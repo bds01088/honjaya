@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.honjaya.model.mapper.RateMapper">
+
+	<!-- 이미 별점을 준 적이 있는지 확인 -->
+	<select id="rateSelect" parameterType="map" resultType="RateDto">
+	select rate_no, rate_score
+	from rate
+	where rate_from = #{rateFrom} and rate_to = #{rateTo}
+	</select>
+	
+	<!-- 별점 등록 -->
+	<insert id="rateInsert" parameterType="RateDto" useGeneratedKeys="true" keyProperty="rateNo">
+	insert into rate(rate_from, rate_to, rate_score)
+	values(#{rateFrom}, #{rateTo}, #{rateScore})
+	</insert>
+	
+	<!-- 별점 수정 -->
+	<update id="rateUpdate" parameterType="RateDto">
+	update rate set
+	rate_score = #{rateScore}
+	where rate_no = #{rateNo}
+	<!-- 여기서 rateNo를 받을 것인지(프론트에 select 해올 때 미리 저장) -->
+	<!-- rateFrom, rateTo를 받을 것인지 결정해야 함 -->
+	<!-- (Delete도 마찬가지) -->
+	</update>
+	
+	<!-- 별점 삭제(이미 별점을 준 상태에서 같은 별점에 마우스를 클릭하면 별점이 삭제됨) -->
+	<delete id="rateDelete" parameterType="int">
+	delete from rate where rate_no = #{rateNo}
+	</delete>
+	
+	
+	<!-- 유저 별점 평균 요청 -->
+	<select id="rateAverage" parameterType="int" resultType="double">
+	select round(avg(rate_score), 1)
+	from rate
+	where rate_to = #{userNo}
+	</select>
+	
+</mapper>

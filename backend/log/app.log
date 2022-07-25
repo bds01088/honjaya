@@ -1,0 +1,36 @@
+2022-07-21 14:08:38.230  INFO 27856 --- [restartedMain] com.ssafy.honjaya.HonjayaApplication     : Starting HonjayaApplication using Java 1.8.0_192 on DESKTOP-96Q8J0R with PID 27856 (E:\SSAFY2\SSAFY Common Project\Honjaya_boot\Honjaya\bin\main started by TAECHAN in E:\SSAFY2\SSAFY Common Project\Honjaya_boot\Honjaya)
+2022-07-21 14:08:38.232  INFO 27856 --- [restartedMain] com.ssafy.honjaya.HonjayaApplication     : No active profile set, falling back to 1 default profile: "default"
+2022-07-21 14:08:38.278  INFO 27856 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-07-21 14:08:38.279  INFO 27856 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-07-21 14:08:39.067  INFO 27856 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-07-21 14:08:39.082  INFO 27856 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 JPA repository interfaces.
+2022-07-21 14:08:39.218  WARN 27856 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.ssafy.happyhouse.model.mapper]' package. Please check your configuration.
+2022-07-21 14:08:39.690  INFO 27856 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-21 14:08:39.698  INFO 27856 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-21 14:08:39.698  INFO 27856 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.64]
+2022-07-21 14:08:39.778  INFO 27856 --- [restartedMain] o.a.c.c.C.[.[localhost].[/honjaya]       : Initializing Spring embedded WebApplicationContext
+2022-07-21 14:08:39.778  INFO 27856 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1496 ms
+2022-07-21 14:08:39.825  WARN 27856 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourceScriptDatabaseInitializer' defined in class path resource [org/springframework/boot/autoconfigure/sql/init/DataSourceInitializationConfiguration.class]: Unsatisfied dependency expressed through method 'dataSourceScriptDatabaseInitializer' parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Generic.class]: Unsatisfied dependency expressed through method 'dataSource' parameter 0; nested exception is org.springframework.boot.context.properties.ConfigurationPropertiesBindException: Error creating bean with name 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties': Could not bind properties to 'DataSourceProperties' : prefix=spring.datasource, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'spring.datasource.type' to java.lang.Class<javax.sql.DataSource>
+2022-07-21 14:08:39.827  INFO 27856 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-07-21 14:08:39.844  INFO 27856 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2022-07-21 14:08:39.864 ERROR 27856 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to bind properties under 'spring.datasource.type' to java.lang.Class<javax.sql.DataSource>:
+
+    Property: spring.datasource.type
+    Value: org.apache.commons.dbcp2.BasicDataSource
+    Origin: class path resource [application.properties] - 8:24
+    Reason: failed to convert java.lang.String to java.lang.Class<javax.sql.DataSource> (caused by java.lang.ClassNotFoundException: org.apache.commons.dbcp2.BasicDataSource)
+
+Action:
+
+Update your application's configuration
+
