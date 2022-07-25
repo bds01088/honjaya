@@ -7,6 +7,7 @@ import com.ssafy.honjaya.model.UserDto;
 public interface UserService {
 	boolean findUser(int id);
 	boolean findUserByEmail(String email);
+	boolean findUserByNickname(String Nickname);
 	boolean doSignUp(UserDto userDto);
 	UserDto doLogin(UserDto userDto);
 	List<UserDto> allUserInfo();

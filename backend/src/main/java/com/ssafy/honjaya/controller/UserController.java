@@ -40,7 +40,7 @@ public class UserController {
 	private UserService userService;
 
 	@ApiOperation(value = "회원가입", response = String.class)
-	@PostMapping("/signup.do")
+	@PostMapping("/signup")
 	public ResponseEntity<String> doSingUp(@RequestBody UserDto userDto) {
 		logger.debug("sign up");
 		if (userService.doSignUp(userDto)) {
@@ -70,7 +70,7 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "회원 유무 파악", response = Boolean.class)
-	@GetMapping("/find.do/{id}")
+	@GetMapping("/find/id/{id}")
 	public ResponseEntity<Boolean> findUser(@PathVariable int id){
 		logger.debug("find user");
 		if(userService.findUser(id)) {
@@ -78,9 +78,29 @@ public class UserController {
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "이메일 중복 유무 파악", response = Boolean.class)
+	@GetMapping("/find/email/{email}")
+	public ResponseEntity<Boolean> findUserByEmail(@PathVariable String email){
+		logger.debug("find email");
+		if(userService.findUserByEmail(email)) {
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "이메일 중복 유무 파악", response = Boolean.class)
+	@GetMapping("/find/nickname/{nickname}")
+	public ResponseEntity<Boolean> findUserByNickname(@PathVariable String nickname){
+		logger.debug("find nickname");
+		if(userService.findUserByNickname(nickname)) {
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "로그인", response = Map.class)
-	@PostMapping("/login.do")
+	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> doLogin(@RequestBody UserDto userDto) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -147,7 +167,7 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "로그아웃", response = Map.class)
-	@PutMapping("logout.do/{id}")
+	@PutMapping("logout/{id}")
 	public ResponseEntity<?> removeToken(@PathVariable int id){
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;

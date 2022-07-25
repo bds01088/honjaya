@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService{
 	public boolean findUserByEmail(String email) {
 		return userMapper.findUserByEmail(email) == 0;
 	}
+	
+	@Override
+	public boolean findUserByNickname(String nickname) {
+		return userMapper.findUserByNickname(nickname) == 0;
+	}
 
 	@Override
 	@Transactional
