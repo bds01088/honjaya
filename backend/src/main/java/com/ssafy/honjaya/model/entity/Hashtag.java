@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.sun.istack.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,14 +34,16 @@ import lombok.ToString;
 public class Hashtag {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char", -> 이건 뭐더라?
+	@Column(name="hash_no", updatable=false) // columnDefinition="char",
 	private int hashNo;
 	
 	@ManyToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(name="user_no", nullable=false)
+	@JoinColumn(name="user_no")
+	@NotNull
 	private User user;
 	
-	@Column(name="hash_text", length=11, nullable=false)
+	@Column(name="hash_text", length=11)
+	@NotNull
 	private String hashText;
 	
 }
