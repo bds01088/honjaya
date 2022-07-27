@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,27 +27,28 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
-public class Hashtag {
+@Table(
+name="chatroom",
+uniqueConstraints = {
+		@UniqueConstraint(name="UK_CHATROOM_USERS", columnNames={"chatroom_user1", "chatroom_user2"})
+}
+)
+public class Chatroom {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
-	private int hashNo;
+	@Column(name="chatroom_no", nullable=false, updatable=false) // columnDefinition="char",
+	private int chatroomNo;
 	
 	@ManyToOne
-	@JoinColumn(name="user_no", nullable=false)
+	@JoinColumn(name="chatroom_user1", nullable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User user;
+	private User chatroomUser1;
 	
-	@Column(name="hash_text", length=11, nullable=false)
+	@ManyToOne
+	@JoinColumn(name="chatroom_user2", nullable=false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private String hashText;
+	private User chatroomUser2;
 	
 }

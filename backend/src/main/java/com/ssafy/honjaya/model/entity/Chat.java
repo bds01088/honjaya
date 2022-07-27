@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,18 +27,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
-public class Hashtag {
+@Table(name="chat")
+public class Chat {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
-	private int hashNo;
+	@Column(name="chat_no", nullable=false, updatable=false, columnDefinition="bigint")
+	private long chatNo;
+	
+	@ManyToOne
+	@JoinColumn(name="chatroom_no", nullable=false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@NotNull
+	private Chatroom chatroom;
 	
 	@ManyToOne
 	@JoinColumn(name="user_no", nullable=false)
@@ -45,8 +46,8 @@ public class Hashtag {
 	@NotNull
 	private User user;
 	
-	@Column(name="hash_text", length=11, nullable=false)
-	@NotNull
-	private String hashText;
+	@Column(name="chat_message", length=1000)
+	private String chatMessage;
 	
+	// 1234
 }

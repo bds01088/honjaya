@@ -8,8 +8,10 @@
 	</settings>
 	
 	<mappers>
+		<!--
 		<mapper resource="mapper/user.xml"/>
 		<mapper resource="mapper/rate.xml"/>
+		-->
 	</mappers>
 
 </configuration>

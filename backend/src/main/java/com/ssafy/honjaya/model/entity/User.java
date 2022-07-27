@@ -11,6 +11,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -38,15 +40,15 @@ public class User {
 	@Column(name="user_no", nullable=false, updatable=false)
 	private int userNo;
 	
-	@Column(name="user_email", length=50, updatable=false)
+	@Column(name="user_email", length=50, nullable=false, updatable=false)
 	@NotNull
 	private String userEmail;
 	
-	@Column(name="user_password", length=16)
+	@Column(name="user_password", length=16, nullable=false)
 	@NotNull
 	private String userPassword;
 	
-	@Column(name="user_nickname", length=20)
+	@Column(name="user_nickname", length=20, nullable=false)
 	@NotNull
 	private String userNickname;
 	
@@ -56,7 +58,8 @@ public class User {
 	@Column(name="user_birthday")
 	private java.sql.Date userBirthday;
 	
-	@Column(name="user_gender", columnDefinition = "char(1) CHECK (user_gender in ('m', 'f'))")
+	@Column(name="user_gender", nullable=false, columnDefinition = "char(1) CHECK (user_gender in ('m', 'f'))")
+	@ColumnDefault("'m'")
 	private String userGender; // "m" or "f"
 	
 	@Column(name="user_phone", length=45)
@@ -65,17 +68,24 @@ public class User {
 	@Column(name="user_profile_pic_url", length=255)
 	private String userProfilePicUrl;
 	
-	@Column(name="user_reg_time")
+	@Column(name="user_reg_time", updatable=false, columnDefinition = "datetime")
 	private LocalDateTime userRegTime;
 	
-	@Column(name="user_point", columnDefinition = "int CHECK (user_point >= 0)")
+	@Column(name="user_point", nullable=false, columnDefinition = "int CHECK (user_point >= 0)")
+	@ColumnDefault("0")
 	private int userPoint;
 	
 	@Column(name="user_token", length=1000)
 	private String userToken;
 	
+//	@OneToMany(orphanRemoval=true, cascade=CascadeType.REMOVE, mappedBy="user")
+//	private List<Hashtag> hashtags;
+	
 	@PrePersist
-    public void createdAt() {
-        this.userRegTime = LocalDateTime.now();
-    }
+	public void createdAt() {
+		this.userRegTime = LocalDateTime.now();
+//		ZonedDateTime nowUTC = ZonedDateTime.now(ZoneId.of("UTC"));
+//		LocalDateTime nowSeoul = nowUTC.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+//		this.userRegTime = nowSeoul;
+	}
 }

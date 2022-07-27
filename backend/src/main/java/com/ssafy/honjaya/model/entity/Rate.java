@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,27 +27,32 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
-public class Hashtag {
+@Table(
+name="rate",
+uniqueConstraints = {
+		@UniqueConstraint(name="UK_RATE_FROM_TO", columnNames={"rate_from", "rate_to"})
+}
+)
+public class Rate {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
-	private int hashNo;
+	@Column(name="rate_no", nullable=false, updatable=false) // columnDefinition="char",
+	private int rateNo;
 	
 	@ManyToOne
-	@JoinColumn(name="user_no", nullable=false)
+	@JoinColumn(name="rate_from", nullable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User user;
+	private User rateFrom;
 	
-	@Column(name="hash_text", length=11, nullable=false)
+	@ManyToOne
+	@JoinColumn(name="rate_to", nullable=false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private String hashText;
+	private User rateTo;
+	
+	@Column(name="rate_score", nullable=false, columnDefinition = "decimal(2,1)")
+	@NotNull
+	private double rateScore;
 	
 }

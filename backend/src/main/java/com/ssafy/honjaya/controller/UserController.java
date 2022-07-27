@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.honjaya.model.UserDto;
+import com.ssafy.honjaya.model.entity.User;
 import com.ssafy.honjaya.model.service.JwtServiceImpl;
 import com.ssafy.honjaya.model.service.UserService;
 
@@ -41,9 +42,9 @@ public class UserController {
 
 	@ApiOperation(value = "회원가입", response = String.class)
 	@PostMapping("/signup")
-	public ResponseEntity<String> doSingUp(@RequestBody UserDto userDto) {
+	public ResponseEntity<String> doSingUp(@RequestBody User user) {
 		logger.debug("sign up");
-		if (userService.doSignUp(userDto)) {
+		if (userService.doSignUp(user)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
