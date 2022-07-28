@@ -14,7 +14,6 @@ const Main = () => {
 
     return (
             <div style={ background }>
-                
             </div>
         )
 };
