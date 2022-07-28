@@ -1,21 +1,22 @@
+import styled from 'styled-components'
 import backImg from '../../assets/main_img.jpg'
 
-const background = {
-    backgroundImage:`url(${backImg})`, 
-    backgroundSize:"cover", 
-    backgroundRepeat: "no-repeat",
-    width: '100vw',
-    height: '100vh',
-    position: 'fixed'
-}
+const Container = styled.div`
+    background-image: url(${backImg});
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+`
 
 
 const Main = () => {
 
     return (
-            <div style={ background }>
-            </div>
+            <Container>
+            </Container>
         )
-};
+}
 
-export default Main;
+export default Main
