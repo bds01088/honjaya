@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,27 +27,28 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
-public class Hashtag {
+@Table(
+name="block",
+uniqueConstraints = {
+		@UniqueConstraint(name="UK_BLOCK_FROM_TO", columnNames={"block_from", "block_to"})
+}
+)
+public class Block {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
-	private int hashNo;
+	@Column(name="block_no", nullable=false, updatable=false)
+	private int blockNo;
 	
 	@ManyToOne
-	@JoinColumn(name="user_no", nullable=false, updatable=false)
+	@JoinColumn(name="block_from", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User user;
+	private User blockFrom;
 	
-	@Column(name="hash_text", length=11, nullable=false, updatable=false) // 해쉬태그는 insert, delete만
+	@ManyToOne
+	@JoinColumn(name="block_to", nullable=false, updatable=false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private String hashText;
+	private User blockTo;
 	
 }
