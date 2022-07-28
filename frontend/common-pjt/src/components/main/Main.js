@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import backImg from '../../assets/main_img.jpg'
+import MainHeader from './MainHeader'
 
 const Container = styled.div`
     background-image: url(${backImg});
@@ -14,9 +15,11 @@ const Container = styled.div`
 const Main = () => {
 
     return (
-            <Container>
-            </Container>
-        )
+        <Container>
+            {/* MainHeader는 nickname, point, rate_score가 필요 */}
+            <MainHeader/>
+        </Container>
+    )
 }
 
 export default Main
