@@ -28,27 +28,25 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(
-name="block",
+name="user_oauth",
 uniqueConstraints = {
-		@UniqueConstraint(name="UK_BLOCK_FROM_TO", columnNames={"block_from", "block_to"})
+		@UniqueConstraint(name="UK_USER_OAUTH", columnNames={"user_no", "oauth_provider"})
 }
 )
-public class Block {
+public class UserOauth {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="block_no", nullable=false, updatable=false)
-	private int blockNo;
+	@Column(name="oauth_no", nullable=false, updatable=false)
+	private int oauthNo;
 	
 	@ManyToOne
-	@JoinColumn(name="block_from", nullable=false, updatable=false)
+	@JoinColumn(name="user_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User blockFrom;
+	private User user;
 	
-	@ManyToOne
-	@JoinColumn(name="block_to", nullable=false, updatable=false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@Column(name="oauth_provider", nullable=false, updatable=false, columnDefinition="char(3)")
 	@NotNull
-	private User blockTo;
+	private String oauthProvider;
 	
 }

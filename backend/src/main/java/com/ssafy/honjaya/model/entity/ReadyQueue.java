@@ -1,5 +1,7 @@
 package com.ssafy.honjaya.model.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -28,27 +31,40 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(
-name="block",
+name="ready_queue",
 uniqueConstraints = {
-		@UniqueConstraint(name="UK_BLOCK_FROM_TO", columnNames={"block_from", "block_to"})
+		@UniqueConstraint(name="UK_READY_QUEUE_USER", columnNames="user_no")
 }
 )
-public class Block {
+public class ReadyQueue {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="block_no", nullable=false, updatable=false)
-	private int blockNo;
+	@Column(name="queue_no", nullable=false, updatable=false)
+	private int queueNo;
 	
 	@ManyToOne
-	@JoinColumn(name="block_from", nullable=false, updatable=false)
+	@JoinColumn(name="user_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User blockFrom;
+	private User user;
+	
+	@Column(name="queue_start_time", nullable=false, updatable=false, columnDefinition="datetime(6)")
+	@NotNull
+	private LocalDateTime queueStartTime;
+	
+	@Column(name="queue_user_role_code", nullable=false, columnDefinition="char(3)")
+	@NotNull
+	private String queueUserRoleCode;
 	
 	@ManyToOne
-	@JoinColumn(name="block_to", nullable=false, updatable=false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@NotNull
-	private User blockTo;
+	@JoinColumn(name="queue_pair_user_no", nullable=true)
+	private User queuePairUserNo;
 	
+	@Column(name="queue_temp_room_code", length=100)
+	private String queueTempRoomCode;
+	
+	@PrePersist
+	public void createdAt() {
+		this.queueStartTime = LocalDateTime.now();
+	}
 }

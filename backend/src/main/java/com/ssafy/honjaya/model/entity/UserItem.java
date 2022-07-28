@@ -40,13 +40,13 @@ public class UserItem {
 	private int userItemNo;
 	
 	@ManyToOne
-	@JoinColumn(name="item_no", nullable=false)
+	@JoinColumn(name="item_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private Item item;
 	
 	@ManyToOne
-	@JoinColumn(name="user_no", nullable=false)
+	@JoinColumn(name="user_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User user;

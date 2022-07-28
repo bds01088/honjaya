@@ -28,27 +28,31 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(
-name="block",
+name="room_user",
 uniqueConstraints = {
-		@UniqueConstraint(name="UK_BLOCK_FROM_TO", columnNames={"block_from", "block_to"})
+		@UniqueConstraint(name="UK_ROOM_USER", columnNames={"room_no", "user_no"})
 }
 )
-public class Block {
+public class RoomUser {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="block_no", nullable=false, updatable=false)
-	private int blockNo;
+	@Column(name="room_user_no", nullable=false, updatable=false) // columnDefinition="char",
+	private int roomUserNo;
 	
 	@ManyToOne
-	@JoinColumn(name="block_from", nullable=false, updatable=false)
+	@JoinColumn(name="room_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User blockFrom;
+	private Room room;
 	
 	@ManyToOne
-	@JoinColumn(name="block_to", nullable=false, updatable=false)
+	@JoinColumn(name="user_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
-	private User blockTo;
+	private User user;
+	
+	@Column(name="room_user_role_code", nullable=false, columnDefinition="char(3)")
+	@NotNull
+	private String roomUserRoleCode;
 	
 }

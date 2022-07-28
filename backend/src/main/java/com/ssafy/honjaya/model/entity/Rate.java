@@ -40,13 +40,13 @@ public class Rate {
 	private int rateNo;
 	
 	@ManyToOne
-	@JoinColumn(name="rate_from", nullable=false)
+	@JoinColumn(name="rate_from", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User rateFrom;
 	
 	@ManyToOne
-	@JoinColumn(name="rate_to", nullable=false)
+	@JoinColumn(name="rate_to", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User rateTo;

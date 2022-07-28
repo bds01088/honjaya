@@ -40,12 +40,12 @@ public class Hashtag {
 	private int hashNo;
 	
 	@ManyToOne
-	@JoinColumn(name="user_no", nullable=false)
+	@JoinColumn(name="user_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User user;
 	
-	@Column(name="hash_text", length=11, nullable=false)
+	@Column(name="hash_text", length=11, nullable=false, updatable=false) // 해쉬태그는 insert, delete만
 	@NotNull
 	private String hashText;
 	

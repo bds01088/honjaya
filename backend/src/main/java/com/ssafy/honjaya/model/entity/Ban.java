@@ -31,7 +31,7 @@ public class Ban {
 	@Column(name="ban_no", nullable=false, updatable=false) // columnDefinition="char",
 	private int banNo;
 	
-	@Column(name="ban_user_email", length=50, nullable=false)
+	@Column(name="ban_user_email", length=50, nullable=false, updatable=false)
 	@NotNull
 	private String banUserEmail;
 	
@@ -43,7 +43,7 @@ public class Ban {
 	@NotNull
 	private LocalDateTime banStartTime;
 	
-	@Column(name="ban_end_time", updatable=false, columnDefinition = "datetime")
+	@Column(name="ban_end_time", columnDefinition = "datetime")
 	private LocalDateTime banEndTime;
 	
 	@Column(name="ban_type", columnDefinition="char(3)")

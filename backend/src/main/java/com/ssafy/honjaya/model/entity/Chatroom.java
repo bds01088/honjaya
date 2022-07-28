@@ -40,13 +40,13 @@ public class Chatroom {
 	private int chatroomNo;
 	
 	@ManyToOne
-	@JoinColumn(name="chatroom_user1", nullable=false)
+	@JoinColumn(name="chatroom_user1", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User chatroomUser1;
 	
 	@ManyToOne
-	@JoinColumn(name="chatroom_user2", nullable=false)
+	@JoinColumn(name="chatroom_user2", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User chatroomUser2;

@@ -43,13 +43,13 @@ public class Report {
 	private int reportNo;
 	
 	@ManyToOne
-	@JoinColumn(name="report_from", nullable=false)
+	@JoinColumn(name="report_from", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User reportFrom;
 	
 	@ManyToOne
-	@JoinColumn(name="report_to", nullable=false)
+	@JoinColumn(name="report_to", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User reportTo;
