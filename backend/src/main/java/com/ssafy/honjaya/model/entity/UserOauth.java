@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,18 +27,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
-public class Hashtag {
+@Table(
+name="user_oauth",
+uniqueConstraints = {
+		@UniqueConstraint(name="UK_USER_OAUTH", columnNames={"user_no", "oauth_provider"})
+}
+)
+public class UserOauth {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
-	private int hashNo;
+	@Column(name="oauth_no", nullable=false, updatable=false)
+	private int oauthNo;
 	
 	@ManyToOne
 	@JoinColumn(name="user_no", nullable=false, updatable=false)
@@ -45,8 +45,8 @@ public class Hashtag {
 	@NotNull
 	private User user;
 	
-	@Column(name="hash_text", length=11, nullable=false, updatable=false) // 해쉬태그는 insert, delete만
+	@Column(name="oauth_provider", nullable=false, updatable=false, columnDefinition="char(3)")
 	@NotNull
-	private String hashText;
+	private String oauthProvider;
 	
 }

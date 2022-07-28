@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,18 +27,23 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
-public class Hashtag {
+@Table(
+name="user_item",
+uniqueConstraints = {
+		@UniqueConstraint(name="UK_USER_ITEM", columnNames={"item_no", "user_no"})
+}
+)
+public class UserItem {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
-	private int hashNo;
+	@Column(name="user_item_no", nullable=false, updatable=false) // columnDefinition="char",
+	private int userItemNo;
+	
+	@ManyToOne
+	@JoinColumn(name="item_no", nullable=false, updatable=false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@NotNull
+	private Item item;
 	
 	@ManyToOne
 	@JoinColumn(name="user_no", nullable=false, updatable=false)
@@ -45,8 +51,8 @@ public class Hashtag {
 	@NotNull
 	private User user;
 	
-	@Column(name="hash_text", length=11, nullable=false, updatable=false) // 해쉬태그는 insert, delete만
+	@Column(name="item_count", nullable=false, columnDefinition = "int CHECK (item_count >= 0)")
 	@NotNull
-	private String hashText;
+	private int itemCount;
 	
 }
