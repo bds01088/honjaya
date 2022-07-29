@@ -1,45 +1,40 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom'
 // import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+// 체크 , 체크 해제 구분
 
-
-// const theme = createTheme({
-//     palette: {
-//       primary: {
-//         main: '#000000'
-//       },
-//     }}
-// )
 
 const Background = styled.div`
     background: #FFFDDE;
     width: 100vw;
     height: 100vh;
-    position: fixed;
 `
 
-const Form = styled.form`
-
+const Form = styled.div`
+    display: flex;
+    justify-content: center; 
+    flex-direction: column; 
+    align-items: center;
+    
 `
-
 
 const PledgeTemplate = styled.div`
-    background-color: #CCF3EE;
-    width: 500px;
-    height: 600px;
-    margin: 0 auto;
-    margin-top: 60px;
-    border-radius: 3%;
     display: flex;
     justify-content: center;
     position: relative;
+    margin-top: 30px;
+    height: 600px;
+    width: 500px;
+    border-radius: 3%;
+    background-color: #CCF3EE;
+
 `
 
 const Title = styled.div`
     display: flex;
-    justify-content: flex-start;
     height: 15%;
     margin: 1.2rem;
 `
@@ -54,17 +49,15 @@ const Phrase = styled.p`
 `
 
 const TextBox = styled.div`
-
-    background-color: #ffffff;
-    width: 400px;
-    height: 370px;
-    border-radius: 3%;
     position: absolute;
     top: 8rem;
+    height: 370px;
+    width: 400px;
+    border-radius: 3%;
     padding: 20px;
+    background-color: #ffffff;
 `
 const Agree = styled.div`
-    display: flex;
     position: absolute;
     top: 35rem;
    
@@ -78,21 +71,30 @@ const CheckBox = styled.input`
 `
 
 const Next = styled(Button)`
-    position: absolute;
-    left: 45%;
+    /* position: absolute; */
     top: 30px;
     color: #F38BA0;
+    background-color: "#";
 
 `
 
-// 체크 , 체크 해제 구분
-// 체크 해제 했을 때 뜨는 문구 구현
-
 const Pledge = () => {
 
+    // 동의 체크 유무 판별
+    const [check, setCheck] = useState(false);
+
+    const clickEvent = () => {
+        if (check === false){
+            setCheck(true)
+        } else{
+            setCheck(false)
+        }
+    }
+    
+    console.log(check);
     return (
-        <Form>
-            <Background>
+        <Background>
+            <Form>
                 <PledgeTemplate className="Template">
                     <Title>
                         <Logo src={logo}/>
@@ -101,16 +103,23 @@ const Pledge = () => {
                     <TextBox>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </TextBox>
-                    <Agree > 
-                        <CheckBox type="checkbox" name="" value="동의"></CheckBox>
-                        <label htmlFor="동의">동의</label>
+                    <Agree> 
+                        <CheckBox type="checkbox" checked={check} onChange={clickEvent}></CheckBox>
+                        <label>동의</label>
                     </Agree>
                 </PledgeTemplate>
-                <Next color="primary"  variant="next">다음</Next>
-            </Background>
-        </Form>
+                
+                {/* Signup 이동 버튼 */}
+                <Link to="/signup" style={{ textDecoration: 'none'}}>
+                    <Next disabled={!check}
+                        variant="contained"
+                        >다음
+                    </Next>
+                </Link>
+            </Form>
+        </Background>
     )
-};
+}
 
 export default Pledge
 
