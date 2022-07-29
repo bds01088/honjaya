@@ -3,6 +3,8 @@ import logoImg from '../../assets/logo.png'
 import Rating from '@mui/material/Rating';
 import { MdPets, MdAccountCircle, MdHelpOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import MainHelper from './MainHelper'
+import React, { useState } from "react"
 
 const Header = styled.div`
     display: flex;
@@ -31,11 +33,20 @@ const point = 100000;
 const pointShow = point.toLocaleString('ko-KR');
 
 
+const Helper = styled(MdHelpOutline)`
+`
+
+
 const MainHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    
+    const openModalHelper = () => {
+        setIsOpen(!isOpen)
+    }
 
     return (
         <div>
-            <Header>
+            <Header style={{ position: 'relative' }}>
                 <Logo src={logoImg}/>
                 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -43,14 +54,17 @@ const MainHeader = () => {
                     <Rating style={{ color: '#FFF672', marginRight: '1rem' }} size="large" value={3.5} precision={0.5} readOnly />
                     <MdPets style={{ color: '#F38BA0', fontSize: '2rem', marginRight: '0.5rem' }}/>
                     <p style={{ color: '#333333', fontSize: '1.5rem', marginRight: '1rem' }}>{pointShow}</p>
-                    <Link to="/profile">
-                    <MdAccountCircle style={{ color: '#333333', fontSize: '2rem', marginRight: '0.5rem' }}/>
+                    <Link to="/profile" style={{ fontSize: '0' }}>    
+                        <MdAccountCircle style={{ color: '#333333', fontSize: '2rem', marginRight: '0.5rem' }}/>
                     </Link>
-                    <MdHelpOutline style={{ color: '#333333',fontSize: '2rem'}}/>
+                    <Helper style={{ color: '#333333',fontSize: '2rem'}} onClick={openModalHelper}/>
                 </div>
+                { isOpen? <MainHelper openModalHelper={openModalHelper}/> : null }
             </Header>
         </div>
     )
 }
 
 export default MainHeader
+
+
