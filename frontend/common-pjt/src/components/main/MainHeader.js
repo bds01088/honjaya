@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import logoImg from '../../assets/logo.png'
 import Rating from '@mui/material/Rating';
 import { MdPets, MdAccountCircle, MdHelpOutline } from 'react-icons/md'
+import { Link } from 'react-router-dom'
 
 const Header = styled.div`
     display: flex;
@@ -32,7 +33,6 @@ const pointShow = point.toLocaleString('ko-KR');
 
 const MainHeader = () => {
 
-
     return (
         <div>
             <Header>
@@ -43,7 +43,9 @@ const MainHeader = () => {
                     <Rating style={{ color: '#FFF672', marginRight: '1rem' }} size="large" value={3.5} precision={0.5} readOnly />
                     <MdPets style={{ color: '#F38BA0', fontSize: '2rem', marginRight: '0.5rem' }}/>
                     <p style={{ color: '#333333', fontSize: '1.5rem', marginRight: '1rem' }}>{pointShow}</p>
+                    <Link to="/profile">
                     <MdAccountCircle style={{ color: '#333333', fontSize: '2rem', marginRight: '0.5rem' }}/>
+                    </Link>
                     <MdHelpOutline style={{ color: '#333333',fontSize: '2rem'}}/>
                 </div>
             </Header>
