@@ -17,9 +17,6 @@ import lombok.ToString;
 @ToString
 @ApiModel(value = "HashtagReq", description = "해쉬태그 Req")
 public class HashtagReq {
-	@ApiModelProperty(value = "유저 번호")
-	private int userNo;
-	
 	@ApiModelProperty(value = "해쉬태그 내용")
 	@Size(min = 1, max = 11)
 	private String hashText;
