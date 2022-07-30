@@ -94,7 +94,7 @@ const StyledButton = styled.button`
   }
 
 `
-
+ 
 const Pledge = () => {
 
     // 동의 체크 여부 판별
