@@ -24,7 +24,6 @@ const ModalView = styled.div.attrs(props => ({
 `
 
 
-
 const MainHelper = ({openModalHelper}) => {
     const [isOpen, setIsOpen] = useState(false);
 
