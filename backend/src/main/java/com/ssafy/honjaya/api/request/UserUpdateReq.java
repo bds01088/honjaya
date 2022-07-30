@@ -1,6 +1,5 @@
 package com.ssafy.honjaya.api.request;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -19,14 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @ApiModel(value = "SignUpReq", description = "회원 가입 Req")
-public class SignUpReq {
-
-	@ApiModelProperty(value = "이메일")
-	@NotNull(message = "email may not be empty")
-	@Email(message = "이메일 형식이 아닙니다.")
-	@Size(min = 3, max = 50)
-	private String userEmail;
-
+public class UserUpdateReq {
 	@ApiModelProperty(value = "비밀번호")
 	@NotNull(message = "password may not be empty")
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,15}$",
@@ -43,7 +35,6 @@ public class SignUpReq {
 	private String userName;
 
 	@ApiModelProperty(value = "생일 (yyyy-MM-dd (2021-01-01))")
-	@Pattern(regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$", message = "닉네임은 숫자, 영어, 한글만 가능합니다.")
 	private String userBirthday; // yyyy-MM-dd (2021-01-01)
 
 	@ApiModelProperty(value = "성별 (m/f)")

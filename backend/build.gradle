@@ -50,6 +50,9 @@ dependencies {
 	implementation "org.apache.commons:commons-dbcp2"
 	implementation "org.aspectj:aspectjrt:1.9.7"
     implementation "org.aspectj:aspectjweaver:1.9.7"
+    
+    // spring-boot-starter-validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
