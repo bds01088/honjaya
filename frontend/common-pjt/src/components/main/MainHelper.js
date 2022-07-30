@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import styled from "styled-components"
 
 
@@ -24,13 +24,10 @@ const ModalView = styled.div.attrs(props => ({
 `
 
 
-
 const MainHelper = ({openModalHelper}) => {
-    const [isOpen, setIsOpen] = useState(false);
 
     const closeModalProfile = () => {
-        openModalHelper(isOpen)
-        setIsOpen(false)
+        openModalHelper(false)
     }
 
     return (
