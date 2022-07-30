@@ -8,8 +8,8 @@ const Container = styled.div`
     background-repeat: no-repeat;
     width: 100vw;
     height: 100vh;
-    position: fixed;
 `
+
 
 
 const Main = () => {
