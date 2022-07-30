@@ -10,12 +10,10 @@ import React, { useState } from "react"
 const Header = styled.div`
     display: flex;
     justify-content: space-between;
-    height: 7rem;
+    height: 5rem;
     font-family: Jua;
-
-    @media (max-width: 412px) {
-        width: 100vw;
-    }
+    position: sticky;
+    z-index: 3;
 `
 
 const Logo = styled.img`
@@ -53,7 +51,6 @@ const MainHeader = () => {
     }
 
     return (
-        <div>
             <Header>
                 <Logo src={logoImg}/>
                 
@@ -69,7 +66,6 @@ const MainHeader = () => {
                 </div>
                 { isOpen ? <MainHelper openModalHelper={openModalHelper}/> : null }
             </Header>
-        </div>
     )
 }
 
