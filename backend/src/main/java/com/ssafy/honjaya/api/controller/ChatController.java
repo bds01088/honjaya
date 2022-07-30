@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.honjaya.api.request.ChatReq;
 import com.ssafy.honjaya.api.request.RateReq;
+import com.ssafy.honjaya.api.response.ChatListRes;
+import com.ssafy.honjaya.api.response.ChatroomListRes;
+import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.RateRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 import com.ssafy.honjaya.api.service.RateService;
@@ -25,81 +29,70 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(value = "별점 API", tags = {"RateController"})
+@Api(value = "채팅 API", tags = {"ChatController"})
 @RestController
-@RequestMapping("/rates")
-public class RateController {
-	private static final Logger logger = LoggerFactory.getLogger(RateController.class);
+@RequestMapping("/chats")
+public class ChatController {
+	private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 	
 	@Autowired
 	private JwtServiceImpl jwtService;
 
-	@Autowired
-	private RateService rateService;
+//	@Autowired
+//	private RateService rateService;
 
-	@ApiOperation(value = "본인 별점 평균", response = RateRes.class)
+	@ApiOperation(value = "채팅방 개설", response = CommonRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@GetMapping("/average")
-	public ResponseEntity<RateRes> averageMe(@RequestBody RateReq rateReq, HttpServletRequest request) {
+	@PostMapping("/create/{userNo}")
+	public ResponseEntity<CommonRes> createChatroom(@PathVariable int userNo, HttpServletRequest request) {
+		return null;
+	}
+	
+	@ApiOperation(value = "채팅방 목록 조회", response = ChatroomListRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/list")
+	public ResponseEntity<ChatroomListRes> listChatroom(HttpServletRequest request) {
 		return null;
 	}
 
-	@ApiOperation(value = "특정 유저 별점 평균", response = RateRes.class)
+	@ApiOperation(value = "채팅방 메시지 조회", response = ChatListRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@GetMapping("/average/{userNo}")
-	public ResponseEntity<RateRes> average(@PathVariable int userNo, HttpServletRequest request) {
+	@GetMapping("/messages/{chatroomNo}")
+	public ResponseEntity<ChatListRes> average(@PathVariable int chatroomNo, HttpServletRequest request) {
 		return null;
 	}
 	
-	@ApiOperation(value = "특정 유저 평가 입력", response = RateRes.class)
+	@ApiOperation(value = "채팅 메시지 입력", response = CommonRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@PostMapping
-	public ResponseEntity<RateRes> insertRate(@RequestBody RateReq rateReq, HttpServletRequest request) {
+	@PostMapping("/message")
+	public ResponseEntity<CommonRes> insertChat(@RequestBody ChatReq chatReq, HttpServletRequest request) {
 		return null;
 	}
 	
-	@ApiOperation(value = "특정 유저 평가 내역 조회", response = RateReq.class)
+	@ApiOperation(value = "채팅방 삭제", response = CommonRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@GetMapping
-	public ResponseEntity<RateRes> findRate(@RequestBody RateReq rateReq, HttpServletRequest request) {
-		return null;
-	}
-	
-	@ApiOperation(value = "특정 유저 평가 수정", response = RateRes.class)
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "성공 (success: true)"),
-		@ApiResponse(code = 401, message = "토큰 만료"),
-		@ApiResponse(code = 500, message = "서버 오류")
-	})
-	@PutMapping("/{rateNo}")
-	public ResponseEntity<RateRes> updateRate(@PathVariable int rateNo, @RequestBody RateReq rateReq, HttpServletRequest request) {
-		return null;
-	}
-	
-	@ApiOperation(value = "특정 유저 평가 삭제", response = RateRes.class)
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "성공 (success: true)"),
-		@ApiResponse(code = 401, message = "토큰 만료"),
-		@ApiResponse(code = 500, message = "서버 오류")
-	})
-	@DeleteMapping("/{rateNo}")
-	public ResponseEntity<RateRes> deleteRate(@RequestBody RateReq rateReq, HttpServletRequest request) {
+	@DeleteMapping("/exit/{chatroomNo}")
+	public ResponseEntity<CommonRes> deleteChatroom(@PathVariable int chatroomNo, HttpServletRequest request) {
 		return null;
 	}
 }
