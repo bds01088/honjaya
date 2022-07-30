@@ -1,16 +1,12 @@
 import React, { useState } from "react"
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
-import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
-// import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
-// 체크 , 체크 해제 구분
-
 
 const Background = styled.div`
-    background: #FFFDDE;
+    background-color: #FFFDDE;
     width: 100vw;
-    height: 100vh;
+    height: 100vh;    
 `
 
 const Form = styled.div`
@@ -18,19 +14,17 @@ const Form = styled.div`
     justify-content: center; 
     flex-direction: column; 
     align-items: center;
-    
 `
 
 const PledgeTemplate = styled.div`
     display: flex;
     justify-content: center;
     position: relative;
-    margin-top: 30px;
+    margin-top: 1rem;
     height: 600px;
     width: 500px;
     border-radius: 3%;
     background-color: #CCF3EE;
-
 `
 
 const Title = styled.div`
@@ -44,25 +38,27 @@ const Logo = styled.img`
 `
 
 const Phrase = styled.p`
-    font-size: 25px;
-    padding-top: 15px;
+    font-family: 'Jua';
+    font-size: 2rem;
+    padding-top: 2.5rem;
+    color: #333333;
 `
 
 const TextBox = styled.div`
     position: absolute;
     top: 8rem;
-    height: 370px;
-    width: 400px;
+    height: 62%;
+    width: 80%;
     border-radius: 3%;
     padding: 20px;
     background-color: #ffffff;
 `
+
 const Agree = styled.div`
     position: absolute;
     top: 35rem;
    
 `
-
 const CheckBox = styled.input`
     position: absolute;
     right: 2rem;
@@ -70,19 +66,38 @@ const CheckBox = styled.input`
     
 `
 
-const Next = styled(Button)`
-    /* position: absolute; */
-    top: 30px;
-    color: #F38BA0;
-    background-color: "#";
+const StyledButton = styled.button`
+  /* 공통 스타일 */
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-top: 30%;
+
+  /* 크기 */
+  height: 2.25rem;
+  width: 7rem;
+  font-size: 1rem;
+
+  /* 색상 */
+  background: #FF728E;
+  
+  &:hover {
+    background: #F38BA0;
+  }
+  &:active {
+    background: #FF728E;
+  }
 
 `
-
+ 
 const Pledge = () => {
 
-    // 동의 체크 유무 판별
+    // 동의 체크 여부 판별
     const [check, setCheck] = useState(false);
-
     const clickEvent = () => {
         if (check === false){
             setCheck(true)
@@ -90,12 +105,11 @@ const Pledge = () => {
             setCheck(false)
         }
     }
-    
-    console.log(check);
+
     return (
         <Background>
             <Form>
-                <PledgeTemplate className="Template">
+                <PledgeTemplate>
                     <Title>
                         <Logo src={logo}/>
                         <Phrase >이용을 위한 서약서</Phrase>
@@ -108,13 +122,10 @@ const Pledge = () => {
                         <label>동의</label>
                     </Agree>
                 </PledgeTemplate>
-                
-                {/* Signup 이동 버튼 */}
                 <Link to="/signup" style={{ textDecoration: 'none'}}>
-                    <Next disabled={!check}
-                        variant="contained"
+                    <StyledButton disabled={!check}   
                         >다음
-                    </Next>
+                    </StyledButton>
                 </Link>
             </Form>
         </Background>
@@ -122,28 +133,3 @@ const Pledge = () => {
 }
 
 export default Pledge
-
-/*
-import styled from 'styled-components'
-import backImg from '../../assets/main_img.jpg'
-
-const Container = styled.div`
-    background-image: url(${backImg});
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-`
-
-
-const Main = () => {
-
-    return (
-            <Container>
-            </Container>
-        )
-}
-
-export default Main
-*/
