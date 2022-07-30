@@ -27,10 +27,10 @@ public class SwaggerConfig {
 	@Bean
 	public Docket postsApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("HAPPYHOUSE")
+				.groupName("Spring Boot")
 				.apiInfo(apiInfo())
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.ssafy.honjaya.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.ssafy.honjaya.api.controller"))
 				.paths(PathSelectors.ant("/**/**/**"))
 				.build()
 				.securityContexts(Arrays.asList(securityContext()))
@@ -38,8 +38,8 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("HappyHouse REST API")
-				.description("HappyHouse Project")
+		return new ApiInfoBuilder().title("Honjaya REST API")
+				.description("Honjaya Project")
 				.version("1.0").build();
 	}
 	
