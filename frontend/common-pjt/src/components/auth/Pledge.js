@@ -70,17 +70,48 @@ const CheckBox = styled.input`
     
 `
 
+// !! 스타일 수정 필요
 const Next = styled(Button)`
-    /* position: absolute; */
     top: 30px;
     color: #F38BA0;
-    background-color: "#";
+    background-color: "#F38BA0";
 
 `
 
+// const StyledButton = styled.button`
+//   /* 공통 스타일 */
+//   display: inline-flex;
+//   outline: none;
+//   border: none;
+//   border-radius: 4px;
+//   color: white;
+//   font-weight: bold;
+//   cursor: pointer;
+//   padding-left: 1rem;
+//   padding-right: 1rem;
+
+//   /* 크기 */
+//   height: 2.25rem;
+//   font-size: 1rem;
+
+//   /* 색상 */
+//   background: #F38BA0;
+//   &:hover {
+//     background: #FA99AC;
+//   }
+//   &:active {
+//     background: #FF728E;
+//   }
+
+//   /* 기타 */
+//   & + & {
+//     margin-left: 1rem;
+//   }
+// `
+
 const Pledge = () => {
 
-    // 동의 체크 유무 판별
+    // 동의 체크 여부 판별
     const [check, setCheck] = useState(false);
 
     const clickEvent = () => {
@@ -109,13 +140,16 @@ const Pledge = () => {
                     </Agree>
                 </PledgeTemplate>
                 
-                {/* Signup 이동 버튼 */}
+                {/* Signup 이동 버튼  */}
                 <Link to="/signup" style={{ textDecoration: 'none'}}>
                     <Next disabled={!check}
                         variant="contained"
                         >다음
                     </Next>
                 </Link>
+
+                
+            {/* <StyledButton>다음</StyledButton> */}
             </Form>
         </Background>
     )
