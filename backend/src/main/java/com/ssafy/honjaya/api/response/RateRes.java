@@ -1,5 +1,7 @@
 package com.ssafy.honjaya.api.response;
 
+import com.ssafy.honjaya.db.entity.Rate;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,5 +34,12 @@ public class RateRes {
 	
 	@ApiModelProperty(value = "에러 메시지")
 	private String error;
+
+	public RateRes(Rate rate) {
+		this.rateNo = rate.getRateNo();
+		this.rateFrom = rate.getRateFrom().getUserNo();
+		this.rateTo = rate.getRateTo().getUserNo();
+		this.rateScore = rate.getRateScore();
+	}
 	
 }
