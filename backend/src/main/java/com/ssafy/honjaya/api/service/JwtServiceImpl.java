@@ -95,26 +95,37 @@ public class JwtServiceImpl implements JwtService {
 			return false;
 		}
 	}
-
+	
 	@Override
-	public Map<String, Object> get(String key) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
-		String jwt = request.getHeader("access-token");
+	public int extractUserNo(String jwt) {
 		Jws<Claims> claims = null;
 		try {
 			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		Map<String, Object> value = claims.getBody();
-		logger.info("value : {}", value);
-		return value;
+		return (int) claims.getBody().get("userNo");
 	}
 
-	@Override
-	public String getId() {
-		return (String) this.get("user").get("id");
-	}
+//	@Override
+//	public Map<String, Object> get(String key) {
+//		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+//				.getRequest();
+//		String jwt = request.getHeader("access-token");
+//		Jws<Claims> claims = null;
+//		try {
+//			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//		}
+//		Map<String, Object> value = claims.getBody();
+//		logger.info("value : {}", value);
+//		return value;
+//	}
+//
+//	@Override
+//	public String getId() {
+//		return (String) this.get("user").get("id");
+//	}
 
 }

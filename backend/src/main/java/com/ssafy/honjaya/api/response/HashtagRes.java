@@ -8,18 +8,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel(value = "LoginRes", description = "로그인 Res")
+@ApiModel(value = "HashtagRes", description = "해시태그 Res")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LoginRes {
-	@ApiModelProperty(value = "액세스 토큰")
-	private String accessToken;
+public class HashtagRes {
+	@ApiModelProperty(value = "해시태그 번호, PK")
+	private int hashNo;
 	
-	@ApiModelProperty(value = "리프레쉬 토큰")
-	private String refreshToken;
+	@ApiModelProperty(value = "해시태그 내용")
+	private String hashText;
 	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;

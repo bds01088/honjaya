@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -42,13 +45,13 @@ public class Report {
 	@Column(name="report_no", nullable=false, updatable=false) // columnDefinition="char",
 	private int reportNo;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="report_from", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User reportFrom;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="report_to", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull

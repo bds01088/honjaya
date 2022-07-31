@@ -1,6 +1,4 @@
-package com.ssafy.honjaya.api.request;
-
-import javax.validation.constraints.Size;
+package com.ssafy.honjaya.api.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,14 +8,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@ApiModel(value = "LoginRes", description = "로그인 Res")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@ApiModel(value = "HashtagReq", description = "해쉬태그 Req")
-public class HashtagReq {
-	@ApiModelProperty(value = "해쉬태그 내용")
-	@Size(min = 1, max = 11)
-	private String hashText;
+public class CommonRes {
+	@ApiModelProperty(value = "성공 여부 (boolean)")
+	private boolean success;
+	
+	@ApiModelProperty(value = "에러 메시지")
+	private String error;
+	
 }

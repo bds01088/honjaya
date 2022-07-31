@@ -4,18 +4,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.honjaya.api.request.LoginReq;
+import com.ssafy.honjaya.api.request.SignUpReq;
+import com.ssafy.honjaya.api.request.UserUpdateReq;
+import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.db.entity.User;
 import com.ssafy.honjaya.db.repository.UserRepository;
+import com.ssafy.honjaya.util.CommonUtil;
 
 @Service
 public class UserServiceImpl implements UserService{
 
+	private static final int SIGN_UP_POINT = 0; // 가입 시 포인트
+	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Override
-	public User findUser(int id) {
-		return userRepository.findById(id).get();
+	@Transactional
+	public boolean signUp(SignUpReq signUpReq) {
+		
+		User user = User.builder()
+				.userEmail(signUpReq.getUserEmail())
+				.userPassword(signUpReq.getUserPassword())
+				.userNickname(signUpReq.getUserNickname())
+				.userName(signUpReq.getUserName())
+				.userBirthday(CommonUtil.stringToDate(signUpReq.getUserBirthday()))
+				.userGender(signUpReq.getUserGender())
+				.userPhone(signUpReq.getUserPhone())
+				.userProfilePicUrl(signUpReq.getUserProfilePicUrl())
+				.userPoint(SIGN_UP_POINT)
+				.build();
+		return userRepository.save(user) != null;
+	}
+
+	@Override
+	public UserRes findUser(int userNo) {
+		User user = userRepository.findById(userNo).get();
+		UserRes userRes = new UserRes(user);
+		return userRes;
 	}
 	
 	@Override
@@ -29,23 +56,17 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	@Transactional
-	public boolean signUp(User user) {
-		return userRepository.save(user) != null;
-	}
-
-	@Override
-	public User login(User user) {
-		String email = user.getUserEmail();
-		String password = user.getUserPassword();
+	public int login(LoginReq loginReq) {
+		String email = loginReq.getUserEmail();
+		String password = loginReq.getUserPassword();
 		if (email == null || password == null) {
-			return null;
+			return -1;
 		}
-		user = userRepository.findByUserEmail(email);
-		if (user.getUserPassword() != password) {
-			return null; // 비밀번호 오답
+		User user = userRepository.findByUserEmail(email);
+		if (user == null || !user.getUserPassword().equals(password)) {
+			return -2; // 이메일 또는 비밀번호 오답
 		}
-		return user;
+		return user.getUserNo();
 	}
 
 //	@Override
@@ -54,41 +75,53 @@ public class UserServiceImpl implements UserService{
 //	}
 
 //	@Override
-//	public User userInfo(int id) { // findUser
-//		return userMapper.userInfo(id);
+//	public User userInfo(int userNo) { // findUser
+//		return userMapper.userInfo(userNo);
 //	}
 
 	@Override
 	@Transactional
-	public boolean userUpdate(User user) {
+	public boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) {
+		User user = userRepository.findById(userNo).get();
+		if (user == null) {
+			return false;
+		}
+		user.setUserPassword(userUpdateReq.getUserPassword());
+		user.setUserNickname(userUpdateReq.getUserNickname());
+		user.setUserName(userUpdateReq.getUserName());
+		user.setUserBirthday(CommonUtil.stringToDate(userUpdateReq.getUserBirthday()));
+		user.setUserGender(userUpdateReq.getUserGender());
+		user.setUserPhone(userUpdateReq.getUserPhone());
+		user.setUserProfilePicUrl(userUpdateReq.getUserProfilePicUrl());
+		
 		return userRepository.save(user) != null;
 	}
 
 	@Override
 	@Transactional
-	public boolean userDelete(int id) {
-		userRepository.deleteById(id);
+	public boolean userDelete(int userNo) {
+		userRepository.deleteById(userNo);
 		return true;
 	}
 
 	@Override
 	@Transactional
-	public void saveRefreshToken(int id, String refreshToken) {
-		User user = userRepository.findById(id).get();
+	public void saveRefreshToken(int userNo, String refreshToken) {
+		User user = userRepository.findById(userNo).get();
 		user.setUserToken(refreshToken);
 		
 		userRepository.save(user);
 	}
 
 	@Override
-	public String getRefreshToken(int id) {
-		return userRepository.findById(id).get().getUserToken();
+	public String getRefreshToken(int userNo) {
+		return userRepository.findById(userNo).get().getUserToken();
 	}
 
 	@Override
 	@Transactional
-	public void deleRefreshToken(int id) {
-		User user = userRepository.findById(id).get();
+	public void deleRefreshToken(int userNo) {
+		User user = userRepository.findById(userNo).get();
 		user.setUserToken(null);
 		
 		userRepository.save(user);

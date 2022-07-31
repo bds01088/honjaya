@@ -1,5 +1,7 @@
 package com.ssafy.honjaya.api.response;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,18 +10,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel(value = "LoginRes", description = "로그인 Res")
+@ApiModel(value = "ChatListRes", description = "채팅 리스트 Res")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LoginRes {
-	@ApiModelProperty(value = "액세스 토큰")
-	private String accessToken;
-	
-	@ApiModelProperty(value = "리프레쉬 토큰")
-	private String refreshToken;
+public class ChatListRes {
+	@ApiModelProperty(value = "채팅 리스트")
+	List<ChatroomRes> list;
 	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;

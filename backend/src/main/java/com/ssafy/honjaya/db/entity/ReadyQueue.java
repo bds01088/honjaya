@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -42,7 +45,7 @@ public class ReadyQueue {
 	@Column(name="queue_no", nullable=false, updatable=false)
 	private int queueNo;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_no", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
@@ -56,7 +59,7 @@ public class ReadyQueue {
 	@NotNull
 	private String queueUserRoleCode;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="queue_pair_user_no", nullable=true)
 	private User queuePairUserNo;
 	

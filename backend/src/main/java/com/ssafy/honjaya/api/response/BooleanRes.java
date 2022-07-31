@@ -14,12 +14,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LoginRes {
-	@ApiModelProperty(value = "액세스 토큰")
-	private String accessToken;
-	
-	@ApiModelProperty(value = "리프레쉬 토큰")
-	private String refreshToken;
+public class BooleanRes {
+	@ApiModelProperty(value = "true or false")
+	private boolean trueOrFalse;
 	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;

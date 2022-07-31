@@ -2,6 +2,7 @@ package com.ssafy.honjaya.db.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +25,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -39,13 +42,13 @@ public class Block {
 	@Column(name="block_no", nullable=false, updatable=false)
 	private int blockNo;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="block_from", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull
 	private User blockFrom;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="block_to", nullable=false, updatable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@NotNull

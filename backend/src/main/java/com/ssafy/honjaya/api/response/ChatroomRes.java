@@ -8,18 +8,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel(value = "LoginRes", description = "로그인 Res")
+@ApiModel(value = "ChatroomRes", description = "채팅방 Res")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LoginRes {
-	@ApiModelProperty(value = "액세스 토큰")
-	private String accessToken;
+public class ChatroomRes {
+	@ApiModelProperty(value = "채팅방 번호, PK")
+	private int chatroomNo;
 	
-	@ApiModelProperty(value = "리프레쉬 토큰")
-	private String refreshToken;
+	@ApiModelProperty(value = "채팅방 상대방 유저")
+	private int userNo;
+	
+	@ApiModelProperty(value = "채팅방 상대방 유저 닉네임")
+	private String userNickname;
 	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;
