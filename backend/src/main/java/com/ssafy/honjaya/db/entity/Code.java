@@ -2,6 +2,7 @@ package com.ssafy.honjaya.db.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -28,7 +29,7 @@ import lombok.ToString;
 @Table(name="code")
 public class Code {
 	@Id
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="group_code", nullable=false, columnDefinition="char(3)")
 	private GroupCode groupCode;
 	

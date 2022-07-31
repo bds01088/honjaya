@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.honjaya.api.request.RateReq;
+import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.RateRes;
+import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 import com.ssafy.honjaya.api.service.RateService;
 
@@ -44,8 +46,28 @@ public class RateController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@GetMapping("/average")
-	public ResponseEntity<RateRes> averageMe(@RequestBody RateReq rateReq, HttpServletRequest request) {
-		return null;
+	public ResponseEntity<RateRes> averageMe(HttpServletRequest request) {
+		UserRes userRes = new UserRes();
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+		String accessToken = request.getHeader("access-token");
+		if (jwtService.checkToken(accessToken)) {
+			int userNo = jwtService.extractUserNo(accessToken);
+			try {
+				userRes = userService.findUser(userNo);
+				userRes.setSuccess(true);
+				status = HttpStatus.ACCEPTED;
+			} catch (Exception e) {
+				logger.error("정보조회 실패 : {}", e);
+				userRes.setError(e.getMessage());
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} else {
+			logger.error("사용 불가능 토큰!!!");
+			userRes.setError("The token is denied");
+			status = HttpStatus.UNAUTHORIZED;
+		}
+		return new ResponseEntity<UserRes>(userRes, status);
 	}
 
 	@ApiOperation(value = "특정 유저 별점 평균", response = RateRes.class)
@@ -76,8 +98,8 @@ public class RateController {
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@GetMapping
-	public ResponseEntity<RateRes> findRate(@RequestBody RateReq rateReq, HttpServletRequest request) {
+	@GetMapping("/{userNo}")
+	public ResponseEntity<RateRes> findRate(@PathVariable int userNo, HttpServletRequest request) {
 		return null;
 	}
 	
@@ -92,14 +114,14 @@ public class RateController {
 		return null;
 	}
 	
-	@ApiOperation(value = "특정 유저 평가 삭제", response = RateRes.class)
+	@ApiOperation(value = "특정 유저 평가 삭제", response = CommonRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@DeleteMapping("/{rateNo}")
-	public ResponseEntity<RateRes> deleteRate(@RequestBody RateReq rateReq, HttpServletRequest request) {
+	public ResponseEntity<CommonRes> deleteRate(@PathVariable int rateNo, HttpServletRequest request) {
 		return null;
 	}
 }
