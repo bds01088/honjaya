@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import React from "react"
+import React, { useState } from "react"
 import { MdClear } from "react-icons/md"
 
 
@@ -54,9 +54,11 @@ const SubmitBtn = styled.button`
 
 
 const CreateTag = (props) => {
+    const [tag01, setTag01] = useState('')
 
     const sendToMain = () => {
         props.openModalHash01(false)
+        props.setHash01(tag01)
     }
 
     return (
@@ -65,7 +67,7 @@ const CreateTag = (props) => {
                 <BackIcon onClick={sendToMain}/>
                 <h1>해시태그를 입력하세요</h1>
                 <Form>
-                    <InputHash type="text"/>
+                    <InputHash type="text" onChange={(e) => setTag01(e.target.value)}/>
                     <SubmitBtn onClick={sendToMain}>등록</SubmitBtn>
                 </Form>
             </ModalView>    

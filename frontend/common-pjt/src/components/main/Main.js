@@ -3,7 +3,7 @@ import backImg from '../../assets/main_img.jpg'
 import MainHeader from './MainHeader'
 import MainCharacter from './MainCharacter'
 import CreateTag from './CreateTag'
-import { MdAddCircle } from 'react-icons/md'
+import { MdAddCircle, MdRemoveCircle } from 'react-icons/md'
 import React, { useState } from 'react'
 
 const Container = styled.div`
@@ -28,6 +28,8 @@ const HashTag01 = styled.div`
     position: absolute;
     top: 17rem;
     left: 43%;
+    display: flex;
+    flex-direction: row;
 `
 
 const AddHash01 = styled(MdAddCircle)`
@@ -40,44 +42,71 @@ const AddHash01 = styled(MdAddCircle)`
     }
 `
 
-// const HashTag02 = styled.div`
-//     position: absolute;
-//     top: 33rem;
-//     left: 62%;
-// `
+const Hash01 = styled.p`
+    font-family: Jua;
+    font-size: 1.5rem;
+    border-radius: 20%;
+    background-color: #85EAEA;
+    padding: 0.5rem;
+`
 
-// const AddHash02 = styled(MdAddCircle)`
-//     width: 3.2rem;
-//     height: 3.2rem;
-//     color: #df5dbe;
+const RemoveHash01 = styled(MdRemoveCircle)`
+    width: 3rem;
+    height: 3rem;
+    color: #71db76;
+    margin-left: 1rem;
 
-//     &:hover {
-//         color: #c954ab;
-//     }
-// `
+    &:hover {
+        color: #65c56a;
+    }
+`
 
-// const HashTag03 = styled.div`
-//     position: absolute;
-//     top: 40rem;
-//     left: 33%;
-// `
+const HashTag02 = styled.div`
+    position: absolute;
+    top: 33rem;
+    left: 62%;
+`
 
-// const AddHash03 = styled(MdAddCircle)`
-//     width: 3.5rem;
-//     height: 3.5rem;
-//     color: #B5EAEA;
+const AddHash02 = styled(MdAddCircle)`
+    width: 3.2rem;
+    height: 3.2rem;
+    color: #df5dbe;
 
-//     &:hover {
-//         color: #77c9c9;
-//     }
-// `
+    &:hover {
+        color: #c954ab;
+    }
+`
+
+const HashTag03 = styled.div`
+    position: absolute;
+    top: 40rem;
+    left: 33%;
+`
+
+const AddHash03 = styled(MdAddCircle)`
+    width: 3.5rem;
+    height: 3.5rem;
+    color: #B5EAEA;
+
+    &:hover {
+        color: #77c9c9;
+    }
+`
+
 
 const Main = () => {
 
     const [openHash01, setOpenHash01] = useState(false)
+    const [hash01, setHash01] = useState('')
+    const [remove01, setRemove01] = useState(false)
 
     const openModalHash01 = () => {
         setOpenHash01(!openHash01)
+        setHash01(hash01)
+    }
+
+    const showRemove01 = () => {
+        setRemove01(!remove01)
     }
 
     return (
@@ -90,17 +119,24 @@ const Main = () => {
             </CharacterBox>
 
             <HashTag01>
-                <AddHash01 onClick={openModalHash01}/>
-                { openHash01 ? <CreateTag openModalHash01={openModalHash01}/> : null }
+                { hash01==='' ? 
+                    <AddHash01 onClick={openModalHash01}/> 
+                    : <Hash01 onClick={showRemove01}># {hash01}</Hash01>
+                }
+                { remove01 ? <RemoveHash01 onClick={() => {
+                    setRemove01(!remove01)
+                    setHash01('')
+                }}/> : null}
+                { openHash01 ? <CreateTag openModalHash01={openModalHash01} setHash01={setHash01}/> : null }
             </HashTag01>
 
-            {/* <HashTag02>
+            <HashTag02>
                 <AddHash02 />
             </HashTag02>
 
             <HashTag03>
                 <AddHash03 />
-            </HashTag03> */}
+            </HashTag03>
         </Container>
     )
 }
