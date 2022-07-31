@@ -5,6 +5,7 @@ import MainCharacter from './MainCharacter'
 import CreateTag from './CreateTag'
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const Container = styled.div`
     background-image: url(${backImg});
@@ -16,7 +17,7 @@ const Container = styled.div`
     position: relative;
 `
 
-const CharacterBox = styled.span`
+const CharacterBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,6 +94,20 @@ const AddHash03 = styled(MdAddCircle)`
     }
 `
 
+const Start = styled.div`
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    text-decoration: none;
+    background-color: #FFCBCB;
+    font-size: 2rem;
+    font-family: Jua;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    border: 3px solid #333333;
+    
+`
+
 
 const Main = () => {
 
@@ -137,6 +152,11 @@ const Main = () => {
             <HashTag03>
                 <AddHash03 />
             </HashTag03>
+            
+            <Start>
+                <Link to="/mode" style={{ textDecoration: 'none', color: '#333333' }}>입장하기</Link>
+            </Start>
+
         </Container>
     )
 }
