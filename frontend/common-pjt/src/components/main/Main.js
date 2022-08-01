@@ -1,9 +1,10 @@
 import styled from 'styled-components'
 import backImg from '../../assets/main_img.jpg'
 import MainHeader from './MainHeader'
+import ChatList from './ChatList'
 import MainCharacter from './MainCharacter'
 import CreateTag from './CreateTag'
-import { MdAddCircle, MdRemoveCircle } from 'react-icons/md'
+import { MdAddCircle, MdRemoveCircle, MdLogout, MdForum, MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -18,28 +19,63 @@ const Container = styled.div`
 `
 
 const CharacterBox = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    position: relative;
+    position: absolute;
+    top: 38%;
+    left: 43%;
+    width: 17%;
+    height: 17%;
 `
 
-const HashTag01 = styled.div`
+const HashTag = styled.div`
     position: absolute;
-    top: 17rem;
-    left: 43%;
     display: flex;
     flex-direction: row;
+
+    &.hash1 {
+        top: 23%;
+        left: 43%;
+    }
+
+    &.hash2 {
+        top: 60%;
+        left: 62%;  
+    }
+    &.hash3 {
+        top: 70%;
+        left: 36%;
+    }
 `
 
-const AddHash01 = styled(MdAddCircle)`
-    width: 3rem;
-    height: 3rem;
-    color: #71db76;
+const AddHash = styled(MdAddCircle)`
 
-    &:hover {
-        color: #65c56a;
+    &.hash1 {
+        width: 3rem;
+        height: 3rem;
+        color: #71db76;
+    
+        &:hover {
+            color: #65c56a;
+        }
+    }
+
+    &.hash2 {
+        width: 3.2rem;
+        height: 3.2rem;
+        color: #df5dbe;
+
+        &:hover {
+            color: #c954ab;
+        }
+    }
+
+    &.hash3 {
+        width: 3.5rem;
+        height: 3.5rem;
+        color: #B5EAEA;
+
+        &:hover {
+            color: #77c9c9;
+        }
     }
 `
 
@@ -62,36 +98,62 @@ const RemoveHash01 = styled(MdRemoveCircle)`
     }
 `
 
-const HashTag02 = styled.div`
+const LogoutBox = styled.div`
     position: absolute;
-    top: 33rem;
-    left: 62%;
+    bottom: 3.2rem;
+    left: 3rem;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+`
+const Logout = styled(MdLogout)`
+    font-size: 2rem;
+    color: #FF728E;
+`
+const LogoutText = styled.p`
+    font-family: Jua;
+    color: #FF728E;
 `
 
-const AddHash02 = styled(MdAddCircle)`
-    width: 3.2rem;
-    height: 3.2rem;
-    color: #df5dbe;
-
-    &:hover {
-        color: #c954ab;
-    }
-`
-
-const HashTag03 = styled.div`
+const ChatBox = styled.div`
     position: absolute;
-    top: 40rem;
-    left: 33%;
+    bottom: 4rem;
+    left: 9rem;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
-const AddHash03 = styled(MdAddCircle)`
-    width: 3.5rem;
-    height: 3.5rem;
-    color: #B5EAEA;
+const Chat = styled(MdForum)`
+    font-size: 2rem;
+    color: #FF728E;
+`
 
-    &:hover {
-        color: #77c9c9;
-    }
+const ChatListUp = styled.div`
+    font-size: 120%;
+    font-family: Jua;
+    background-color: #FFFFFF;
+    width: 11rem;
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 1rem;
+    border: 2px solid #333333;
+    margin-left: 1rem;
+    color: #333333;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    position: relative;
+`
+
+const ClosedChat = styled(MdKeyboardArrowUp)`
+`
+
+
+const OpenChat = styled(MdKeyboardArrowDown)`
 `
 
 const Start = styled.div`
@@ -106,6 +168,9 @@ const Start = styled.div`
     border-radius: 2rem;
     border: 3px solid #333333;
     
+    @media screen and (max-width: 800px){
+        font-size: 1.5rem;
+    }
 `
 
 
@@ -114,6 +179,7 @@ const Main = () => {
     const [openHash01, setOpenHash01] = useState(false)
     const [hash01, setHash01] = useState('')
     const [remove01, setRemove01] = useState(false)
+    const [openChat, setOpenChat] = useState(false)
 
     const openModalHash01 = () => {
         setOpenHash01(!openHash01)
@@ -122,6 +188,10 @@ const Main = () => {
 
     const showRemove01 = () => {
         setRemove01(!remove01)
+    }
+
+    const openChatModal = () => {
+        setOpenChat(!openChat)
     }
 
     return (
@@ -133,9 +203,9 @@ const Main = () => {
                 <MainCharacter />
             </CharacterBox>
 
-            <HashTag01>
+            <HashTag className="hash1">
                 { hash01==='' ? 
-                    <AddHash01 onClick={openModalHash01}/> 
+                    <AddHash  className="hash1" onClick={openModalHash01}/> 
                     : <Hash01 onClick={showRemove01}># {hash01}</Hash01>
                 }
                 { remove01 ? <RemoveHash01 onClick={() => {
@@ -143,16 +213,37 @@ const Main = () => {
                     setHash01('')
                 }}/> : null}
                 { openHash01 ? <CreateTag openModalHash01={openModalHash01} setHash01={setHash01}/> : null }
-            </HashTag01>
+            </HashTag>
 
-            <HashTag02>
-                <AddHash02 />
-            </HashTag02>
+            <HashTag className="hash2">
+                    <AddHash className="hash2"/>
+            </HashTag>
 
-            <HashTag03>
-                <AddHash03 />
-            </HashTag03>
+            <HashTag className="hash3">
+                <AddHash className="hash3"/>
+            </HashTag>
             
+
+            <LogoutBox>
+                <Logout/>
+                <LogoutText>로그아웃</LogoutText>
+            </LogoutBox>
+            
+
+            <ChatBox>
+                <Chat/>
+                <ChatListUp onClick={openChatModal}>
+                    채팅목록
+                    { openChat ? 
+                        <ClosedChat/> : 
+                        <>
+                            <OpenChat/>
+                            <ChatList/>
+                        </>
+                    }
+                </ChatListUp>
+            </ChatBox>
+
             <Start>
                 <Link to="/mode" style={{ textDecoration: 'none', color: '#333333' }}>입장하기</Link>
             </Start>
