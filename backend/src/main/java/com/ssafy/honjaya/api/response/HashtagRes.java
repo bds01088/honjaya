@@ -1,5 +1,7 @@
 package com.ssafy.honjaya.api.response;
 
+import com.ssafy.honjaya.db.entity.Hashtag;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,5 +28,9 @@ public class HashtagRes {
 	
 	@ApiModelProperty(value = "에러 메시지")
 	private String error;
-	
+
+	public HashtagRes(Hashtag hashtag) {
+		this.hashNo = hashtag.getHashNo();
+		this.hashText = hashtag.getHashText();
+	}
 }
