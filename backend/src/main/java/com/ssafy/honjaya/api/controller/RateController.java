@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.honjaya.api.request.RateReq;
 import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.RateRes;
-import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 import com.ssafy.honjaya.api.service.RateService;
 
@@ -47,27 +47,26 @@ public class RateController {
 	})
 	@GetMapping("/average")
 	public ResponseEntity<RateRes> averageMe(HttpServletRequest request) {
-		UserRes userRes = new UserRes();
-		HttpStatus status = HttpStatus.UNAUTHORIZED;
-
-		String accessToken = request.getHeader("access-token");
-		if (jwtService.checkToken(accessToken)) {
-			int userNo = jwtService.extractUserNo(accessToken);
-			try {
-				userRes = userService.findUser(userNo);
-				userRes.setSuccess(true);
-				status = HttpStatus.ACCEPTED;
-			} catch (Exception e) {
-				logger.error("정보조회 실패 : {}", e);
-				userRes.setError(e.getMessage());
-				status = HttpStatus.INTERNAL_SERVER_ERROR;
+		RateRes rateRes = new RateRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				rateRes.setRateScore(rateService.getAverageRate(userNo));
+				rateRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				rateRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
 			}
-		} else {
-			logger.error("사용 불가능 토큰!!!");
-			userRes.setError("The token is denied");
-			status = HttpStatus.UNAUTHORIZED;
+		} catch (Exception e) {
+			rateRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		return new ResponseEntity<UserRes>(userRes, status);
+		return new ResponseEntity<RateRes>(rateRes, status);
 	}
 
 	@ApiOperation(value = "특정 유저 별점 평균", response = RateRes.class)
@@ -78,7 +77,25 @@ public class RateController {
 	})
 	@GetMapping("/average/{userNo}")
 	public ResponseEntity<RateRes> average(@PathVariable int userNo, HttpServletRequest request) {
-		return null;
+		RateRes rateRes = new RateRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				rateRes.setRateScore(rateService.getAverageRate(userNo));
+				rateRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				rateRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			rateRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<RateRes>(rateRes, status);
 	}
 	
 	@ApiOperation(value = "특정 유저 평가 입력", response = RateRes.class)
@@ -89,7 +106,27 @@ public class RateController {
 	})
 	@PostMapping
 	public ResponseEntity<RateRes> insertRate(@RequestBody RateReq rateReq, HttpServletRequest request) {
-		return null;
+		RateRes rateRes = new RateRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				rateReq.setRateFrom(userNo);
+				rateRes = rateService.insertRate(rateReq);
+				rateRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				rateRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			rateRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<RateRes>(rateRes, status);
 	}
 	
 	@ApiOperation(value = "특정 유저 평가 내역 조회", response = RateReq.class)
@@ -100,7 +137,27 @@ public class RateController {
 	})
 	@GetMapping("/{userNo}")
 	public ResponseEntity<RateRes> findRate(@PathVariable int userNo, HttpServletRequest request) {
-		return null;
+		RateRes rateRes = new RateRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int rateFrom = jwtService.extractUserNo(accessToken);
+				int rateTo = userNo;
+				rateRes = rateService.findRate(rateFrom, rateTo);
+				rateRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				rateRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			rateRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<RateRes>(rateRes, status);
 	}
 	
 	@ApiOperation(value = "특정 유저 평가 수정", response = RateRes.class)
@@ -111,7 +168,28 @@ public class RateController {
 	})
 	@PutMapping("/{rateNo}")
 	public ResponseEntity<RateRes> updateRate(@PathVariable int rateNo, @RequestBody RateReq rateReq, HttpServletRequest request) {
-		return null;
+		RateRes rateRes = new RateRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+//				int userNo = jwtService.extractUserNo(accessToken);
+//				rateReq.setRateFrom(userNo);
+				// rateNo를 통해 바로 데이터베이스에서 rate 정보를 조회하여 그곳에 rateTo가 이미 있으므로 userNo를 가져올 필요가 없다.
+				rateRes = rateService.updateRate(rateNo, rateReq);
+				rateRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				rateRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			rateRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<RateRes>(rateRes, status);
 	}
 	
 	@ApiOperation(value = "특정 유저 평가 삭제", response = CommonRes.class)
@@ -122,6 +200,24 @@ public class RateController {
 	})
 	@DeleteMapping("/{rateNo}")
 	public ResponseEntity<CommonRes> deleteRate(@PathVariable int rateNo, HttpServletRequest request) {
-		return null;
+		CommonRes commonRes = new CommonRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				rateService.deleteRate(rateNo);
+				commonRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				commonRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			commonRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<CommonRes>(commonRes, status);
 	}
 }
