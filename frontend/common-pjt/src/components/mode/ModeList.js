@@ -8,19 +8,20 @@ const Container = styled.div`
     position: absolute;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 `
 
 const ModeList = () => {
-    const indexs = [0, 1, 2, 3]
+    const indexes = [0, 1, 2, 3]
 
     return (
         <Container>
-            {indexs.map( i => (
-                <>
-                    <ModeListItem i={i}/>
-                </>
+            
+            {indexes.map( i => (
+                
+                    <ModeListItem key={i} i={i} />
+                
             ))}
         </Container>
  
