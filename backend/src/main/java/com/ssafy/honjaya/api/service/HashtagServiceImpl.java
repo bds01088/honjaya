@@ -37,7 +37,7 @@ public class HashtagServiceImpl implements HashtagService {
 
 	@Override
 	public HashtagListRes listHashtag(int userNo) {
-		List<Hashtag> list = hashtagRepository.findByUserNo(userNo);
+		List<Hashtag> list = hashtagRepository.findByUser_UserNo(userNo);
 		List<HashtagRes> resList = new ArrayList<>();
 		HashtagListRes hashtagListRes = new HashtagListRes();
 		list.forEach(e -> resList.add(new HashtagRes(e)));
