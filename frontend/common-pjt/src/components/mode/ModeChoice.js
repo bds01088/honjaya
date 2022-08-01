@@ -16,7 +16,7 @@ const ModeSelectBox=styled.div`
 const ModeChoice = () =>{
     return(
         <ModeSelectBox className="box">
-            <ModeList></ModeList>
+            <ModeList className="ModeList"></ModeList>
         </ModeSelectBox>
     )
 }

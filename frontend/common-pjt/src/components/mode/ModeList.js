@@ -13,16 +13,19 @@ const Container = styled.div`
 `
 
 const ModeList = () => {
-    const indexes = [0, 1, 2, 3]
+  
 
     return (
         <Container>
             
-            {indexes.map( i => (
+            {/* {indexes.map( i => (
                 
                     <ModeListItem key={i} i={i} />
                 
-            ))}
+            ))} */}
+            <ModeListItem />
+
+       
         </Container>
  
     )
