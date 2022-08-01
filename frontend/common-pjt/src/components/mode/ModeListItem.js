@@ -168,31 +168,31 @@ const ModeListItem = () => {
     ) 
 }
 
-const data = [
-    {
-        id: 0,
-        src: `${TempImg}`,
-        text: '싱글로 참여해서~',
+// const data = [
+//     {
+//         id: 0,
+//         src: `${TempImg}`,
+//         text: '싱글로 참여해서~',
 
-    },
-    {
-        id: 1,
-        src: `${TempImg}`,
-        text: '지시자로 참여해서~',
+//     },
+//     {
+//         id: 1,
+//         src: `${TempImg}`,
+//         text: '지시자로 참여해서~',
 
-    },
-    {
-        id: 2,
-        src: `${TempImg}`,
-        text: '아바타로 참여해서~',
+//     },
+//     {
+//         id: 2,
+//         src: `${TempImg}`,
+//         text: '아바타로 참여해서~',
 
-    },
-    {
-        id: 3,
-        src: `${TempImg}`,
-        text: '랜덤으로 참여해서~',
+//     },
+//     {
+//         id: 3,
+//         src: `${TempImg}`,
+//         text: '랜덤으로 참여해서~',
 
-    },
-]
+//     },
+// ]
 export default ModeListItem
 
