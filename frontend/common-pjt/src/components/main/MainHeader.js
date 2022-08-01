@@ -28,6 +28,10 @@ const Nickname = styled.div`
     padding-right: 1rem;
     border-radius: 0.5rem;
     margin-right: 1rem;
+
+    @media screen and (max-width: 800px){
+        font-size: 1.5rem;
+    }
 `
 
 const PointImg = styled.img`
@@ -40,6 +44,8 @@ const pointShow = point.toLocaleString('ko-KR');
 
 const Helper = styled(MdHelpOutline)`
     margin-right: 2rem;
+    color: #333333;
+    font-size: 2rem;
 `
 
 
@@ -62,7 +68,7 @@ const MainHeader = () => {
                     <Link to="/profile" style={{ fontSize: '0' }}>    
                         <MdAccountCircle style={{ color: '#333333', fontSize: '2rem', marginRight: '0.5rem' }}/>
                     </Link>
-                    <Helper style={{ color: '#333333',fontSize: '2rem'}} onClick={openModalHelper}/>
+                    <Helper onClick={openModalHelper}/>
                 </div>
                 { isOpen ? <MainHelper openModalHelper={openModalHelper}/> : null }
             </Header>

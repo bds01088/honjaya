@@ -3,8 +3,6 @@ import Character from '../../assets/character.png'
 import Shadow from '../../assets/shadow.png'
 
 const Container = styled.div`
-    width: 20rem;
-    height: 20rem;
     perspective: 300px;
     position: relative;
 
