@@ -211,7 +211,7 @@ public class UserController {
 			try {
 				userRes = userService.findUser(userNo);
 				userRes.setSuccess(true);
-				status = HttpStatus.ACCEPTED;
+				status = HttpStatus.OK;
 			} catch (Exception e) {
 				logger.error("정보조회 실패 : {}", e);
 				userRes.setError(e.getMessage());
@@ -237,19 +237,25 @@ public class UserController {
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@PutMapping("logout")
+	@PutMapping("/logout")
 	public ResponseEntity<CommonRes> removeToken(HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.ACCEPTED;
 		CommonRes res = new CommonRes();
-
-		String accessToken = request.getHeader("access-token");
-		int userNo = jwtService.extractUserNo(accessToken);
-
+		
 		try {
-			userService.deleRefreshToken(userNo);
-			res.setSuccess(true);
-			status = HttpStatus.ACCEPTED;
+			String accessToken = request.getHeader("access-token");
+			if (accessToken != null && !accessToken.isEmpty()) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				userService.deleRefreshToken(userNo);
+				res.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("토큰 값이 없음");
+				res.setError("The token is empty");
+				res.setSuccess(true);
+				status = HttpStatus.OK; // 토큰 값이 없을 경우에도 프론트에서는 자연스럽게 로그아웃으로 가면 된다.
+			}
 		} catch (Exception e) {
 			logger.error("로그아웃 실패 : {}", e);
 			res.setError(e.getMessage());
@@ -269,10 +275,18 @@ public class UserController {
 		LoginRes loginRes = new LoginRes();
 		HttpStatus status = HttpStatus.ACCEPTED;
 		String refreshToken = request.getHeader("refresh-token");
+		
+		if (refreshToken == null || refreshToken.isEmpty()) {
+			logger.error("리프레쉬 토큰 값 없음");
+			loginRes.setError("리프레쉬 토큰 값이 없습니다.");	
+			
+			return new ResponseEntity<LoginRes>(loginRes, HttpStatus.UNAUTHORIZED);
+		}
+		
 		int userNo = jwtService.extractUserNo(refreshToken);
 
 		if (!jwtService.checkToken(refreshToken)) {
-			logger.error("리프레쉬 토큰도 만료됐습니다. 다시 로그인 하세요.");
+			logger.error("리프레쉬 토큰도 만료");
 			loginRes.setError("리프레쉬 토큰도 만료됐습니다. 다시 로그인 하세요.");
 
 			userService.deleRefreshToken(userNo);
@@ -283,7 +297,7 @@ public class UserController {
 			String accessToken = jwtService.createAccessToken("userNo", userNo);
 			loginRes.setAccessToken(accessToken);
 			loginRes.setSuccess(true);
-			status = HttpStatus.ACCEPTED;
+			status = HttpStatus.OK;
 		} else {
 			logger.error("요청한 리프레쉬 토큰과 저장된 리프레쉬 토큰이 일치하지 않습니다.");
 			loginRes.setError("요청한 리프레쉬 토큰과 저장된 리프레쉬 토큰이 일치하지 않습니다.");

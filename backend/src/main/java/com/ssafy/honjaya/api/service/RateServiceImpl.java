@@ -33,7 +33,7 @@ public class RateServiceImpl implements RateService {
 	public RateRes insertRate(RateReq rateReq) {
 		Rate rate = Rate.builder()
 				.rateFrom(userRepository.getOne(rateReq.getRateFrom()))
-				.rateTo(userRepository.getOne(rateReq.getRateFrom()))
+				.rateTo(userRepository.getOne(rateReq.getRateTo()))
 				.rateScore(rateReq.getRateScore())
 				.build();
 		rate = rateRepository.save(rate);
