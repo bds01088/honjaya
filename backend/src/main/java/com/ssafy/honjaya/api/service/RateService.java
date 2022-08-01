@@ -1,11 +1,12 @@
 package com.ssafy.honjaya.api.service;
 
-import com.ssafy.honjaya.db.entity.Rate;
+import com.ssafy.honjaya.api.request.RateReq;
+import com.ssafy.honjaya.api.response.RateRes;
 
 public interface RateService {
-	Rate detail(int rateFrom, int rateTo);
-	Rate insert(Rate rate);
-	Rate update(int rateNo);
-	void delete(int rateNo);
 	double getAverageRate(int userNo);
+	RateRes findRate(int rateFrom, int rateTo);
+	RateRes insertRate(RateReq rateReq);
+	RateRes updateRate(int rateNo, RateReq rateReq);
+	void deleteRate(int rateNo);
 }

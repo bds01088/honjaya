@@ -67,8 +67,9 @@ const CheckBox = styled.input`
     
 `
 
-const StyledButton = styled.button`
-  /* 공통 스타일 */
+const Button = styled.button`
+  position: relative;
+  top:1rem;
   border: none;
   border-radius: 4px;
   color: white;
@@ -76,7 +77,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   padding-left: 1rem;
   padding-right: 1rem;
-  margin-top: 30%;
+  margin:auto;
 
   /* 크기 */
   height: 2.25rem;
@@ -86,15 +87,20 @@ const StyledButton = styled.button`
   /* 색상 */
   background: #FF728E;
   
-  &:hover {
-    background: #F38BA0;
+  &:disabled {
+    cursor: default;
+    background: #FF728E;
   }
+  
+  /* &:hover {
+
+  } */
   &:active {
     background: #FF728E;
   }
 
 `
- 
+
 const Pledge = () => {
 
     // 동의 체크 여부 판별
@@ -107,6 +113,7 @@ const Pledge = () => {
         }
     }
 
+    console.log(check)
     return (
         <Background>
             <Form>
@@ -124,9 +131,13 @@ const Pledge = () => {
                     </Agree>
                 </PledgeTemplate>
                 <Link to="/signup" style={{ textDecoration: 'none'}}>
-                    <StyledButton disabled={!check}   
-                        >다음
-                    </StyledButton>
+                    <div >
+                        {
+                            check === true 
+                            ? (<Button hover={true} >다음</Button>)
+                            : (<Button hover={false} disabled={!check}>다음</Button>)
+                        }
+                    </div>
                 </Link>
             </Form>
         </Background>

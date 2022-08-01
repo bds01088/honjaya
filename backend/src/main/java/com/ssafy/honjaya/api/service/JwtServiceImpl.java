@@ -82,6 +82,9 @@ public class JwtServiceImpl implements JwtService {
 	// 전달 받은 토큰이 제대로 생성된것인지 확인 하고 문제가 있다면Exception을 발생.
 	@Override
 	public boolean checkToken(String jwt) {
+		if (jwt == null || jwt.isEmpty()) { // Exception 발생 로직도 고민
+			return false;
+		}
 		try {
 			// Json Web Signature? 서버에서 인증을 근거로 인증정보를 서버의 private key로 서명 한것을 토큰화 한것
 			// setSigningKey : JWS 서명 검증을 위한 secretkey 셋팅
