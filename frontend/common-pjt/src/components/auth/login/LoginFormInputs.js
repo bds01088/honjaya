@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginActions } from './login-slice'
+import { login } from './login-slice'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -100,12 +100,13 @@ const LoginFormInputs = () => {
   const [userPassword, setPassword] = useState('')
 
   function handleSubmit(e) {
+    console.log(e)
     e.preventDefault()
     const data = {
       userEmail,
       userPassword
     }
-    dispatch(loginActions(data))
+    dispatch(login(data))
     .unwrap()
     .then(() => {
       navigate.push('/main')
@@ -125,30 +126,35 @@ const LoginFormInputs = () => {
 
 
   return (
-    <LoginFormInputsBlock
-    onSubmit = {handleSubmit}
-    >
-    <StyledInput
-      autoComplete="userEmail"
-      name="userEmail"
-      placeholder="이메일을 입력하세요"
-      onChange={(e) => setEmail(e.target.value)}
-      value={userEmail}
-      className="email"
-    ></StyledInput>
-    <StyledInput
-      autoComplete="userPassword"
-      name="userPassword"
-      placeholder="비밀번호를 입력하세요"
-      onChange={(e) => setPassword(e.target.value)}
-      value={userPassword}
-      className="password"
-      
-    ></StyledInput>
+    <>
+      <LoginFormInputsBlock
+      onSubmit = {handleSubmit}
+      >
+      <StyledInput
+        autoComplete="userEmail"
+        name="userEmail"
+        placeholder="이메일을 입력하세요"
+        onChange={(e) => setEmail(e.target.value)}
+        value={userEmail}
+        className="email"
+      ></StyledInput>
+      <StyledInput
+        type="password"
+        autoComplete="userPassword"
+        name="userPassword"
+        placeholder="비밀번호를 입력하세요"
+        onChange={(e) => setPassword(e.target.value)}
+        value={userPassword}
+        className="password"
+        
+      ></StyledInput>
+      <button>테스트</button>
+      <LoginBtn>로그인</LoginBtn>
+      </LoginFormInputsBlock>
+      <GoInBtn>회원가입</GoInBtn>
+    </>
 
-    <LoginBtn>로그인</LoginBtn>
-    <GoInBtn>회원가입</GoInBtn>
-    </LoginFormInputsBlock>
+  
   );
 };
 

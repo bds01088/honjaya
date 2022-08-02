@@ -8,9 +8,14 @@ import {configureStore, combineReducers} from '@reduxjs/toolkit'
 import { createBrowserHistory } from 'history'
 
 import signupReducer from '../components/auth/signup/signup-slice'
+import loginReducer from '../components/auth/login/login-slice'
+
+//떵크 관련
+
 
 const rootReducers = combineReducers({
-  signup: signupReducer
+  signup: signupReducer,
+  login: loginReducer
 })
 
 
