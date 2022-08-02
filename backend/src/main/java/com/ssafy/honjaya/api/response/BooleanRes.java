@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel(value = "LoginRes", description = "로그인 Res")
+@ApiModel(value = "BooleanRes", description = "boolean Res")
 @Getter
 @Setter
 @NoArgsConstructor

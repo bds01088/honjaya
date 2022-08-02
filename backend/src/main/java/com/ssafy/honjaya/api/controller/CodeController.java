@@ -8,15 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.honjaya.api.request.PointReq;
 import com.ssafy.honjaya.api.response.CodeListRes;
-import com.ssafy.honjaya.api.response.CommonRes;
-import com.ssafy.honjaya.api.response.PointRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 
 import io.swagger.annotations.Api;
