@@ -1,7 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
-// import ModeChoice from "./ModeChoice"
+
+const ModeHeader = () => {
+  return (
+    <>
+      <Header>
+        <Logo src={logo}></Logo>
+      </Header>
+
+      <ModeSelect>
+        <Text>역할선택</Text>
+      </ModeSelect>
+    </>
+  )
+}
+
+export default ModeHeader
 
 const Header = styled.div`
   display: flex;
@@ -35,19 +50,3 @@ const Text = styled.p`
   background-color: #fffdde;
   font-family: 'Jua';
 `
-
-const ModeHeader = () => {
-  return (
-    <>
-      <Header>
-        <Logo src={logo}></Logo>
-      </Header>
-
-      <ModeSelect>
-        <Text>역할선택</Text>
-      </ModeSelect>
-    </>
-  )
-}
-
-export default ModeHeader
