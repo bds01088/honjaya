@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login from './components/auth/Login';
 import Pledge from './components/auth/Pledge';
-import Signup from './components/auth/Signup';
+import Signup from './components/auth/signup/Signup';
 import Main from './components/main/Main';
 import UpdateProfile from './components/main/profile/UpdateProfile';
 import Mode from './components/mode/Mode';
