@@ -1,7 +1,8 @@
 import React from "react"
 import styled from 'styled-components'
 import ModeHeader from "./ModeHeader"
-import ModeChoice from "./ModeChoice"
+import ModeRole from "./ModeRole"
+import ModePersonnel from "./ModePersonnel"
 
 const Background = styled.div`
     background-color: #FFFDDE;
@@ -14,7 +15,8 @@ const Mode = () => {
     return (
         <Background>
             <ModeHeader/>
-            <ModeChoice></ModeChoice>
+            <ModeRole></ModeRole>
+            <ModePersonnel></ModePersonnel>
         </Background>
     )
 };

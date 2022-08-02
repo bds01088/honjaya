@@ -2,21 +2,25 @@ import styled from 'styled-components'
 import SignupForm from './SignupForm'
 
 
-const SignupBlock = styled.div`
+
+const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   height: 100vh;
   width: 100vw;
-  background-color: yellow;
+  background-color: #FFFDDE;
+  overflow: hidden;
+  font-family: Jua;
 `
 
 const Signup = () => {
   return (
-    <SignupBlock>
-      <SignupForm>        
+    <Background>      
+      <SignupForm>  
       </SignupForm>
-    </SignupBlock>
+    </Background>
   )
 }
 

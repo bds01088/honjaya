@@ -3,6 +3,7 @@ package com.ssafy.honjaya.api.service;
 import com.ssafy.honjaya.api.request.LoginReq;
 import com.ssafy.honjaya.api.request.SignUpReq;
 import com.ssafy.honjaya.api.request.UserUpdateReq;
+import com.ssafy.honjaya.api.response.BanRes;
 import com.ssafy.honjaya.api.response.UserRes;
 
 public interface UserService {
@@ -18,4 +19,6 @@ public interface UserService {
 	void saveRefreshToken(int userNo, String refreshToken);
 	String getRefreshToken(int userNo);
 	void deleRefreshToken(int userNo);
+	
+	BanRes confirmBan(String email);
 }
