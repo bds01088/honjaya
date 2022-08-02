@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const FormInputsBlock = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const FormInputsBlock = styled.div`
     width: 100%;
     align-items: center;
   }
-`;
+`
 
 const StyledInput = styled.input`
   background-color: white;
@@ -35,10 +35,10 @@ const StyledInput = styled.input`
   & + & {
     margin-top: 1.5rem;
   }
-`;
+`
 
-const FormInputs = ({form, onChange, onSubmit, error}) => {
-  console.log(form)
+const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, error}) => {
+  // console.log(form)
   return (
     <FormInputsBlock>
       <h3>회원가입</h3>
@@ -50,6 +50,7 @@ const FormInputs = ({form, onChange, onSubmit, error}) => {
           onChange={onChange}
           value={form.userEmail}
         ></StyledInput>
+        <button onClick={() => isValidEmail()}>이메일 중복체크</button>
         <StyledInput
           autoComplete='userPassword'
           name="userPassword"
@@ -64,6 +65,7 @@ const FormInputs = ({form, onChange, onSubmit, error}) => {
           onChange={onChange}
           value={form.userNickname}
         ></StyledInput>
+        <button onClick={() => isValidNickname()}>닉네임 중복체크</button>
         <StyledInput
           autoComplete='userName'
           name="userName"
@@ -102,7 +104,7 @@ const FormInputs = ({form, onChange, onSubmit, error}) => {
         <button>가입</button>
       </form>
     </FormInputsBlock>
-  );
-};
+  )
+}
 
-export default FormInputs;
+export default FormInputs

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialSignupState = {
   //register
@@ -12,9 +12,13 @@ const initialSignupState = {
     userPhone: '',
     userProfilePicUrl: '',
   },
+  
+  isEmailChecked: false,
+  isNicknameChecked: false,
+  
   loading: false,
   error: null,
-};
+}
 
 const signupSlice = createSlice({
   name: 'signup',
@@ -30,9 +34,29 @@ const signupSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    //이메일 중복 체크
+    checkEmailStart(state) {
+      state.loading = true
+      state.error = null
+    },
+    //이메일 중복 체크 결과 담을 state
+    changeCheckEmailField(state, action) {
+      const isDuplicatedEmail = action.payload
+      state.isEmailChecked = isDuplicatedEmail
+    },
+    //닉네임 중복 체크
+    checkNicknameStart(state) {
+      state.loading = true
+      state.error = null
+    },
+    //닉네임 중복 체크 결과 담을 state
+    changeCheckNicknameField(state, action) {
+      const isDuplicatedNickname = action.payload
+      state.isNicknameChecked = isDuplicatedNickname
+    }
   },
-});
+})
 
-export const signupActions = signupSlice.actions;
+export const signupActions = signupSlice.actions
 
-export default signupSlice.reducer;
+export default signupSlice.reducer

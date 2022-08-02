@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import SignupForm from './SignupForm';
+import styled from 'styled-components'
+import SignupForm from './SignupForm'
 
 
 const SignupBlock = styled.div`
@@ -9,7 +9,7 @@ const SignupBlock = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: yellow;
-`;
+`
 
 const Signup = () => {
   return (
@@ -17,7 +17,7 @@ const Signup = () => {
       <SignupForm>        
       </SignupForm>
     </SignupBlock>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

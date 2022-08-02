@@ -9,11 +9,8 @@ import {
   call,
 } from 'redux-saga/effects'
 
-
 import { signupActions } from '../components/auth/signup/signup-slice'
-
-
-import { createUser } from '../api/api'
+import { createUser, emailCheck, nicknameCheck } from '../api/api'
 
 function* onCreateUserStartAsync({ payload }) {
   try {
@@ -30,6 +27,61 @@ function* onCreateUser() {
   yield takeLatest(createUserStart, onCreateUserStartAsync);
 }
 
+
+function* onCheckEmailStartAsync({ payload }) {
+  const { changeCheckEmailField } = signupActions
+  // console.log("온체크이메일페이로드", payload)
+  try {
+    const response = yield call(emailCheck, payload)
+    console.log(response)
+    const isDuplicatedEmail = response.data.trueOrFalse
+    yield put(changeCheckEmailField(isDuplicatedEmail)) //put은 dispatch와 유사
+    console.log(response.data.trueOrFalse)
+    if (response.data.trueOrFalse) {
+      alert('아이디가 중복됨')
+    }
+    else {
+      alert('아이디가 사용가능함')
+    }
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+function* onCheckEmail() {
+  const { checkEmailStart } = signupActions
+  yield takeLatest(checkEmailStart, onCheckEmailStartAsync)
+}
+
+
+function* onCheckNicknameStartAsync({ payload }) {
+  const { changeCheckNicknameField } = signupActions
+  console.log("온체크닉네임페이로드", payload)
+  try {
+    const response = yield call(nicknameCheck, payload)
+    console.log(response)
+    const isDuplicatedNickname = response.data.trueOrFalse
+    yield put(changeCheckNicknameField(isDuplicatedNickname)) //put은 dispatch와 유사
+    console.log(response.data.trueOrFalse)
+    if (response.data.trueOrFalse) {
+      alert('닉네임이 중복됨')
+    }
+    else {
+      alert('닉네임이 사용가능함')
+    }
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+function* onCheckNickname() {
+  const { checkNicknameStart } = signupActions
+  yield takeLatest(checkNicknameStart, onCheckNicknameStartAsync)
+}
+
+
 export const signupSagas = [
   fork(onCreateUser),
+  fork(onCheckEmail),
+  fork(onCheckNickname),
 ]
