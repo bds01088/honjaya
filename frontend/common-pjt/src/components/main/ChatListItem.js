@@ -8,15 +8,22 @@ const Container = styled.div`
 `
 
 const Name = styled.p`
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 `
 
-const ChatListItem = ({user}) => {
+const ChatListItem = ({user, openChatList, setChatUser}) => {
+
+
     return (
-        <Container className="Container">
-            <Name>{user}</Name>
-            <MdClose/>
-        </Container>
+        <>
+            <Container onClick={() => {
+                openChatList()
+                setChatUser({user})
+            }}>
+                <Name>{user}</Name>
+                <MdClose/>
+            </Container>
+        </>
     )
 }
 

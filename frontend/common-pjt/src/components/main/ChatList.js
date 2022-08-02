@@ -7,13 +7,14 @@ const Container = styled.div`
     font-family: Jua;
     background-color: #FFFFFF;
     width: 11rem;
-    height: 30rem;
+    height: 20rem;
     padding: 1rem 1rem;
     border-radius: 0.5rem;
     border: 2px solid #333333;
-    bottom: 3rem;
+    bottom: 3.2rem;
     left: 0rem;
     overflow-y: scroll;
+    z-index: 1;
 
     &::-webkit-scrollbar{
         width: 0.7rem;
@@ -31,14 +32,13 @@ const Container = styled.div`
     }
 `
 
-const ChatList = () => {
-    const users = ['김누리', '김효근', '배상현', '배송윤', '이승현']
+const ChatList = ({users, openChatList, setChatUser}) => {
 
     return (
         <Container>
             {users.map(user => (
                 <>
-                    <ChatListItem user={user}/><hr/>
+                    <ChatListItem openChatList={openChatList} user={user} setChatUser={setChatUser}/><hr/>
                 </>
             ))}
         </Container>

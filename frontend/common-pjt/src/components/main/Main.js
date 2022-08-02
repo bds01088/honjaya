@@ -4,6 +4,7 @@ import MainHeader from './MainHeader'
 import ChatList from './ChatList'
 import MainCharacter from './MainCharacter'
 import CreateTag from './CreateTag'
+import ChatRoom from './ChatRoom'
 import { MdAddCircle, MdRemoveCircle, MdLogout, MdForum, MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -126,8 +127,13 @@ const ChatBox = styled.div`
 `
 
 const Chat = styled(MdForum)`
+    margin-right: 1rem;
     font-size: 2rem;
     color: #FF728E;
+`
+
+const FullChat = styled.div`
+    position: relative;
 `
 
 const ChatListUp = styled.div`
@@ -139,14 +145,11 @@ const ChatListUp = styled.div`
     padding: 0 1rem;
     border-radius: 1rem;
     border: 2px solid #333333;
-    margin-left: 1rem;
     color: #333333;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    position: relative;
 `
 
 const ClosedChat = styled(MdKeyboardArrowUp)`
@@ -179,19 +182,21 @@ const Main = () => {
     const [openHash01, setOpenHash01] = useState(false)
     const [hash01, setHash01] = useState('')
     const [remove01, setRemove01] = useState(false)
-    const [openChat, setOpenChat] = useState(false)
+    const [openList, setOpenList] = useState(false)
+    const [users, setUsers] = useState(['김누리', '김효근', '배상현', '배송윤', '이승현', '박준영', '구두성', '강태찬'])
+    const [chatUser, setChatUser] = useState('')
 
     const openModalHash01 = () => {
         setOpenHash01(!openHash01)
         setHash01(hash01)
     }
-
+    
     const showRemove01 = () => {
         setRemove01(!remove01)
     }
 
-    const openChatModal = () => {
-        setOpenChat(!openChat)
+    const openChatList = () => {
+        setOpenList(!openList)
     }
 
     return (
@@ -212,7 +217,7 @@ const Main = () => {
                     setRemove01(!remove01)
                     setHash01('')
                 }}/> : null}
-                { openHash01 ? <CreateTag openModalHash01={openModalHash01} setHash01={setHash01}/> : null }
+                { openHash01 ? <CreateTag openModalHash01={openModalHash01} setHash01={setHash01} /> : null }
             </HashTag>
 
             <HashTag className="hash2">
@@ -232,18 +237,23 @@ const Main = () => {
 
             <ChatBox>
                 <Chat/>
-                <ChatListUp onClick={openChatModal}>
-                    채팅목록
-                    { openChat ? 
-                        <ClosedChat/> : 
-                        <>
-                            <OpenChat/>
-                            <ChatList/>
-                        </>
-                    }
-                </ChatListUp>
-            </ChatBox>
+                <FullChat className="FullChat">
+                    <ChatListUp onClick={openChatList}>
+                        채팅목록
+                        { openList ? <OpenChat/> : <ClosedChat/> }
+                    </ChatListUp>
 
+                    { openList ? 
+                        <ChatList openChatList={openChatList} users={users} setChatUser={setChatUser}/> 
+                        : null 
+                    }
+
+                </FullChat>
+            </ChatBox>
+            
+            { chatUser ? <ChatRoom chatUser={chatUser.user}/> : null }
+
+            
             <Start>
                 <Link to="/mode" style={{ textDecoration: 'none', color: '#333333' }}>입장하기</Link>
             </Start>
