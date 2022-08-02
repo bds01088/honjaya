@@ -8,6 +8,62 @@ import { pink } from '@mui/material/colors';
 import { green } from '@mui/material/colors';
 
 
+const ModePersonnel = () => {
+
+  const [personnel, setPersonnel] = useState('1')
+  const handleClickRadioButton = (e) => {
+    setPersonnel(e.target.value);
+  }
+
+  console.log(personnel)
+  return (
+    <>
+      <ModeSelectBox >
+        <Header><Text>인원선택</Text></Header>
+        <Container>
+          <FormControl>
+            <RadioGroup row>
+
+              <FormControlLabel 
+                value="1" 
+                control={<Radio 
+                          sx={{
+                            color: pink[100],
+                            '&.Mui-checked' : {
+                              color: pink[300],
+                            }
+                          }} />} 
+                // label="1:1" 
+                checked={personnel==='1'}
+                onChange={handleClickRadioButton}/>
+                <Label1>1:1</Label1>
+
+              <FormControlLabel 
+              value="4" 
+              control={<Radio 
+                        sx={{
+                          color: green[300],
+                          '&.Mui-checked' : {
+                            color: green[600],
+                          }
+                        }} 
+                        id='4'/>} 
+              // label="4인"
+              checked={personnel==='4'}
+              onChange={handleClickRadioButton}/>
+              <Label2 htmlFor='4'>4인</Label2>
+            </RadioGroup>
+          </FormControl>
+        </Container>
+      </ModeSelectBox>
+
+
+    </>
+  )
+}
+
+export default ModePersonnel
+
 const Header = styled.div`
   display: flex;
   justify-content: center;
@@ -53,56 +109,15 @@ const Text = styled.p`
   
 `
 
-const ModePersonnel = () => {
-
-  const [personnel, setPersonnel] = useState('');
-  const handleClickRadioButton = (e) => {
-    setPersonnel(e.target.value);
-  }
-
-  console.log(personnel)
-  return (
-    <>
-      <ModeSelectBox >
-        <Header><Text>인원선택</Text></Header>
-        <Container>
-          <FormControl>
-            <RadioGroup row>
-
-              <FormControlLabel 
-                value="1" 
-                control={<Radio 
-                          sx={{
-                            color: pink[100],
-                            '&.Mui-checked' : {
-                              color: pink[300],
-                            }
-                          }} />} 
-                label="1:1" 
-                checked={personnel==='1'}
-                onChange={handleClickRadioButton}/>
-
-              <FormControlLabel 
-              value="4" 
-              control={<Radio 
-                        sx={{
-                          color: green[300],
-                          '&.Mui-checked' : {
-                            color: green[600],
-                          }
-                        }} />} 
-              label="4인"
-              checked={personnel==='4'}
-              onChange={handleClickRadioButton}/>
-
-            </RadioGroup>
-          </FormControl>
-        </Container>
-      </ModeSelectBox>
-
-
-    </>
-  )
-}
-
-export default ModePersonnel
+const Label1= styled.label`
+  font-family: 'Jua';
+  position: absolute;
+  top: 0.5rem;
+  left: 2rem;
+`
+const Label2= styled.label`
+  font-family: 'Jua';
+  position: absolute;
+  top: 0.5rem;
+  left: 4.2rem;
+`
