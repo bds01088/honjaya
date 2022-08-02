@@ -125,6 +125,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
     }
   }
 
+
   useEffect(() => {
     if (phone.length === 10) {
       setPhone(phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
@@ -153,7 +154,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
 
         <StyledBtn>인증하기</StyledBtn>
       </CheckDiv>
-      {emailValid ? null : <ErrorText>유효하지 않은 이메일입니다.</ErrorText>}
+      { emailValid ? null : <ErrorText>유효하지 않은 이메일입니다.</ErrorText>}
 
       <StyledInput
         type="password"
