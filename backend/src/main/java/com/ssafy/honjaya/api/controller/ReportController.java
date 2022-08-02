@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.honjaya.api.request.RateReq;
+import com.ssafy.honjaya.api.request.ReportReq;
 import com.ssafy.honjaya.api.response.BooleanRes;
 import com.ssafy.honjaya.api.response.CommonRes;
-import com.ssafy.honjaya.api.response.RateRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
+import com.ssafy.honjaya.api.service.ReportService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,8 +34,8 @@ public class ReportController {
 	@Autowired
 	private JwtServiceImpl jwtService;
 
-//	@Autowired
-//	private RateService rateService;
+	@Autowired
+	private ReportService reportService;
 
 	@ApiOperation(value = "유저 신고", response = CommonRes.class)
 	@ApiResponses({
@@ -44,27 +44,28 @@ public class ReportController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PostMapping
-	public ResponseEntity<CommonRes> insertReport(@RequestBody RateReq rateReq, HttpServletRequest request) {
+	public ResponseEntity<CommonRes> insertReport(@RequestBody ReportReq reportReq, HttpServletRequest request) {
 		CommonRes res = new CommonRes();
 		HttpStatus status;
 		
 		try {
 			String accessToken = request.getHeader("access-token");
 			if (jwtService.checkToken(accessToken)) {
-				int userNo = jwtService.extractUserNo(accessToken);
-				rateRes.setRateScore(rateService.getAverageRate(userNo));
-				rateRes.setSuccess(true);
+				int reportFrom = jwtService.extractUserNo(accessToken);
+				reportReq.setReportFrom(reportFrom);
+				reportService.insertReport(reportReq);
+				res.setSuccess(true);
 				status = HttpStatus.OK;
 			} else {
 				logger.error("사용 불가능 토큰!!!");
-				rateRes.setError("The token is denied");
+				res.setError("The token is denied");
 				status = HttpStatus.UNAUTHORIZED;
 			}
 		} catch (Exception e) {
-			rateRes.setError(e.getMessage());
+			res.setError(e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		return new ResponseEntity<CommonRes>(rateRes, status);
+		return new ResponseEntity<CommonRes>(res, status);
 	}
 	
 	@ApiOperation(value = "유저 신고 중복 여부 확인", response = BooleanRes.class)
@@ -75,6 +76,25 @@ public class ReportController {
 	})
 	@GetMapping("/{userNo}")
 	public ResponseEntity<BooleanRes> findReport(@PathVariable int userNo, HttpServletRequest request) {
-		return null;
+		BooleanRes booleanRes = new BooleanRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int reportFrom = jwtService.extractUserNo(accessToken);
+				booleanRes.setTrueOrFalse(reportService.isAlreadyReported(reportFrom, userNo));
+				booleanRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				booleanRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			booleanRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<BooleanRes>(booleanRes, status);
 	}
 }

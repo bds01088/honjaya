@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.honjaya.api.request.LoginReq;
 import com.ssafy.honjaya.api.request.SignUpReq;
 import com.ssafy.honjaya.api.request.UserUpdateReq;
+import com.ssafy.honjaya.api.response.BanRes;
 import com.ssafy.honjaya.api.response.BooleanRes;
 import com.ssafy.honjaya.api.response.CommonRes;
+import com.ssafy.honjaya.api.response.EmailCheckRes;
 import com.ssafy.honjaya.api.response.LoginRes;
 import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
@@ -113,23 +115,32 @@ public class UserController {
 		return new ResponseEntity<CommonRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@ApiOperation(value = "이메일 중복 유무 파악 (trueOrFalse: 중복)", response = BooleanRes.class)
+	@ApiOperation(value = "이메일 중복 유무 파악 (setDuplicated: 중복) 먼저 확인 후 (setBanned: 정지 중) 확인", response = BooleanRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@GetMapping("/find/email/{email}")
-	public ResponseEntity<BooleanRes> findUserByEmail(@PathVariable String email) {
+	public ResponseEntity<EmailCheckRes> findUserByEmail(@PathVariable String email) {
 		logger.debug("find email");
-		BooleanRes res = new BooleanRes();
+		EmailCheckRes res = new EmailCheckRes();
 		try {
 			if (userService.hasUserByEmail(email)) {
-				res.setTrueOrFalse(true);
+				res.setDuplicated(true);
+				res.setSuccess(true);
+				return new ResponseEntity<EmailCheckRes>(res, HttpStatus.OK);
+			}
+			
+			BanRes banRes = userService.confirmBan(email);
+			if (banRes != null) {
+				res.setBanned(true);
+				res.setBanEndDate(banRes.getBanEndTime());
 			}
 			res.setSuccess(true);
-			return new ResponseEntity<BooleanRes>(res, HttpStatus.OK);
+			return new ResponseEntity<EmailCheckRes>(res, HttpStatus.OK);
+			
 		} catch (Exception e) {
-			return new ResponseEntity<BooleanRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<EmailCheckRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -157,6 +168,7 @@ public class UserController {
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 400, message = "이메일 또는 비밀번호 틀림"),
+		@ApiResponse(code = 403, message = "이용 정지 중인 유저임"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PostMapping("/login")
@@ -167,6 +179,14 @@ public class UserController {
 		logger.info("로그인 요청");
 
 		try {
+			// 이용 정지 중인 유저 체크
+			BanRes banRes = userService.confirmBan(loginReq.getUserEmail());
+			if (banRes != null) {
+				loginRes.setBanRes(banRes);
+				status = HttpStatus.FORBIDDEN;
+				return new ResponseEntity<LoginRes>(loginRes, status);
+			}
+			
 			int loginResult = userService.login(loginReq);
 			if (loginResult >= 0) {
 				int userNo = loginResult;
