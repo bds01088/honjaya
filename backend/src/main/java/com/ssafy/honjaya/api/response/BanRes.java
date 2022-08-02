@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel(value = "LoginRes", description = "로그인 Res")
+@ApiModel(value = "BanRes", description = "이용 정지 Res")
 @Getter
 @Setter
 @NoArgsConstructor
