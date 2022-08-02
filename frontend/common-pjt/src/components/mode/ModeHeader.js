@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 // import ModeChoice from "./ModeChoice"
 
+
 const Header = styled.div`
     display: flex;
     justify-content: space-between;
@@ -20,11 +21,12 @@ const Logo = styled.img`
 `
 
 const ModeSelect = styled.div`
+    /* position: relative; */
     display: flex;
     justify-content: center;
-    /* position: relative; */
     font-family: 'Jua';
     font-size: 2rem;
+    /* color: #00C3A9; */
 
 `
 
