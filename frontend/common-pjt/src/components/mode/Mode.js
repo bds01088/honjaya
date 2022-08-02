@@ -7,7 +7,7 @@ const Background = styled.div`
     background-color: #FFFDDE;
     width: 100vw;
     height: 100vh;    
-    overflow: hidden;
+    overflow: hidden;    
 `
 
 const Mode = () => {

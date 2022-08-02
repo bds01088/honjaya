@@ -7,6 +7,7 @@ const Background = styled.div`
     background-color: #FFFDDE;
     width: 100vw;
     height: 100vh;    
+    overflow: hidden;
 `
 
 const Form = styled.div`
@@ -122,7 +123,7 @@ const Pledge = () => {
                         <Phrase >이용을 위한 서약서</Phrase>
                     </Title>
                     <TextBox>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <li style={{fontFamily:"Jua", fontSize:'1.5rem'}}>제발 이거는 지켜 주십쇼</li>
                     </TextBox>
                     <Agree> 
                         <CheckBox type="checkbox" checked={check} onChange={clickEvent}></CheckBox>

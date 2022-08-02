@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,26 @@ public class ReportController {
 	})
 	@PostMapping
 	public ResponseEntity<CommonRes> insertReport(@RequestBody RateReq rateReq, HttpServletRequest request) {
-		return null;
+		CommonRes res = new CommonRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				rateRes.setRateScore(rateService.getAverageRate(userNo));
+				rateRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				rateRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			rateRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<CommonRes>(rateRes, status);
 	}
 	
 	@ApiOperation(value = "유저 신고 중복 여부 확인", response = BooleanRes.class)
