@@ -70,13 +70,14 @@ const CheckDiv = styled.div`
   margin: 1rem 0;
 `
 
-const InBtn = styled.div`
+const InBtn = styled.button`
   background-color: #00cfb4;
   color: white;
-  width: 95%;
+  width: 100%;
   text-align: center;
   border-radius: 0.5rem;
-  padding: 1rem 0.5rem;
+  border: 0;
+  padding: 1rem;
   margin: 1rem 0;
   font-size: 1.2rem;
   font-family: Jua;
@@ -88,7 +89,7 @@ const InBtn = styled.div`
 `
 
 const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, error}) => {
-  const [userGender, setUserGender] = useState('m')
+  const [userGender, setUserGender] = useState('')
   
   const changeGender = (e) => {
     setUserGender(e.target.value)
@@ -101,9 +102,10 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
 
       <CheckDiv>
         <StyledInput
+          type="email"
           autoComplete="userEmail"
           name="userEmail"
-          placeholder="이메일을 입력하세요"
+          placeholder="이메일"
           onChange={onChange}
           value={form.userEmail}
           className="email"
@@ -113,11 +115,18 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
       </CheckDiv>
 
       <StyledInput
+        type="password"
         autoComplete="userPassword"
         name="userPassword"
-        placeholder="비밀번호를 입력하세요"
+        placeholder="비밀번호"
         onChange={onChange}
         value={form.userPassword}
+      ></StyledInput>
+
+      <StyledInput
+        type="password"
+        autoComplete="userPassword"
+        placeholder="비밀번호 확인"
       ></StyledInput>
 
       <CheckDiv>
@@ -125,7 +134,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
           className="nickname"
           autoComplete="userNickname"
           name="userNickname"
-          placeholder="닉네임을 입력하세요"
+          placeholder="닉네임"
           onChange={onChange}
           value={form.userNickname}
         ></StyledInput>
@@ -135,7 +144,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
       <StyledInput
         autoComplete="userName"
         name="userName"
-        placeholder="이름을 입력하세요"
+        placeholder="이름"
         onChange={onChange}
         value={form.userName}
       ></StyledInput>
@@ -165,7 +174,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
       <StyledInput
         autoComplete="userPhone"
         name="userPhone"
-        placeholder="전화번호를 입력하세요"
+        placeholder="전화번호"
         onChange={onChange}
         value={form.userPhone}
       ></StyledInput>
@@ -173,7 +182,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
       <StyledInput
         autoComplete="userProfilePicUrl"
         name="userProfilePicUrl"
-        placeholder="사진을 추가하세요"
+        placeholder="프로필 사진(선택)"
         onChange={onChange}
         value={form.userProfilePicUrl}
       ></StyledInput>
