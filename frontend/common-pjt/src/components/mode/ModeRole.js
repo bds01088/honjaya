@@ -1,22 +1,22 @@
 import React from "react"
 import styled from 'styled-components'
-import ModeList from "./ModeList"
+import ModeRoleList from "./ModeRoleList"
 
 const ModeSelectBox=styled.div`
     display: flex;
+    position: relative;
     justify-content: space-between;
     margin: 0 auto;
-    border: 5px solid #000;
+    outline: 0.2rem solid #000;
     width: 90%;
     height: 55%;
     border-radius: 2rem;
-    position: relative;
 ` 
 
 const ModeChoice = () =>{
     return(
         <ModeSelectBox className="box">
-            <ModeList className="ModeList"></ModeList>
+            <ModeRoleList className="ModeList"></ModeRoleList>
         </ModeSelectBox>
     )
 }
