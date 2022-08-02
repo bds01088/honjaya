@@ -58,8 +58,12 @@ public class Ban {
 	@PrePersist
 	public void createdAt() {
 		this.banStartTime = LocalDateTime.now();
-		if (this.banTerm != 0) {
+		if (this.banTerm != -1) {
 			this.banEndTime = this.banStartTime.plusDays(this.banTerm);
+			this.banMessage = "이용자들의 신고 누적으로 인해 " + banTerm + "일 정지되었습니다.";
+		} else {
+			this.banEndTime = LocalDateTime.of(2100, 12, 31, 23, 59);
+			this.banMessage = "이용자들의 신고 누적으로 인해 영구 정지되었습니다.";
 		}
 	}
 }
