@@ -22,6 +22,7 @@ function* onCreateUserStartAsync({ payload }) {
   try {
     const response = yield call(createUser, payload)
     // console.log(response)
+    
   } catch (error) {
     // console.log(error)
   }
