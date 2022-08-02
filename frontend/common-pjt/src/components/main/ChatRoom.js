@@ -22,6 +22,8 @@ const Container = styled.div`
   }
 `
 
+
+
 const ChatRoom = ({chatUser, openChatList, setChatUser}) => {
   return (
     <Container>
