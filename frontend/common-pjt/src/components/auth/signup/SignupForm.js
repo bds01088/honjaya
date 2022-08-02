@@ -68,7 +68,6 @@ const SignupForm = () => {
     dispatch(signupActions.checkEmailStart(email))
   }
   
-  
   const isValidNickname = (e) => {
     const nickname = form.userNickname
     dispatch(signupActions.checkNicknameStart(nickname))
