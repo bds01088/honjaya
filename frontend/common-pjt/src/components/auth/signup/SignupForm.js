@@ -3,16 +3,37 @@ import styled from 'styled-components'
 import FormInputs from './FormInputs'
 import { useDispatch, useSelector } from 'react-redux'
 import { signupActions } from './signup-slice'
+import logoImg from '../../../assets/logo.png'
+import { Link } from 'react-router-dom'
 
 const SignupFormBlock = styled.div`
-  width: 50%;
+  width: 30rem;
   height: 80%;
-  background-color: grey;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  
+  h3 {
+    margin: 0;
+    color: #00C3A9;
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+  }
+
+  .Login {
+    color: #333333;
+  }
 `
 
+const Logo = styled.div`
+  text-align: center;
+  width: 100%;
+  height: 12%;
+`
 
 const SignupForm = () => {
 
@@ -57,6 +78,9 @@ const SignupForm = () => {
   
   return (
     <SignupFormBlock>
+      <Logo><img src={logoImg} alt="logo" style={{ height: '100%'}}/></Logo> 
+      <h3>회원가입</h3>
+      <p>이미 회원이신가요? <Link to="/login" className="Login">로그인하기</Link></p>
       <FormInputs
         form={form}
         onChange={onChange}
