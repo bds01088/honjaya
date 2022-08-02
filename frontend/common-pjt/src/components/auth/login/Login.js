@@ -15,7 +15,7 @@ const Background = styled.div`
   font-family: Jua;
 `
 
-const Signup = () => {
+const Login = () => {
   return (
     <Background>      
       <LoginForm>  
@@ -24,4 +24,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default Login
