@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from './login-slice'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const LoginFormInputsBlock = styled.form`
@@ -109,7 +108,7 @@ const LoginFormInputs = () => {
     dispatch(login(data))
     .unwrap()
     .then(() => {
-      navigate.push('/main')
+      navigate('/main')
     })
     .catch((err) => {
       if (err.status === 400) {
@@ -119,7 +118,7 @@ const LoginFormInputs = () => {
       } else if (err.status === 403) {
         toast.error('신고누적으로 사용이 정지된 유저입니다')
       } else if (err.status === 500) {
-        navigate.push('/error')
+        navigate('/error')
       } 
       })
   }
