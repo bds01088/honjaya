@@ -5,8 +5,7 @@ import logger from 'redux-logger';
 import { signupSagas } from './signupSagas';
 import { all } from "redux-saga/effects";
 import {configureStore, combineReducers} from '@reduxjs/toolkit'
-
-
+import { createBrowserHistory } from 'history'
 
 import signupReducer from '../components/auth/signup/signup-slice'
 
@@ -20,7 +19,12 @@ function *rootSaga() {
   yield all([...signupSagas,])  
 }
 
-const sagaMiddleware = createSagaMiddleware()
+const customHistory = createBrowserHistory()
+const sagaMiddleware = createSagaMiddleware(
+  {context: {
+    history: customHistory,
+  }},
+)
 const middlewares = [sagaMiddleware]
 
 if(process.env.NODE_ENV === 'development') {
