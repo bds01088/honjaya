@@ -1,5 +1,21 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import { pink } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
+
+
+const Header = styled.div`
+  display: flex;
+  justify-content: center;
+  font-family: 'Jua';
+  text-align: center;
+  font-size: 1.5rem;
+  
+`
 
 const ModeSelectBox=styled.div`
     display: flex;
@@ -8,26 +24,84 @@ const ModeSelectBox=styled.div`
     flex-direction: column;
     outline: 0.2rem solid #000;
     width: 20%;
-    height: 20%;
+    height: 15%;
     left: 4.7rem;
-    margin-top:1rem; 
+    margin-top:1rem;
     border-radius: 2rem;
 ` 
 
-
-const H2 = styled.h2`
+const Container = styled.div`
   display: flex;
-  justify-content: center;
+  position: relative;
+  top: -2rem;
+  margin: 0 auto;
+`
+const Text = styled.p`
+  position: relative;
+  top: -0.7rem;
+  z-index: 1;
+  padding: 0 1rem;
+  font-size: 1.5rem;
+  background-color: #fffdde;
   font-family: 'Jua';
-  text-align: center;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+  }
+  @media screen and (max-width: 370px) {
+    font-size: 0.5rem;
+  }
   
 `
+
 const ModePersonnel = () => {
+
+  const [personnel, setPersonnel] = useState('');
+  const handleClickRadioButton = (e) => {
+    setPersonnel(e.target.value);
+  }
+
+  console.log(personnel)
   return (
-    <ModeSelectBox >
-      <H2>인원선택</H2>
-    </ModeSelectBox>
-    
+    <>
+      <ModeSelectBox >
+        <Header><Text>인원선택</Text></Header>
+        <Container>
+          <FormControl>
+            <RadioGroup row>
+
+              <FormControlLabel 
+                value="1" 
+                control={<Radio 
+                          sx={{
+                            color: pink[100],
+                            '&.Mui-checked' : {
+                              color: pink[300],
+                            }
+                          }} />} 
+                label="1:1" 
+                checked={personnel==='1'}
+                onChange={handleClickRadioButton}/>
+
+              <FormControlLabel 
+              value="4" 
+              control={<Radio 
+                        sx={{
+                          color: green[300],
+                          '&.Mui-checked' : {
+                            color: green[600],
+                          }
+                        }} />} 
+              label="4인"
+              checked={personnel==='4'}
+              onChange={handleClickRadioButton}/>
+
+            </RadioGroup>
+          </FormControl>
+        </Container>
+      </ModeSelectBox>
+
+
+    </>
   )
 }
 

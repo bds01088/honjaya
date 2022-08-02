@@ -1,70 +1,3 @@
-// import React, { useState } from "react"
-// import styled from "styled-components"
-// import TempImg from '../../assets/character.png'
-
-// const Container= styled.div`
-//     display: flex;
-//     justify-content: center;
-//     width: 100%;
-//     text-align: center;
-//     margin: 0 auto;
-// `
-
-// const Mode = styled.img`
-//     height: 90%;
-//     width: 90%;
-// `
-
-// // 모드 종류
-// const ModeListItem = ({i}) => {
-
-//     const [x, setX] = useState([]);
-
-//     const handleClickRadioButton2 = (e) => {
-//         setX(e.target.value)
-//     }
-
-//     return (
-//         <Container>
-//             <div className="RadioButtonBox">
-
-//                 <Mode src={data[i].src}></Mode>
-//                 <Explain>{data[i].text}</Explain>
-
-//             </div>
-//         </Container>
-
-//     )
-// }
-
-// const data = [
-//     {
-//         id: 1,
-//         src: `${TempImg}`,
-//         text: '싱글로 참여해서~',
-
-//     },
-//     {
-//         id: 2,
-//         src: `${TempImg}`,
-//         text: '지시자로 참여해서~',
-
-//     },
-//     {
-//         id: 3,
-//         src: `${TempImg}`,
-//         text: '아바타로 참여해서~',
-
-//     },
-//     {
-//         id: 4,
-//         src: `${TempImg}`,
-//         text: '랜덤으로 참여해서~',
-
-//     },
-// ]
-// export default ModeListItem
-
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import TempImg from '../../assets/character.png'
@@ -160,30 +93,73 @@ const ModeListItem = () => {
   );
 };
 
+export default ModeListItem
+
+// import React, { useState } from "react"
+// import styled from "styled-components"
+// import TempImg from '../../assets/character.png'
+
+// const Container= styled.div`
+//     display: flex;
+//     justify-content: center;
+//     width: 100%;
+//     text-align: center;
+//     margin: 0 auto;
+// `
+
+// const Mode = styled.img`
+//     height: 90%;
+//     width: 90%;
+// `
+
+// // 모드 종류
+// const ModeListItem = ({i}) => {
+
+//     const [x, setX] = useState([]);
+
+//     const handleClickRadioButton2 = (e) => {
+//         setX(e.target.value)
+//     }
+
+//     return (
+//         <Container>
+//             <div className="RadioButtonBox">
+
+//                 <Mode src={data[i].src}></Mode>
+//                 <Explain>{data[i].text}</Explain>
+
+//             </div>
+//         </Container>
+
+//     )
+// }
+
 // const data = [
 //     {
-//         id: 0,
+//         id: 1,
 //         src: `${TempImg}`,
 //         text: '싱글로 참여해서~',
 
 //     },
 //     {
-//         id: 1,
+//         id: 2,
 //         src: `${TempImg}`,
 //         text: '지시자로 참여해서~',
 
 //     },
 //     {
-//         id: 2,
+//         id: 3,
 //         src: `${TempImg}`,
 //         text: '아바타로 참여해서~',
 
 //     },
 //     {
-//         id: 3,
+//         id: 4,
 //         src: `${TempImg}`,
 //         text: '랜덤으로 참여해서~',
 
 //     },
 // ]
-export default ModeListItem
+// export default ModeListItem
+
+
