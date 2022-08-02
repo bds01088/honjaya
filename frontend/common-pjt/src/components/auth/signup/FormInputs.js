@@ -49,12 +49,17 @@ const StyledInput = styled.input`
 
 const StyledBtn = styled.button`
   height: 100%;
-  background-color: #00C3A9;
+  background-color: #00cfb4;
   color: white;
   border-radius: 0.5rem;
   border: 0;
   font-size: 1rem;
   font-family: Jua;
+
+  &:hover{
+    background-color: #009c87;
+    color: #e0e0e0;
+  }
 `
 
 const CheckDiv = styled.div`
@@ -65,11 +70,29 @@ const CheckDiv = styled.div`
   margin: 1rem 0;
 `
 
+const InBtn = styled.div`
+  background-color: #00cfb4;
+  color: white;
+  width: 95%;
+  text-align: center;
+  border-radius: 0.5rem;
+  padding: 1rem 0.5rem;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  font-family: Jua;
+
+  &:hover{
+    background-color: #009c87;
+    color: #e0e0e0;
+  }
+`
+
 const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, error}) => {
-  const [gender, setGender] = useState('m')
+  const [userGender, setUserGender] = useState('m')
   
   const changeGender = (e) => {
-    setGender(e.target.value)
+    setUserGender(e.target.value)
+    onChange(e)
   }
 
   // console.log(form)
@@ -127,12 +150,12 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
           className="birth"
         ></StyledInput>
 
-        <div onChange={changeGender} name="userGender" value={form.userGender}>
+        <div>
           <label>
-            <input name="gender" type="radio" value="m" checked={gender==="m"}/>남
+            <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender}/>남
           </label>
           <label>
-            <input name="gender" type="radio" value="f" checked={gender==="f"}/>여
+            <input name="userGender" type="radio" value="f" checked={userGender==="f"} onChange={changeGender}/>여
           </label>
         </div>
 
@@ -155,7 +178,9 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
         value={form.userProfilePicUrl}
       ></StyledInput>
 
-      <button>가입</button>
+
+      <InBtn>계정 생성하기</InBtn>
+
     </FormInputsBlock>
   )
 }
