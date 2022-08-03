@@ -27,6 +27,7 @@ const GoInBtn = styled.div`
   padding: 1rem 0rem;
   font-size: 1.2rem;
   font-family: Jua;
+  margin-bottom: 25%;
 
   &:hover{
     background-color: #009c87;
