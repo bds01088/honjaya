@@ -10,8 +10,9 @@ const LoginFormInputsBlock = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
+  margin: 0;
 `
 
 const StyledInput = styled.input`
@@ -23,47 +24,22 @@ const StyledInput = styled.input`
   width: 95%;
   height: 1rem;
   font-family: Jua;
+  margin-top: 1.5rem;
 
   &:focus {
     border: 3px solid #adff45;
   }
-  & + & {
-    margin-top: 1.5rem;
-  }
-
-  &.email {
-    width: 95%;
-  }
-
-  &.password {
-    width: 95%;
-  }
-
 `
 
-const StyledBtn = styled.button`
-  height: 100%;
-  background-color: #00cfb4;
-  color: white;
-  border-radius: 0.5rem;
-  border: 0;
-  font-size: 1rem;
-  font-family: Jua;
-
-  &:hover{
-    background-color: #009c87;
-    color: #e0e0e0;
-  }
-`
-
-const LoginBtn = styled.div`
+const LoginBtn = styled.button`
   background-color: #FF728E;
   color: white;
-  width: 95%;
+  width: 100%;
   text-align: center;
   border-radius: 0.5rem;
+  border: 0;
   padding: 1rem 0.5rem;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   font-size: 1.2rem;
   font-family: Jua;
 
@@ -72,24 +48,6 @@ const LoginBtn = styled.div`
     color: #e0e0e0;
   }
 `
-
-const GoInBtn = styled.div`
-  background-color: #00cfb4;
-  color: white;
-  width: 95%;
-  text-align: center;
-  border-radius: 0.5rem;
-  padding: 1rem 0.5rem;
-  margin: 1rem 0;
-  font-size: 1.2rem;
-  font-family: Jua;
-
-  &:hover{
-    background-color: #009c87;
-    color: #e0e0e0;
-  }
-`
-
 
 
 const LoginFormInputs = () => {
@@ -125,10 +83,9 @@ const LoginFormInputs = () => {
 
 
   return (
-    <>
-      <LoginFormInputsBlock
+    <LoginFormInputsBlock
       onSubmit = {handleSubmit}
-      >
+    >
       <StyledInput
         autoComplete="userEmail"
         name="userEmail"
@@ -136,7 +93,7 @@ const LoginFormInputs = () => {
         onChange={(e) => setEmail(e.target.value)}
         value={userEmail}
         className="email"
-      ></StyledInput>
+      />
       <StyledInput
         type="password"
         autoComplete="userPassword"
@@ -146,14 +103,10 @@ const LoginFormInputs = () => {
         value={userPassword}
         className="password"
         
-      ></StyledInput>
-      <button>테스트</button>
-      <LoginBtn>로그인</LoginBtn>
-      </LoginFormInputsBlock>
-      <GoInBtn>회원가입</GoInBtn>
-    </>
+      />
 
-  
+      <LoginBtn>로그인</LoginBtn>
+    </LoginFormInputsBlock>
   );
 };
 

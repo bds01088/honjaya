@@ -4,14 +4,13 @@ import LoginForm from './LoginForm'
 
 
 const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   height: 100vh;
   width: 100vw;
   background-color: #FFFDDE;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: Jua;
 `
 
