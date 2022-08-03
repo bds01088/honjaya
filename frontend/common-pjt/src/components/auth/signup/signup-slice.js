@@ -1,62 +1,66 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from '../../../api/http'
 
-const initialSignupState = {
-  //register
-  register: {
-    userEmail: '',
-    userPassword: '',
-    userNickname: '',
-    userName: '',
-    userBirthday: '',
-    userGender: '',
-    userPhone: '',
-    userProfilePicUrl: '',
-  },
-  
-  isEmailChecked: false,
+
+export const signup = createAsyncThunk(
+  'SIGNUP',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const res = await axios.post('/honjaya/users/signup', userData);
+      return res;
+    } catch (err) {
+      return rejectWithValue(err.res);
+    }
+  }
+);
+
+// 닉네임 중복 검사
+export const checkNickname = createAsyncThunk(
+  'CHECK_NICKNAME',
+  async (userNickname, { rejectWithValue }) => {
+    try {
+      const nickname = userNickname
+      const res = await axios.get(`/honjaya/users/find/nickname/${nickname}`);
+      return res;
+    } catch (err) {
+      return rejectWithValue(err.res);
+    }
+  }
+);
+
+const initialState = {
   isNicknameChecked: false,
-  
-  loading: false,
-  error: null,
-}
+  isLoading: false,
+};
 
 const signupSlice = createSlice({
   name: 'signup',
-  initialState: initialSignupState,
+  initialState,
   reducers: {
-    changeField(state, action) {
-      console.log(action);
-      const { key, value } = action.payload;
-      state['register'][key] = value; //여기서 state는 위에서 내가 설정해준 초기state
+    setNicknameCheckedFalse: (state) => {
+      state.isNicknameChecked = false;
     },
-    //회원가입
-    createUserStart(state) {
-      state.loading = true;
-      state.error = null;
-    },
-    //이메일 중복 체크
-    checkEmailStart(state) {
-      state.loading = true
-      state.error = null
-    },
-    //이메일 중복 체크 결과 담을 state
-    changeCheckEmailField(state, action) {
-      const isDuplicatedEmail = action.payload
-      state.isEmailChecked = isDuplicatedEmail
-    },
-    //닉네임 중복 체크
-    checkNicknameStart(state) {
-      state.loading = true
-      state.error = null
-    },
-    //닉네임 중복 체크 결과 담을 state
-    changeCheckNicknameField(state, action) {
-      const isDuplicatedNickname = action.payload
-      state.isNicknameChecked = isDuplicatedNickname
-    }
   },
-})
+  extraReducers: {
+    [signup.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [signup.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    [signup.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    [checkNickname.fulfilled]: (state) => {
+      state.isNicknameChecked = true;
+    },
+    [checkNickname.rejected]: (state) => {
+      state.isNicknameChecked = false;
+    },
+  },
+});
 
-export const signupActions = signupSlice.actions
+
+export const {setNicknameCheckedFalse} = signupSlice.actions
 
 export default signupSlice.reducer

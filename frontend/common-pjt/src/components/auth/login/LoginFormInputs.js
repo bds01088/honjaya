@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginActions } from './login-slice'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { login } from './login-slice'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const LoginFormInputsBlock = styled.form`
@@ -100,15 +99,16 @@ const LoginFormInputs = () => {
   const [userPassword, setPassword] = useState('')
 
   function handleSubmit(e) {
+    console.log(e)
     e.preventDefault()
     const data = {
       userEmail,
       userPassword
     }
-    dispatch(loginActions(data))
+    dispatch(login(data))
     .unwrap()
     .then(() => {
-      navigate.push('/main')
+      navigate('/main')
     })
     .catch((err) => {
       if (err.status === 400) {
@@ -118,37 +118,42 @@ const LoginFormInputs = () => {
       } else if (err.status === 403) {
         toast.error('신고누적으로 사용이 정지된 유저입니다')
       } else if (err.status === 500) {
-        navigate.push('/error')
+        navigate('/error')
       } 
       })
   }
 
 
   return (
-    <LoginFormInputsBlock
-    onSubmit = {handleSubmit}
-    >
-    <StyledInput
-      autoComplete="userEmail"
-      name="userEmail"
-      placeholder="이메일을 입력하세요"
-      onChange={(e) => setEmail(e.target.value)}
-      value={userEmail}
-      className="email"
-    ></StyledInput>
-    <StyledInput
-      autoComplete="userPassword"
-      name="userPassword"
-      placeholder="비밀번호를 입력하세요"
-      onChange={(e) => setPassword(e.target.value)}
-      value={userPassword}
-      className="password"
-      
-    ></StyledInput>
+    <>
+      <LoginFormInputsBlock
+      onSubmit = {handleSubmit}
+      >
+      <StyledInput
+        autoComplete="userEmail"
+        name="userEmail"
+        placeholder="이메일을 입력하세요"
+        onChange={(e) => setEmail(e.target.value)}
+        value={userEmail}
+        className="email"
+      ></StyledInput>
+      <StyledInput
+        type="password"
+        autoComplete="userPassword"
+        name="userPassword"
+        placeholder="비밀번호를 입력하세요"
+        onChange={(e) => setPassword(e.target.value)}
+        value={userPassword}
+        className="password"
+        
+      ></StyledInput>
+      <button>테스트</button>
+      <LoginBtn>로그인</LoginBtn>
+      </LoginFormInputsBlock>
+      <GoInBtn>회원가입</GoInBtn>
+    </>
 
-    <LoginBtn>로그인</LoginBtn>
-    <GoInBtn>회원가입</GoInBtn>
-    </LoginFormInputsBlock>
+  
   );
 };
 
