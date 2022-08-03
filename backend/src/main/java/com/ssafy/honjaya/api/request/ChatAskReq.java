@@ -13,12 +13,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@ApiModel(value = "ChatroomReq", description = "채팅방 Req")
-public class ChatroomReq {
-	@ApiModelProperty(value = "채팅방 신청 유저")
-	private int chatroomFrom;
-	
-	@ApiModelProperty(value = "채팅방 수락 유저")
-	private int chatroomTo;
-	
+@ApiModel(value = "ChatAskReq", description = "채팅 신청 Req")
+public class ChatAskReq {
+
+	@ApiModelProperty(value = "채팅 신청한 사람")
+	private int chatAskFrom;
+
+	@ApiModelProperty(value = "채팅 신청 받은 사람")
+	private int chatAskTo;
+		
 }

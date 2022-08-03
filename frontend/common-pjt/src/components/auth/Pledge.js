@@ -134,8 +134,8 @@ const Pledge = () => {
               제발 이거는 지켜 주십쇼
             </li>
           </TextBox>
-          <Agree>
-            { check ? <Checked onClick={clickEvent}/> : <NotChecked onClick={clickEvent}/> }동의
+          <Agree onClick={clickEvent}>
+            { check ? <Checked/> : <NotChecked/> }동의
           </Agree>
         </PledgeTemplate>
 
