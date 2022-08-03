@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+// import { toast } from 'react-toastify'
+import { checkNickname, signup } from './signup-slice'
+
 
 const FormInputsBlock = styled.form`
   display: flex;
@@ -95,15 +101,38 @@ const ErrorText = styled.span`
   margin-bottom: 0.5rem;
 `
 
-const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, error}) => {
-  const [userGender, setUserGender] = useState('')
+const FormInputs = () => {
+  //필드 유효성검사
   const [emailValid, setEmailValid] = useState(true)
+  // const [nicknameValid, setNicknameValid] = useState(false)
+  
+  const [userGender, setUserGender] = useState('')
   const [phone, setPhone] = useState('')
 
+  //닉네임 이메일 중복체크 //머징 이메일 중복체크 인증으로 대체하는거야?
+  const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
+  
+  
+  
+  //필드 값 입력
+  const [userEmail, setUserEmail] = useState('')
+  const [userNickname, setUserNickname] = useState('')
+  const [userPassword, setUserPassword] = useState('')
+  const [repeatPassword, setRepeatPassword] = useState('')
+  const [userName, setUserName] = useState('')
+  const [userBirthday, setUserBirthday] = useState('')
+  // const [userPhone, setUserPhone] = useState('')
 
+  
+  // const errRef = useRef(null);
+  
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+
+  //changeGender 보류
   const changeGender = (e) => {
     setUserGender(e.target.value)
-    onChange(e)
   }
 
   const validateEmail = (e) => {
@@ -135,10 +164,49 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
     }
   }, [phone]);
 
+  function isValidNickname() {
+    dispatch(checkNickname(userNickname))
+    .unwrap()
+    .then((res) => {
+      res.data.trueOrFalse ? alert('사용 불가능한 닉네임입니다') : alert('사용 가능한 닉네임입니다')
+    })
+    .catch((err) => {
+      if (err.status === 500) {
+        navigate('/error')
+      }
+    })
+  }
 
-  // console.log(form)
+  function handleSubmit(e) {
+    e.preventDefault()
+    const data = {
+      userEmail,
+      userNickname,
+      userPassword,
+      userGender,
+      userBirthday,
+      userName,
+      userNickname,
+      phone
+    }
+    dispatch(signup(data))
+      .unwrap()
+      .then(() => {
+        alert('가입성공')
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          alert(
+            "입력하신 정보를 한번 더 확인해주세요"
+          );
+        } else if (err.status === 500) {
+          navigate('/error')
+        }
+      });
+  }
+  
   return (
-    <FormInputsBlock onSubmit={onSubmit}>
+    <FormInputsBlock onSubmit={handleSubmit}>
 
       <CheckDiv>
         <StyledInput
@@ -146,8 +214,8 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
           autoComplete="userEmail"
           name="userEmail"
           placeholder="이메일"
-          onChange={onChange}
-          value={form.userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
+          value={userEmail}
           className="email"
           onBlur={validateEmail}>
           </StyledInput>
@@ -161,8 +229,8 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
         autoComplete="userPassword"
         name="userPassword"
         placeholder="비밀번호"
-        onChange={onChange}
-        value={form.userPassword}
+        onChange={(e) => setUserPassword(e.target.value)}
+        value={userPassword}
       ></StyledInput>
 
       <StyledInput
@@ -177,8 +245,8 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
           autoComplete="userNickname"
           name="userNickname"
           placeholder="닉네임"
-          onChange={onChange}
-          value={form.userNickname}
+          onChange={(e) => setUserNickname(e.target.value)}
+          value={userNickname}
         ></StyledInput>
         <StyledBtn onClick={isValidNickname}>중복확인</StyledBtn>
       </CheckDiv>
@@ -187,8 +255,8 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
         autoComplete="userName"
         name="userName"
         placeholder="이름"
-        onChange={onChange}
-        value={form.userName}
+        onChange={(e) => setUserName(e.target.value)}
+        value={userName}
       ></StyledInput>
 
       <CheckDiv>
@@ -196,8 +264,8 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
           type="date"
           autoComplete="userBirthday"
           name="userBirthday"
-          onChange={onChange}
-          value={form.userBirthday}
+          onChange={(e) => setUserBirthday(e.target.value)}
+          value={userBirthday}
           className="birth"
         ></StyledInput>
 
@@ -220,7 +288,7 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
         onChange={checkPhone}
         onBlur={(e) => {
           console.log(e.target.value);
-          onChange(e)
+          this.onChange(e)
         }}
         value={phone}
       ></StyledInput>
@@ -232,7 +300,6 @@ const FormInputs = ({form, onChange, onSubmit, isValidEmail, isValidNickname, er
         onChange={onChange}
         value={form.userProfilePicUrl}
       ></StyledInput> */}
-
 
       <InBtn>계정 생성하기</InBtn>
 
