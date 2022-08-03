@@ -12,27 +12,30 @@ export const signup = createAsyncThunk(
       return rejectWithValue(err.response);
     }
   }
-);
+)
 
 // 닉네임 중복 검사
 export const checkNickname = createAsyncThunk(
   'CHECK_NICKNAME',
   async (userNickname, { rejectWithValue }) => {
     try {
+      
       const nickname = userNickname
-      const res = await axios.get(`/honjaya/users/find/nickname/${nickname}`);
-      return res;
+      const res = await axios.get(`/honjaya/users/find/nickname/${nickname}`)
+      console.log("중복검사하기")
+      return res
     } catch (err) {
-      return rejectWithValue(err.response);
+      return rejectWithValue(err.response)
     }
   }
-);
+)
 
 const initialState = {
   isNicknameChecked: false,
   isLoading: false,
 };
 
+//닉네임검사를폴스로바꿔주자 라는 리듀서는 isNicknameChecked를 false로 바꾼다
 const signupSlice = createSlice({
   name: 'signup',
   initialState,
@@ -40,6 +43,7 @@ const signupSlice = createSlice({
     setNicknameCheckedFalse: (state) => {
       state.isNicknameChecked = false;
     },
+
   },
   extraReducers: {
     [signup.pending]: (state) => {

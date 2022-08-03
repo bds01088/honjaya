@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
-import { checkNickname, signup } from './signup-slice'
+import { checkNickname, signup, setNicknameCheckedFalse } from './signup-slice'
 
 
 const FormInputsBlock = styled.form`
@@ -104,7 +104,7 @@ const ErrorText = styled.span`
 const FormInputs = () => {
   // 필드 유효성검사
   const [emailValid, setEmailValid] = useState(true)
-  // const [nicknameValid, setNicknameValid] = useState(false)
+  const [nicknameValid, setNicknameValid] = useState(true)
   
   const [userGender, setUserGender] = useState('')
   const [phone, setPhone] = useState('')
@@ -113,7 +113,10 @@ const FormInputs = () => {
   const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
   
   //전체 필드 검사 완료
-  const { isValidSignupForm, setisValidSingupForm } = useState(false)
+  const [ isValidSignupForm, setisValidSignupForm ] = useState(false)
+ 
+  //닉네임 중복 검사 완료
+  // const [ isValidNickname, setisValidNickname ] = useState(false)
   
   
   //필드 값 입력
@@ -132,6 +135,20 @@ const FormInputs = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  // function handleNickname(e) {
+  //   const { value } = e.target;
+  //   if (isNicknameChecked) {
+  //     dispatch(setNicknameCheckedFalse()) //중복이면
+  //   }
+  //   if (value.length < 7) {
+  //     setNickname(value.replace(/\s/g, ''));
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+
+
 
   //changeGender 보류
   const changeGender = (e) => {
@@ -146,7 +163,15 @@ const FormInputs = () => {
     // ? 없거나 1회
     let regexp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (regexp.test(e.target.value)) setEmailValid(true);
-    else  setEmailValid(false); 
+    else setEmailValid(false); 
+  }
+
+  //validateNickname 미완성
+  const validateNickname = (e) => {
+    let regexp = /^[0-9a-zA-Z가-힣]*$/i;
+    if (regexp.test(e.target.value) && e.target.value <= 10 && e.target.value >= 2) 
+      setNicknameValid(true);
+    else setNicknameValid(false); 
   }
 
   const checkPhone = (e) => {
@@ -170,25 +195,38 @@ const FormInputs = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (isNicknameChecked && isEmailChecked) {
-        setisValidSingupForm(true)
+      if (isNicknameChecked) {
+        isValidNickname(true)
       } else {
-        setisValidSingupForm(false)
+        isValidNickname(false)
       }
     }, 10);
   }, [userNickname, isNicknameChecked]);
 
+  // console.log(isDuplicateChNickname)
+  
 
-
-  function isValidNickname() {
+  function isValidNickname(e) {
+    e.preventDefault();
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
+      isNicknameChecked(true)
+      console.log(isNicknameChecked)
       res.data.trueOrFalse ? alert('사용 불가능한 닉네임입니다') : alert('사용 가능한 닉네임입니다')
+      if(res.data.trueOrFalse) {
+        // console.log(res.data.trueOrFalse)
+        // console.log(isNicknameChecked)
+      } else {
+        // isNicknameChecked(false)
+        console.log(res.data.trueOrFalse)
+        console.log(isNicknameChecked)
+      }
     })
     .catch((err) => {
       if (err.status === 500) {
-        navigate('/error')
+        console.log("대체뭐가문제냐")
+        // navigate('/error')
       }
     })
   }
@@ -216,6 +254,7 @@ const FormInputs = () => {
             "입력하신 정보를 한번 더 확인해주세요"
           );
         } else if (err.status === 500) {
+          console.log('이게무슨문제야')
           navigate('/error')
         }
       });
@@ -235,7 +274,6 @@ const FormInputs = () => {
           className="email"
           onBlur={validateEmail}>
           </StyledInput>
-
         <StyledBtn>인증하기</StyledBtn>
       </CheckDiv>
       { emailValid ? null : <ErrorText>유효하지 않은 이메일입니다.</ErrorText>}
@@ -263,9 +301,11 @@ const FormInputs = () => {
           placeholder="닉네임"
           onChange={(e) => setUserNickname(e.target.value)}
           value={userNickname}
+          onBlur={validateNickname}
         ></StyledInput>
         <StyledBtn onClick={isValidNickname}>중복확인</StyledBtn>
       </CheckDiv>
+      { nicknameValid ? null : <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText>}
 
       <StyledInput
         autoComplete="userName"
