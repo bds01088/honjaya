@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.honjaya.api.request.EmailReq;
 import com.ssafy.honjaya.api.request.LoginReq;
 import com.ssafy.honjaya.api.request.SignUpReq;
 import com.ssafy.honjaya.api.request.UserUpdateReq;
@@ -25,6 +26,7 @@ import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.EmailCheckRes;
 import com.ssafy.honjaya.api.response.LoginRes;
 import com.ssafy.honjaya.api.response.UserRes;
+import com.ssafy.honjaya.api.service.EmailService;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 import com.ssafy.honjaya.api.service.UserService;
 
@@ -46,6 +48,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@ApiOperation(value = "회원가입", response = CommonRes.class)
 	@ApiResponses({
@@ -326,5 +331,25 @@ public class UserController {
 		}
 
 		return new ResponseEntity<LoginRes>(loginRes, status);
+	}
+	
+	@ApiOperation(value = "이메일 인증 코드 전송", response = CommonRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@PostMapping("/email")
+	public ResponseEntity<CommonRes> singUp(@RequestBody EmailReq emailReq) {
+		CommonRes res = new CommonRes();
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		try {
+			emailService.sendMessage(emailReq);
+			res.setSuccess(true);
+			status = HttpStatus.OK;
+		} catch (Exception e) {
+			logger.error("이메일 인증 코드 전송 에러");
+			res.setError(e.getMessage());
+		}
+		return new ResponseEntity<CommonRes>(res, status);
 	}
 }
