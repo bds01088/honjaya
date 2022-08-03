@@ -1,146 +1,151 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import { Link } from 'react-router-dom'
+import { MdOutlineCheckBoxOutlineBlank, MdOutlineCheckBox } from "react-icons/md";
 
 const Background = styled.div`
-    background-color: #FFFDDE;
-    width: 100vw;
-    height: 100vh;    
-    overflow: hidden;
+  background-color: #fffdde;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `
 
 const Form = styled.div`
-    display: flex;
-    justify-content: center; 
-    flex-direction: column; 
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  font-family: Jua;
+  height: 80%;
+  width: 35%;
+
+  @media screen and (max-width: 1295px){
+    width: 454px;
+    height: 700px;
+  }
 `
 
 const PledgeTemplate = styled.div`
-    display: flex;
-    justify-content: center;
-    position: relative;
-    margin-top: 1rem;
-    height: 600px;
-    width: 500px;
-    border-radius: 3%;
-    background-color: #CCF3EE;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 1rem;
+  height: 100%;
+  width: 100%;
+  border-radius: 3%;
+  background-color: #ccf3ee;
 `
 
 const Title = styled.div`
-    display: flex;
-    height: 15%;
-    margin: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  height: 15%;
+  margin: 1rem;
 `
 
 const Logo = styled.img`
-    height: 100%;
+  height: 100%;
+
+  @media screen and (max-width: 1500px){
+    height: 90%;
+  }
 `
 
 const Phrase = styled.p`
-    font-family: 'Jua';
-    font-size: 2rem;
-    padding-top: 2.5rem;
-    color: #333333;
+  font-family: 'Jua';
+  font-size: 2rem;
+  padding-top: 2.5rem;
+  color: #333333;
+
+  @media screen and (max-width: 1500px){
+    font-size: 1.6rem;
+    padding-top: 3rem;
+  }
 `
 
 const TextBox = styled.div`
-    position: absolute;
-    top: 8rem;
-    height: 62%;
-    width: 80%;
-    border-radius: 3%;
-    padding: 20px;
-    background-color: #ffffff;
+  height: 62%;
+  width: 80%;
+  border-radius: 3%;
+  padding: 1.5rem;
+  background-color: #ffffff;
 `
 
 const Agree = styled.div`
-    position: absolute;
-    top: 35rem;
+  margin: 1rem;
+  font-size: 1.2rem;
+  display: flex;
 `
-const CheckBox = styled.input`
-    position: absolute;
-    right: 2rem;
-    top: 0.1rem;
-    
+const NotChecked = styled(MdOutlineCheckBoxOutlineBlank)`
+  margin: 0 0.2rem;
+`
+
+const Checked = styled(MdOutlineCheckBox)`
+  margin: 0 0.2rem;
 `
 
 const Button = styled.button`
-  position: relative;
-  top:1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.2rem;
   color: white;
-  font-weight: bold;
-  cursor: pointer;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin:auto;
+  font-family: Jua;
+  font-size: 1.3rem;
+  padding: 0.5rem 2rem;
+  margin: 1rem 0;
+  background: #ff728e;
 
-  /* 크기 */
-  height: 2.25rem;
-  width: 7rem;
-  font-size: 1rem;
-
-  /* 색상 */
-  background: #FF728E;
-  
   &:disabled {
-    cursor: default;
-    background: #FF728E;
+    background: #8a3849;
+    color: #c2c2c2;
+    cursor: not-allowed;
   }
-  
-  /* &:hover {
 
+  /* &:active {
+    cursor: pointer;
+    background: #ff728e;
   } */
-  &:active {
-    background: #FF728E;
-  }
-
 `
 
 const Pledge = () => {
+  // 동의 체크 여부 판별
+  const [check, setCheck] = useState(false)
 
-    // 동의 체크 여부 판별
-    const [check, setCheck] = useState(false);
-    const clickEvent = () => {
-        if (check === false){
-            setCheck(true)
-        } else{
-            setCheck(false)
-        }
-    }
+  const clickEvent = () => {
+    setCheck(!check)
+  }
 
-    console.log(check)
-    return (
-        <Background>
-            <Form>
-                <PledgeTemplate>
-                    <Title>
-                        <Logo src={logo}/>
-                        <Phrase >이용을 위한 서약서</Phrase>
-                    </Title>
-                    <TextBox>
-                        <li style={{fontFamily:"Jua", fontSize:'1.5rem'}}>제발 이거는 지켜 주십쇼</li>
-                    </TextBox>
-                    <Agree> 
-                        <CheckBox type="checkbox" checked={check} onChange={clickEvent}></CheckBox>
-                        <label>동의</label>
-                    </Agree>
-                </PledgeTemplate>
-                <Link to="/signup" style={{ textDecoration: 'none'}}>
-                    <div >
-                        {
-                            check === true 
-                            ? (<Button hover={true} >다음</Button>)
-                            : (<Button hover={false} disabled={!check}>다음</Button>)
-                        }
-                    </div>
-                </Link>
-            </Form>
-        </Background>
-    )
+  return (
+    <Background>
+      <Form>
+
+        <PledgeTemplate>
+          <Title>
+            <Logo src={logo} />
+            <Phrase>이용을 위한 서약서</Phrase>
+          </Title>
+          <TextBox>
+            <li style={{ fontFamily: 'Jua', fontSize: '1.5rem' }}>
+              제발 이거는 지켜 주십쇼
+            </li>
+          </TextBox>
+          <Agree>
+            { check ? <Checked onClick={clickEvent}/> : <NotChecked onClick={clickEvent}/> }동의
+          </Agree>
+        </PledgeTemplate>
+
+        <Link to="/signup" style={{ textDecoration: 'none' }}>
+          <Button disabled={!check} >다음</Button>
+        </Link>
+
+      </Form>
+    </Background>
+  )
 }
 
 export default Pledge
