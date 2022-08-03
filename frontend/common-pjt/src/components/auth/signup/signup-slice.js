@@ -9,7 +9,7 @@ export const signup = createAsyncThunk(
       const res = await axios.post('/honjaya/users/signup', userData);
       return res;
     } catch (err) {
-      return rejectWithValue(err.res);
+      return rejectWithValue(err.response);
     }
   }
 );
@@ -23,7 +23,7 @@ export const checkNickname = createAsyncThunk(
       const res = await axios.get(`/honjaya/users/find/nickname/${nickname}`);
       return res;
     } catch (err) {
-      return rejectWithValue(err.res);
+      return rejectWithValue(err.response);
     }
   }
 );

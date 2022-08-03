@@ -1,7 +1,7 @@
 import baseAxios from 'axios'
 import {getToken} from './JWT'
 const axios = baseAxios.create({
-  baseURL: 'http://localhost:8080', //url 배포 후에 'https://i7e104.p.ssafy.io' 로 변경
+  baseURL: 'https://i7e104.p.ssafy.io',
   headers: {
     'Content-Type': 'application/json'
   },

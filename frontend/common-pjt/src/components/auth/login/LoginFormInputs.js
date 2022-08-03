@@ -66,15 +66,18 @@ const LoginFormInputs = () => {
     dispatch(login(data))
     .unwrap()
     .then(() => {
+      // console.log(res) 이렇게 쓸려면 ()안에 인자로 담으면됨
       navigate('/main')
     })
     .catch((err) => {
+      // console.log("error 도착")
+      // console.log(err.status)
       if (err.status === 400) {
-        toast.error('아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.')
+        alert('아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.')
       } else if (err.status === 401) {//refresh token 발급
         console.log('토큰발급필요')
       } else if (err.status === 403) {
-        toast.error('신고누적으로 사용이 정지된 유저입니다')
+        alert('신고누적으로 사용이 정지된 유저입니다')
       } else if (err.status === 500) {
         navigate('/error')
       } 
