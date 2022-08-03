@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import logoImg from '../assets/logo.png'
 import React, { Component } from 'react'
 import { MdHelpOutline } from 'react-icons/md'
+import timerImg from '../assets/timer.png'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -21,6 +22,7 @@ const Header = styled.div`
   height: 10%;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
 `
 
 const Logo = styled.img.attrs({ src:`${logoImg}` })`
@@ -34,40 +36,73 @@ const Helper = styled(MdHelpOutline)`
   margin: 0 2rem;
   color: #333333;
 `
+const TimerBox = styled.div`
+  background-color: #F6A9A9;
+  padding: 0.5rem 1rem;
+  border-radius: 1.8rem;
+  display: flex;
+  align-items: center;
+`
+const Timer = styled.p`
+  font-size: 1.8rem;
+  font-family: Jua;
+  margin: 0 0.5rem;
+`
+
+const TimerImg = styled.img.attrs({ src: `${timerImg}`})`
+  height: 2rem;
+`
 
 class Waiting extends Component {
-  constructor() {			// 1. 호출된다.
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      date: new Date()			// 2. 현재 시간으로 초기화
-    };
+      // 3분의 시간제한
+      timeLimit: 180
+    }
+
+    this.intervalRef = React.createRef();
   }
 
-  componentDidMount() {			// 5. 함수 호출
-    this.timerID = setInterval(		// 6. timer 추가
-      () => this.tick(),
-      1000
-    );
+  componentDidMount() {
+    this.intervalRef.current = setInterval(() => {
+      // timeLimit이 남은 경우, 카운팅
+      if (this.state.timeLimit > 0) {
+        this.setState((prevState) => ({
+          timeLimit: prevState.timeLimit - 1
+        }));
+      } else {
+        // 스톱워치 종료
+        this.stopTimer();
+      }
+    }, 1000);
   }
 
-  componentWillUnmount() {		// 8. DOM에서 Clock 컴포넌트 삭제 -> 함수 호출
-    clearInterval(this.timerID);	// 9. timer stopped
+  componentWillUnmount() {
+    // unmount 될때, 스톱워치 종료
+    this.stopTimer();
   }
 
-  tick() {
-    this.setState({
-      date: new Date()			// 7. this.state.date 값 변화(매초)
-    });
-  }
+  // 스톱워치 종료 함수: clearInterval(변수)
+  stopTimer = () => {
+    clearInterval(this.intervalRef.current);
+  };
+
 
   render() {
     return (
       <Background>
-        <Header className='head'>
-          <Logo/><Helper/>
+        <Header>
+          <Logo/>
+          <TimerBox>
+            <TimerImg/>
+            <Timer onClick={this.stopTimer}>
+              {this.state.timeLimit}
+            </Timer>
+          </TimerBox>
+          <Helper/>
         </Header>
-        <p>{this.state.date.toLocaleTimeString()}</p>
       </Background>
     )
   }
