@@ -53,6 +53,26 @@ const TimerImg = styled.img.attrs({ src: `${timerImg}`})`
   height: 2rem;
 `
 
+const CamGuideBox = styled.div`
+  position: absolute;
+  top: 28%;
+  display: flex;
+  width: 90%;
+  height: 65%;
+`
+
+const CamBox = styled.div`
+  border: 3px solid black;
+  width: 50%;
+  height: 100%;
+`
+
+const GuideBox = styled.div`
+  border: 3px solid black;
+  width: 50%;
+  height: 100%;
+`
+
 class Waiting extends Component {
   constructor(props) {
     super(props);
@@ -103,6 +123,10 @@ class Waiting extends Component {
           </TimerBox>
           <Helper/>
         </Header>
+        <CamGuideBox>
+          <CamBox/>
+          <GuideBox/>
+        </CamGuideBox>
       </Background>
     )
   }
