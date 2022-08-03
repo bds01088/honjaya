@@ -4,6 +4,13 @@ import React, { Component } from 'react'
 import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443'
+const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
+=======
+=======
+>>>>>>> b1cbb81a0f1f22d5af2003a74ccc408adb07d8b2
 
 
 
@@ -17,6 +24,10 @@ import UserVideoComponent from './UserVideoComponent';
 const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443';
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
 
+<<<<<<< HEAD
+>>>>>>> 23d37ca02ce83f77faea35d2c1e3c5fc32b5137f
+=======
+>>>>>>> b1cbb81a0f1f22d5af2003a74ccc408adb07d8b2
 
 class Meeting extends Component {
   constructor(props) {
