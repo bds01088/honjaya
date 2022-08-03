@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService{
 		if (ban == null) {
 			return null;
 		}
-		if (ban.getBanEndTime().isAfter(LocalDateTime.now())) {
+		if (ban.getBanEndTime().isBefore(LocalDateTime.now())) {
 			banRepository.deleteById(ban.getBanNo());
 			return null;
 		}
