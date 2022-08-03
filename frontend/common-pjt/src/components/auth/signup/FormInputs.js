@@ -102,14 +102,14 @@ const ErrorText = styled.span`
 `
 
 const FormInputs = () => {
-  //필드 유효성검사
+  // 필드 유효성검사
   const [emailValid, setEmailValid] = useState(true)
   // const [nicknameValid, setNicknameValid] = useState(false)
   
   const [userGender, setUserGender] = useState('')
   const [phone, setPhone] = useState('')
 
-  //닉네임 이메일 중복체크 //머징 이메일 중복체크 인증으로 대체하는거야?
+  // 닉네임 이메일 중복체크 // 머징 이메일 중복체크 인증으로 대체하는거야?
   const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
   
   
@@ -153,6 +153,7 @@ const FormInputs = () => {
       console.log(e.target.value)
     }
   }
+
 
   useEffect(() => {
     if (phone.length === 10) {
@@ -221,7 +222,7 @@ const FormInputs = () => {
 
         <StyledBtn>인증하기</StyledBtn>
       </CheckDiv>
-      {emailValid ? null : <ErrorText>유효하지 않은 이메일입니다.</ErrorText>}
+      { emailValid ? null : <ErrorText>유효하지 않은 이메일입니다.</ErrorText>}
 
       <StyledInput
         type="password"
