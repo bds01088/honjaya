@@ -58,7 +58,6 @@ const TextBox = styled.div`
 const Agree = styled.div`
     position: absolute;
     top: 35rem;
-   
 `
 const CheckBox = styled.input`
     position: absolute;
