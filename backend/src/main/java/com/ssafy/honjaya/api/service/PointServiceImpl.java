@@ -15,7 +15,7 @@ public class PointServiceImpl implements PointService {
 
 	@Override
 	public int findPoint(int userNo) {
-		return userRepository.findUserPointById(userNo);
+		return userRepository.findById(userNo).get().getUserPoint();
 	}
 
 	@Override
