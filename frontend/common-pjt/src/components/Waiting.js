@@ -117,7 +117,7 @@ class Waiting extends Component {
 
     this.state = {
       // 3분의 시간제한
-      timeLimit: 3,
+      timeLimit: 180,
       minute: 3,
       sec: 0
     }
