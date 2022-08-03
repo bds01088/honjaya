@@ -112,6 +112,8 @@ const FormInputs = () => {
   // 닉네임 이메일 중복체크 // 머징 이메일 중복체크 인증으로 대체하는거야?
   const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
   
+  //전체 필드 검사 완료
+  const { isValidSignupForm, setisValidSingupForm } = useState(false)
   
   
   //필드 값 입력
@@ -121,6 +123,7 @@ const FormInputs = () => {
   const [repeatPassword, setRepeatPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [userBirthday, setUserBirthday] = useState('')
+  
   // const [userPhone, setUserPhone] = useState('')
 
   
@@ -163,6 +166,19 @@ const FormInputs = () => {
       setPhone(phone.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
   }, [phone]);
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (isNicknameChecked && isEmailChecked) {
+        setisValidSingupForm(true)
+      } else {
+        setisValidSingupForm(false)
+      }
+    }, 10);
+  }, [userNickname, isNicknameChecked]);
+
+
 
   function isValidNickname() {
     dispatch(checkNickname(userNickname))
