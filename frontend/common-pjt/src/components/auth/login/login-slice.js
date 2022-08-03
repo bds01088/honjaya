@@ -8,10 +8,12 @@ export const login = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const res = await axios.post('/honjaya/users/login', userData)
-      console.log(res)
+      return res
       // saveToken(token)
       } catch (err) {
-        return rejectWithValue(err.res)
+        console.log("err가 오고있나?")
+        console.log(err)
+        return rejectWithValue(err.response) //err안에 response로 담겨있음
       }
     }
 )

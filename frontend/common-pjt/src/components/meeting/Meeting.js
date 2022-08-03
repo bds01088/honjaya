@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import './meeting.css';
 import UserVideoComponent from './UserVideoComponent';
 
-const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+// const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443';
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
 
 
