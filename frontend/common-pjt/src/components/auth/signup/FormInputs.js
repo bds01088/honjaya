@@ -314,7 +314,7 @@ const FormInputs = () => {
     dispatch(signup(data))
       .unwrap()
       .then(() => {
-        alert('가입성공')
+        navigate('/')
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -322,14 +322,13 @@ const FormInputs = () => {
             "입력하신 정보를 한번 더 확인해주세요"
           );
         } else if (err.status === 500) {
-          console.log('이게무슨문제야')
           navigate('/error')
         }
       });
   }
   
   return (
-    <FormInputsBlock onSubmit={(e) =>  { handleSubmit(e) }}>
+    <FormInputsBlock onSubmit={(e) =>  { if (checkedEmail && checkedPwd && isDuplicateNicknameChecked && nameValid && userBirthday && userGender && userPhone) handleSubmit(e) }}>
       <CheckDiv>
         <StyledInput
           type="email"
@@ -456,7 +455,7 @@ const FormInputs = () => {
         value={form.userProfilePicUrl}
       ></StyledInput> */}
 
-      <InBtn disabled={checkedEmail || checkedPwd || isDuplicateNicknameChecked || nameValid || userBirthday || userGender || userPhone}>계정 생성하기</InBtn>
+      <InBtn>계정 생성하기</InBtn>
 
     </FormInputsBlock>
   )

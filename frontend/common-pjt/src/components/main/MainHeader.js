@@ -39,8 +39,8 @@ const PointImg = styled.img`
   height: 50%;
 `
 
-const point = 100000
-const pointShow = point.toLocaleString('ko-KR')
+// const point = 100000
+// const pointShow = point.toLocaleString('ko-KR')
 
 const Helper = styled(MdHelpOutline)`
   margin-right: 2rem;
@@ -53,9 +53,11 @@ const MainHeader = () => {
 
   //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
   //store에 있는 userNickname 불러오기
-  const { userNickname } = useSelector((state) => state.login.user)
+  const { userNickname, userPoint } = useSelector((state) => state.login.user)
   const [isOpen, setIsOpen] = useState(false)
 
+  //toLocaleString에서 에러남  
+  // const pointShow = userPoint.toLocaleString('ko-KR')
   const openModalHelper = () => {
     setIsOpen(!isOpen)
   }
@@ -77,7 +79,7 @@ const MainHeader = () => {
         <p
           style={{ color: '#333333', fontSize: '1.5rem', marginRight: '1rem' }}
         >
-          {pointShow}
+          {userPoint}
         </p>
         <Link to="/profile" style={{ fontSize: '0' }}>
           <MdAccountCircle
