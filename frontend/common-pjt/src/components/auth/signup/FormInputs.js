@@ -242,22 +242,12 @@ const FormInputs = () => {
   // console.log(isDuplicateChNickname)
   
 
-  function isValidNickname(e) {
-    e.preventDefault();
+  function isValidNickname() {
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
-      isNicknameChecked(true)
-      console.log(isNicknameChecked)
+      console.log(res.data.trueOrFalse)
       res.data.trueOrFalse ? alert('사용 불가능한 닉네임입니다') : alert('사용 가능한 닉네임입니다')
-      if(res.data.trueOrFalse) {
-        // console.log(res.data.trueOrFalse)
-        // console.log(isNicknameChecked)
-      } else {
-        // isNicknameChecked(false)
-        console.log(res.data.trueOrFalse)
-        console.log(isNicknameChecked)
-      }
     })
     .catch((err) => {
       if (err.status === 500) {

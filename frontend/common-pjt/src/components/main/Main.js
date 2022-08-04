@@ -22,7 +22,7 @@ const Container = styled.div`
   background-repeat: no-repeat;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 `
 
