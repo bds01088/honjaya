@@ -17,12 +17,15 @@ const BottomBox = styled.div`
   padding: 1rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  /* outline: 3px solid; */
 `
 const LeftBox = styled.div`
   display: flex;
   align-items: center;
-  width: 30%;
-  height: 100%;
+  height: 20vh;
+  width: 50vw;
+  /* outline: 2px solid; */
 `
 
 const PersonnelBox = styled.div`
@@ -32,8 +35,8 @@ const PersonnelBox = styled.div`
   justify-content: space-evenly;
   border: 0.2rem solid #333333;
   border-radius: 2rem;
-  height: 50%;
-  width: 30rem;
+  height: 70%;
+  width: 50%;
   /* @media (max-width: 1650px ) { 
     width: 30rem;
     
@@ -43,7 +46,7 @@ const PersonnelBox = styled.div`
 const Title = styled.div`
   position: absolute;
   font-family: "Jua";
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: #333333;
   top: -1rem;
   z-index: 1;
@@ -60,30 +63,31 @@ const Label = styled.label`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  width: 30%;
+  width: 10rem;
   font-size: 1.5rem;
   margin: 0 1rem;
   font-family: "Jua";
   cursor: pointer;
+  /* outline: 2px solid; */
 `
 
 const RadioIconOff = styled(MdRadioButtonUnchecked)`
-  width: 40%;
-  height: 30%;
+  width: 3rem;
+  height: 3rem;
 `
 
 const RadioIconOn = styled(MdRadioButtonChecked)`
-  width: 40%;
-  height: 30%;
+  width: 3rem;
+  height: 3rem;
   color: #00C3A9;
 `
 const CheckIconOff = styled(MdCheckBoxOutlineBlank)`
-  width: 25%;
-  height: 25%;
+  width: 2.5rem;
+  height: 2.5rem;
 `
 const CheckIconOn = styled(MdCheckBox)`
-  width: 25%;
-  height: 25%;
+  width: 2.5rem;
+  height: 2.5rem;
   color: #FFC9D0;
 `
 
@@ -92,7 +96,7 @@ const StartDiv = styled.div`
   align-items: center;
   /* width: 3rem; */
   /* height: 5rem; */
-
+  /* outline: 2px solid; */
 `
 
 const Start = styled.button`
@@ -108,6 +112,8 @@ const Start = styled.button`
 
   cursor: pointer;
 
+
+  // 모드 하나라도 선택 안했을 시 시작하기 버튼 disabled
   &:disabled {
     background: #8a3849;
     color: #c2c2c2;
@@ -118,10 +124,10 @@ const Start = styled.button`
 
 const ModePageBottom = () => {
 
-  // 인원 선택
+  // 인원 선택 (라디오 버튼)
   const [personnel, setPersonnel] = useState('1:1')
   
-  // 성별 선택
+  // 성별 선택 (체크 박스)
   const [oppGen, setOppGen] = useState(false)
 
   const handleClickRadioButton = (e) => {
@@ -179,7 +185,7 @@ const ModePageBottom = () => {
         
       </LeftBox>
       
-      
+      {/* 모드 하나라도 선택 안했을 시 [시작하기 버튼 비활성화 기능] 추가 필요 */}
       <StartDiv>
         <Link to="/waiting" style={{ textDecoration: 'none' }}>
           <Start>
