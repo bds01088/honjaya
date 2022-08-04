@@ -5,13 +5,12 @@ const axios = baseAxios.create({
   // baseURL: 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin' : '*'
   },
 })
 
 //headers에 반복적으로 담아 요청 보내기 때문에 interceptors를 활용
 axios.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${getToken()}`
+  config.headers['access-Token'] = `${getToken()}`
   return config
 })
 
