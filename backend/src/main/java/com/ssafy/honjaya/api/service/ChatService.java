@@ -6,10 +6,10 @@ import com.ssafy.honjaya.api.request.ChatroomReq;
 import com.ssafy.honjaya.api.response.ChatroomListRes;
 
 public interface ChatService {
-	void askChat(ChatAskReq chatAskReq);
+	boolean askChat(ChatAskReq chatAskReq);
 	void deleteAsk(int userNo);
 	
-	void createChatroom(ChatroomReq chatroomReq);
+//	void createChatroom(ChatroomReq chatroomReq);
 	ChatroomListRes listChatroom(int userNo);
 	void deleteChatroom(int chatRoomNo);
 	

@@ -26,8 +26,8 @@ import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.EmailCheckRes;
 import com.ssafy.honjaya.api.response.LoginRes;
 import com.ssafy.honjaya.api.response.UserRes;
-import com.ssafy.honjaya.api.service.EmailService;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
+import com.ssafy.honjaya.api.service.MailService;
 import com.ssafy.honjaya.api.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -50,7 +50,7 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private EmailService emailService;
+	private MailService mailService;
 
 	@ApiOperation(value = "회원가입", response = CommonRes.class)
 	@ApiResponses({
@@ -339,11 +339,11 @@ public class UserController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PostMapping("/email")
-	public ResponseEntity<CommonRes> singUp(@RequestBody EmailReq emailReq) {
+	public ResponseEntity<CommonRes> confirmEmail(@RequestBody EmailReq emailReq) {
 		CommonRes res = new CommonRes();
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		try {
-			emailService.sendMessage(emailReq);
+			mailService.sendMail(emailReq);
 			res.setSuccess(true);
 			status = HttpStatus.OK;
 		} catch (Exception e) {
