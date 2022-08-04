@@ -226,9 +226,8 @@ const Main = () => {
   },[])
 
   const hashList = useSelector((state) => state.hashtag.list)
-  
 
-  //수정사항
+  //main에서 유저정보 불러오기
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
@@ -236,7 +235,7 @@ const Main = () => {
   },[])
 
   const { userNickname } = useSelector((state) => state.login.user)
-  
+
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)

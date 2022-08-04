@@ -22,7 +22,21 @@ export const checkNickname = createAsyncThunk(
       
       const nickname = userNickname
       const res = await axios.get(`/honjaya/users/find/nickname/${nickname}`)
-      console.log("중복검사하기")
+      console.log("닉네임중복검사하기")
+      return res
+    } catch (err) {
+      return rejectWithValue(err.response)
+    }
+  }
+)
+
+// 이메일 중복 검사
+export const checkEmail = createAsyncThunk(
+  'CHECK_EMAIL',
+  async (userEmail, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`/honjaya/users/find/email/${userEmail}`)
+      console.log("이메일중복검사하기")
       return res
     } catch (err) {
       return rejectWithValue(err.response)
@@ -31,18 +45,14 @@ export const checkNickname = createAsyncThunk(
 )
 
 const initialState = {
-  isNicknameChecked: false,
   isLoading: false,
 };
 
-//닉네임검사를폴스로바꿔주자 라는 리듀서는 isNicknameChecked를 false로 바꾼다
+
 const signupSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    setNicknameCheckedFalse: (state) => {
-      state.isNicknameChecked = false;
-    },
 
   },
   extraReducers: {
@@ -65,6 +75,6 @@ const signupSlice = createSlice({
 });
 
 
-export const {setNicknameCheckedFalse} = signupSlice.actions
+// export const {} = signupSlice.actions
 
 export default signupSlice.reducer
