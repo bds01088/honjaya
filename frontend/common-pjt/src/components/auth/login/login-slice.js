@@ -8,16 +8,31 @@ export const login = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const res = await axios.post('/honjaya/users/login', userData)
+      const {
+        data: { accessToken },
+      } = res
+      saveToken(accessToken)
       return res
       // saveToken(token)
       } catch (err) {
-        console.log("err가 오고있나?")
-        console.log(err)
         return rejectWithValue(err.response) //err안에 response로 담겨있음
       }
     }
 )
 
+// 유저정보가져오기
+export const loadUser = createAsyncThunk(
+  'LOAD_USER',
+  async (arg, {rejectWithValue}) => {
+    try {
+      const res = await axios.get('/honjaya/users/')
+      console.log(res.data)
+      return res.data
+    } catch (err) {
+      return rejectWithValue(err.response)
+    }
+  }
+)
 
 const initialState = {
   user: {},
