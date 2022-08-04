@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
+import { putHash } from './hashtag-slice'
 
 export const ModalBackdrop = styled.div`
   width: 100vw;
@@ -51,12 +52,13 @@ const SubmitBtn = styled.button`
 `
 
 const CreateTag = (props) => {
-  
+  const dispatch = useDispatch()
   const [tag01, setTag01] = useState('')
 
   const sendToMain = () => {
     props.openModalHash01(false)
     props.setHash01(tag01)
+    dispatch(putHash(tag01))
   }
 
   return (

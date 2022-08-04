@@ -14,15 +14,17 @@ import {
   MdKeyboardArrowDown,
 } from 'react-icons/md'
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { getHash } from './hashtag/hashtag-slice'
+import { getHash, delHash } from './hashtag/hashtag-slice'
 
 
 
 //수정사항
 import { useSelector } from 'react-redux'
-import { loadUser } from '../auth/login/login-slice'
+import { loadUser,logout } from '../auth/login/login-slice'
+import { NavigateBefore } from '@mui/icons-material'
+
 
 
 const Container = styled.div`
@@ -191,7 +193,6 @@ const Start = styled.div`
 const Main = () => {
   const [openHash01, setOpenHash01] = useState(false)
   const [hash01, setHash01] = useState('')
-  const [hashList, setHashList] = useState('')
   const [remove01, setRemove01] = useState(false)
   const [openList, setOpenList] = useState(false)
   const [users, setUsers] = useState([
@@ -206,19 +207,27 @@ const Main = () => {
   ])
   const [chatUser, setChatUser] = useState('')
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
 
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
   useEffect(() => {
     dispatch(getHash())
     .unwrap()
     .then((res) => {
-      setHashList([1,1,1])
+      console.log(res.data.list)
+      if (res.data.list.length !== 0) {
+        setHash01(res.data.list[0])
+      }
     })
     .catch((err) => {
+      console.log("----")
       console.log(err)
     })
     // console.log("??")
   },[])
+
+  const hashList = useSelector((state) => state.hashtag.list)
 
   //main에서 유저정보 불러오기
   useEffect(() => {
@@ -227,19 +236,52 @@ const Main = () => {
       .catch((err)=> {alert.err("에러지롱")})
   },[])
 
+  const { userNickname } = useSelector((state) => state.login.user)
+
+  //로그아웃
+  function handleLogout() {
+    dispatch(logout())
+    .unwrap()
+    .then((res) => {
+      //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜 
+      console.log(res)
+      navigate('/')
+    })
+    .catch((err) => {
+      if (err.status === 500) {
+        navigate('/error')
+      }
+    })
+  }
+
 
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
-    setHash01(hash01)
+    // setHash01(hash01)
   }
 
   const showRemove01 = () => {
+    console.log("혹시 지금삭제되니?")
     setRemove01(!remove01)
   }
 
   const openChatList = () => {
     setOpenList(!openList)
+  }
+
+  //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
+  const handleDeleteHash = (hashNo) => {
+    console.log("왜 지금 삭제됌???")
+    dispatch(delHash(hashNo))
+    .then((res) => {
+      console.log(res)
+      setRemove01(!remove01)
+      setHash01('')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 
   return (
@@ -250,20 +292,17 @@ const Main = () => {
       <CharacterBox>
         <MainCharacter />
       </CharacterBox>
-
+      
       <HashTag className="hash1">
         {hash01 === '' ? (
           <AddHash className="hash1" onClick={openModalHash01} />
         ) : (
-          <Hash01 onClick={showRemove01}># {hash01}</Hash01>
+          <Hash01 onClick={showRemove01}># {hash01.hashText}</Hash01>
         )}
         {remove01 ? (
           <RemoveHash01
-            onClick={() => {
-              setRemove01(!remove01)
-              setHash01('')
-            }}
-          />
+            onClick={
+              handleDeleteHash(hash01.hashNo)}/>
         ) : null}
         {openHash01 ? (
           <CreateTag openModalHash01={openModalHash01} setHash01={setHash01} />
@@ -278,7 +317,7 @@ const Main = () => {
         <AddHash className="hash3" />
       </HashTag>
 
-      <LogoutBox>
+      <LogoutBox onClick={handleLogout}>
         <Logout />
         <LogoutText>로그아웃</LogoutText>
       </LogoutBox>
@@ -287,6 +326,7 @@ const Main = () => {
         <Chat />
         <FullChat className="FullChat">
           <ChatListUp onClick={openChatList}>
+            
             채팅목록
             {openList ? <OpenChat /> : <ClosedChat />}
           </ChatListUp>

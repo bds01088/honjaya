@@ -52,6 +52,32 @@ export const delHash = createAsyncThunk(
     }
 )
 
+//해시태그 입력하기
+export const putHash = createAsyncThunk(
+  'PUTHASH',
+  async ( hashContent, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        `/honjaya/hashtags/`,
+        {
+          body: {"hashText": `${hashContent}`}
+        }
+      // {
+      //   headers: {"access-Token": `${getToken()}` },
+      // }
+      )
+      console.log(res)
+      console.log("해시태그 생성 성공")
+      return res
+      } catch (err) {
+        console.log("err가 오고있나?")
+        console.log(err)
+        return rejectWithValue(err.response) //err안에 response로 담겨있음
+      }
+  }
+)
+
+
 const initialState = {
   loading: false,
   list: [],
@@ -74,7 +100,7 @@ const hashTagSlice = createSlice({
     [getHash.fulfilled]: (state, action) => {
       state.loading = false
       // console.log(action.payload)
-      //action.payload는 response와 동일하다.
+      // action.payload는 response와 동일하다.
       state.list = action.payload.data.list
       console.log(state.list)
       state.success = action.payload.data.success
@@ -88,6 +114,14 @@ const hashTagSlice = createSlice({
     },
     [delHash.fulfilled]: (state, action) => {
       state.loading = false
+      state.list = action.pyaload.data.list
+    },
+    [delHash.rejected]: (state, action) => {
+      state.loading = false
+      state.error = action.payload.error
+    },
+    [putHash.fulfilled]: (state, action) => {
+      console.log(action.payload)
     }
   }
 
