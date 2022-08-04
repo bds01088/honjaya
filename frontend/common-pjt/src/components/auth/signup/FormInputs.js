@@ -70,7 +70,10 @@ const CheckDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  
 `
 
 const InBtn = styled.button`
@@ -303,7 +306,7 @@ const FormInputs = () => {
           </StyledInput>
         <StyledBtn>인증하기</StyledBtn>
       </CheckDiv>
-      { emailValid ? null : <ErrorText>유효하지 않은 이메일입니다.</ErrorText>}
+      { emailValid ? null : <ErrorText className='errorText'>유효하지 않은 이메일입니다.</ErrorText>}
 
       <StyledInput
         type="password"
