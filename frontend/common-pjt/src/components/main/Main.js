@@ -200,7 +200,7 @@ const Main = () => {
   const dispatch = useDispatch()
 
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
-  useEffect(() => dispatch(getHash()))
+  // useEffect(() => dispatch(getHash()))
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
