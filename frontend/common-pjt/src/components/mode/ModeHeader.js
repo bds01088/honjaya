@@ -6,7 +6,8 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   height: 10%;
-
+  margin-left: 5rem;
+  /* padding-left: 5rem; */
   @media (max-width: 412px) {
     width: 100vw;
   }
@@ -23,9 +24,6 @@ const ModeHeader = () => {
     <>
       <Header>
         <Logo src={logo}></Logo>
-        {/* <ModeSelect>
-          <Text>역할선택</Text>
-        </ModeSelect> */}
       </Header>
 
     </>
