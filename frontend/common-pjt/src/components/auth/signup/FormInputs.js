@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
-import { checkNickname, signup, setNicknameCheckedFalse } from './signup-slice'
+import { checkNickname, checkEmail, signup } from './signup-slice'
 import EmailCheck from './EmailCheck'
 import axios from '../../../api/http'
 
@@ -117,16 +117,14 @@ const FormInputs = () => {
   const [pwdValid, setPwdValid] = useState(true)
   const [checkPwd, setCheckPwd] = useState(true)
   
-  // 성별, 전화번호 필드
+  //닉네임 중복 체크 후 중복되지 않아서 사용가능한 여부
+  //이메일 중복 체크 후 중복되지 않아서 사용가능한 여부
+  //둘다 중복이 아닐 때만 true로 바뀜 
+  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] = useState(false)
+  const [isDuplicateEmailChecked, setisDuplicateEmailChecked] = useState(false)
+
   
-  // 닉네임 이메일 중복체크 // 머징 이메일 중복체크 인증으로 대체하는거야?
-  // const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
   
-  //전체 필드 검사 완료
-  // const [ isValidSignupForm, setisValidSignupForm ] = useState(false)
-  
-  //닉네임 중복 검사 완료
-  // const [ isValidNickname, setisValidNickname ] = useState(false)
   
   
   //필드 값 입력
@@ -139,24 +137,12 @@ const FormInputs = () => {
   const [userBirthday, setUserBirthday] = useState('')
   
   // const [userPhone, setUserPhone] = useState('')
-
   
-  // const errRef = useRef(null);
+
   
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  // function handleNickname(e) {
-  //   const { value } = e.target;
-  //   if (isNicknameChecked) {
-  //     dispatch(setNicknameCheckedFalse()) //중복이면
-  //   }
-  //   if (value.length < 7) {
-  //     setNickname(value.replace(/\s/g, ''));
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   // 이메일 인증 모달 열기
   const [emailModal, setEmailModal] = useState(false)        // t: opend, f: closed
@@ -266,26 +252,38 @@ const FormInputs = () => {
   }, [phone]);
 
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (isNicknameChecked) {
-  //       isValidNickname(true)
-  //     } else {
-  //       isValidNickname(false)
-  //     }
-  //   }, 10);
-  // }, [userNickname, isNicknameChecked]);
-
-  // console.log(isDuplicateChNickname)
   
-
+  //닉네임 중복 체크
   function isValidNickname(e) {
     e.preventDefault()
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
       console.log(res.data.trueOrFalse)
+      if (res.data.trueOrFalse === false) {
+        setisDuplicateNicknameChecked(true)
+      }
       res.data.trueOrFalse ? alert('사용 불가능한 닉네임입니다') : alert('사용 가능한 닉네임입니다')
+    })
+    .catch((err) => {
+      if (err.status === 500) {
+        console.log("대체뭐가문제냐")
+        // navigate('/error')
+      }
+    })
+  }
+
+  //이메일 중복체크
+  function isValidEmail(e) {
+    e.preventDefault()
+    dispatch(checkEmail(userEmail))
+    .unwrap()
+    .then((res) => {
+      //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜
+      if (res.data.duplicated === false) {
+        setisDuplicateEmailChecked(true)
+      }
+      res.data.duplicated ? alert('사용 불가능한 이메일입니다') : alert('사용 가능한 이메일입니다')
     })
     .catch((err) => {
       if (err.status === 500) {
@@ -304,7 +302,6 @@ const FormInputs = () => {
       userGender,
       userBirthday,
       userName,
-      userNickname,
       phone
     }
     dispatch(signup(data))
@@ -342,6 +339,7 @@ const FormInputs = () => {
           onBlur={validateEmail}>
           </StyledInput>
         <StyledBtn type="button" onClick={openEmailModal} disabled={checkedEmail}>인증하기</StyledBtn>
+        <StyledBtn onClick={isValidEmail}>중복확인</StyledBtn>
       </CheckDiv>
       { emailValid ? null : <ErrorText className='errorText'>유효하지 않은 이메일입니다.</ErrorText>}
       { emailModal ? <EmailCheck closeEmailModal={closeEmailModal} setCheckedEmail={setCheckedEmail} code={code} /> : null }
@@ -381,7 +379,6 @@ const FormInputs = () => {
         <StyledBtn onClick={isValidNickname}>중복확인</StyledBtn>
       </CheckDiv>
       { nicknameValid ? null : <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText>}
-
       <StyledInput
         autoComplete="userName"
         name="userName"
