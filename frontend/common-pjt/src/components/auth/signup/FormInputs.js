@@ -229,20 +229,21 @@ const FormInputs = () => {
   }, [phone]);
 
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (isNicknameChecked) {
-        isValidNickname(true)
-      } else {
-        isValidNickname(false)
-      }
-    }, 10);
-  }, [userNickname, isNicknameChecked]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (isNicknameChecked) {
+  //       isValidNickname(true)
+  //     } else {
+  //       isValidNickname(false)
+  //     }
+  //   }, 10);
+  // }, [userNickname, isNicknameChecked]);
 
   // console.log(isDuplicateChNickname)
   
 
-  function isValidNickname() {
+  function isValidNickname(e) {
+    e.preventDefault()
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
