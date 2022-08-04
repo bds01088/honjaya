@@ -18,6 +18,13 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getHash } from './hashtag/hashtag-slice'
 
+
+
+//수정사항
+import { useSelector } from 'react-redux'
+import { loadUser } from '../auth/login/login-slice'
+
+
 const Container = styled.div`
   background-image: url(${backImg});
   background-size: cover;
@@ -212,6 +219,15 @@ const Main = () => {
     })
     // console.log("??")
   },[])
+
+
+  //수정사항
+  useEffect(() => {
+    dispatch(loadUser())
+      .unwrap()
+      .catch((err)=> {alert.err("에러지롱")})
+  },[])
+  const { userNickname } = useSelector((state) => state.login.user)
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
