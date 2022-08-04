@@ -10,10 +10,11 @@ const Background = styled.div`
   background-color: #fffdde;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   display: flex;
-  justify-content: center;
-  position: relative;
+  justify-content: end;
+  flex-direction: column;
+  align-items: center;
 `
 
 const Header = styled.div`
@@ -24,7 +25,7 @@ const Header = styled.div`
   height: 10%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: end;
 `
 
 const Logo = styled.img.attrs({ src:`${logoImg}` })`
@@ -45,8 +46,8 @@ const SpinnerBox = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-  position: absolute;
-  top: 5%;
+  position: fixed;
+  top: 0;
 `
 const TimerBox = styled.div`
   background-color: #F6A9A9;
@@ -57,7 +58,7 @@ const TimerBox = styled.div`
   margin: 1rem;
 `
 const Timer = styled.p`
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-family: Jua;
   margin: 0 0.5rem;
 `
@@ -90,25 +91,80 @@ const ChoiceBtn = styled.button`
 `
 
 const CamGuideBox = styled.div`
-  position: absolute;
-  top: 28%;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 90%;
-  height: 65%;
+  height: 70%;
+  margin-bottom: 2rem;
 `
 
 const CamBox = styled.div`
-  border: 3px solid black;
-  width: 50%;
+  /* border: 3px solid black; */
+  width: 49%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 960px){
+    width: 426px;
+  }
+
+  @media (max-height: 620px){
+    height: 403px;
+  }
+`
+
+const CamContainer = styled.div`
+  width: 27rem;
+  height: 27rem;
+  margin: 0 2rem;
+  background-color: #B5EAEA;
+  border-radius: 50%;
+
+  @media (max-width: 960px){
+    height: 350px;
+    width: 350px;
+  }
+
+  @media (max-height: 620px){
+    height: 350px;
+    width: 350px;
+  }
 `
 
 const GuideBox = styled.div`
-  border: 3px solid black;
-  width: 50%;
+  /* border: 3px solid black; */
+  width: 49%;
   height: 100%;
-`
+  display: flex;
+  justify-content: center;
+  align-items: end;
 
+  @media (max-width: 960px){
+    width: 426px;
+  }
+
+  @media (max-height: 620px){
+    height: 403px;
+  }
+`
+const GuideContainer = styled.div`
+  width: 70%;
+  height: 93%;
+  margin: 0 2rem;
+  background-color: #B5EAEA;
+  border-radius: 5%;
+
+  @media (max-width: 960px){
+    width: 300px;
+  }
+
+  @media (max-height: 620px){
+    height: 370px;
+  }
+`
 
 
 class Waiting extends Component {
@@ -180,8 +236,15 @@ class Waiting extends Component {
         </SpinnerBox>
         
         <CamGuideBox>
-          <CamBox/>
-          <GuideBox/>
+          <CamBox>
+            <CamContainer>
+
+            </CamContainer>
+          </CamBox>
+          <GuideBox>
+            <GuideContainer>
+            </GuideContainer>
+          </GuideBox>
         </CamGuideBox>
       </Background>
     )
