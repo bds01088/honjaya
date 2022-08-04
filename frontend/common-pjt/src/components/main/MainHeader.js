@@ -6,7 +6,7 @@ import { MdAccountCircle, MdHelpOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import MainHelper from './MainHelper'
 import React, { useState,useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
 import { loadUser } from '../auth/login/login-slice'
 const Header = styled.div`
   display: flex;
@@ -50,9 +50,9 @@ const Helper = styled(MdHelpOutline)`
 
 const MainHeader = () => {
 
-  useEffect(() => {
-    loadUser();
-  });
+
+  //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
+  //store에 있는 userNickname 불러오기
   const { userNickname } = useSelector((state) => state.login.user)
   const [isOpen, setIsOpen] = useState(false)
 
