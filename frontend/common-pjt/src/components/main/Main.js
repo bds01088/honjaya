@@ -220,14 +220,14 @@ const Main = () => {
     // console.log("??")
   },[])
 
-
-  //수정사항
+  //main에서 유저정보 불러오기
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
       .catch((err)=> {alert.err("에러지롱")})
   },[])
-  const { userNickname } = useSelector((state) => state.login.user)
+
+
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
