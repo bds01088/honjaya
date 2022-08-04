@@ -33,7 +33,6 @@ const ModeTitle = styled.div`
   font-size: 2.5vh;
   font-family: "Jua";
   width: 80%;
-  /* outline: 1px solid; */
   background-color: #FFC9D0;
   border-radius: 2rem;
   padding: 0.5rem;
@@ -50,8 +49,7 @@ const LabelDiv = styled.div`
   flex-direction: column;
   width: 90%;
   height: 90%;
-  /* outline: 2px solid red; */
-  /* margin:0; */
+
 `
 const Label = styled.label`
   display: flex;
@@ -59,7 +57,7 @@ const Label = styled.label`
   justify-content: start;
   width: 80%;
   height: 100%;
-  /* outline: 2px solid blue; */
+
 `
 
 const Input = styled.input`
@@ -99,8 +97,7 @@ const ModeChoice = () => {
             type="radio"
             value="Solo"
             checked={Role === 'Solo'}
-            onChange={handleClickRadioButton}
-          />
+            onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
             싱글로 참여해서
@@ -118,8 +115,7 @@ const ModeChoice = () => {
             type="radio"
             value="Commander"
             checked={Role === 'Commander'}
-            onChange={handleClickRadioButton}
-          />
+            onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
             지시자로 참여해서
@@ -127,10 +123,9 @@ const ModeChoice = () => {
           <Explain>
           아바타에게 지시를 내려보세요. 
           </Explain>
-
         </Label>
       </LabelDiv>
-      
+    
       <LabelDiv>
         <ModeTitle>아바타로 참여하기</ModeTitle>
         <Label>
@@ -138,8 +133,7 @@ const ModeChoice = () => {
             type="radio"
             value="Avatar"
             checked={Role === 'Avatar'}
-            onChange={handleClickRadioButton}
-          />
+            onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
             아바타로 참여해서 
@@ -147,8 +141,6 @@ const ModeChoice = () => {
           <Explain>
           색다른 경험을 해보세요. 
           </Explain>
-
-
         </Label>
       </LabelDiv>
 
@@ -159,8 +151,7 @@ const ModeChoice = () => {
             type="radio"
             value="Random"
             checked={Role === 'Random'}
-            onChange={handleClickRadioButton}
-          />
+            onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
             싱글, 아바타, 지시자 중 랜덤으로 역할이 부여됩니다.
