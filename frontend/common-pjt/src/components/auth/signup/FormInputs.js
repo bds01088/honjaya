@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
 import { checkNickname, signup, setNicknameCheckedFalse } from './signup-slice'
-
+import EmailCheck from './EmailCheck'
+import axios from '../../../api/http'
 
 const FormInputsBlock = styled.form`
   display: flex;
@@ -101,6 +102,13 @@ const ErrorText = styled.span`
   margin-bottom: 0.5rem;
 `
 
+const SuccessText = styled.span`
+  width: 100%;
+  color: #009c87;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+`
+
 const FormInputs = () => {
   // 필드 유효성검사
   const [emailValid, setEmailValid] = useState(true)
@@ -109,15 +117,14 @@ const FormInputs = () => {
   const [pwdValid, setPwdValid] = useState(true)
   const [checkPwd, setCheckPwd] = useState(true)
   
-  const [userGender, setUserGender] = useState('')
-  const [phone, setPhone] = useState('')
-
+  // 성별, 전화번호 필드
+  
   // 닉네임 이메일 중복체크 // 머징 이메일 중복체크 인증으로 대체하는거야?
-  const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
+  // const { isNicknameChecked, isEmailChecked, isloading } = useSelector((state) => state.signup)
   
   //전체 필드 검사 완료
-  const [ isValidSignupForm, setisValidSignupForm ] = useState(false)
-
+  // const [ isValidSignupForm, setisValidSignupForm ] = useState(false)
+  
   //닉네임 중복 검사 완료
   // const [ isValidNickname, setisValidNickname ] = useState(false)
   
@@ -126,7 +133,8 @@ const FormInputs = () => {
   const [userEmail, setUserEmail] = useState('')
   const [userNickname, setUserNickname] = useState('')
   const [userPassword, setUserPassword] = useState('')
-  const [repeatPassword, setRepeatPassword] = useState('')
+  const [userGender, setUserGender] = useState('')
+  const [phone, setPhone] = useState('')
   const [userName, setUserName] = useState('')
   const [userBirthday, setUserBirthday] = useState('')
   
@@ -150,13 +158,34 @@ const FormInputs = () => {
   //   return false;
   // }
 
+  // 이메일 인증 모달 열기
+  const [emailModal, setEmailModal] = useState(false)        // t: opend, f: closed
+  const [checkedEmail, setCheckedEmail] = useState(false)    // t: checked, f: notchecked
+  const [code, setCode] = useState(null)                     // 난수
 
+  const openEmailModal = (e) => {
+    const email = document.querySelector('.email').value
 
+    // 이메일이 유효하고, 값이 존재할 경우
+    if(emailValid && (email)) {
+      
+      // 난수 생성
+      const randomCode = Math.floor(Math.random() * (999999-100000)+100000)
+      setCode(randomCode)
 
-  //changeGender 보류
-  const changeGender = (e) => {
-    setUserGender(e.target.value)
+      // 메일 전송
+      axios.post('/honjaya/users/email', { code: randomCode, email })
+        .catch(err => console.log(err)) 
+
+      setEmailModal(true)
+    }
   }
+
+  const closeEmailModal = (e) => {
+    setEmailModal(false)
+    setCode(null)
+  }
+
 
   // 이메일 유효성 검사
   const validateEmail = (e) => {
@@ -210,6 +239,11 @@ const FormInputs = () => {
     if (e.target.value.length <= 30 && e.target.value.length >= 1) 
       setNameValid(true);
     else setNameValid(false); 
+  }
+
+  // 성별 선택
+  const changeGender = (e) => {
+    setUserGender(e.target.value)
   }
 
   // 전화번호 유효성 검사 및 형식 자동 변환
@@ -299,14 +333,19 @@ const FormInputs = () => {
           autoComplete="userEmail"
           name="userEmail"
           placeholder="이메일"
-          onChange={(e) => setUserEmail(e.target.value)}
+          onChange={(e) => {
+            setUserEmail(e.target.value)
+            if(checkedEmail) setCheckedEmail(false)
+            }}
           value={userEmail}
           className="email"
           onBlur={validateEmail}>
           </StyledInput>
-        <StyledBtn>인증하기</StyledBtn>
+        <StyledBtn type="button" onClick={openEmailModal} disabled={checkedEmail}>인증하기</StyledBtn>
       </CheckDiv>
       { emailValid ? null : <ErrorText className='errorText'>유효하지 않은 이메일입니다.</ErrorText>}
+      { emailModal ? <EmailCheck closeEmailModal={closeEmailModal} setCheckedEmail={setCheckedEmail} code={code} /> : null }
+      { checkedEmail ? <SuccessText>인증된 이메일입니다</SuccessText> : null }
 
       <StyledInput
         type="password"
