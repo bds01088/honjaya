@@ -27,9 +27,6 @@ export const loadUser = createAsyncThunk(
     console.log("요청은 가나")
     try {
       const res = await axios.get('/honjaya/users/',
-        {
-          headers: {"access-Token": `${getToken()}`},
-        }
       )
       console.log("요청은 가나")
       console.log(res.data)
