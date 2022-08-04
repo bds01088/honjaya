@@ -5,8 +5,9 @@ import Rating from '@mui/material/Rating'
 import { MdAccountCircle, MdHelpOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import MainHelper from './MainHelper'
-import React, { useState } from 'react'
-
+import React, { useState,useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { loadUser } from '../auth/login/login-slice'
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
@@ -48,6 +49,11 @@ const Helper = styled(MdHelpOutline)`
 `
 
 const MainHeader = () => {
+
+  useEffect(() => {
+    loadUser();
+  });
+  const { userNickname } = useSelector((state) => state.login.user)
   const [isOpen, setIsOpen] = useState(false)
 
   const openModalHelper = () => {
@@ -57,9 +63,9 @@ const MainHeader = () => {
   return (
     <Header>
       <Logo src={logoImg} />
-
+      
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Nickname>닉네임</Nickname>
+        <Nickname>{userNickname}</Nickname>
         <Rating
           style={{ color: '#FFF672', marginRight: '1rem' }}
           size="large"

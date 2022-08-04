@@ -18,6 +18,13 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import getHash from './hashtag/hashtag-slice'
 
+
+
+//수정사항
+import { useSelector } from 'react-redux'
+import { loadUser } from '../auth/login/login-slice'
+
+
 const Container = styled.div`
   background-image: url(${backImg});
   background-size: cover;
@@ -202,6 +209,18 @@ const Main = () => {
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
   // useEffect(() => dispatch(getHash()))
 
+
+  //수정사항
+  useEffect(() => {
+    dispatch(loadUser())
+      .unwrap()
+      .then((res) => {
+        console.log("??")
+      })
+      .catch((err)=> {})
+  },[])
+  const { userNickname } = useSelector((state) => state.login.user)
+
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
     setHash01(hash01)
@@ -253,7 +272,7 @@ const Main = () => {
 
       <LogoutBox>
         <Logout />
-        <LogoutText>로그아웃</LogoutText>
+        <LogoutText>로그아웃{userNickname}</LogoutText>
       </LogoutBox>
 
       <ChatBox>
