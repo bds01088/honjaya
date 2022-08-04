@@ -14,7 +14,7 @@ import {
   MdKeyboardArrowDown,
 } from 'react-icons/md'
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getHash, delHash } from './hashtag/hashtag-slice'
 
@@ -22,7 +22,8 @@ import { getHash, delHash } from './hashtag/hashtag-slice'
 
 //수정사항
 import { useSelector } from 'react-redux'
-import { loadUser } from '../auth/login/login-slice'
+import { loadUser,logout } from '../auth/login/login-slice'
+import { NavigateBefore } from '@mui/icons-material'
 
 
 
@@ -206,6 +207,7 @@ const Main = () => {
   ])
   const [chatUser, setChatUser] = useState('')
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
 
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
@@ -235,6 +237,23 @@ const Main = () => {
   },[])
 
   const { userNickname } = useSelector((state) => state.login.user)
+
+  //로그아웃
+  function handleLogout() {
+    dispatch(logout())
+    .unwrap()
+    .then((res) => {
+      //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜 
+      console.log(res)
+      navigate('/')
+    })
+    .catch((err) => {
+      if (err.status === 500) {
+        navigate('/error')
+      }
+    })
+  }
+
 
 
   const openModalHash01 = () => {
@@ -298,7 +317,7 @@ const Main = () => {
         <AddHash className="hash3" />
       </HashTag>
 
-      <LogoutBox>
+      <LogoutBox onClick={handleLogout}>
         <Logout />
         <LogoutText>로그아웃</LogoutText>
       </LogoutBox>
