@@ -24,13 +24,25 @@ export const login = createAsyncThunk(
 export const loadUser = createAsyncThunk(
   'LOAD_USER',
   async (arg, {rejectWithValue}) => {
-    console.log("요청은 가나")
     try {
       const res = await axios.get('/honjaya/users/',
       )
-      console.log("요청은 가나")
-      console.log(res.data)
       return res.data
+    } catch (err) {
+      return rejectWithValue(err.response)
+    }
+  }
+)
+
+// 로그아웃
+export const logout = createAsyncThunk(
+  'LOGOUT',
+  async (arg, {rejectWithValue}) => {
+    try {
+      const res = await axios.put('/honjaya/users/logout')
+      deleteToken()
+      console.log("로그아웃완료")
+      return res
     } catch (err) {
       return rejectWithValue(err.response)
     }
