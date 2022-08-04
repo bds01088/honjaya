@@ -338,7 +338,7 @@ const FormInputs = () => {
       <CheckDiv>
         <StyledInput
           className="nickname"
-          autoComplete="userNickname"
+          autoComplete="userNickname" 
           name="userNickname"
           placeholder="닉네임"
           onChange={(e) => setUserNickname(e.target.value)}
