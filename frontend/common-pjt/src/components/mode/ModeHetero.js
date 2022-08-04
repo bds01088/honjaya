@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 const ModeHetero = () => {
-  
+  // hetero = true (이성만) or false (성별무관, default)
   const [hetero, setHetero] = useState(false)
   console.log(hetero)
   const handleClickCheckBox = ({target}) => {

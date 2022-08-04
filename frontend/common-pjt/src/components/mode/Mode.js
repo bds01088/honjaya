@@ -1,18 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 import ModeHeader from './ModeHeader'
-import ModeRole from './ModeRole'
-import ModePersonnel from './ModePersonnel'
-import ModeHetero from './ModeHetero'
+import ModePageTop from './ModePageTop'
+import ModePageBottom from './ModePageBottom'
+
+
+const ModeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 90%;
+`
+
 
 const Mode = () => {
 
   return (
     <Background>
       <ModeHeader />
-      <ModeRole />
-      <ModePersonnel />
-      <ModeHetero />
+      <ModeContainer>
+        <ModePageTop/>
+        <ModePageBottom/>
+      </ModeContainer>
     </Background>
   )
 }
@@ -24,4 +34,5 @@ const Background = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  border: 1px solid;
 `
