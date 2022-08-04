@@ -1,13 +1,12 @@
 import React, {useState} from 'react'
-import ModeHetero from './ModeHetero'
 import styled from 'styled-components'
 import {
   MdRadioButtonUnchecked,
-  MdRadioButtonChecked
+  MdRadioButtonChecked,
+  MdCheckBoxOutlineBlank,
+  MdCheckBox
 } from 'react-icons/md'
-
-// import M
-
+import {Link} from 'react-router-dom' 
 
 const BottomBox = styled.div`
   /* position: relative; */
@@ -19,39 +18,37 @@ const BottomBox = styled.div`
   display: flex;
   justify-content: space-between;
 `
-
 const LeftBox = styled.div`
-  position: relative;
   display: flex;
   align-items: center;
   width: 30%;
   height: 100%;
-  /* outline: 1px solid; */
-`
-
-const LeftBoxHeader = styled.div`
-  position: absolute;
-  font-family: "Jua";
-  font-size: 1.5rem;
-  color: #333333;
-  top: 2.5rem;
-  left: 5.5rem;
-  z-index: 1;
-  padding: 0 1rem;
-  background-color: #fffdde;
-  
-
 `
 
 const PersonnelBox = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   border: 0.2rem solid #333333;
   border-radius: 2rem;
   height: 50%;
-  width: 60%;
-  
+  width: 30rem;
+  /* @media (max-width: 1650px ) { 
+    width: 30rem;
+    
+  } */
+`
+
+const Title = styled.div`
+  position: absolute;
+  font-family: "Jua";
+  font-size: 1.5rem;
+  color: #333333;
+  top: -1rem;
+  z-index: 1;
+  padding: 0 1rem;
+  background-color: #fffdde;
 `
 
 const PersonnelRadio = styled.input`
@@ -59,34 +56,15 @@ const PersonnelRadio = styled.input`
   visibility: hidden;
 `
 
-const RadioLabel = styled.label`
+const Label = styled.label`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   width: 30%;
-  font-size: 1rem;
+  font-size: 1.5rem;
   margin: 0 1rem;
   font-family: "Jua";
   cursor: pointer;
-  /* outline: 1px solid; */
-`
-
-const OppositeGender = styled.input`
-  appearance: none;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 1.5px solid gainsboro;
-  border-radius: 0.35rem;
-  cursor: pointer;
-  &:checked {
-    border-color: transparent;
-    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-    background-size: 100% 100%;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-color: #00C3A9;
-  }
-  
 `
 
 const RadioIconOff = styled(MdRadioButtonUnchecked)`
@@ -97,26 +75,72 @@ const RadioIconOff = styled(MdRadioButtonUnchecked)`
 const RadioIconOn = styled(MdRadioButtonChecked)`
   width: 40%;
   height: 30%;
+  color: #00C3A9;
 `
+const CheckIconOff = styled(MdCheckBoxOutlineBlank)`
+  width: 25%;
+  height: 25%;
+`
+const CheckIconOn = styled(MdCheckBox)`
+  width: 25%;
+  height: 25%;
+  color: #FFC9D0;
+`
+
+const StartDiv = styled.div`
+  display: flex;
+  align-items: center;
+  /* width: 3rem; */
+  /* height: 5rem; */
+
+`
+
 const Start = styled.button`
+  display: flex;
+  border: none;
+  border-radius: 0.2rem;
+  color: white;
+  font-family: Jua;
+  font-size: 3rem;
+  padding: 0.5rem 2rem;
+  /* margin: 1rem 0; */
+  background: #ff728e;
+
+  cursor: pointer;
+
+  &:disabled {
+    background: #8a3849;
+    color: #c2c2c2;
+    cursor: not-allowed;
+  }
 `
+
 
 const ModePageBottom = () => {
 
-  const [personnel, setPersonnel] = useState('1')
+  // 인원 선택
+  const [personnel, setPersonnel] = useState('1:1')
+  
+  // 성별 선택
+  const [oppGen, setOppGen] = useState(false)
+
   const handleClickRadioButton = (e) => {
     setPersonnel(e.target.value);
   }
+  const handleClickCheckBox = (e) => {
+    setOppGen(!oppGen)
+  }
 
   console.log(personnel)
+  console.log(oppGen)
 
   return(
     <BottomBox>
       <LeftBox>
-        <LeftBoxHeader>인원선택</LeftBoxHeader>
         <PersonnelBox>
+          <Title>인원선택</Title>
 
-          <RadioLabel>
+          <Label>
             {personnel === "1:1" ? ( 
               <RadioIconOn></RadioIconOn>
             ) : (
@@ -127,9 +151,9 @@ const ModePageBottom = () => {
               value="1:1"
               checked={personnel === "1:1"}
               onChange={handleClickRadioButton}/>
-          </RadioLabel>
+          </Label>
 
-          <RadioLabel>
+          <Label>
             {personnel === "4" ? ( 
               <RadioIconOn></RadioIconOn>
             ) : (
@@ -140,18 +164,29 @@ const ModePageBottom = () => {
               value="4"
               checked={personnel === "4"}
               onChange={handleClickRadioButton}/>
-          </RadioLabel>
+          </Label>
  
         </PersonnelBox>
 
-        <RadioLabel>
-          <OppositeGender type="checkbox"/> 이성만
-        </RadioLabel>
+        <Label
+          onClick={handleClickCheckBox}>
+          {oppGen === true ? (
+            <CheckIconOn></CheckIconOn>
+          ) : (
+            <CheckIconOff></CheckIconOff>
+          )} 이성만
+        </Label>
         
       </LeftBox>
-      <Start>
-        시작하기
-      </Start>
+      
+      
+      <StartDiv>
+        <Link to="/waiting" style={{ textDecoration: 'none' }}>
+          <Start>
+            시작하기
+          </Start>
+        </Link>
+      </StartDiv>
     </BottomBox>
   )
 }
