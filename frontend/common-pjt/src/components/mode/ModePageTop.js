@@ -1,3 +1,4 @@
+import { display } from '@mui/system'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import TempImg from '../../assets/character.png'
@@ -16,16 +17,27 @@ const ModeSelectBox = styled.div`
   padding: 1rem 0;
 `
 
-const Title = styled.div`
+const RoleSelectTitle = styled.div`
   position: absolute;
   top: -2rem;
   z-index: 1;
   padding: 0 2rem;
-  font-size: 2.5em;
+  font-size: 3em;
   background-color: #fffdde;
   font-family: 'Jua';
 `
-
+const ModeTitle = styled.div`
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  font-size: 2.5vh;
+  font-family: "Jua";
+  width: 80%;
+  /* outline: 1px solid; */
+  background-color: #FFC9D0;
+  border-radius: 2rem;
+  padding: 0.5rem;
+`
 const Mode = styled.img`
   width: 100%;
   cursor: pointer;
@@ -33,10 +45,10 @@ const Mode = styled.img`
 
 const LabelDiv = styled.div`
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   height: 90%;
   /* outline: 2px solid red; */
   /* margin:0; */
@@ -59,7 +71,7 @@ const Input = styled.input`
   }
 `
 
-const Explain = styled.p`
+const Explain = styled.div`
   text-align: center;
   font-family: 'Jua';
   font-size: 1.5rem;
@@ -78,9 +90,10 @@ const ModeChoice = () => {
   console.log(Role)
   return (
     <ModeSelectBox className="box">
-      <Title>역할선택</Title>
+      <RoleSelectTitle>역할선택</RoleSelectTitle>
 
       <LabelDiv>
+        <ModeTitle>"어, 싱글이야"로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
@@ -90,12 +103,16 @@ const ModeChoice = () => {
           />
           <Mode src={TempImg}></Mode>
           <Explain>
-            싱글로 참여해서 역할 없는 일반 모드를 즐겨보세요.
+            싱글로 참여해서
+          </Explain>
+          <Explain>
+          역할 없는 일반 모드를 즐겨보세요.
           </Explain>
         </Label>
       </LabelDiv>
 
       <LabelDiv>
+        <ModeTitle>지시자로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
@@ -105,13 +122,17 @@ const ModeChoice = () => {
           />
           <Mode src={TempImg}></Mode>
           <Explain>
-            지시자로 참여해서 아바타에게 지시를 내려보세요.
-            지시자는 미팅화면에서 보이지 않습니다.
+            지시자로 참여해서
           </Explain>
+          <Explain>
+          아바타에게 지시를 내려보세요. 
+          </Explain>
+
         </Label>
       </LabelDiv>
       
       <LabelDiv>
+        <ModeTitle>아바타로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
@@ -121,13 +142,18 @@ const ModeChoice = () => {
           />
           <Mode src={TempImg}></Mode>
           <Explain>
-            아바타로 참여해서 색다른 경험을 해보세요.
-            아바타는 지시자의 명령을 수행하며 미팅을 진행합니다.
+            아바타로 참여해서 
           </Explain>
+          <Explain>
+          색다른 경험을 해보세요. 
+          </Explain>
+
+
         </Label>
       </LabelDiv>
 
       <LabelDiv>
+       <ModeTitle>랜덤 역할로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
