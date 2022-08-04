@@ -109,37 +109,41 @@ const SuccessText = styled.span`
   margin-bottom: 0.5rem;
 `
 
+
 const FormInputs = () => {
+
   // 필드 유효성검사
   const [emailValid, setEmailValid] = useState(true)
   const [nicknameValid, setNicknameValid] = useState(true)
   const [nameValid, setNameValid] = useState(true)
   const [pwdValid, setPwdValid] = useState(true)
-  const [checkPwd, setCheckPwd] = useState(true)
+
+  // 비밀번호 재확인 변수
+  const [checkedPwd, setCheckedPwd] = useState(true)
   
-  //닉네임 중복 체크 후 중복되지 않아서 사용가능한 여부
-  //이메일 중복 체크 후 중복되지 않아서 사용가능한 여부
-  //둘다 중복이 아닐 때만 true로 바뀜 
-  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] = useState(false)
+
+  // 닉네임, 이메일 중복체크
+  // t: 사용가능, f: 사용불가능
+  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] = useState(false) 
   const [isDuplicateEmailChecked, setisDuplicateEmailChecked] = useState(false)
 
-  
-  
-  
-  
+
   //필드 값 입력
   const [userEmail, setUserEmail] = useState('')
   const [userNickname, setUserNickname] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [userGender, setUserGender] = useState('')
-  const [phone, setPhone] = useState('')
+  const [userPhone, setUserPhone] = useState('')
   const [userName, setUserName] = useState('')
   const [userBirthday, setUserBirthday] = useState('')
-  
-  // const [userPhone, setUserPhone] = useState('')
-  
 
-  
+  // default에서 이메일, 닉네임 에러 메시지 방지
+  const [defaultEmail, setDefaultEmail] = useState(false)
+  const [defaultPwd, setDefaultPwd] = useState(false)
+  const [defaultNickname, setDefaultNickname] = useState(false)
+  const [defaultName, setDefaultName] = useState(false)
+
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -149,11 +153,12 @@ const FormInputs = () => {
   const [checkedEmail, setCheckedEmail] = useState(false)    // t: checked, f: notchecked
   const [code, setCode] = useState(null)                     // 난수
 
-  const openEmailModal = (e) => {
+
+  async function openEmailModal (e) {
     const email = document.querySelector('.email').value
 
     // 이메일이 유효하고, 값이 존재할 경우
-    if(emailValid && (email)) {
+    if(emailValid && email && isDuplicateEmailChecked) {
       
       // 난수 생성
       const randomCode = Math.floor(Math.random() * (999999-100000)+100000)
@@ -180,9 +185,13 @@ const FormInputs = () => {
     // * 0회 이상, + 1회 이상
     // [-_.] - 또는 _ 또는 .
     // ? 없거나 1회
+    
+    if(e.target.value) { setDefaultEmail(true)
+      } else { setDefaultEmail(false) }
+
     let regexp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    if (regexp.test(e.target.value)) setEmailValid(true);
-    else setEmailValid(false); 
+    if (regexp.test(e.target.value)) return setEmailValid(true);
+    else return setEmailValid(false); 
   }
 
   // 비밀번호 유효성 검사
@@ -191,7 +200,11 @@ const FormInputs = () => {
     var patternSpeAtListOne = new RegExp(/[~!@#$%^]+/); // + for at least one
     var patternNumAtListOne = new RegExp(/[0-9]+/); // + for at least one
 
-    console.log(e.target.value)
+    if (e.target.value) {
+      setDefaultPwd(true)
+    } else { setDefaultPwd(false) }
+
+
     if( patternEngAtListOne.test( e.target.value ) 
         && patternSpeAtListOne.test( e.target.value )  
         && patternNumAtListOne.test( e.target.value )
@@ -205,26 +218,29 @@ const FormInputs = () => {
 
   // 비밀번호 확인
   const checkPassword = (e) => {
-    if (pwdValid 
+    if ( defaultPwd && pwdValid 
       && (e.target.value === document.querySelector(".userPassword").value)
     ){
-      return setCheckPwd(true);
-    } else return setCheckPwd(false);
+      return setCheckedPwd(true);
+    } else return setCheckedPwd(false);
   }
 
   // 닉네임 유효성 검사 | 2~10자 이하의 한글,영어,숫자만
   const validateNickname = (e) => {
+    if(e.target.value) { setDefaultNickname(true) 
+      } else { setDefaultNickname(false) }
+
     let regexp = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
     if (regexp.test(e.target.value) && e.target.value.length <= 10 && e.target.value.length >= 2) 
-      setNicknameValid(true);
-    else setNicknameValid(false); 
+      return setNicknameValid(true);
+    else return setNicknameValid(false); 
   }
 
   // 이름 유효성 검사 | 1~30자
   const validateName = (e) => {
-    if (e.target.value.length <= 30 && e.target.value.length >= 1) 
-      setNameValid(true);
-    else setNameValid(false); 
+    if ( e.target.value.length <= 30 && e.target.value.length >= 1) 
+      return setNameValid(true);
+    else return setNameValid(false); 
   }
 
   // 성별 선택
@@ -236,34 +252,29 @@ const FormInputs = () => {
   const checkPhone = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
-      setPhone(e.target.value);
-      console.log(e.target.value)
+      setUserPhone(e.target.value);
     }
   }
 
 
   useEffect(() => {
-    if (phone.length === 10) {
-      setPhone(phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+    if (userPhone.length === 10) {
+      setUserPhone(userPhone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
-    if (phone.length === 13) {
-      setPhone(phone.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+    if (userPhone.length === 13) {
+      setUserPhone(userPhone.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [phone]);
+  }, [userPhone]);
 
 
   
-  //닉네임 중복 체크
-  function isValidNickname(e) {
-    e.preventDefault()
+  // 닉네임 중복 체크
+  function isValidNickname() {
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
-      console.log(res.data.trueOrFalse)
-      if (res.data.trueOrFalse === false) {
-        setisDuplicateNicknameChecked(true)
-      }
-      res.data.trueOrFalse ? alert('사용 불가능한 닉네임입니다') : alert('사용 가능한 닉네임입니다')
+      if (res.data.trueOrFalse === false) { return setisDuplicateNicknameChecked(true) 
+      } else return setisDuplicateNicknameChecked(false)
     })
     .catch((err) => {
       if (err.status === 500) {
@@ -273,17 +284,13 @@ const FormInputs = () => {
     })
   }
 
-  //이메일 중복체크
-  function isValidEmail(e) {
-    e.preventDefault()
+  // 이메일 중복체크
+  function isValidEmail() {
     dispatch(checkEmail(userEmail))
     .unwrap()
     .then((res) => {
       //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜
-      if (res.data.duplicated === false) {
-        setisDuplicateEmailChecked(true)
-      }
-      res.data.duplicated ? alert('사용 불가능한 이메일입니다') : alert('사용 가능한 이메일입니다')
+      res.data.duplicated ? setisDuplicateEmailChecked(false) : setisDuplicateEmailChecked(true)
     })
     .catch((err) => {
       if (err.status === 500) {
@@ -302,7 +309,7 @@ const FormInputs = () => {
       userGender,
       userBirthday,
       userName,
-      phone
+      userPhone,
     }
     dispatch(signup(data))
       .unwrap()
@@ -322,7 +329,9 @@ const FormInputs = () => {
   }
   
   return (
-    <FormInputsBlock onSubmit={handleSubmit}>
+    <FormInputsBlock onSubmit={(e) => { 
+      if(checkedEmail && checkedPwd && isDuplicateNicknameChecked && nameValid && userBirthday && userGender && userPhone) { handleSubmit(e) }
+      }}>
 
       <CheckDiv>
         <StyledInput
@@ -336,12 +345,14 @@ const FormInputs = () => {
             }}
           value={userEmail}
           className="email"
-          onBlur={validateEmail}>
+          onBlur={(e) => {
+            validateEmail(e) 
+            isValidEmail(e)}}>
           </StyledInput>
         <StyledBtn type="button" onClick={openEmailModal} disabled={checkedEmail}>인증하기</StyledBtn>
-        <StyledBtn onClick={isValidEmail}>중복확인</StyledBtn>
       </CheckDiv>
-      { emailValid ? null : <ErrorText className='errorText'>유효하지 않은 이메일입니다.</ErrorText>}
+      { defaultEmail && !emailValid ? <ErrorText className="errorText">유효하지 않은 이메일입니다.</ErrorText> : null }
+      { defaultEmail && !isDuplicateEmailChecked && emailValid ? <ErrorText className="errorText">이미 존재하는 이메일입니다</ErrorText> : null }
       { emailModal ? <EmailCheck closeEmailModal={closeEmailModal} setCheckedEmail={setCheckedEmail} code={code} /> : null }
       { checkedEmail ? <SuccessText>인증된 이메일입니다</SuccessText> : null }
 
@@ -355,7 +366,7 @@ const FormInputs = () => {
         value={userPassword}
         onBlur={validatePwd}
       ></StyledInput>
-      { pwdValid ? null : <ErrorText>비밀번호는 8~15자의 영어, 숫자, 기호(~!@#$%^)를 조합해주세요</ErrorText>}
+      { !pwdValid && defaultPwd ? <ErrorText>비밀번호는 8~15자의 영어, 숫자, 기호(~!@#$%^)를 조합해주세요</ErrorText> : null }
 
       <StyledInput
         type="password"
@@ -364,7 +375,7 @@ const FormInputs = () => {
         onBlur={checkPassword}
       ></StyledInput>
       { pwdValid ? 
-        ( checkPwd ? null : <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>) : null }
+        ( checkedPwd ? null : <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>) : null }
 
       <CheckDiv>
         <StyledInput
@@ -372,22 +383,40 @@ const FormInputs = () => {
           autoComplete="userNickname" 
           name="userNickname"
           placeholder="닉네임"
-          onChange={(e) => setUserNickname(e.target.value)}
+          onChange={(e) => {
+            setUserNickname(e.target.value) 
+            if(isDuplicateNicknameChecked) { setisDuplicateNicknameChecked(false) }
+          }}
           value={userNickname}
-          onBlur={validateNickname}
+          onBlur={(e) => {
+            validateNickname(e)
+          }}
         ></StyledInput>
-        <StyledBtn onClick={isValidNickname}>중복확인</StyledBtn>
+        <StyledBtn type="button" onClick={(e) => {
+          if(nicknameValid && defaultNickname){
+            isValidNickname(e)
+          }
+        }}>중복확인</StyledBtn>
       </CheckDiv>
-      { nicknameValid ? null : <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText>}
+      { defaultNickname && !nicknameValid ? <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText> : 
+        ( defaultNickname && nicknameValid && !isDuplicateNicknameChecked ? <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText> : null )}
+      { isDuplicateNicknameChecked ? <SuccessText>사용 가능한 닉네임입니다.</SuccessText> : null}
+
       <StyledInput
         autoComplete="userName"
         name="userName"
         placeholder="이름"
-        onChange={(e) => setUserName(e.target.value)}
+        onChange={(e) => { 
+          setUserName(e.target.value)
+          if(e.target.value) { setDefaultName(true) 
+          } else { setDefaultName(false) }
+
+          if(nameValid) { setNameValid(false) }
+        }}
         onBlur={validateName}
         value={userName}
       ></StyledInput>
-      { nameValid ? null : <ErrorText>이름은 1~30자로 입력할 수 있어요</ErrorText>}
+      { defaultName && !nameValid ? <ErrorText>이름은 1~30자로 입력할 수 있어요</ErrorText> : null }
 
       <CheckDiv>
         <StyledInput
@@ -407,7 +436,6 @@ const FormInputs = () => {
             <input name="userGender" type="radio" value="f" checked={userGender==="f"} onChange={changeGender}/>여
           </label>
         </div>
-
       </CheckDiv>
 
 
@@ -420,7 +448,7 @@ const FormInputs = () => {
           console.log(e.target.value);
           this.onChange(e)
         }}
-        value={phone}
+        value={userPhone}
       ></StyledInput>
 
       {/* <StyledInput
