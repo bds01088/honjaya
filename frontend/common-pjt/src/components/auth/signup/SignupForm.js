@@ -35,6 +35,11 @@ const Logo = styled.div`
   height: 12%;
 `
 
+const FormBox = styled.div`
+  width: 90%;
+  height: 90%;
+`
+
 const SignupForm = () => {
 
   // const dispatch = useDispatch()
@@ -80,14 +85,16 @@ const SignupForm = () => {
       <Logo><img src={logoImg} alt="logo" style={{ height: '100%'}}/></Logo> 
       <h3>회원가입</h3>
       <p>이미 회원이신가요? <Link to="/" className="Login">로그인하기</Link></p>
-      <FormInputs
-        // form={form}
-        // onChange={onChange}
-        // onSubmit={onSubmit}
-        // isValidEmail={isValidEmail}
-        // isValidNickname={isValidNickname}
-        // error={loginError}
-      ></FormInputs>
+      <FormBox>
+        <FormInputs
+          // form={form}
+          // onChange={onChange}
+          // onSubmit={onSubmit}
+          // isValidEmail={isValidEmail}
+          // isValidNickname={isValidNickname}
+          // error={loginError}
+        ></FormInputs>
+      </FormBox>
     </SignupFormBlock>
   )
 }
