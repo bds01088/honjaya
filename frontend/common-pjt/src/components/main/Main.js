@@ -225,10 +225,7 @@ const Main = () => {
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .then((res) => {
-        console.log("??")
-      })
-      .catch((err)=> {})
+      .catch((err)=> {alert.err("에러지롱")})
   },[])
   const { userNickname } = useSelector((state) => state.login.user)
 
@@ -283,7 +280,7 @@ const Main = () => {
 
       <LogoutBox>
         <Logout />
-        <LogoutText>로그아웃{userNickname}</LogoutText>
+        <LogoutText>로그아웃</LogoutText>
       </LogoutBox>
 
       <ChatBox>
