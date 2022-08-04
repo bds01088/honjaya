@@ -16,7 +16,7 @@ import {
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import getHash from './hashtag/hashtag-slice'
+import { getHash } from './hashtag/hashtag-slice'
 
 const Container = styled.div`
   background-image: url(${backImg});
@@ -184,6 +184,7 @@ const Start = styled.div`
 const Main = () => {
   const [openHash01, setOpenHash01] = useState(false)
   const [hash01, setHash01] = useState('')
+  const [hashList, setHashList] = useState('')
   const [remove01, setRemove01] = useState(false)
   const [openList, setOpenList] = useState(false)
   const [users, setUsers] = useState([
@@ -200,7 +201,17 @@ const Main = () => {
   const dispatch = useDispatch()
 
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
-  useEffect(() => dispatch(getHash()))
+  useEffect(() => {
+    dispatch(getHash())
+    .unwrap()
+    .then((res) => {
+      setHashList([1,1,1])
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    // console.log("??")
+  },[])
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
