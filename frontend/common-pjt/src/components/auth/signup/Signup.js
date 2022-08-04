@@ -11,7 +11,7 @@ const Background = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: #FFFDDE;
-  overflow: hidden;
+  overflow: auto;
   font-family: Jua;
 `
 

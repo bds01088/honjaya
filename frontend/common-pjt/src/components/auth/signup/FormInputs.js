@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
 import { checkNickname, signup, setNicknameCheckedFalse } from './signup-slice'
@@ -12,8 +11,6 @@ const FormInputsBlock = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 90%;
 
   form {
     display: flex;
@@ -34,10 +31,10 @@ const StyledInput = styled.input`
   font-family: Jua;
 
   &:focus {
-    border: 3px solid #adff45;
+    border: 3px solid #00cfb4;
   }
   & + & {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
 
   &.email {
@@ -54,7 +51,7 @@ const StyledInput = styled.input`
 `
 
 const StyledBtn = styled.button`
-  height: 100%;
+  height: 3rem;
   background-color: #00cfb4;
   color: white;
   border-radius: 0.5rem;
@@ -105,6 +102,9 @@ const FormInputs = () => {
   // 필드 유효성검사
   const [emailValid, setEmailValid] = useState(true)
   const [nicknameValid, setNicknameValid] = useState(true)
+  const [nameValid, setNameValid] = useState(true)
+  const [pwdValid, setPwdValid] = useState(true)
+  const [checkPwd, setCheckPwd] = useState(true)
   
   const [userGender, setUserGender] = useState('')
   const [phone, setPhone] = useState('')
@@ -114,7 +114,7 @@ const FormInputs = () => {
   
   //전체 필드 검사 완료
   const [ isValidSignupForm, setisValidSignupForm ] = useState(false)
- 
+
   //닉네임 중복 검사 완료
   // const [ isValidNickname, setisValidNickname ] = useState(false)
   
@@ -155,6 +155,7 @@ const FormInputs = () => {
     setUserGender(e.target.value)
   }
 
+  // 이메일 유효성 검사
   const validateEmail = (e) => {
     // ^ 시작일치, $ 끝 일치
     // {2, 3} 2개 ~ 3개
@@ -166,14 +167,49 @@ const FormInputs = () => {
     else setEmailValid(false); 
   }
 
-  //validateNickname 미완성
+  // 비밀번호 유효성 검사
+  const validatePwd = (e) => {
+    var patternEngAtListOne = new RegExp(/[a-zA-Z]+/); // + for at least one
+    var patternSpeAtListOne = new RegExp(/[~!@#$%^]+/); // + for at least one
+    var patternNumAtListOne = new RegExp(/[0-9]+/); // + for at least one
+
+    console.log(e.target.value)
+    if( patternEngAtListOne.test( e.target.value ) 
+        && patternSpeAtListOne.test( e.target.value )  
+        && patternNumAtListOne.test( e.target.value )
+        && e.target.value.length >= 8
+        && e.target.value.length <= 15
+    ){
+        return setPwdValid(true);
+    }
+    else return setPwdValid(false);
+  }
+
+  // 비밀번호 확인
+  const checkPassword = (e) => {
+    if (pwdValid 
+      && (e.target.value === document.querySelector(".userPassword").value)
+    ){
+      return setCheckPwd(true);
+    } else return setCheckPwd(false);
+  }
+
+  // 닉네임 유효성 검사 | 2~10자 이하의 한글,영어,숫자만
   const validateNickname = (e) => {
-    let regexp = /^[0-9a-zA-Z가-힣]*$/i;
-    if (regexp.test(e.target.value) && e.target.value <= 10 && e.target.value >= 2) 
+    let regexp = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
+    if (regexp.test(e.target.value) && e.target.value.length <= 10 && e.target.value.length >= 2) 
       setNicknameValid(true);
     else setNicknameValid(false); 
   }
 
+  // 이름 유효성 검사 | 1~30자
+  const validateName = (e) => {
+    if (e.target.value.length <= 30 && e.target.value.length >= 1) 
+      setNameValid(true);
+    else setNameValid(false); 
+  }
+
+  // 전화번호 유효성 검사 및 형식 자동 변환
   const checkPhone = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
@@ -282,16 +318,22 @@ const FormInputs = () => {
         type="password"
         autoComplete="userPassword"
         name="userPassword"
+        className="userPassword"
         placeholder="비밀번호"
         onChange={(e) => setUserPassword(e.target.value)}
         value={userPassword}
+        onBlur={validatePwd}
       ></StyledInput>
+      { pwdValid ? null : <ErrorText>비밀번호는 8~15자의 영어, 숫자, 기호(~!@#$%^)를 조합해주세요</ErrorText>}
 
       <StyledInput
         type="password"
         autoComplete="userPassword"
         placeholder="비밀번호 확인"
+        onBlur={checkPassword}
       ></StyledInput>
+      { pwdValid ? 
+        ( checkPwd ? null : <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>) : null }
 
       <CheckDiv>
         <StyledInput
@@ -312,8 +354,10 @@ const FormInputs = () => {
         name="userName"
         placeholder="이름"
         onChange={(e) => setUserName(e.target.value)}
+        onBlur={validateName}
         value={userName}
       ></StyledInput>
+      { nameValid ? null : <ErrorText>이름은 1~30자로 입력할 수 있어요</ErrorText>}
 
       <CheckDiv>
         <StyledInput
