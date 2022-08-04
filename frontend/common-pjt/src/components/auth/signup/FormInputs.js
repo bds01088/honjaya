@@ -329,10 +329,7 @@ const FormInputs = () => {
   }
   
   return (
-    <FormInputsBlock onSubmit={(e) => { 
-      if(checkedEmail && checkedPwd && isDuplicateNicknameChecked && nameValid && userBirthday && userGender && userPhone) { handleSubmit(e) }
-      }}>
-
+    <FormInputsBlock onSubmit={(e) =>  { handleSubmit(e) }}>
       <CheckDiv>
         <StyledInput
           type="email"
@@ -459,7 +456,7 @@ const FormInputs = () => {
         value={form.userProfilePicUrl}
       ></StyledInput> */}
 
-      <InBtn>계정 생성하기</InBtn>
+      <InBtn disabled={checkedEmail || checkedPwd || isDuplicateNicknameChecked || nameValid || userBirthday || userGender || userPhone}>계정 생성하기</InBtn>
 
     </FormInputsBlock>
   )
