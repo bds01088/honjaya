@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
 
 export const ModalBackdrop = styled.div`
   width: 100vw;
@@ -50,6 +51,7 @@ const SubmitBtn = styled.button`
 `
 
 const CreateTag = (props) => {
+  
   const [tag01, setTag01] = useState('')
 
   const sendToMain = () => {

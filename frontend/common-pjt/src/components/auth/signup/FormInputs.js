@@ -229,15 +229,15 @@ const FormInputs = () => {
   }, [phone]);
 
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (isNicknameChecked) {
-        isValidNickname(true)
-      } else {
-        isValidNickname(false)
-      }
-    }, 10);
-  }, [userNickname, isNicknameChecked]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (isNicknameChecked) {
+  //       isValidNickname(true)
+  //     } else {
+  //       isValidNickname(false)
+  //     }
+  //   }, 10);
+  // }, [isNicknameChecked]);
 
   // console.log(isDuplicateChNickname)
   
