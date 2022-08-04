@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
 import { checkNickname, signup, setNicknameCheckedFalse } from './signup-slice'
@@ -12,8 +11,6 @@ const FormInputsBlock = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 90%;
 
   form {
     display: flex;
@@ -30,14 +27,14 @@ const StyledInput = styled.input`
   font-size: 1.1rem;
   padding: 1rem 0.5rem;
   width: 95%;
-  height: 1rem;
+  height: 0.5rem;
   font-family: Jua;
 
   &:focus {
-    border: 3px solid #adff45;
+    border: 3px solid #00cfb4;
   }
   & + & {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
 
   &.email {
@@ -54,7 +51,7 @@ const StyledInput = styled.input`
 `
 
 const StyledBtn = styled.button`
-  height: 100%;
+  height: 2.5rem;
   background-color: #00cfb4;
   color: white;
   border-radius: 0.5rem;
@@ -114,7 +111,7 @@ const FormInputs = () => {
   
   //전체 필드 검사 완료
   const [ isValidSignupForm, setisValidSignupForm ] = useState(false)
- 
+
   //닉네임 중복 검사 완료
   // const [ isValidNickname, setisValidNickname ] = useState(false)
   
