@@ -3,7 +3,7 @@ import backImg from '../../assets/main_img.jpg'
 import MainHeader from './MainHeader'
 import ChatList from './ChatList'
 import MainCharacter from './MainCharacter'
-import CreateTag from './CreateTag'
+import CreateTag from './hashtag/CreateTag'
 import ChatRoom from './ChatRoom'
 import {
   MdAddCircle,
@@ -13,8 +13,10 @@ import {
   MdKeyboardArrowUp,
   MdKeyboardArrowDown,
 } from 'react-icons/md'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import getHash from './hashtag/hashtag-slice'
 
 const Container = styled.div`
   background-image: url(${backImg});
@@ -195,6 +197,10 @@ const Main = () => {
     '강태찬',
   ])
   const [chatUser, setChatUser] = useState('')
+  const dispatch = useDispatch()
+
+  //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
+  useEffect(() => dispatch(getHash()))
 
   const openModalHash01 = () => {
     setOpenHash01(!openHash01)
