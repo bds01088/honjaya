@@ -9,8 +9,6 @@ import {
 import {Link} from 'react-router-dom' 
 
 const BottomBox = styled.div`
-  /* position: relative; */
-  /* outline: 0.2rem solid #333333; */
   width: 90%;
   height: 50%;
   margin: 1rem auto;
@@ -18,14 +16,14 @@ const BottomBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* outline: 3px solid; */
+
 `
 const LeftBox = styled.div`
   display: flex;
   align-items: center;
   height: 20vh;
   width: 50vw;
-  /* outline: 2px solid; */
+
 `
 
 const PersonnelBox = styled.div`
@@ -37,10 +35,6 @@ const PersonnelBox = styled.div`
   border-radius: 2rem;
   height: 70%;
   width: 50%;
-  /* @media (max-width: 1650px ) { 
-    width: 30rem;
-    
-  } */
 `
 
 const Title = styled.div`
@@ -68,7 +62,6 @@ const Label = styled.label`
   margin: 0 1rem;
   font-family: "Jua";
   cursor: pointer;
-  /* outline: 2px solid; */
 `
 
 const RadioIconOff = styled(MdRadioButtonUnchecked)`
@@ -94,9 +87,6 @@ const CheckIconOn = styled(MdCheckBox)`
 const StartDiv = styled.div`
   display: flex;
   align-items: center;
-  /* width: 3rem; */
-  /* height: 5rem; */
-  /* outline: 2px solid; */
 `
 
 const Start = styled.button`
@@ -107,13 +97,9 @@ const Start = styled.button`
   font-family: Jua;
   font-size: 3rem;
   padding: 0.5rem 2rem;
-  /* margin: 1rem 0; */
   background: #ff728e;
-
   cursor: pointer;
 
-
-  // 모드 하나라도 선택 안했을 시 시작하기 버튼 disabled
   &:disabled {
     background: #8a3849;
     color: #c2c2c2;
