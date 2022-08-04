@@ -1,5 +1,8 @@
 package com.ssafy.honjaya.api.response;
 
+import com.ssafy.honjaya.db.entity.ChatroomUser;
+import com.ssafy.honjaya.db.entity.User;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,7 +19,7 @@ import lombok.ToString;
 @ToString
 public class ChatroomRes {
 	@ApiModelProperty(value = "채팅방 번호, PK")
-	private int chatroomNo;
+	private long chatroomNo;
 	
 	@ApiModelProperty(value = "채팅방 상대방 유저")
 	private int userNo;
@@ -29,5 +32,12 @@ public class ChatroomRes {
 	
 	@ApiModelProperty(value = "에러 메시지")
 	private String error;
+
+	public ChatroomRes(ChatroomUser chatroomUser) {
+		this.chatroomNo = chatroomUser.getChatroom().getChatroomNo();
+		User user = chatroomUser.getUser();
+		this.userNo = user.getUserNo();
+		this.userNickname = user.getUserNickname();
+	}	
 	
 }
