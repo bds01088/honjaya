@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import logo from '../../../assets/logo.png'
+import profileImg from '../../../assets/shadow.png'
 import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector,useDispatch } from 'react-redux'
@@ -13,18 +14,102 @@ const Background = styled.div`
 `
 
 const Header = styled.div`
+    position: relative;
     display: flex;
     justify-content: center;
+    height: 25%;
+    background-color: #CCF3EE;
+    /* outline: 1px solid; */
 `
 
 const Logo = styled.img`
-  /* position: fixed; */
-  /* display: inline; */
-  margin-left: 2rem;
+  height: 50%;
 `
 
-// 체크용 회원가입폼 그대로 가지고옴
 
+const ProfileContainer = styled.div`
+  position: absolute;
+  /* z-index: 1; */
+  top: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 25%;
+  /* inline: block; */
+  /* outline: 2px solid; */
+  `
+
+const ImgBox = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  width: 30%;
+  height: 100%;
+  /* outline: 1px solid red; */
+  `
+const ProfileImg = styled.div`
+  height: 85%;
+  width: 35%;
+  border-radius: 70%;
+  background-color: #333333;
+`
+
+const Container = styled.div`
+  display: flex;
+  /* position: absolute; */
+  justify-content: center;
+  width: 100%;
+  height: 75%;
+  /* outline: 2px solid; */
+`
+
+const FormBox = styled.form`
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  /* outline: 2px solid blue; */
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+`
+const InfoBox = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  width: 90%;
+  height: 70%;
+  margin-top: 3rem;
+  /* outline: 2px solid green; */
+`
+
+const LeftBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: space-evenly;
+  width: 40%;
+  /* outline: 2px solid; */
+`
+
+const RightBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 40%;
+  
+  /* outline: 1px solid purple; */
+  /* margin-top: 1rem; */
+`
+
+const UpdateBtn = styled.div`
+
+`
 
 const StyledInput = styled.input`
   background-color: white;
@@ -32,9 +117,10 @@ const StyledInput = styled.input`
   border-radius: 0.5rem;
   font-size: 1.1rem;
   padding: 1rem 0.5rem;
-  width: 95%;
+  width: 70%;
   height: 1rem;
   font-family: Jua;
+  /* outline: 2px solid navy; */
 
   &:focus {
     border: 3px solid #00cfb4;
@@ -44,11 +130,13 @@ const StyledInput = styled.input`
   }
 
   &.email {
-    width: 75%;
+    width: 70%;
   }
 
   &.nickname {
-    width: 75%;
+    width: 50%;
+    margin-right: 1.5rem;
+    
   }
 
   &.birth {
@@ -56,7 +144,10 @@ const StyledInput = styled.input`
   }
 `
 
-
+const Label = styled.div`
+  font-family: "Jua";
+  font-size: 1rem;
+`
 const StyledBtn = styled.button`
   height: 3rem;
   background-color: #00cfb4;
@@ -76,22 +167,18 @@ const CheckDiv = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-
-  
+  outline: 1px solid red;
+  flex-direction: column;
 `
 
 const InBtn = styled.button`
   background-color: #00cfb4;
   color: white;
-  width: 100%;
-  
+  width: 10%;
   border-radius: 0.5rem;
   border: 0;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.5rem;
+  /* margin: 1rem 0; */
   font-size: 1.2rem;
   font-family: Jua;
 
@@ -112,52 +199,9 @@ const SuccessText = styled.span`
   font-size: 1rem;
   margin-bottom: 0.5rem;
 `
-//여기까지 체크용 회원가입 폼 그대로 가지고옴
 
 
-
-
-
-
-
-
-
-
-
-const Container = styled.div`
-
-`
-
-const ImgBox = styled.div`
-
-`
-
-//회원가입 인풋 블락 디자인 일단 그대로 가지고왔어용
-const FormBox = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-`
-
-const LeftBox = styled.div`
-
-`
-const RightBox = styled.div`
-`
-
-const UpdateBtn = styled.div`
-
-`
-
-
+// 누누가 들고온 회원가입 데이터
 const UpdateProfile = () => {
   //이름이랑 이메일은 수정불가
   //필드 값 변경
@@ -172,6 +216,11 @@ const UpdateProfile = () => {
   const [nicknameValid, setNicknameValid] = useState(true)
   const [pwdValid, setPwdValid] = useState(true)
 
+
+
+  // console.log(userBirthday)
+  // console.log(userGender)
+  // console.log(userGender)
 
   //닉네임 중복 체크 여부 변수
   // t: 사용가능, f: 사용불가능
@@ -315,7 +364,14 @@ const UpdateProfile = () => {
   }
   
   
-  
+  console.log("usergender : "+userGender)
+  console.log("패스워드 재확인 체크 : "+checkedPwd)
+  console.log("패스워드 유효성 체크 : "+ pwdValid)
+  // console.log("올바른 전화번호인지 : " + {userphone})
+  // console.log("성별 체크 했는지 : " + usergender)
+  console.log("닉네임 유효성 : " +nicknameValid )
+  console.log("닉네임 중복 검사 : " + isDuplicateNicknameChecked)
+
   return (
 
     <Background>
@@ -323,112 +379,142 @@ const UpdateProfile = () => {
             <Logo src={logo}></Logo>
         </Header>
 
+        <ProfileContainer>
+          <ImgBox>
+            <ProfileImg src={profileImg}></ProfileImg>
+            <ProfileImg src={profileImg}></ProfileImg>
+          </ImgBox>
+        </ProfileContainer>
+
         <Container>
-        
-            <ImgBox>
-            </ImgBox>
+          <FormBox onSubmit={(e) => { if (checkedPwd && isDuplicateNicknameChecked && userBirthday && userGender && userPhone) handleSubmit(e) }}>
+            <InfoBox>
+              <LeftBox>
 
-            <FormBox onSubmit={(e) => { if (checkedPwd && isDuplicateNicknameChecked && userBirthday && userGender && userPhone) handleSubmit(e) }}>
-              {/* 테스트용 회원가입 폼 그대로 가지고옴 */}
-              <CheckDiv>
+                <CheckDiv>
+                  <Label>닉네임</Label>
+                  <div>
+                  <StyledInput
+                    className="nickname"
+                    autoComplete="userNickname" 
+                    name="userNickname"
+                    placeholder={nowUserNickname}
+                    onChange={(e) => {
+                      setUserNickname(e.target.value) 
+                      if(isDuplicateNicknameChecked) { setisDuplicateNicknameChecked(false) }
+                    }}
+                    value={userNickname}
+                    onBlur={(e) => {
+                      validateNickname(e)
+                    }}
+                  ></StyledInput>
+                  <StyledBtn 
+                    type="button" 
+                    onClick={(e) => {
+                    if(nicknameValid && defaultNickname){
+                      isValidNickname(e)
+                    }
+                    }}>확인</StyledBtn>
+                    </div>
+                  </CheckDiv>
+
+                  { defaultNickname && !nicknameValid ? 
+                  <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText> : 
+                  ( defaultNickname && nicknameValid && !isDuplicateNicknameChecked ? 
+                  <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText> : null )}
+                  { isDuplicateNicknameChecked ? 
+                  <SuccessText>사용 가능한 닉네임입니다.</SuccessText> : null}
+                  
+                  <div>
+                    <Label>이름(수정불가)</Label>
+                    <StyledInput
+                      autoComplete="userName"
+                      disabled={true}
+                      name="userName"
+                      value={userName}
+                    ></StyledInput>
+                  </div>
+
+                  <div>
+                    <Label>전화번호</Label>
+                    <StyledInput
+                    autoComplete="userPhone"
+                    name="userPhone"
+                    placeholder={nowUserPhone}
+                    onChange={checkPhone}
+                    onBlur={(e) => {
+                      console.log(e.target.value);
+                      this.onChange(e)
+                    }}
+                    value={userPhone}
+                    ></StyledInput>
+                  </div>
+                  
+
+                  <CheckDiv>
+                    <Label>이메일(수정불가)</Label>
+                    <StyledInput
+                      type="email"
+                      disabled={true}
+                      value={userEmail}
+                      className="email"
+                      >
+                    </StyledInput>
+                  </CheckDiv>
+              </LeftBox>
+            
+              <RightBox>
+                <CheckDiv>
+                  <StyledInput
+                    type="date"
+                    autoComplete="userBirthday"
+                    name="userBirthday"
+                    className="birth"
+                    onChange={(e) => setUserBirthday(e.target.value)}
+                    value={userBirthday}
+                  ></StyledInput>
+
+                  <div>
+                    <label>
+                      <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender}/>남
+                    </label>
+                    <label>
+                      <input name="userGender" type="radio" value="f" checked={userGender==="f"} onChange={changeGender}/>여
+                    </label>
+                  </div>
+
+                </CheckDiv>
                 <StyledInput
-                  type="email"
-                  disabled="true"
-                  value={userEmail}
-                  className="email"
-                  >
-                  </StyledInput>
-              </CheckDiv>
+                    type="password"
+                    autoComplete="userPassword"
+                    name="userPassword"
+                    className="userPassword"
+                    placeholder="비밀번호"
+                    onChange={(e) => setUserPassword(e.target.value)}
+                    value={userPassword}
+                    onBlur={validatePwd}
+                  ></StyledInput>
+                  { !pwdValid && defaultPwd ? <ErrorText>비밀번호는 8~15자의 영어, 숫자, 기호(~!@#$%^)를 조합해주세요</ErrorText> : null }
 
-
-              <StyledInput
-                type="password"
-                autoComplete="userPassword"
-                name="userPassword"
-                className="userPassword"
-                placeholder="비밀번호"
-                onChange={(e) => setUserPassword(e.target.value)}
-                value={userPassword}
-                onBlur={validatePwd}
-              ></StyledInput>
-              { !pwdValid && defaultPwd ? <ErrorText>비밀번호는 8~15자의 영어, 숫자, 기호(~!@#$%^)를 조합해주세요</ErrorText> : null }
-
-              <StyledInput
-                type="password"
-                autoComplete="userPassword"
-                placeholder="비밀번호 확인"
-                onBlur={checkPassword}
-              ></StyledInput>
-              { pwdValid ? 
-        ( checkedPwd ? null : <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>) : null }
-
-              <CheckDiv>
-              <StyledInput
-                className="nickname"
-                autoComplete="userNickname" 
-                name="userNickname"
-                placeholder={nowUserNickname}
-                onChange={(e) => {
-                  setUserNickname(e.target.value) 
-                  if(isDuplicateNicknameChecked) { setisDuplicateNicknameChecked(false) }
-                }}
-                value={userNickname}
-                onBlur={(e) => {
-                  validateNickname(e)
-                }}
-              ></StyledInput>
-              <StyledBtn type="button" onClick={(e) => {
-                if(nicknameValid && defaultNickname){
-                  isValidNickname(e)
-                }
-                }}>중복확인</StyledBtn>
-              </CheckDiv>
-              { defaultNickname && !nicknameValid ? <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText> : 
-                ( defaultNickname && nicknameValid && !isDuplicateNicknameChecked ? <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText> : null )}
-              { isDuplicateNicknameChecked ? <SuccessText>사용 가능한 닉네임입니다.</SuccessText> : null}
-                    
-              <StyledInput
-                autoComplete="userName"
-                disabled="true"
-                name="userName"
-                value={userName}
-              ></StyledInput>
-    
-
-              <CheckDiv>
                 <StyledInput
-                  type="date"
-                  autoComplete="userBirthday"
-                  name="userBirthday"
-                  className="birth"
-                  onChange={(e) => setUserBirthday(e.target.value)}
-                  value={userBirthday}
+                  type="password"
+                  autoComplete="userPassword"
+                  placeholder="비밀번호 확인"
+                  onBlur={checkPassword}
                 ></StyledInput>
-
-                <div>
-                  <label>
-                    <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender}/>남
-                  </label>
-                  <label>
-                    <input name="userGender" type="radio" value="f" checked={userGender==="f"} onChange={changeGender}/>여
-                  </label>
-                </div>
-
-              </CheckDiv>
+                { pwdValid ? 
+                ( checkedPwd ? null : <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>) : null }
+              </RightBox>
+            </InfoBox>
+            
+             {/* 테스트용 회원가입 폼 그대로 가지고옴 */}
+            
 
 
-              <StyledInput
-                
-                autoComplete="userPhone"
-                name="userPhone"
-                placeholder={nowUserPhone}
-                onChange={checkPhone}
-                onBlur={(e) => {
-                  console.log(e.target.value);
-                  this.onChange(e)
-                }}
-                value={userPhone}
-              ></StyledInput>
+            
+
+
+            
 
               {/* <StyledInput
                 autoComplete="userProfilePicUrl"
@@ -438,19 +524,8 @@ const UpdateProfile = () => {
                 value={form.userProfilePicUrl}
               ></StyledInput> */}
 
-              <InBtn>회원정보 수정하기</InBtn>
-
-            {/* 여기까지 체크용 회원가입폼 그대로 가지고옴 */}
-                <LeftBox>
-
-                </LeftBox>
-
-                <RightBox>
-                </RightBox>
-
-                <UpdateBtn>
-                </UpdateBtn>
-            </FormBox>
+            <InBtn>수정</InBtn>
+          </FormBox>
 
         </Container>
     </Background>
