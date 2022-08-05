@@ -44,6 +44,22 @@ export const checkEmail = createAsyncThunk(
   }
 )
 
+//회원정보 수정
+export const modifyUserInfo = createAsyncThunk(
+  'MODIFY_USERINFO',
+  async ( newUserInfo , { rejectWithValue }) => {
+    console.log(newUserInfo)
+    console.log("뭔가문제냐고")
+    try {
+      console.log(newUserInfo)
+      const res = await axios.put('/honjaya/users', newUserInfo)
+      return res;
+    } catch (err) {
+      return rejectWithValue(err.response);
+    }
+  }
+);
+
 const initialState = {
   isLoading: false,
 };
