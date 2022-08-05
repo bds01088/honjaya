@@ -17,6 +17,7 @@ import React, { useState, useEffect } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getHash, delHash } from './hashtag/hashtag-slice'
+import { getRate } from './hashtag/rate-slice'
 
 
 
@@ -229,6 +230,21 @@ const Main = () => {
 
   const hashList = useSelector((state) => state.hashtag.list)
 
+  //main 컴포넌트가 붙기 전에 별점 데이터 가져오기
+  useEffect(() => {
+    dispatch(getRate())
+    .unwrap()
+    .then((res) => {
+      console.log("별점", res)
+    })
+    .catch((err) => {
+      console.log("별점 에러")
+      console.log(err)
+    })
+  }, [])
+
+  // const rate = useSelector((state) => state.rate.score )
+
   //main에서 유저정보 불러오기
   useEffect(() => {
     dispatch(loadUser())
@@ -286,6 +302,7 @@ const Main = () => {
 
   return (
     <Container>
+      {/* {console.log(rate)} */}
       {/* MainHeader는 nickname, point, rate_score가 필요 */}
       <MainHeader />
 
