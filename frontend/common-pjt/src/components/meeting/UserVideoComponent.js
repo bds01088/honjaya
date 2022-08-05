@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
 import OpenViduVideoComponent from './OvVideo';
 import './UserVideo.css';
+import styled from 'styled-components';
+
+const StreamComponent = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const Nickname = styled.div`
+  text-align: center;
+  position: absolute;
+  width: auto;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+`
 
 export default class UserVideoComponent extends Component {
 
@@ -13,10 +28,10 @@ export default class UserVideoComponent extends Component {
         return (
             <div>
                 {this.props.streamManager !== undefined ? (
-                    <div className="streamcomponent">
+                    <StreamComponent className="streamcomponent">
                         <OpenViduVideoComponent streamManager={this.props.streamManager} />
-                        <div><p>{this.getNicknameTag()}</p></div>
-                    </div>
+                        <Nickname><p>{this.getNicknameTag()}</p></Nickname>
+                    </StreamComponent>
                 ) : null}
             </div>
         );
