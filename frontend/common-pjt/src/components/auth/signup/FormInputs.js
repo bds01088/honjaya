@@ -278,8 +278,7 @@ const FormInputs = () => {
     })
     .catch((err) => {
       if (err.status === 500) {
-        console.log("대체뭐가문제냐")
-        // navigate('/error')
+        navigate('/error')
       }
     })
   }
@@ -294,8 +293,7 @@ const FormInputs = () => {
     })
     .catch((err) => {
       if (err.status === 500) {
-        console.log("대체뭐가문제냐")
-        // navigate('/error')
+        navigate('/error')
       }
     })
   }
