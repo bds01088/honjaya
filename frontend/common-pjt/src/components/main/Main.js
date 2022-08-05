@@ -230,18 +230,7 @@ const Main = () => {
 
   const hashList = useSelector((state) => state.hashtag.list)
 
-  //main 컴포넌트가 붙기 전에 별점 데이터 가져오기
-  useEffect(() => {
-    dispatch(getRate())
-    .unwrap()
-    .then((res) => {
-      console.log("별점", res)
-    })
-    .catch((err) => {
-      console.log("별점 에러")
-      console.log(err)
-    })
-  }, [])
+
 
   // const rate = useSelector((state) => state.rate.score )
 
@@ -249,10 +238,19 @@ const Main = () => {
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .catch((err)=> {alert.err("에러지롱")})
+      .catch((err)=> {alert('에러')})
   },[])
 
-  const { userNickname } = useSelector((state) => state.login.user)
+  //main에서 별점 정보 불러오기
+  useEffect(() => {
+    dispatch(getRate())
+    .unwrap()
+    // .then((res) => {console.log(res)})
+    .catch((err) => {alert('이게에러네')})
+  },[])
+
+
+
 
   //로그아웃
   function handleLogout() {
