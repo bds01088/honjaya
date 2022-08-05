@@ -8,6 +8,7 @@ import MainHelper from './MainHelper'
 import React, { useState,useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { loadUser } from '../auth/login/login-slice'
+import { getRate } from './hashtag/rate-slice'
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
@@ -50,10 +51,15 @@ const Helper = styled(MdHelpOutline)`
 
 const MainHeader = () => {
 
+  
 
   //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
   //store에 있는 userNickname 불러오기
   const { userNickname, userPoint } = useSelector((state) => state.login.user)
+  
+  //store에서 관리중인 rate 불러오기
+  const { rateScore } = useSelector((state) => state.rate.rateInfo)
+  
   const [isOpen, setIsOpen] = useState(false)
 
   //toLocaleString에서 에러남  
@@ -71,7 +77,7 @@ const MainHeader = () => {
         <Rating
           style={{ color: '#FFF672', marginRight: '1rem' }}
           size="large"
-          value={3.5}
+          value={rateScore}
           precision={0.5}
           readOnly
         />
