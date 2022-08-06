@@ -313,23 +313,21 @@ const Main = () => {
     setRemove(!remove)
   }
 
-  //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
-  const handleDeleteHash = (e) => {
-    
-    // console.log("왜 지금 삭제됌???")
 
-    dispatch(delHash(hashesOwned[0][1]))
+  //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
+  const handleDeleteHash = (hashNo) => {
+    console.log("왜 지금 삭제됌???")
+    dispatch(delHash(hashNo))
     .then((res) => {
       console.log(res)
-      setRemove(!remove)
-      
-      
-
+      dispatch(getHash())
     })
     .catch((err) => {
-      // console.log(err)
+      console.log(err)
     })
   }
+
+
 
   return (
     
@@ -368,6 +366,7 @@ const Main = () => {
 
 
       <AddHash className="hash" onClick={openModalHash} />
+      
       {hashesOwned.map((item, idx ) => (
         <>
           {/* <h2>안녕하세요</h2> */}
@@ -375,7 +374,7 @@ const Main = () => {
           <Hash onClick={showRemove}># {item[1]}</Hash>
  
           <RemoveHash
-            onClick={handleDeleteHash}/>
+            onClick={() => handleDeleteHash(item[0])}/>
        
         </>
         // <HashTag className="hash">
@@ -396,6 +395,8 @@ const Main = () => {
       {openHash ? (
             <CreateTag openModalHash={openModalHash} />
           ) : null}
+
+
       {/* {remove ?  (
           <RemoveHash
             onClick={handleDeleteHash}/>

@@ -96,7 +96,11 @@ const hashTagSlice = createSlice({
     },
 
     [delHash.fulfilled]: (state, action) => {
+      console.log(action.payload.data)
+      const response = action.payload.data
+      
 
+   
     },
 
     [putHash.fulfilled]: (state, action) => {
@@ -104,7 +108,8 @@ const hashTagSlice = createSlice({
       // putHash 요청 뒤에 초기값에 값이 제대로 세팅되지 않아서 아래로직을 이용해 추가해줌
       const response = action.payload.data
       const temp = [response.hashNo, response.hashText];
-      state.hashesOwned.push(temp)      
+      state.hashesOwned.push(temp)
+      console.log("추가 후", state.hashesOwned)      
     },
   },
 })

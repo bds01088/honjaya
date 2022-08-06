@@ -59,10 +59,9 @@ const CreateTag = (props) => {
   const sendToMain = (e) => { 
 
     if (tag01.trimStart().trimEnd() !== ''){
-      // props.setHash01(tag01)
       dispatch(putHash(tag01))
       console.log("해시태그생성후 응답")    
-      props.openModalHash01(false) 
+      props.openModalHash(false) 
     }
   }
 
