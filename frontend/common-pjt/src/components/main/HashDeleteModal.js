@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+
 import { getHash, delHash, putHash, loadHashesOwned } from './hashtag/hashtag-slice'
 export const ModalBackdrop = styled.div`
   width: 100vw;
@@ -37,13 +37,13 @@ const HashDeleteModal = ({openHashDeleteModal}) => {
   const { hashesOwned } = useSelector((state) => state.hashtag);
   const handleDeleteHash = (e) => {
       
-    // console.log("왜 지금 삭제됌???")
+
   
     dispatch(delHash(hashesOwned[0][1]))
     .then((res) => {
-      // console.log(res)
+
       console.log(res)
-      // setRemove01(!remove01)
+    
       
       
   

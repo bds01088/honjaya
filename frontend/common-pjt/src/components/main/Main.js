@@ -16,10 +16,8 @@ import {
 import React, { useState, useEffect } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { getHash, delHash, putHash, loadHashesOwned } from './hashtag/hashtag-slice'
+import { getHash, delHash, putHash } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
-
-import Hash01 from './hashtag/Hash01'
 
 
 import { useSelector } from 'react-redux'
@@ -340,29 +338,6 @@ const Main = () => {
         {isOpen ? <HashDeleteModal openHashDeleteModal={openHashDeleteModal} /> : null}
       </CharacterBox>
 
-      {/* {hashesOwned.map((item, idx) => {
-        <p>{hash01}</p>
-        <HashTag className="hash1">
-          {hash01 === '' ? (
-            <AddHash className="hash1" onClick={openModalHash01} />
-          ) : (
-            // <Hash01 onClick={showRemove01}># {hash01}</Hash01>
-            // <Hash01 onClick={showRemove01}># {hash01}</Hash01>
-            <Hash01 showRemove01={showRemove01} hash01={hash01}></Hash01>
-         
-         )}
-          {remove01 ? (
-            <RemoveHash01
-              onClick={handleDeleteHash}/>
-          ) : null}
-          {openHash01 ? (
-            <CreateTag LoadHashes={LoadHashes} openModalHash01={openModalHash01} setHash01={setHash01} />
-          ) : null}
-        </HashTag>
-      })
-      
-      
-      } */}
 
 
       <AddHash className="hash" onClick={openModalHash} />
@@ -377,18 +352,6 @@ const Main = () => {
             onClick={() => handleDeleteHash(item[0])}/>
        
         </>
-        // <HashTag className="hash">
-        //   <h2>{item[1]}</h2>
-          
-
-          
-        //     <Hash onClick={showRemove}># {item[1]}</Hash>
-
-          
-        //   {remove ? (<RemoveHash onClick={handleDeleteHash}/> ): null}
-        //   {openHash ? (<createTag openModalHash={openModalHash}/>) : null}
-        // </HashTag>
-
 
       ))}
 
@@ -397,10 +360,7 @@ const Main = () => {
           ) : null}
 
 
-      {/* {remove ?  (
-          <RemoveHash
-            onClick={handleDeleteHash}/>
-        ) : null} */}
+
 
 
  
