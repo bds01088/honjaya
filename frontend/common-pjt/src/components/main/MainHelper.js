@@ -11,6 +11,7 @@ export const ModalBackdrop = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
 `
 
 const ModalView = styled.div.attrs(props => ({
@@ -19,19 +20,25 @@ const ModalView = styled.div.attrs(props => ({
   /* text-align: center; */
   text-decoration: none;
   padding: 30px 90px;
-  background-color: white;
   border-radius: 30px;
-  color: #333333;
+  color: #5D5D5D;
   background-color: #FFFDDE;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-family: Jua;
+  width: 28rem;
 `
+
+
 const Header = styled.div`
   flex-direction: row;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom: thick double #333333;
+  border-top: thick double #333333;
+  margin-bottom: 1rem;
 `
+
 
 const LogoImg = styled.img`
   height: 5rem;
@@ -40,7 +47,14 @@ const LogoImg = styled.img`
 const HeaderText = styled.p`
   font-size: 2rem;
   margin-bottom: -1rem;
+  color: #006A71;
 `
+
+const GuideTitle = styled.p`
+  font-size: 1.6rem;
+  color: #006A71;
+`
+
 
 const MainHelper = ({openModalHelper}) => {
 
@@ -59,23 +73,23 @@ const MainHelper = ({openModalHelper}) => {
         </Header>
 
         <div>
-          1. 매너 별점
+          <GuideTitle>🌟 매너 별점</GuideTitle>
+          미팅을 진행하며 얼마나 매너있었는가?<br />
+          함께 미팅을 진행한 유저들이 평가해줘요 !<br />
           <br />
-          : 게임을 진행하는 동안 얼마나 매너도를 나타내는 지표에요 !<br />
-          <br />
-          2. 루팡
-          <br />
-          : 혼자야만의 포인트 제도. <br />
-          루팡을 이용해 미팅 중, 랜덤 주제 추천이나 타이머 연장 등의 서비스를
+
+          <GuideTitle>💎 루팡</GuideTitle>
+          혼자야만의 포인트 제도 💰 <br />
+          루팡을 소모하여 랜덤 대화 주제 추천이나 타이머 연장 등의 서비스를
           이용할 수 있어요 ! <br />
+
           <br />
-          3. 해시태그
+          <GuideTitle>#️⃣ 해시태그</GuideTitle>
+          해시태그로 나를 표현해보세요 ! <br />
           <br />
-          : 해시태그를 이용해 나를 표현해보세요 ! <br />
-          <br />
-          4. 1:1 채팅
-          <br />
-          : 마음에 드는 유저와 채팅을 통해 소통할 수 있어요 !<br />
+          
+          <GuideTitle>💌 1:1 채팅</GuideTitle>
+          마음에 드는 유저와 채팅을 통해 소통할 수 있어요 !<br />
         </div>
       </ModalView>
     </ModalBackdrop>
