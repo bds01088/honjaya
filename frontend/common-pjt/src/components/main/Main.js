@@ -383,7 +383,7 @@ const Main = () => {
     .then((res) => {
       //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜 
       console.log(res)
-      navigate('/')
+      // navigate('/')
     })
     .catch((err) => {
       if (err.status === 500) {
