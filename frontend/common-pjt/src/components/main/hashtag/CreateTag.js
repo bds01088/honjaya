@@ -102,6 +102,7 @@ const CreateTag = (props) => {
       dispatch(putHash(tag02))
       .then(res => {
         console.log("해시태그생성후 응답")
+        
         // console.log(res.payload.data)
         // dispatch(addHashTag(res.payload.data))
       })

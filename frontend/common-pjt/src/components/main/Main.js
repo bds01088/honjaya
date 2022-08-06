@@ -211,10 +211,18 @@ const Start = styled.div`
 const Main = () => {
   const [openHash01, setOpenHash01] = useState(false)
   const [openHash02, setOpenHash02] = useState(false)
+  const [openHash03, setOpenHash03] = useState(false)
+  
   const [hash01, setHash01] = useState('')
   const [hash02, setHash02] = useState('')
+  const [hash03, setHash03] = useState('')
+  const [hashNo1, setHashNo1] = useState('')
+  const [hashNo2, setHashNo2] = useState('')
+  const [hashNo3, setHashNo3] = useState('')
+  
   const [remove01, setRemove01] = useState(false)
   const [remove02, setRemove02] = useState(false)
+  const [remove03, setRemove03] = useState(false)
   const [openList, setOpenList] = useState(false)
   const [users, setUsers] = useState([
     '김누리',
@@ -233,11 +241,18 @@ const Main = () => {
   
   
   const { hashesOwned } = useSelector((state) => state.hashtag);
-
+  const { testhash01 } = useSelector((state) => state.hashtag);
   function LoadHashes() {
+      console.log(hashesOwned)
       setHash01(hashesOwned[1][1]) 
       setHash02(hashesOwned[3][1]) 
+      setHash03(hashesOwned[5][1]) 
+      setHashNo1(hashesOwned[0][1]) 
+      setHashNo2(hashesOwned[2][1]) 
+      setHashNo3(hashesOwned[4][1]) 
     }
+  
+  
   
     
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
@@ -246,14 +261,13 @@ const Main = () => {
       .unwrap()
       .then(() => {
         console.log("왜안됨")
-          LoadHashes()
+        LoadHashes()
+        
         
       })
       // .catch((err)=> {alert('이게에러')})
   },[])
 
-//해쉬태그가 있으면 정보를 가져오고
-//없으면 정보 가져오고, load
 
 
    
@@ -405,13 +419,17 @@ const Main = () => {
   }
 
   //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
-  const handleDeleteHash = (hashNo) => {
+  const handleDeleteHash = (e) => {
+    
     // console.log("왜 지금 삭제됌???")
-    dispatch(delHash(hashNo))
+
+    dispatch(delHash(hashesOwned[0][1]))
     .then((res) => {
       // console.log(res)
+      console.log(res)
       setRemove01(!remove01)
-      setHash01('')
+      
+      alert('삭제성공')
     })
     .catch((err) => {
       // console.log(err)
@@ -438,8 +456,7 @@ const Main = () => {
         )}
         {remove01 ? (
           <RemoveHash01
-            onClick={
-              handleDeleteHash(hash01.hashNo)}/>
+            onClick={handleDeleteHash}/>
         ) : null}
         {openHash01 ? (
           <CreateTag openModalHash01={openModalHash01} setHash01={setHash01} />

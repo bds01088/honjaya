@@ -33,14 +33,12 @@ export const getHash = createAsyncThunk(
 
 //해시태그 데이터 삭제요청 보내기
 export const delHash = createAsyncThunk(
-  'DELHASH',
+  'DEL_HASH',
   async ( hashNo, { rejectWithValue }) => {
+    console.log(hashNo)
     try {
       const res = await axios.delete(
         `/honjaya/hashtags/${hashNo}`,
-      // {
-      //   headers: {"access-Token": `${getToken()}` },
-      // }
       )
       console.log("해시태그 데이터 삭제성공")
       return res
@@ -86,7 +84,8 @@ const initialState = {
   // success: false,
   // error: null
   hashtagInfo: {},
-  hashesOwned: []
+  hashesOwned: [],
+  hash01 : ''
 
 }
 
@@ -155,6 +154,7 @@ const hashTagSlice = createSlice({
         })
       })
       // console.log(tempHash)
+      
       state.hashesOwned = tempHash
       // console.log(state.hashesOwned)
       // state.success = action.payload.data.success
