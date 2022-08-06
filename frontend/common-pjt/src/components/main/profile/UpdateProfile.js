@@ -55,20 +55,25 @@ const ProfileImg = styled.div`
 `
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   /* position: absolute; */
   justify-content: center;
   width: 100%;
   height: 75%;
-  outline: 2px solid;
+  /* outline: 2px solid; */
 `
 
 const FormBox = styled.form`
+  position: absolute;
+  /* left: 1; */
   display: flex;
+  margin-left: 6rem;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 50%;
+  height: 100%;
   /* outline: 2px solid blue; */
 
   form {
@@ -111,6 +116,7 @@ const GenderSelect = styled.select`
   border: 1.5px solid #333333;
   font-family: "Jua";
   font-size: 1.3rem;
+  cursor: pointer;
   &:focus {
     border: 3px solid #00cfb4;
   }
@@ -132,6 +138,7 @@ const StyledInput = styled.input`
   width: 70%;
   height: 1rem;
   font-family: Jua;
+  /* cursor: pointer; */
   /* outline: 2px solid navy; */
 
   &:focus {
@@ -168,6 +175,7 @@ const StyledBtn = styled.button`
   border: 0;
   font-size: 1rem;
   font-family: Jua;
+  cursor: pointer;
 
   &:hover{
     background-color: #009c87;
@@ -201,6 +209,7 @@ const InBtn = styled.button`
   /* margin: 1rem 0; */
   font-size: 1.2rem;
   font-family: Jua;
+  cursor: pointer;
 
   &:hover{
     background-color: #FF5066;
@@ -218,6 +227,14 @@ const SuccessText = styled.span`
   color: #009c87;
   font-size: 1rem;
   margin-bottom: 0.5rem;
+`
+
+const UpdateDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-right: 4rem;
+  /* outline: 1px solid; */
 `
 
 
@@ -561,7 +578,9 @@ const UpdateProfile = () => {
                 value={form.userProfilePicUrl}
               ></StyledInput> */}
 
-            <InBtn>수정</InBtn>
+            <UpdateDiv>
+              <InBtn>수정</InBtn>
+            </UpdateDiv>
           </FormBox>
 
         </Container>
