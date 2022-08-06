@@ -5,12 +5,16 @@ import './meeting.css';
 import UserVideoComponent from './UserVideoComponent';
 import styled from 'styled-components';
 import logo from '../../assets/logo.png'
-import { border } from '@mui/system';
+import addTimerImg from '../../assets/add-timer.png'
+import pointImg from '../../assets/carrot.png'
+import { MdHelpOutline } from 'react-icons/md'
+
+
 // const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
 const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443';
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
 
-
+// 전체 배경
 const Background = styled.div`
   background-color: #fffdde;
   width: 100vw;
@@ -18,20 +22,98 @@ const Background = styled.div`
   overflow: auto;
 `
 
+// Header: 로고, 타이머, 포인트, 도움말 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 10%;
-  /* margin-left: 5rem; */
-  padding-left: 5rem;
-  @media (max-width: 412px) {
-    width: 100vw;
-  }
-  /* outline: 2px solid blue; */
+  width: 96%;
+  padding: 0.5rem 2%;
 `
-const Logo = styled.img`
 
+// 헤더로고
+const LogoBox = styled.div`
+  height: 100%;
+
+  @media (max-height: 720px){
+    height: 64px;
+  }
 `
+const Logo = styled.img.attrs({ src: `${logo}` })`
+  height: 100%;
+`
+
+// 타이머
+const TimerBox = styled.div`
+  background-color: #F6A9A9;
+  padding: 0.4rem 1rem;
+  border-radius: 1.8rem;
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+`
+const Timer = styled.p`
+  font-size: 1.6rem;
+  font-family: Jua;
+  margin: 0 0.5rem;
+`
+
+// 타이머 연장
+const AddBox = styled.div`
+  position: relative;
+
+  &:hover .timerTip {
+    visibility: visible;
+  }
+`
+
+const AddTimerImg = styled.img.attrs({ src: `${addTimerImg}`})`
+  height: 2rem;
+  z-index: 1;
+`
+
+const AddText = styled.span`
+  visibility: hidden;
+  width: 100px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 2px 0;
+  font-family: Jua;
+  opacity: 80%;
+  
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -3rem;
+`
+
+// 포인트 및 시간 연장
+const LeftBox = styled.div`
+  display: flex; 
+  align-items: center;
+  height: 100%;
+`
+
+const PointImg = styled.img.attrs({ src: `${pointImg}`})`
+  height: 1.8rem;
+`
+const PointText = styled.p`
+  color: #333333;
+  font-size: 1.5rem;
+  font-family: Jua;
+  margin-right: 1rem;
+`
+
+const Helper = styled(MdHelpOutline)`
+  /* margin-right: 2rem; */
+  color: #333333;
+  font-size: 1.8rem;
+`
+
 
 const Container = styled.div`
   outline: 3px solid;
@@ -47,21 +129,6 @@ const VideoBox = styled.div`
   height: 50%;
 `
 
-const Footer = styled.div`
-  outline: 2px solid;
-`
-
-const MeetingChatBox = styled.div`
-  outline: 1px solid;
-`
-
-const BottomCenterBox = styled.div`
-
-`
-
-const BottomRightBox = styled.div`
-
-`
 
 class Meeting extends Component {
   constructor(props) {
@@ -74,6 +141,11 @@ class Meeting extends Component {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
+
+      // 10분의 시간제한
+      timeLimit: 60*10,
+      minute: 10,
+      sec: 0
     }
 
     this.joinSession = this.joinSession.bind(this)
@@ -83,15 +155,45 @@ class Meeting extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this)
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this)
     this.onbeforeunload = this.onbeforeunload.bind(this)
+
+    this.intervalRef = React.createRef();
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onbeforeunload)
+
+    this.intervalRef.current = setInterval(() => {
+      // timeLimit이 남은 경우, 카운팅
+      if (this.state.timeLimit > 0) {
+        this.setState((prevState) => ({
+          timeLimit: prevState.timeLimit - 1,
+          minute: parseInt((prevState.timeLimit-1)/60),
+          sec: (prevState.timeLimit-1)%60
+        }));
+      } else {
+        // 스톱워치 종료
+        this.stopTimer();
+      }
+    }, 1000);
   }
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onbeforeunload)
+
+    // unmount 될때, 스톱워치 종료
+    this.stopTimer();
   }
+
+    // 스톱워치 종료 함수: clearInterval(변수)
+    stopTimer = () => {
+      clearInterval(this.intervalRef.current);
+    }
+    
+    // 스톱워치 시간 추가 함수
+    addTimer = () => {
+      const plusTime = this.state.timeLimit + 180
+      this.setState({ timeLimit: plusTime })
+    }
 
   onbeforeunload(event) {
     this.leaveSession()
@@ -290,9 +392,27 @@ class Meeting extends Component {
     return (
       <Background>
         <Header>
-        <Logo src={logo}></Logo>
-        <p>dd</p>
+          <LogoBox>
+            <Logo/>
+          </LogoBox>
+
+          <TimerBox>
+            <Timer onClick={this.stopTimer}>
+              {this.state.minute}:{this.state.sec < 10 ? 0: null}
+              {this.state.sec}
+            </Timer>
+            <AddBox>
+              <AddTimerImg/>
+              <AddText className="timerTip">시간 연장</AddText>
+            </AddBox>
+          </TimerBox>
+          <LeftBox>
+            <PointImg/>
+            <PointText>10,000</PointText>
+            <Helper/>
+          </LeftBox>
         </Header>
+
         <Container>
           {/* 세션 입장 대기 화면 */}
           {this.state.session === undefined ? (
