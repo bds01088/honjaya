@@ -21,11 +21,8 @@ export const getHash = createAsyncThunk(
       console.log('해시태그 데이터 받아옴')
       //extraReducer가 지켜보고 있기 때문에,
       //진행상황에 따라 extraReducer도 실행된다.
-      // console.log(res)
       return res
     } catch (err) {
-      // console.log("err가 오고있나?")
-      // console.log(err)
       return rejectWithValue(err.response) //err안에 response로 담겨있음
     }
   },
@@ -58,9 +55,6 @@ export const putHash = createAsyncThunk(
         {
           hashText: `${hashContent}`,
         },
-        // {
-        //   headers: {"access-Token": `${getToken()}` },
-        // }
       )
       console.log(res)
       console.log('해시태그 생성 성공')
@@ -74,7 +68,6 @@ export const putHash = createAsyncThunk(
 )
 
 const initialState = {
-  hashtagInfo: {},
   hashesOwned: [],
 }
 
@@ -85,41 +78,36 @@ const hashTagSlice = createSlice({
   },
   extraReducers: {
     [getHash.fulfilled]: (state, action) => {
-      state.hashtagInfo = action.payload.data.list
-
-      const hashArray = state.hashtagInfo
+      const hashArray = action.payload.data.list
       console.log(hashArray)
       const tempHash = []
+      //현재 hashArray 구조
+      // [{hashNo: 1, hashText: "내용"}, ...]
       //hashNo랑 hashText만 필요함
+      //map 
       hashArray.map((item, idx) => {
         const temp = [item.hashNo, item.hashText];
         tempHash.push(temp)
       })
-      console.log("결과는", tempHash);
-      console.log("템프해쉬", tempHash.length)
+      // 아래와 같이 값을 명시해서 콘솔에 찍어줄 수도 있음
+      console.log("결과는", tempHash)
       state.hashesOwned = tempHash
-      // if (tempHash.length === 0) {
-      //   state.hashesOwned = [['hashNo', 1], ['hashText', '아무거나']]
-      // } else {
-      //   state.hashesOwned = tempHash
-      // }
+
     },
 
     [delHash.fulfilled]: (state, action) => {
-      // state.loading = false
-      // state. = action.pyaload.data.list
-      state.hashtagInfo = action.payload.data
+
     },
 
     [putHash.fulfilled]: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
+      // putHash 요청 뒤에 초기값에 값이 제대로 세팅되지 않아서 아래로직을 이용해 추가해줌
       const response = action.payload.data
-      console.log("너뭐임", state.hastagInfo)
       const temp = [response.hashNo, response.hashText];
       state.hashesOwned.push(temp)      
     },
   },
 })
 
-export const { resetHashtagInfo, saveNewHashtagInfo } = hashTagSlice.actions
+export const { } = hashTagSlice.actions
 export default hashTagSlice.reducer
