@@ -30,6 +30,7 @@ const Nickname = styled.div`
   padding-right: 1rem;
   border-radius: 0.5rem;
   margin-right: 1rem;
+  color: #333333;
 
   @media screen and (max-width: 800px) {
     font-size: 1.5rem;
