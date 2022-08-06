@@ -19,12 +19,13 @@ import { useDispatch } from 'react-redux'
 import { getHash, delHash, putHash, loadHashesOwned } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
 
-
+import Hash01 from './hashtag/Hash01'
 
 
 import { useSelector } from 'react-redux'
 import { loadUser,logout } from '../auth/login/login-slice'
 import { NavigateBefore } from '@mui/icons-material'
+import HashDeleteModal from './HashDeleteModal'
 
 
 
@@ -98,13 +99,13 @@ const AddHash = styled(MdAddCircle)`
   }
 `
 
-const Hash01 = styled.p`
-  font-family: Jua;
-  font-size: 1.5rem;
-  border-radius: 20%;
-  background-color: #85eaea;
-  padding: 0.5rem;
-`
+// const Hash01 = styled.p`
+//   font-family: Jua;
+//   font-size: 1.5rem;
+//   border-radius: 20%;
+//   background-color: #85eaea;
+//   padding: 0.5rem;
+// `
 const Hash02 = styled.p`
   font-family: Jua;
   font-size: 1.5rem;
@@ -211,14 +212,7 @@ const Start = styled.div`
 const Main = () => {
   const [openHash01, setOpenHash01] = useState(false)
   const [openHash02, setOpenHash02] = useState(false)
-  const [openHash03, setOpenHash03] = useState(false)
-  
-  const [hash01, setHash01] = useState('')
-  const [hash02, setHash02] = useState('')
-  const [hash03, setHash03] = useState('')
-  const [hashNo1, setHashNo1] = useState('')
-  const [hashNo2, setHashNo2] = useState('')
-  const [hashNo3, setHashNo3] = useState('')
+  const [openHash03, setOpenHash03] = useState(false)  
   
   const [remove01, setRemove01] = useState(false)
   const [remove02, setRemove02] = useState(false)
@@ -240,23 +234,30 @@ const Main = () => {
   const navigate = useNavigate()
   
   
-  const { hashesOwned } = useSelector((state) => state.hashtag);
-  
-  function LoadHashes() {
-      console.log(hashesOwned)
-      if ( hashesOwned && hashesOwned[1][1])
-      {setHash01(hashesOwned[1][1])}
-      if ( hashesOwned && hashesOwned[3][1])
-      {setHash02(hashesOwned[3][1])} 
-      if ( hashesOwned && hashesOwned[5][1])
-      {setHash03(hashesOwned[5][1])} 
-      
-      setHashNo1(hashesOwned[0][1]) 
-      setHashNo2(hashesOwned[2][1]) 
-      setHashNo3(hashesOwned[4][1]) 
-    }
-  
-  
+  const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
+  // const hashTest1 = useSelector((state) => state.hashtag.hashesOwned[1][1]);
+  // const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
+  // const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
+  // const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
+  // const hashTest1 = hashesOwned[1][1];
+
+ 
+  // const LoadHashes = () => {
+  //   console.log(hashesOwned||'없다')
+  //   if (hashesOwned.length > 0) {
+  //     setHash01(hashesOwned[1][1]) 
+  //   }
+    
+  //   // setHash02(hashesOwned[3][1]) 
+  //   // setHash03(hashesOwned[5][1]) 
+  //   // setHashNo1(hashesOwned[0][1]) 
+  //   // setHashNo2(hashesOwned[2][1]) 
+  //   // setHashNo3(hashesOwned[4][1]) 
+  // }
+
+  // 차라리 컴포넌트 단에서
+  // hashesOwned.map(<div></div>)  
+
   
     
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
@@ -265,108 +266,17 @@ const Main = () => {
       .unwrap()
       .then(() => {
         console.log("왜안됨")
-        LoadHashes()
-        
-        
+        // LoadHashes()
       })
       // .catch((err)=> {alert('이게에러')})
-  },[])
-
-
-
-   
-
-  
- 
-
-  // console.log(rows[0])
-  // useEffect(() => { 
-  //   if(hashesOwned !== 'undefined' && hashesOwned != null) {
-  //     console.log("에러없냐")
-  //   }
-
-  // },[hashesOwned])
-  // console.log(hashesOwned)
-  
-  // useEffect(() => {
-  //   if(user?.email) setValue ('email', user?.name);
-    
-  // }, [user]);
-  // setHash01(hashesOwned[1][1])
-  // [['hashNo', 42],
-  //  ['hashText', 'qqqq'],
-  //  ['hashNo', 43],
-  //  ['hashText', 'zzzz'],
-  //  ['hashNo', 44],
-  //  ['hashText', 'llll']]
-  //승승이한테 물어보기
-
-
-  // const { hashtagInfo } = useSelector((state) => state.hashtag);
-  // if ( hashtagInfo.length !==0 ) {
-  //   setHash01(hashtagInfo[0].hashText)
-  //   // const hash01 = hashtagInfo[0].hashText
-    
-  // }
-
-  // console.log(hashtagInfo[0].hashText)
-  // console.log(hashtagInfo[0].hashText)
-
-  // useEffect(() => {
-  //   dispatch(getHash())
-  //   .unwrap()
-  //   .then((res) => {
-  //     console.log(res.data.list)
-  //     if (res.data.list.length !== 0) {
-  //       setHash01(res.data.list[0])
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log("----")
-  //     console.log(err)
-  //   })
-  //   // console.log("??")
-  // },[])
-
-  // useEffect(() => {
-  //   dispatch(getHash())
-  //     .unwrap()
-  //     .then((res) => {
-  //       // console.log(res)
-  //       //요청은 요청만 받아야함
-  //       console.log("로드해쉬여기완료")
-
-  //     .catch((err) => {
-  //       if (err.status === 500) {
-  //         // navigate('/error');
-  //       }
-  //     })
-  // }, [])
-
-
-
-
-  // useEffect(() => {
-  //   dispatch(loadHashesOwned())
-  //     .unwrap()
-  //     .then(() => {
-  //       console.log("로드해쉬완료")
-  //     })
-  //     .catch((err)=> {alert('에러')})
-  // },[])
-  // const hash01 = useSelector((state) => state.hashtag.hashtagInfo.data.list[0])
-  // const { hashesOwned } = useSelector(
-  //   (state) => state.hashtag
-  // );
-
-
+  },[]) 
 
 
   //main에서 유저정보 불러오기
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .catch((err)=> {alert('에러')})
+      .catch((err)=> {alert('유저에러')})
   },[])
 
   //main에서 별점 정보 불러오기
@@ -422,6 +332,12 @@ const Main = () => {
     setOpenList(!openList)
   }
 
+  const [isOpen, setIsOpen] = useState(false)
+  const openHashDeleteModal = () => {
+    setIsOpen(!isOpen)
+    setRemove01(!remove01)
+  }
+
   //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
   const handleDeleteHash = (e) => {
     
@@ -432,8 +348,9 @@ const Main = () => {
       // console.log(res)
       console.log(res)
       setRemove01(!remove01)
-      dispatch(loadHashesOwned())
-      alert('삭제성공')
+      
+      
+
     })
     .catch((err) => {
       // console.log(err)
@@ -449,23 +366,62 @@ const Main = () => {
       {/* {hashesOwned} */}
       <CharacterBox>
         <MainCharacter />
+        {isOpen ? <HashDeleteModal openHashDeleteModal={openHashDeleteModal} /> : null}
       </CharacterBox>
+
+      {/* {hashesOwned.map((item, idx) => {
+        <p>{hash01}</p>
+        <HashTag className="hash1">
+          {hash01 === '' ? (
+            <AddHash className="hash1" onClick={openModalHash01} />
+          ) : (
+            // <Hash01 onClick={showRemove01}># {hash01}</Hash01>
+            // <Hash01 onClick={showRemove01}># {hash01}</Hash01>
+            <Hash01 showRemove01={showRemove01} hash01={hash01}></Hash01>
+         
+         )}
+          {remove01 ? (
+            <RemoveHash01
+              onClick={handleDeleteHash}/>
+          ) : null}
+          {openHash01 ? (
+            <CreateTag LoadHashes={LoadHashes} openModalHash01={openModalHash01} setHash01={setHash01} />
+          ) : null}
+        </HashTag>
+      })
       
- 
+      
+      } */}
+      <p>{hashesOwned}</p>
+      {hashesOwned.map((item, idx) => (
+        <>
+          <h2>안녕하세요</h2>
+          <h1>{item[1]}</h1>
+        </>
+      ))}
+
+      <AddHash className="hash1" onClick={openModalHash01} />
+      {openHash01 ? (
+            <CreateTag openModalHash01={openModalHash01} />
+          ) : null}
+      {/* <p>{hash01}</p>
       <HashTag className="hash1">
         {hash01 === '' ? (
           <AddHash className="hash1" onClick={openModalHash01} />
         ) : (
-          <Hash01 onClick={showRemove01}># {hash01}</Hash01>
-        )}
+          // <Hash01 onClick={showRemove01}># {hash01}</Hash01>
+          // <Hash01 onClick={showRemove01}># {hash01}</Hash01>
+          <Hash01 showRemove01={showRemove01} hash01={hash01}></Hash01>
+       
+       )}
         {remove01 ? (
           <RemoveHash01
             onClick={handleDeleteHash}/>
         ) : null}
         {openHash01 ? (
-          <CreateTag openModalHash01={openModalHash01} setHash01={setHash01} />
+          <CreateTag LoadHashes={LoadHashes} openModalHash01={openModalHash01} setHash01={setHash01} />
         ) : null}
-      </HashTag>
+      </HashTag> */}
 
 
       {/* <HashTag className="hash2">
@@ -477,12 +433,13 @@ const Main = () => {
           {remove02 ? (
             <RemoveHash02
               onClick={
-                handleDeleteHash(hash01.hashNo)}/>
+                handleDeleteHash(hash02.hashNo)}/>
           ) : null}
           {openHash02 ? (
             <CreateTag openModalHash02={openModalHash02} setHash02={setHash02} />
           ) : null}
       </HashTag> */}
+      {/* {hashTest1 ? <h1>{hashTest1}</h1> : ''} */}
 
       <HashTag className="hash3">
         <AddHash className="hash3" />
