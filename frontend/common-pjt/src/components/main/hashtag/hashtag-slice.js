@@ -85,7 +85,7 @@ const initialState = {
   // error: null
   hashtagInfo: {},
   hashesOwned: [],
-  hash01 : ''
+ 
 
 }
 
@@ -99,12 +99,25 @@ const hashTagSlice = createSlice({
     saveNewHashtagInfo: (state, action) => {
       state.hashtagInfo = action.payload.data
     },
-    // loadHashesOwned: (state) => {
-    //   console.log("뭐라도되라")
-    //   const { hashtagInfo } = state
-    //   console.log(state.hashtagInfo)
-      // Object.entries(hashtagInfo.data).forEach(([key, value]))
-      // console.log(action.payload)
+    loadHashesOwned: (state) => {
+      console.log("뭐라도되라")
+      const hashArray = state.hashtagInfo
+      const tempHash = []
+      Array.from(hashArray).forEach((hashDetailObject) => {
+        Object.entries(hashDetailObject).forEach(([key, value]) => {
+          if (key === 'hashNo') {
+            tempHash.push([key, value])
+          }
+          else if (key === 'hashText') {
+            tempHash.push([key, value])
+          }
+      
+          state.hashesOwned = tempHash
+        })
+      })
+    }
+      // console.log(tempHash)
+      
    
 
     // }
@@ -134,28 +147,28 @@ const hashTagSlice = createSlice({
       // action.payload는 response와 동일하다.
       // console.log(action.payload)
       state.hashtagInfo = action.payload.data.list
-
+      
       // console.log(action.payload.data.list[0].hashText)
       // console.log(action.payload.data.list[0].hashNo)
       // console.log(typeof(action.payload.data.list))
       // console.log(state.hashtagInfo)
-      const hashArray = state.hashtagInfo
-      // console.log(hashArray)
-      const tempHash = []
-      Array.from(hashArray).forEach((hashDetailObject) => {
-        Object.entries(hashDetailObject).forEach(([key, value]) => {
-          if (key === 'hashNo') {
-            tempHash.push([key, value])
-          }
-          else if (key === 'hashText') {
-            tempHash.push([key, value])
-          }
+      // const hashArray = state.hashtagInfo
+      // // console.log(hashArray)
+      // const tempHash = []
+      // Array.from(hashArray).forEach((hashDetailObject) => {
+      //   Object.entries(hashDetailObject).forEach(([key, value]) => {
+      //     if (key === 'hashNo') {
+      //       tempHash.push([key, value])
+      //     }
+      //     else if (key === 'hashText') {
+      //       tempHash.push([key, value])
+      //     }
       
-        })
-      })
+      //   })
+      // })
       // console.log(tempHash)
       
-      state.hashesOwned = tempHash
+      // state.hashesOwned = tempHash
       // console.log(state.hashesOwned)
       // state.success = action.payload.data.success
     },
@@ -183,5 +196,5 @@ const hashTagSlice = createSlice({
 })
 
 
-export const { resetHashtagInfo, saveNewHashtagInfo} = hashTagSlice.actions 
+export const { resetHashtagInfo, saveNewHashtagInfo, loadHashesOwned} = hashTagSlice.actions 
 export default hashTagSlice.reducer

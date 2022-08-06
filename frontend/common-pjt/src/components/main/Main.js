@@ -241,12 +241,16 @@ const Main = () => {
   
   
   const { hashesOwned } = useSelector((state) => state.hashtag);
-  const { testhash01 } = useSelector((state) => state.hashtag);
+  
   function LoadHashes() {
       console.log(hashesOwned)
-      setHash01(hashesOwned[1][1]) 
-      setHash02(hashesOwned[3][1]) 
-      setHash03(hashesOwned[5][1]) 
+      if ( hashesOwned && hashesOwned[1][1])
+      {setHash01(hashesOwned[1][1])}
+      if ( hashesOwned && hashesOwned[3][1])
+      {setHash02(hashesOwned[3][1])} 
+      if ( hashesOwned && hashesOwned[5][1])
+      {setHash03(hashesOwned[5][1])} 
+      
       setHashNo1(hashesOwned[0][1]) 
       setHashNo2(hashesOwned[2][1]) 
       setHashNo3(hashesOwned[4][1]) 
@@ -428,7 +432,7 @@ const Main = () => {
       // console.log(res)
       console.log(res)
       setRemove01(!remove01)
-      
+      dispatch(loadHashesOwned())
       alert('삭제성공')
     })
     .catch((err) => {
@@ -464,7 +468,7 @@ const Main = () => {
       </HashTag>
 
 
-      <HashTag className="hash2">
+      {/* <HashTag className="hash2">
         {hash02 === '' ? (
             <AddHash className="hash2" onClick={openModalHash02} />
           ) : (
@@ -478,7 +482,7 @@ const Main = () => {
           {openHash02 ? (
             <CreateTag openModalHash02={openModalHash02} setHash02={setHash02} />
           ) : null}
-      </HashTag>
+      </HashTag> */}
 
       <HashTag className="hash3">
         <AddHash className="hash3" />
