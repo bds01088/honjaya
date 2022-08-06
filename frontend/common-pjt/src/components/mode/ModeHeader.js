@@ -21,12 +21,9 @@ const Logo = styled.img`
 
 const ModeHeader = () => {
   return (
-    <>
       <Header>
         <Logo src={logo}></Logo>
       </Header>
-
-    </>
   )
 }
 

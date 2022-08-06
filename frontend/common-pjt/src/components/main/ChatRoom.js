@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import ChatRoomHeader from "./ChatRoomHeader"
+import { MdSend } from "react-icons/md"; 
 
 const Container = styled.div`
   width: 18rem;
@@ -22,12 +23,60 @@ const Container = styled.div`
   }
 `
 
+const ChatContainer = styled.div`
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  font-family: Jua;
+`
 
+const ChatRecord = styled.div`
+  height: 90%;
+  border: 2px solid blue; 
+`
+
+const SendBox = styled.div`
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const SendInput = styled.input`
+  height: 80%;
+  width: 80%;
+  padding: 0.2rem;
+  font-family: Jua;
+  border-radius: 0.5rem;
+  border: 2.1px solid #333333;
+`
+
+const SendButton = styled.button`
+  /* visibility: hidden; */
+  background: none;
+  border: none;
+`
+
+const SendImg = styled(MdSend)`
+  font-size: 2rem;
+  color: #6AA3F6;
+`
 
 const ChatRoom = ({chatUser, openChatList, setChatUser}) => {
   return (
     <Container>
       <ChatRoomHeader chatUser={chatUser} openChatList={openChatList} setChatUser={setChatUser}/>
+      <ChatContainer>
+        <ChatRecord>
+
+        </ChatRecord>
+        <SendBox>
+          <SendInput/>
+          <SendButton>
+            <SendImg/>
+          </SendButton>
+        </SendBox>
+      </ChatContainer>
     </Container>
   )
 }
