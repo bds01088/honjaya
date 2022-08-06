@@ -105,6 +105,14 @@ const Hash01 = styled.p`
   background-color: #85eaea;
   padding: 0.5rem;
 `
+const Hash02 = styled.p`
+  font-family: Jua;
+  font-size: 1.5rem;
+  border-radius: 20%;
+  background-color: #85eaea;
+  padding: 0.5rem;
+`
+
 
 const RemoveHash01 = styled(MdRemoveCircle)`
   width: 3rem;
@@ -116,7 +124,16 @@ const RemoveHash01 = styled(MdRemoveCircle)`
     color: #65c56a;
   }
 `
+const RemoveHash02 = styled(MdRemoveCircle)`
+  width: 3rem;
+  height: 3rem;
+  color: #71db76;
+  margin-left: 1rem;
 
+  &:hover {
+    color: #65c56a;
+  }
+`
 const LogoutBox = styled.div`
   position: absolute;
   bottom: 3.2rem;
@@ -193,8 +210,11 @@ const Start = styled.div`
 
 const Main = () => {
   const [openHash01, setOpenHash01] = useState(false)
+  const [openHash02, setOpenHash02] = useState(false)
   const [hash01, setHash01] = useState('')
+  const [hash02, setHash02] = useState('')
   const [remove01, setRemove01] = useState(false)
+  const [remove02, setRemove02] = useState(false)
   const [openList, setOpenList] = useState(false)
   const [users, setUsers] = useState([
     '김누리',
@@ -211,18 +231,14 @@ const Main = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   
+  
   const { hashesOwned } = useSelector((state) => state.hashtag);
 
   function LoadHashes() {
-
-    if ( hashesOwned ) {
-      console.log(hashesOwned)
       setHash01(hashesOwned[1][1]) 
-      
-      return true
-      };
-      return false
+      setHash02(hashesOwned[3][1]) 
     }
+  
     
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
   useEffect(() => {
@@ -230,9 +246,10 @@ const Main = () => {
       .unwrap()
       .then(() => {
         console.log("왜안됨")
-        LoadHashes()
+          LoadHashes()
+        
       })
-      .catch((err)=> {alert('이게에러')})
+      // .catch((err)=> {alert('이게에러')})
   },[])
 
 //해쉬태그가 있으면 정보를 가져오고
@@ -325,18 +342,7 @@ const Main = () => {
   // );
 
 
-    // badge 가지고 있는 것 추출하는 함수
-  // 각 경기에 대한 뱃지 이미지의 색을 살려준다.
-  
 
-  // function drawBadge() {
-  //   hashesOwned.forEach((badgeOwned) => {
-  //     const [kind, level] = badgeOwned;
-  //     badgeImages[kind][level][1] = true;
-  //   });
-  // }
-
-  // const rate = useSelector((state) => state.rate.score )
 
   //main에서 유저정보 불러오기
   useEffect(() => {
@@ -382,6 +388,16 @@ const Main = () => {
   const showRemove01 = () => {
     // console.log("혹시 지금삭제되니?")
     setRemove01(!remove01)
+  }
+
+  const openModalHash02 = () => {
+    setOpenHash01(!openHash02)
+    // setHash01(hash01)
+  }
+
+  const showRemove02 = () => {
+    // console.log("혹시 지금삭제되니?")
+    setRemove01(!remove02)
   }
 
   const openChatList = () => {
@@ -432,7 +448,19 @@ const Main = () => {
 
 
       <HashTag className="hash2">
-        <AddHash className="hash2" />
+        {hash02 === '' ? (
+            <AddHash className="hash2" onClick={openModalHash02} />
+          ) : (
+            <Hash02 onClick={showRemove01}># {hash02}</Hash02>
+          )}
+          {remove02 ? (
+            <RemoveHash02
+              onClick={
+                handleDeleteHash(hash01.hashNo)}/>
+          ) : null}
+          {openHash02 ? (
+            <CreateTag openModalHash02={openModalHash02} setHash02={setHash02} />
+          ) : null}
       </HashTag>
 
       <HashTag className="hash3">

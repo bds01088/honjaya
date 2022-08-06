@@ -51,14 +51,62 @@ const SubmitBtn = styled.button`
   margin-top: 1rem;
 `
 
+// const CreateTag = (props) => {
+//   const dispatch = useDispatch()
+//   const [tag02, setTag02] = useState('')
+
+//   const sendToMain = () => {
+//     props.openModalHash02(false)
+//     // props.setHash02(tag02)
+//     // dispatch(putHash(tag02))
+//     // .unwrap()
+//     //   .then(() => {
+//     //     console.log("생성됨?")
+//     //     alert('성공')
+//     //   })
+//     //   .catch((err)=> {alert('이게에러')})
+//   }
+
+//   const handleSubmit = () => {
+//     dispatch(putHash(tag02))
+//     // .unwrap()
+//     //   .then(() => {
+//     //     console.log("생성됨?")
+//     //     alert('성공')
+//     //   })
+//     //   .catch((err)=> {})
+//   }
+
+//   return (
+//     <ModalBackdrop>
+//       <ModalView>
+//         <BackIcon onClick={sendToMain} />
+//         <h1>해시태그를 입력하세요</h1>
+//         <Form>
+//           <InputHash type="text" onChange={(e) => setTag02(e.target.value)} />
+//           <SubmitBtn onClick={sendToMain}>등록</SubmitBtn>
+//           </Form>
+//       </ModalView>
+//     </ModalBackdrop>
+//   )
+// }
+
 const CreateTag = (props) => {
   const dispatch = useDispatch()
-  const [tag01, setTag01] = useState('')
+  const [tag02, setTag02] = useState('')
 
-  const sendToMain = () => {
-    props.openModalHash01(false)
-    props.setHash01(tag01)
-    dispatch(putHash(tag01))
+  const sendToMain = (e) => {
+
+    if (tag02.trimStart().trimEnd() !== ''){
+      // props.setHash01(tag01)
+      dispatch(putHash(tag02))
+      .then(res => {
+        console.log("해시태그생성후 응답")
+        // console.log(res.payload.data)
+        // dispatch(addHashTag(res.payload.data))
+      })
+    }
+    props.openModalHash02(false)
   }
 
   return (
@@ -67,12 +115,17 @@ const CreateTag = (props) => {
         <BackIcon onClick={sendToMain} />
         <h1>해시태그를 입력하세요</h1>
         <Form>
-          <InputHash type="text" onChange={(e) => setTag01(e.target.value)} />
-          <SubmitBtn onClick={sendToMain}>등록</SubmitBtn>
+          <InputHash type="text" onChange={(e) => setTag02(e.target.value)} />
+          <SubmitBtn onClick={(e) => sendToMain(e)}
+            onKeyUp={(e) => e.key==='Enter' ? sendToMain(e) : null }
+          >등록</SubmitBtn>
         </Form>
       </ModalView>
     </ModalBackdrop>
   )
 }
+
+
+
 
 export default CreateTag

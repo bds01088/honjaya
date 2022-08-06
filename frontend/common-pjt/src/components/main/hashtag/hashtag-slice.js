@@ -33,34 +33,34 @@ export const getHash = createAsyncThunk(
 
 //해시태그 데이터 삭제요청 보내기
 export const delHash = createAsyncThunk(
-    'DEL_HASH',
-    async ( hashNo, { rejectWithValue }) => {
-      try {
-        const res = await axios.delete(
-          `/honjaya/hashtags/${hashNo}`,
-        // {
-        //   headers: {"access-Token": `${getToken()}` },
-        // }
-        )
-        console.log("해시태그 데이터 삭제성공")
-        return res
-        } catch (err) {
-          console.log("err가 오고있나?")
-          console.log(err)
-          return rejectWithValue(err.response) //err안에 response로 담겨있음
-        }
-    }
+  'DELHASH',
+  async ( hashNo, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(
+        `/honjaya/hashtags/${hashNo}`,
+      // {
+      //   headers: {"access-Token": `${getToken()}` },
+      // }
+      )
+      console.log("해시태그 데이터 삭제성공")
+      return res
+      } catch (err) {
+        console.log("err가 오고있나?")
+        console.log(err)
+        return rejectWithValue(err.response) //err안에 response로 담겨있음
+      }
+  }
 )
 
 //해시태그 입력하기
 export const putHash = createAsyncThunk(
-  'PUT_HASH',
+  'PUTHASH',
   async ( hashContent, { rejectWithValue }) => {
     try {
       const res = await axios.post(
         `/honjaya/hashtags/`,
         {
-          body: {"hashText": `${hashContent}`}
+          hashText: `${hashContent}`
         }
       // {
       //   headers: {"access-Token": `${getToken()}` },
@@ -70,12 +70,14 @@ export const putHash = createAsyncThunk(
       console.log("해시태그 생성 성공")
       return res
       } catch (err) {
-        console.log("err가 오고있나?")
+        console.log("해시태그 생성 에러")
         console.log(err)
         return rejectWithValue(err.response) //err안에 response로 담겨있음
       }
   }
 )
+
+
 
 
 const initialState = {
@@ -174,12 +176,12 @@ const hashTagSlice = createSlice({
     //   state.error = action.payload.error
     // },
     [putHash.fulfilled]: (state, action) => {
-      // console.log(action.payload)
+      console.log(action.payload)
       state.hastagInfo = action.payload.data
     },
   },
 })
 
 
-export const { resetHashtagInfo, saveNewHashtagInfo, loadHashesOwned } = hashTagSlice.actions 
+export const { resetHashtagInfo, saveNewHashtagInfo} = hashTagSlice.actions 
 export default hashTagSlice.reducer
