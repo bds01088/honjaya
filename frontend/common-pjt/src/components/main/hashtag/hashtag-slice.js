@@ -4,8 +4,8 @@ import { deleteToken, saveToken, getToken } from '../../../api/JWT'
 
 //해시태그 데이터 가져오기
 export const getHash = createAsyncThunk(
-  'GETHASH',
-  async ( data, { rejectWithValue }) => {
+  'GET_HASH',
+  async ( arg, { rejectWithValue }) => {
     try {
       console.log("데이터가 오나?")
       const res = await axios.get(
@@ -33,7 +33,7 @@ export const getHash = createAsyncThunk(
 
 //해시태그 데이터 삭제요청 보내기
 export const delHash = createAsyncThunk(
-    'DELHASH',
+    'DEL_HASH',
     async ( hashNo, { rejectWithValue }) => {
       try {
         const res = await axios.delete(
@@ -54,7 +54,7 @@ export const delHash = createAsyncThunk(
 
 //해시태그 입력하기
 export const putHash = createAsyncThunk(
-  'PUTHASH',
+  'PUT_HASH',
   async ( hashContent, { rejectWithValue }) => {
     try {
       const res = await axios.post(
@@ -79,54 +79,107 @@ export const putHash = createAsyncThunk(
 
 
 const initialState = {
-  loading: false,
-  list: [],
-  success: false,
-  error: null
+  // loading: false,
+  // list: [],
+  // success: false,
+  // error: null
+  hashtagInfo: {},
+  hashesOwned: []
+
 }
 
 const hashTagSlice = createSlice({
   name: 'hashtag',
   initialState,
   reducers: {
-    resetUser: (state) => {
-      state.user = {}
-    }
+    resetHashtagInfo: (state) => {
+      state.hashtagInfo = {}
+    },
+    saveNewHashtagInfo: (state, action) => {
+      state.hashtagInfo = action.payload.data
+    },
+    // loadHashesOwned: (state) => {
+    //   console.log("뭐라도되라")
+    //   const { hashtagInfo } = state
+    //   console.log(state.hashtagInfo)
+      // Object.entries(hashtagInfo.data).forEach(([key, value]))
+      // console.log(action.payload)
+   
+
+    // }
+      // Object.entries(hashtagInfo.data).forEach(([list, hashDetailInfo]) => {
+      //   // 
+      //   if (hashDetailInfo === true) {
+      //     Array.from(hashDetailInfo).forEach((hashDetailObject) => {
+      //       state.hashesOwned.push(hashDetailObject)
+            
+            // Object.entries(hashDetailObject).forEach(([key, value]) => 
+            //     state.hashesOwned.push([gameType, key]);
+            //   }
+  //         })
+  //       }
+  //     })
+  //   }
+  // },
   },
   extraReducers: {
-    [getHash.pending]: (state) => {
+    [getHash.pending]: (state, action) => {
       state.loading = true
+      // state.hashtagInfo = action.payload.data.list
     },
     [getHash.fulfilled]: (state, action) => {
-      state.loading = false
+      // state.loading = false
       // console.log(action.payload)
       // action.payload는 response와 동일하다.
-      state.list = action.payload.data.list
-      console.log(state.list)
-      state.success = action.payload.data.success
-    },
-    [getHash.rejected]: (state, action) => {
-      console.log(action.payload)
-      state.error = action.payload.error
-    },
-    [delHash.pending]: (state) => {
-      state.loading = true
-    },
-    [delHash.fulfilled]: (state, action) => {
-      state.loading = false
-      state.list = action.pyaload.data.list
-    },
-    [delHash.rejected]: (state, action) => {
-      state.loading = false
-      state.error = action.payload.error
-    },
-    [putHash.fulfilled]: (state, action) => {
-      console.log(action.payload)
-    }
-  }
+      // console.log(action.payload)
+      state.hashtagInfo = action.payload.data.list
 
+      // console.log(action.payload.data.list[0].hashText)
+      // console.log(action.payload.data.list[0].hashNo)
+      // console.log(typeof(action.payload.data.list))
+      // console.log(state.hashtagInfo)
+      const hashArray = state.hashtagInfo
+      // console.log(hashArray)
+      const tempHash = []
+      Array.from(hashArray).forEach((hashDetailObject) => {
+        Object.entries(hashDetailObject).forEach(([key, value]) => {
+          if (key === 'hashNo') {
+            tempHash.push([key, value])
+          }
+          else if (key === 'hashText') {
+            tempHash.push([key, value])
+          }
+      
+        })
+      })
+      // console.log(tempHash)
+      state.hashesOwned = tempHash
+      // console.log(state.hashesOwned)
+      // state.success = action.payload.data.success
+    },
+    // [getHash.rejected]: (state, action) => {
+    //   console.log(action.payload)
+    //   state.error = action.payload.error
+    // },
+    // [delHash.pending]: (state) => {
+    //   state.loading = true
+    // },
+    [delHash.fulfilled]: (state, action) => {
+      // state.loading = false
+      // state. = action.pyaload.data.list
+      state.hashtagInfo = action.payload.data
+    },
+    // [delHash.rejected]: (state, action) => {
+    //   state.loading = false
+    //   state.error = action.payload.error
+    // },
+    [putHash.fulfilled]: (state, action) => {
+      // console.log(action.payload)
+      state.hastagInfo = action.payload.data
+    },
+  },
 })
 
 
-export const { resetUser } = hashTagSlice.actions 
+export const { resetHashtagInfo, saveNewHashtagInfo, loadHashesOwned } = hashTagSlice.actions 
 export default hashTagSlice.reducer

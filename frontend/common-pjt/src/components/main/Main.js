@@ -16,12 +16,12 @@ import {
 import React, { useState, useEffect } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { getHash, delHash } from './hashtag/hashtag-slice'
+import { getHash, delHash, putHash, loadHashesOwned } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
 
 
 
-//수정사항
+
 import { useSelector } from 'react-redux'
 import { loadUser,logout } from '../auth/login/login-slice'
 import { NavigateBefore } from '@mui/icons-material'
@@ -207,30 +207,134 @@ const Main = () => {
     '강태찬',
   ])
   const [chatUser, setChatUser] = useState('')
+  // const [hashList, setHashList] = useState([]) 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  
+  const { hashesOwned } = useSelector((state) => state.hashtag);
 
+  function LoadHashes() {
 
+    if ( hashesOwned ) {
+      console.log(hashesOwned)
+      setHash01(hashesOwned[1][1]) 
+      
+      return true
+      };
+      return false
+    }
+    
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
   useEffect(() => {
     dispatch(getHash())
-    .unwrap()
-    .then((res) => {
-      console.log(res.data.list)
-      if (res.data.list.length !== 0) {
-        setHash01(res.data.list[0])
-      }
-    })
-    .catch((err) => {
-      console.log("----")
-      console.log(err)
-    })
-    // console.log("??")
+      .unwrap()
+      .then(() => {
+        console.log("왜안됨")
+        LoadHashes()
+      })
+      .catch((err)=> {alert('이게에러')})
   },[])
 
-  const hashList = useSelector((state) => state.hashtag.list)
+//해쉬태그가 있으면 정보를 가져오고
+//없으면 정보 가져오고, load
 
 
+   
+
+  
+ 
+
+  // console.log(rows[0])
+  // useEffect(() => { 
+  //   if(hashesOwned !== 'undefined' && hashesOwned != null) {
+  //     console.log("에러없냐")
+  //   }
+
+  // },[hashesOwned])
+  // console.log(hashesOwned)
+  
+  // useEffect(() => {
+  //   if(user?.email) setValue ('email', user?.name);
+    
+  // }, [user]);
+  // setHash01(hashesOwned[1][1])
+  // [['hashNo', 42],
+  //  ['hashText', 'qqqq'],
+  //  ['hashNo', 43],
+  //  ['hashText', 'zzzz'],
+  //  ['hashNo', 44],
+  //  ['hashText', 'llll']]
+  //승승이한테 물어보기
+
+
+  // const { hashtagInfo } = useSelector((state) => state.hashtag);
+  // if ( hashtagInfo.length !==0 ) {
+  //   setHash01(hashtagInfo[0].hashText)
+  //   // const hash01 = hashtagInfo[0].hashText
+    
+  // }
+
+  // console.log(hashtagInfo[0].hashText)
+  // console.log(hashtagInfo[0].hashText)
+
+  // useEffect(() => {
+  //   dispatch(getHash())
+  //   .unwrap()
+  //   .then((res) => {
+  //     console.log(res.data.list)
+  //     if (res.data.list.length !== 0) {
+  //       setHash01(res.data.list[0])
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log("----")
+  //     console.log(err)
+  //   })
+  //   // console.log("??")
+  // },[])
+
+  // useEffect(() => {
+  //   dispatch(getHash())
+  //     .unwrap()
+  //     .then((res) => {
+  //       // console.log(res)
+  //       //요청은 요청만 받아야함
+  //       console.log("로드해쉬여기완료")
+
+  //     .catch((err) => {
+  //       if (err.status === 500) {
+  //         // navigate('/error');
+  //       }
+  //     })
+  // }, [])
+
+
+
+
+  // useEffect(() => {
+  //   dispatch(loadHashesOwned())
+  //     .unwrap()
+  //     .then(() => {
+  //       console.log("로드해쉬완료")
+  //     })
+  //     .catch((err)=> {alert('에러')})
+  // },[])
+  // const hash01 = useSelector((state) => state.hashtag.hashtagInfo.data.list[0])
+  // const { hashesOwned } = useSelector(
+  //   (state) => state.hashtag
+  // );
+
+
+    // badge 가지고 있는 것 추출하는 함수
+  // 각 경기에 대한 뱃지 이미지의 색을 살려준다.
+  
+
+  // function drawBadge() {
+  //   hashesOwned.forEach((badgeOwned) => {
+  //     const [kind, level] = badgeOwned;
+  //     badgeImages[kind][level][1] = true;
+  //   });
+  // }
 
   // const rate = useSelector((state) => state.rate.score )
 
@@ -252,7 +356,7 @@ const Main = () => {
 
 
 
-  //로그아웃
+  //로그아웃 
   function handleLogout() {
     dispatch(logout())
     .unwrap()
@@ -276,7 +380,7 @@ const Main = () => {
   }
 
   const showRemove01 = () => {
-    console.log("혹시 지금삭제되니?")
+    // console.log("혹시 지금삭제되니?")
     setRemove01(!remove01)
   }
 
@@ -286,33 +390,35 @@ const Main = () => {
 
   //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
   const handleDeleteHash = (hashNo) => {
-    console.log("왜 지금 삭제됌???")
+    // console.log("왜 지금 삭제됌???")
     dispatch(delHash(hashNo))
     .then((res) => {
-      console.log(res)
+      // console.log(res)
       setRemove01(!remove01)
       setHash01('')
     })
     .catch((err) => {
-      console.log(err)
+      // console.log(err)
     })
   }
 
   return (
+    
     <Container>
-      {/* {console.log(rate)} */}
+
       {/* MainHeader는 nickname, point, rate_score가 필요 */}
       <MainHeader />
-
+      {/* {hashesOwned} */}
       <CharacterBox>
         <MainCharacter />
       </CharacterBox>
       
+ 
       <HashTag className="hash1">
         {hash01 === '' ? (
           <AddHash className="hash1" onClick={openModalHash01} />
         ) : (
-          <Hash01 onClick={showRemove01}># {hash01.hashText}</Hash01>
+          <Hash01 onClick={showRemove01}># {hash01}</Hash01>
         )}
         {remove01 ? (
           <RemoveHash01
@@ -323,6 +429,7 @@ const Main = () => {
           <CreateTag openModalHash01={openModalHash01} setHash01={setHash01} />
         ) : null}
       </HashTag>
+
 
       <HashTag className="hash2">
         <AddHash className="hash2" />
