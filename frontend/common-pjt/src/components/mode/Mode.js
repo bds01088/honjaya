@@ -15,8 +15,10 @@ const ModeContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
-  height: 90%;
+  width: 94%;
+  padding: 0 3%;
+  height: 87%;
+  margin-top: 1rem;
 `
 
 // 모드 default = [Solo, 1:1, 성별무관]

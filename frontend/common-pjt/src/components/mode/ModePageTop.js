@@ -5,10 +5,10 @@ import TempImg from '../../assets/character.png'
 
 const ModeSelectBox = styled.div`
   display: flex;
-  position: relative;
   justify-content: center;
   align-items: center;
-  margin: 1rem auto;
+  position: relative;
+  margin: 0 auto;
   outline: 0.2rem solid #333333;
   width: 90%;
   height: 80%;
@@ -21,7 +21,7 @@ const RoleSelectTitle = styled.div`
   top: -2rem;
   z-index: 1;
   padding: 0 2rem;
-  font-size: 3em;
+  font-size: 2.8em;
   background-color: #fffdde;
   font-family: 'Jua';
 `
@@ -29,19 +29,21 @@ const ModeTitle = styled.div`
   z-index: 2;
   display: flex;
   justify-content: center;
-  font-size: 2.5vh;
+  font-size: 1.5rem;
   font-family: "Jua";
   width: 80%;
   background-color: #FFC9D0;
   border-radius: 2rem;
   padding: 0.5rem;
 `
+
 const Mode = styled.img`
   width: 100%;
   cursor: pointer;
 `
 
 const LabelDiv = styled.div`
+  margin: 1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,7 +73,7 @@ const Input = styled.input`
 const Explain = styled.div`
   text-align: center;
   font-family: 'Jua';
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #333333;
   cursor: pointer;
   /* outline: 2px solid; */
@@ -99,10 +101,10 @@ const ModeChoice = () => {
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
-            싱글로 참여해서
+            역할 없이 즐기고 싶을 땐
           </Explain>
           <Explain>
-          역할 없는 일반 모드를 즐겨보세요.
+            싱글모드로 참여해보세요.
           </Explain>
         </Label>
       </LabelDiv>
@@ -144,7 +146,7 @@ const ModeChoice = () => {
       </LabelDiv>
 
       <LabelDiv>
-       <ModeTitle>랜덤 역할로 참여하기</ModeTitle>
+        <ModeTitle>랜덤 역할로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
@@ -153,7 +155,10 @@ const ModeChoice = () => {
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
-            싱글, 아바타, 지시자 중 랜덤으로 역할이 부여됩니다.
+            역할을 고르기 힘들다면
+          </Explain>
+          <Explain>
+            랜덤모드로 참여해보세요.
           </Explain>
         </Label>
       </LabelDiv>

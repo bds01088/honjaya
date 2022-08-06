@@ -16,14 +16,12 @@ const BottomBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 `
 const LeftBox = styled.div`
   display: flex;
   align-items: center;
   height: 20vh;
   width: 50vw;
-
 `
 
 const PersonnelBox = styled.div`
@@ -92,10 +90,10 @@ const StartDiv = styled.div`
 const Start = styled.button`
   display: flex;
   border: none;
-  border-radius: 0.2rem;
+  border-radius: 1rem;
   color: white;
   font-family: Jua;
-  font-size: 3rem;
+  font-size: 2.8rem;
   padding: 0.5rem 2rem;
   background: #ff728e;
   cursor: pointer;
@@ -157,17 +155,20 @@ const ModePageBottom = () => {
               checked={personnel === "4"}
               onChange={handleClickRadioButton}/>
           </Label>
- 
-        </PersonnelBox>
 
-        <Label
-          onClick={handleClickCheckBox}>
-          {oppGen === true ? (
-            <CheckIconOn></CheckIconOn>
-          ) : (
-            <CheckIconOff></CheckIconOff>
-          )} 이성만
-        </Label>
+        </PersonnelBox>
+        
+        { personnel==="1:1" ? 
+          <Label
+            onClick={handleClickCheckBox}>
+            {oppGen === true ? (
+              <CheckIconOn></CheckIconOn>
+            ) : (
+              <CheckIconOff></CheckIconOff>
+            )} 이성만
+          </Label>
+          : null
+        }
         
       </LeftBox>
       
