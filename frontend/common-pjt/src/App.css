@@ -8,3 +8,18 @@
   font-family: Jua;
   src: url('./fonts/Jua.woff');
 }
+
+@font-face {
+  font-family: Minseo;
+  src: url('./fonts/Minseo.woff');
+}
+
+@font-face {
+  font-family: Seoyun;
+  src: url('./fonts/Seoyun.woff');
+}
+
+@font-face {
+  font-family: Dam;
+  src: url('./fonts/Dam.woff');
+}

@@ -57,12 +57,11 @@ const CreateTag = (props) => {
   const [tag01, setTag01] = useState('')
 
   const sendToMain = (e) => { 
-
     if (tag01.trimStart().trimEnd() !== ''){
       dispatch(putHash(tag01))
       console.log("해시태그생성후 응답")    
-      props.openModalHash(false) 
     }
+    props.openModalHash() 
   }
 
   return (
