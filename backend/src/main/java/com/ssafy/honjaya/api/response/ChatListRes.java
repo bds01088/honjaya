@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 public class ChatListRes {
 	@ApiModelProperty(value = "채팅 리스트")
-	List<ChatroomRes> list;
+	List<ChatRes> list;
 	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;

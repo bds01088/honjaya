@@ -14,7 +14,7 @@ import com.ssafy.honjaya.interceptor.JwtInterceptor;
 
 @Configuration
 @MapperScan(basePackages = "com.ssafy.happyhouse.model.mapper")
-@EnableWebMvc
+//@EnableWebMvc
 public class JwtConfig implements WebMvcConfigurer {
 	
 	@Autowired
