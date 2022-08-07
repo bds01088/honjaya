@@ -57,7 +57,7 @@ const MainHeader = () => {
   //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
   //store에 있는 userNickname 불러오기
   const { userNickname, userPoint } = useSelector((state) => state.login.user)
-  
+
   //store에서 관리중인 rate 불러오기
   const { rateScore } = useSelector((state) => state.rate.rateInfo)
   

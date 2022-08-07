@@ -28,7 +28,7 @@ const rateSlice = createSlice({
   name: 'rate',
   initialState,
   reducers: {
-    resetMainHeaderInfo: (state) => {
+    resetRateInfo: (state) => {
       state.rateInfo = {}
     }
     
@@ -43,6 +43,6 @@ const rateSlice = createSlice({
 })
 
 
-export const { resetMainHeaderInfo } = rateSlice.actions 
+export const { resetRateInfo } = rateSlice.actions 
 
 export default rateSlice.reducer
