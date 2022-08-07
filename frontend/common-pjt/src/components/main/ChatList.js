@@ -6,7 +6,7 @@ const Container = styled.div`
   font-size: 120%;
   font-family: Jua;
   background-color: #FFFFFF;
-  width: 11rem;
+  width: 13rem;
   height: 20rem;
   padding: 1rem 1rem;
   border-radius: 0.5rem;

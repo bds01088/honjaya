@@ -13,7 +13,7 @@ export const ModalBackdrop = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.37);
   z-index: 4;
   font-family: Jua;
 `
@@ -24,9 +24,10 @@ const ModalView = styled.div.attrs((props) => ({
   text-align: center;
   text-decoration: none;
   padding: 30px 90px;
-  background-color: white;
+  background-color: #FFFDDE;
   border-radius: 30px;
-  color: #333333;
+  border: 0.2rem solid #88866f;
+  color: #47463c;
   position: relative;
 `
 
@@ -36,19 +37,29 @@ const BackIcon = styled(MdClear)`
   right: 1.5rem;
   width: 2rem;
   height: 2rem;
+  color: #88866f;
 `
 
 const Form = styled.form``
+
 const InputHash = styled.input`
   width: 100%;
   font-family: Jua;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  border: 2px solid #88866f;
+  color: #47463c;
+  padding: 0.3rem;
 `
 
 const SubmitBtn = styled.button`
   font-family: Jua;
-  font-size: 1rem;
+  font-size: 1.3rem;
   margin-top: 1rem;
+  border-radius: 1rem;
+  padding: 0.3rem 0.5rem;
+  border: 2px solid #47463c;
+  color: #47463c;
+  background-color: #CCF3EE;
 `
 
 

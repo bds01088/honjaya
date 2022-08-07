@@ -8,7 +8,7 @@ const Container = styled.div`
 `
 
 const Name = styled.p`
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 `
 
 const ChatListItem = ({user, openChatList, setChatUser}) => {

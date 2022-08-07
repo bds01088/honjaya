@@ -101,8 +101,9 @@ const AddHash = styled(MdAddCircle)`
 
 const Hash = styled.p`
   font-family: Jua;
-  border-radius: 20%;
+  border-radius: 1rem;
   padding: 0.5rem;
+  color: #333333;
 
   &.hash0 {
     background-color: #85eaea;
@@ -184,9 +185,9 @@ const ChatBox = styled.div`
 `
 
 const Chat = styled(MdForum)`
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
   font-size: 2rem;
-  color: #ff728e;
+  color: #f796a9;
 `
 
 const FullChat = styled.div`
@@ -197,7 +198,7 @@ const ChatListUp = styled.div`
   font-size: 120%;
   font-family: Jua;
   background-color: #ffffff;
-  width: 11rem;
+  width: 13rem;
   height: 3rem;
   padding: 0 1rem;
   border-radius: 1rem;
@@ -218,12 +219,12 @@ const Start = styled.div`
   bottom: 3rem;
   right: 3rem;
   text-decoration: none;
-  background-color: #ffcbcb;
+  background-color: #F38BA0;
   font-size: 2rem;
   font-family: Jua;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   border-radius: 2rem;
-  border: 3px solid #333333;
+  border: 5px dashed #ffd2d2;
 
   @media screen and (max-width: 800px) {
     font-size: 1.5rem;
@@ -393,11 +394,9 @@ const Main = () => {
       </LogoutBox>
 
       <ChatBox>
-        <Chat />
         <FullChat className="FullChat">
           <ChatListUp onClick={openChatList}>
-            
-            채팅목록
+            <Chat />채팅목록
             {openList ? <OpenChat /> : <ClosedChat />}
           </ChatListUp>
 
@@ -420,7 +419,7 @@ const Main = () => {
       ) : null}
 
       <Start>
-        <Link to="/mode" style={{ textDecoration: 'none', color: '#333333' }}>
+        <Link to="/mode" style={{ textDecoration: 'none', color: 'white' }}>
           입장하기
         </Link>
       </Start>
