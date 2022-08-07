@@ -22,7 +22,7 @@ import { getRate } from './hashtag/rate-slice'
 
 import { useSelector } from 'react-redux'
 import { loadUser,logout } from '../auth/login/login-slice'
-import { NavigateBefore } from '@mui/icons-material'
+import { ConnectedTvOutlined, NavigateBefore } from '@mui/icons-material'
 import HashDeleteModal from './HashDeleteModal'
 
 
@@ -49,24 +49,26 @@ const HashTag = styled.div`
   position: absolute;
   display: flex;
   flex-direction: row;
+  align-items: center;
 
-  &.hash {
+  &.hash0 {
     top: 23%;
     left: 43%;
   }
 
-  /* &.hash2 {
+  &.hash1 {
     top: 60%;
     left: 62%;
   }
-  &.hash3 {
+
+  &.hash2 {
     top: 70%;
     left: 36%;
-  } */
+  }
 `
 
 const AddHash = styled(MdAddCircle)`
-  &.hash {
+  &.hash0 {
     width: 3rem;
     height: 3rem;
     color: #71db76;
@@ -76,7 +78,7 @@ const AddHash = styled(MdAddCircle)`
     }
   }
 
-  /* &.hash2 {
+  &.hash1 {
     width: 3.2rem;
     height: 3.2rem;
     color: #df5dbe;
@@ -86,7 +88,7 @@ const AddHash = styled(MdAddCircle)`
     }
   }
 
-  &.hash3 {
+  &.hash2 {
     width: 3.5rem;
     height: 3.5rem;
     color: #b5eaea;
@@ -94,45 +96,66 @@ const AddHash = styled(MdAddCircle)`
     &:hover {
       color: #77c9c9;
     }
-  } */
+  }
 `
 
 const Hash = styled.p`
   font-family: Jua;
-  font-size: 1.5rem;
   border-radius: 20%;
-  background-color: #85eaea;
   padding: 0.5rem;
+
+  &.hash0 {
+    background-color: #85eaea;
+    font-size: 1.4rem;
+  }
+
+  &.hash1 {
+    background-color: #D9D7F1;
+    font-size: 1.3rem;
+  }
+
+  &.hash2 {
+    background-color: #ffc187;
+    font-size: 1.5rem;
+  }
 `
-// const Hash02 = styled.p`
-//   font-family: Jua;
-//   font-size: 1.5rem;
-//   border-radius: 20%;
-//   background-color: #85eaea;
-//   padding: 0.5rem;
-// `
 
 
 const RemoveHash = styled(MdRemoveCircle)`
-  width: 3rem;
-  height: 3rem;
-  color: #71db76;
   margin-left: 1rem;
 
-  &:hover {
-    color: #65c56a;
+  &.hash0 {
+    width: 2.2rem;
+    height: 2.2rem;
+    
+    color: #71db76;
+    &:hover {
+      color: #65c56a;
+    }
+  }
+  
+  &.hash1 {
+    width: 2.3rem;
+    height: 2.3rem;
+    
+    color: #FFE6AB;
+    &:hover {
+      color: #dac492;
+    }
+  }
+
+  &.hash2 {
+    width: 2.5rem;
+    height: 2.5rem;
+    
+    color: #FFC4C4;
+    &:hover {
+      color: #dbaaaa;
+    }
   }
 `
-// const RemoveHash02 = styled(MdRemoveCircle)`
-//   width: 3rem;
-//   height: 3rem;
-//   color: #71db76;
-//   margin-left: 1rem;
 
-//   &:hover {
-//     color: #65c56a;
-//   }
-// `
+
 const LogoutBox = styled.div`
   position: absolute;
   bottom: 3.2rem;
@@ -209,7 +232,11 @@ const Start = styled.div`
 
 const Main = () => {
   const [openHash, setOpenHash] = useState(false)  
-  const [remove, setRemove] = useState(false)
+  const [hashDel, setHashDel] = useState({
+    0: false,
+    1: false,
+    2: false,
+  })  
 
   const [openList, setOpenList] = useState(false)
   
@@ -223,12 +250,14 @@ const Main = () => {
     '구두성',
     '강태찬',
   ])
+
   const [chatUser, setChatUser] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
   
   //소유한 해시태그 userSelector로 불러오기
   const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
+  console.log('해쉬', hashesOwned)
 
 
   // 차라리 컴포넌트 단에서
@@ -242,10 +271,9 @@ const Main = () => {
       .unwrap()
       .then(() => {
         console.log("해시테그 데이터 로드 완료")
-        
       })
       .catch((err)=> {alert('해쉬태그로드에러')})
-  },[]) 
+  }, []) 
 
 
   //main에서 유저정보 불러오기
@@ -253,7 +281,8 @@ const Main = () => {
     dispatch(loadUser())
       .unwrap()
       .catch((err)=> {alert('유저로드에러')})
-  },[])
+  }, [])
+
 
   //main에서 별점 정보 불러오기
   useEffect(() => {
@@ -261,9 +290,7 @@ const Main = () => {
     .unwrap()
     // .then((res) => {console.log(res)})
     .catch((err) => {alert('별점로드에러')})
-  },[])
-
-
+  }, [])
 
 
   //로그아웃 
@@ -283,23 +310,20 @@ const Main = () => {
   }
 
 
-
+  // 해시태그 추가하는 모달 open
   const openModalHash = () => {
     setOpenHash(!openHash)
-    
   }
 
-  const showRemove = () => {
-    setRemove(!remove)
+  // 해시태그 삭제 아이콘 띄우기
+  const showHashDel = (idx) => {
+    const change = {...hashDel}
+    change[idx] = !hashDel[idx]
+    setHashDel(change)
   }
+  
+  console.log('hashDel', hashDel)
 
-  // const openModalHash02 = () => {
-  //   setOpenHash01(!openHash02)
-  // }
-
-  // const showRemove02 = () => {
-  //   setRemove01(!remove02)
-  // }
 
   const openChatList = () => {
     setOpenList(!openList)
@@ -308,12 +332,11 @@ const Main = () => {
   const [isOpen, setIsOpen] = useState(false)
   const openHashDeleteModal = () => {
     setIsOpen(!isOpen)
-    setRemove(!remove)
   }
 
 
   //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
-  const handleDeleteHash = (hashNo) => {
+  const handleDeleteHash = (hashNo, idx) => {
     console.log("왜 지금 삭제됌???")
     dispatch(delHash(hashNo))
     .then((res) => {
@@ -323,9 +346,15 @@ const Main = () => {
     .catch((err) => {
       console.log(err)
     })
+
+    // 해시태그 삭제 아이콘 그대로 옮기기
+    let change = {...hashDel}
+    change = change.splice(0, 1)
+    change[hashesOwned.length] = !hashDel[false]
+    setHashDel(change)
   }
 
-
+  const hashLen = `hash${hashesOwned.length}`
 
   return (
     
@@ -339,47 +368,18 @@ const Main = () => {
       </CharacterBox>
 
 
+      <HashTag className={hashLen} onClick={openModalHash}>
+        <AddHash className={hashLen} onClick={openModalHash} />
+      </HashTag>
 
-      <AddHash className="hash" onClick={openModalHash} />
-      
-      {hashesOwned.map((item, idx ) => (
-        <>
-          {/* <h2>안녕하세요</h2> */}
-          {/* <h1>{item[1]}</h1> */}
-          <Hash onClick={showRemove}># {item[1]}</Hash>
- 
-          <RemoveHash
-            onClick={() => handleDeleteHash(item[0])}/>
-       
-        </>
-
+      {hashesOwned.map((item, idx) => (
+        <HashTag className={'hash'+ idx}>
+          <Hash className={'hash'+ idx} onClick={() => showHashDel(idx)}># {item[1]}</Hash>
+          { hashDel[idx] ? <RemoveHash className={'hash'+ idx} onClick={() => handleDeleteHash(item[0], idx)}/> : null }
+        </HashTag>
       ))}
 
-      {openHash ? (
-            <CreateTag openModalHash={openModalHash} />
-          ) : null}
-
-
-
-
-
- 
-      {/* <HashTag className="hash1">
-        {hash01 === '' ? (
-          <AddHash className="hash1" onClick={openModalHash01} />
-        ) : (
-          <Hash01 onClick={showRemove01}># {hash01}</Hash01>
-       
-       )}
-        {remove01 ? (
-          <RemoveHash01
-            onClick={handleDeleteHash}/>
-        ) : null}
-        {openHash01 ? (
-          <CreateTag LoadHashes={LoadHashes} openModalHash01={openModalHash01} setHash01={setHash01} />
-        ) : null}
-      </HashTag> */}
-
+      {openHash ? <CreateTag openModalHash={openModalHash} /> : null}
 
 
 

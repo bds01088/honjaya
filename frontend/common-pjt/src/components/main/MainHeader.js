@@ -23,12 +23,12 @@ const Logo = styled.img`
 `
 
 const Nickname = styled.div`
-  font-size: 2rem;
-  background-color: #ffc187;
+  font-size: 1.8rem;
+  background-color: #f5c939;
   padding-top: 0.3rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   margin-right: 1rem;
   color: #333333;
 
