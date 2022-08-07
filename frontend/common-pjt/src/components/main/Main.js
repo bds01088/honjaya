@@ -321,8 +321,7 @@ const Main = () => {
     change[idx] = !hashDel[idx]
     setHashDel(change)
   }
-  
-  console.log('hashDel', hashDel)
+
 
 
   const openChatList = () => {
@@ -367,10 +366,11 @@ const Main = () => {
         {isOpen ? <HashDeleteModal openHashDeleteModal={openHashDeleteModal} /> : null}
       </CharacterBox>
 
-
-      <HashTag className={hashLen} onClick={openModalHash}>
-        <AddHash className={hashLen} onClick={openModalHash} />
-      </HashTag>
+      { hashesOwned.length < 3 ? 
+        <HashTag className={hashLen} onClick={openModalHash}>
+          <AddHash className={hashLen} onClick={openModalHash} />
+        </HashTag>
+        : null }
 
       {hashesOwned.map((item, idx) => (
         <HashTag className={'hash'+ idx}>
@@ -378,6 +378,7 @@ const Main = () => {
           { hashDel[idx] ? <RemoveHash className={'hash'+ idx} onClick={() => handleDeleteHash(item[0], idx)}/> : null }
         </HashTag>
       ))}
+      {console.log('del', hashDel)}
 
       {openHash ? <CreateTag openModalHash={openModalHash} /> : null}
 
