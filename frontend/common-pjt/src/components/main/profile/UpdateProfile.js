@@ -6,6 +6,7 @@ import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
 const Background = styled.div`
   background-color: #fffdde;
   width: 100vw;
@@ -224,14 +225,26 @@ const UpdateDiv = styled.div`
 
 // 누누가 들고온 회원가입 데이터
 const UpdateProfile = () => {
+
+  // 기존 유저정보 이메일이랑 이름은 변동사항 없어서 그냥 가져다 써도됨
+  const { userEmail, userName } = useSelector((state) => state.login.user)
+
+  //변수명이 데이터필드랑 겹쳐서, 기존 유저정보 받을려면 새로 변수선언해야되
+  //여기서 생일이랑 성별 기존정보 양식맞춰서 받아서 쓰면됨
+  const nowUserInfo = useSelector(state => state.login.user)
+  const nowUserNickname = nowUserInfo.userNickname
+  const nowUserPhone = nowUserInfo.userPhone
+  const nowuserBirthday = nowUserInfo.userBirthday
+  const nowUserGender = nowUserInfo.userGender
+  const nowUserPassword = nowUserInfo.userPassword
+
   //이름이랑 이메일은 수정불가
   //필드 값 변경
-  const [userNickname, setUserNickname] = useState('')
-  const [userPassword, setUserPassword] = useState('')
-  const [userGender, setUserGender] = useState('')
-  const [userPhone, setUserPhone] = useState('')
-  const [userBirthday, setUserBirthday] = useState('')
- 
+  const [userNickname, setUserNickname] = useState(nowUserNickname)
+  const [userPassword, setUserPassword] = useState(nowUserPassword)
+  const [userGender, setUserGender] = useState(nowUserGender)
+  const [userPhone, setUserPhone] = useState(nowUserPhone)
+  const [userBirthday, setUserBirthday] = useState(nowuserBirthday)
 
   // 필드 유효성검사
   const [nicknameValid, setNicknameValid] = useState(true)
@@ -287,7 +300,7 @@ const UpdateProfile = () => {
   }
 
   // 성별 선택
-  const genderList = ["남" , "여"]
+  const genderList = ["m" , "f"]
   const changeGender = (e) => {
       setUserGender(e.target.value)
     }
@@ -341,15 +354,6 @@ const UpdateProfile = () => {
       }
     })
   }
-  // 기존 유저정보 이메일이랑 이름은 변동사항 없어서 그냥 가져다 써도됨
-  const { userEmail, userName } = useSelector((state) => state.login.user)
-
-  //변수명이 데이터필드랑 겹쳐서, 기존 유저정보 받을려면 새로 변수선언해야되
-  //여기서 생일이랑 성별 기존정보 양식맞춰서 받아서 쓰면됨
-  const nowUserInfo = useSelector(state => state.login.user)
-  const nowUserNickname = nowUserInfo.userNickname
-  const nowUserPhone = nowUserInfo.userPhone
-  const nowUserBirthday = nowUserInfo.userBirthday
 
 
   //회원정보 변경 요청
@@ -364,8 +368,8 @@ const UpdateProfile = () => {
       userName,
       userPhone,
     }
+
     dispatch(modifyUserInfo(data))
-      // console.log(data)
       .unwrap()
       .then(() => {
         alert('회원정보가 수정되었습니다')
@@ -377,10 +381,22 @@ const UpdateProfile = () => {
           );
         } else if (err.status === 500) {
           navigate('/error')
-        }
+
+        } 
       });
   }
   
+
+  let disabled = false
+  if (checkedPwd && isDuplicateNicknameChecked && userBirthday && userGender && userPhone) {
+    disabled = true
+  } 
+
+
+  console.log(disabled)
+  console.log("비밀번호체크"+checkedPwd)
+  console.log()
+
   return (
 
     <Background>
@@ -409,7 +425,6 @@ const UpdateProfile = () => {
                   className="nickname"
                   autoComplete="userNickname" 
                   name="userNickname"
-                  placeholder={nowUserNickname}
                   onChange={(e) => {
                     setUserNickname(e.target.value) 
                     if(isDuplicateNicknameChecked) { setisDuplicateNicknameChecked(false) }
@@ -451,8 +466,8 @@ const UpdateProfile = () => {
                   <StyledInput
                   autoComplete="userPhone"
                   name="userPhone"
-                  placeholder={nowUserPhone}
                   onChange={checkPhone}
+                  placeholder={nowUserPhone}
                   onBlur={(e) => {
                     console.log(e.target.value);
                     this.onChange(e)
@@ -487,7 +502,7 @@ const UpdateProfile = () => {
                 ></StyledInput>
               </BirthdayDiv>
                 
-              <CheckDiv>
+              {/* <CheckDiv>
                 <Label>성별</Label>
                 <div>
                   <GenderSelect onChange={changeGender} value={userGender}>
@@ -498,8 +513,32 @@ const UpdateProfile = () => {
                     ))}
                   </GenderSelect>
                 </div>
-              </CheckDiv>
+              </CheckDiv> */}
               
+            
+              <CheckDiv>
+
+              {/* <label>
+                <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender}/>남
+              </label>
+              <label>
+                <input name="userGender" type="radio" value="f" checked={userGender==="f"} onChange={changeGender}/>여
+              </label> */}
+              <Label>성별</Label>
+                <div>
+                  <GenderSelect onChange={changeGender} value={userGender}>
+          
+                      <GenderOption value="m" key='m'>
+                        남
+                      </GenderOption>
+                      <GenderOption value="f" key='f'>
+                        여
+                      </GenderOption>
+ 
+                  </GenderSelect>
+                </div>
+              </CheckDiv>
+
               <div>
                 <Label>비밀번호</Label>
                 <StyledInput
@@ -523,8 +562,10 @@ const UpdateProfile = () => {
                   placeholder="비밀번호 확인"
                   onBlur={checkPassword}
                 ></StyledInput>
+                <div>
                 { pwdValid ? 
                 ( checkedPwd ? null : <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>) : null }
+                </div>
               </div>
 
             </RightBox>
@@ -542,3 +583,4 @@ const UpdateProfile = () => {
 }
 
 export default UpdateProfile
+
