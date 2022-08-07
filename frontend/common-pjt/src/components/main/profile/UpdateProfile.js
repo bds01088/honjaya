@@ -144,6 +144,7 @@ const StyledInput = styled.input`
 
   &.birth {
     width: 75%;
+    cursor: pointer;
   }
 `
 
@@ -249,8 +250,10 @@ const UpdateProfile = () => {
 
   //닉네임 중복 체크 여부 변수
   // t: 사용가능, f: 사용불가능
-  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] = useState(true)
-
+  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] = useState('')
+  console.log(isDuplicateNicknameChecked)
+  console.log("user : "+userNickname)
+  console.log("now user : "+nowUserNickname)
   // 비밀번호 재확인 변수
   const [checkedPwd, setCheckedPwd] = useState(false)
 
@@ -358,7 +361,7 @@ const UpdateProfile = () => {
     dispatch(checkNickname(userNickname))
       .unwrap()
       .then((res) => {
-        if (res.data.trueOrFalse === false) {
+        if (userNickname === nowUserNickname || res.data.trueOrFalse === false ) {
           return setisDuplicateNicknameChecked(true)
         } else return setisDuplicateNicknameChecked(false)
       })
