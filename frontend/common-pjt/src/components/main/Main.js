@@ -348,8 +348,10 @@ const Main = () => {
 
     // 해시태그 삭제 아이콘 그대로 옮기기
     let change = {...hashDel}
-    change = change.splice(0, 1)
-    change[hashesOwned.length] = !hashDel[false]
+    for (var i=idx; i < 2; i++) {
+      change[i] = change[i+1]
+    }
+    change[hashesOwned.length-1] = false
     setHashDel(change)
   }
 
