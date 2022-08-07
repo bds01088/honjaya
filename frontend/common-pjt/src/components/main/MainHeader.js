@@ -9,6 +9,8 @@ import React, { useState,useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { loadUser } from '../auth/login/login-slice'
 import { getRate } from './hashtag/rate-slice'
+
+
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
@@ -22,6 +24,11 @@ const Logo = styled.img`
   margin-left: 2rem;
 `
 
+const LeftBox = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 const Nickname = styled.div`
   font-size: 1.8rem;
   background-color: #f5c939;
@@ -33,23 +40,117 @@ const Nickname = styled.div`
   color: #333333;
 
   @media screen and (max-width: 800px) {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 `
 
+// 매너 별점
+const RateBox = styled.div`
+  position: relative;
+
+  &:hover .rateTip {
+    visibility: visible;
+  }
+`
+
+const MannerRate = styled(Rating)`
+  && {
+    color: #fffc3e;
+    margin-right: 1rem;
+  }
+`
+
+const RateText = styled.p`
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Jua;
+  opacity: 80%;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -3rem;
+`
+
+// 포인트
 const PointImg = styled.img`
   height: 50%;
 `
 
+const PointText = styled.p`
+  color: #333333;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+`
+
+// 프로필 수정
+const ProfileBox = styled.div`
+  position: relative;
+
+  &:hover .profileTip {
+  visibility: visible;
+  }
+`
+
+const ProfileIcon = styled(MdAccountCircle)`
+  color: #333333;
+  font-size: 2rem;
+  margin-right: 0.5rem;
+`
+
+const ProfileText = styled.p`
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  width: 80px;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Jua;
+  opacity: 80%;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -3.3rem;
+`
+
+// 도움말
+const HelperBox = styled.div`
+    position: relative;
+
+  &:hover .helperTip {
+    visibility: visible;
+  }
+`
 const Helper = styled(MdHelpOutline)`
   margin-right: 2rem;
   color: #333333;
   font-size: 2rem;
 `
 
-const MainHeader = () => {
+const HelperText = styled.p`
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Jua;
+  opacity: 80%;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -2.8rem;
+`
 
-  
+
+const MainHeader = () => {
 
   //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
   //store에 있는 userNickname 불러오기
@@ -69,32 +170,34 @@ const MainHeader = () => {
     <Header>
       <Logo src={logoImg} />
       
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <LeftBox>
         <Nickname>{userNickname}</Nickname>
-        <Rating
-          style={{ color: '#FFF672', marginRight: '1rem' }}
-          size="large"
-          value={rateScore}
-          precision={0.5}
-          readOnly
-        />
-        <PointImg src={pointImg} />
-        <p
-          style={{ color: '#333333', fontSize: '1.5rem', marginRight: '1rem' }}
-        >
-          {pointShow}
-        </p>
-        <Link to="/profile" style={{ fontSize: '0' }}>
-          <MdAccountCircle
-            style={{
-              color: '#333333',
-              fontSize: '2rem',
-              marginRight: '0.5rem',
-            }}
+        <RateBox>
+          <MannerRate
+            size="large"
+            value={rateScore}
+            precision={0.5}
+            readOnly
           />
-        </Link>
-        <Helper onClick={openModalHelper} />
-      </div>
+          <RateText className="rateTip">매너점수: {rateScore}</RateText>
+        </RateBox>
+
+        <PointImg src={pointImg} />
+        <PointText>{pointShow}</PointText>
+        
+        <ProfileBox>
+          <Link to="/profile" style={{ fontSize: '0' }}>
+            <ProfileIcon />
+          </Link>
+          <ProfileText className="profileTip">회원정보수정</ProfileText>
+        </ProfileBox>
+
+        <HelperBox>
+          <Helper onClick={openModalHelper} />
+          <HelperText className="helperTip">도움말</HelperText>
+        </HelperBox>
+
+      </LeftBox>
       {isOpen ? <MainHelper openModalHelper={openModalHelper} /> : null}
     </Header>
   )
