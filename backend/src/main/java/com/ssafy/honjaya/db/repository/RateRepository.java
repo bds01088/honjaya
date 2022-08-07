@@ -10,6 +10,6 @@ public interface RateRepository extends JpaRepository<Rate, Integer> {
 	Rate findByRateFrom_UserNoAndRateTo_UserNo(int rateFrom, int rateTo);
 	
 	@Query(value = "select round(avg(rate_score), 1) from rate where rate_to = ?1", nativeQuery = true)
-	double getAverageRate(int userNo);
+	Double getAverageRate(int userNo);
 	
 }

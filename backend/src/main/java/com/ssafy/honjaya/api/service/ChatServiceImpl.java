@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.honjaya.api.request.ChatAskReq;
 import com.ssafy.honjaya.api.request.ChatReq;
+import com.ssafy.honjaya.api.response.ChatListRes;
+import com.ssafy.honjaya.api.response.ChatRes;
 import com.ssafy.honjaya.api.response.ChatroomListRes;
 import com.ssafy.honjaya.api.response.ChatroomRes;
-import com.ssafy.honjaya.api.response.HashtagListRes;
-import com.ssafy.honjaya.api.response.HashtagRes;
+import com.ssafy.honjaya.db.entity.Chat;
 import com.ssafy.honjaya.db.entity.ChatAsk;
 import com.ssafy.honjaya.db.entity.Chatroom;
 import com.ssafy.honjaya.db.entity.ChatroomUser;
@@ -23,6 +24,8 @@ import com.ssafy.honjaya.db.repository.UserRepository;
 
 @Service
 public class ChatServiceImpl implements ChatService {
+	
+	private static final int CHAT_READ_COUNT = 1;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -38,32 +41,7 @@ public class ChatServiceImpl implements ChatService {
 	
 	@Autowired
 	private ChatroomUserRepository chatroomUserRepository;
-
-//	@Override
-//	public HashtagRes insertHashtag(HashtagReq hashtagReq) {
-//		Hashtag hashtag = Hashtag.builder()
-//				.user(userRepository.getOne(hashtagReq.getUserNo()))
-//				.hashText(hashtagReq.getHashText())
-//				.build();
-//		hashtag = hashtagRepository.save(hashtag);
-//		return new HashtagRes(hashtag);
-//	}
-//
-//	@Override
-//	public HashtagListRes listHashtag(int userNo) {
-//		List<Hashtag> list = hashtagRepository.findByUser_UserNo(userNo);
-//		List<HashtagRes> resList = new ArrayList<>();
-//		HashtagListRes hashtagListRes = new HashtagListRes();
-//		list.forEach(e -> resList.add(new HashtagRes(e)));
-//		hashtagListRes.setList(resList);
-//		return hashtagListRes;
-//	}
-//
-//	@Override
-//	public void deleteHashtag(int hashNo) {
-//		hashtagRepository.deleteById(hashNo);
-//	}
-
+	
 	@Override
 	public boolean askChat(ChatAskReq chatAskReq) {
 		int chatAskFrom = chatAskReq.getChatAskFrom();
@@ -99,18 +77,29 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void deleteChatroom(int chatRoomNo) { // 둘 중 한 명이 채팅을 나갔거나 탈퇴를 한 경우 발동
-		
+	public void deleteChatroom(int chatroomNo) { // 둘 중 한 명이 채팅을 나갔거나 탈퇴를 한 경우 발동
+		chatroomRepository.deleteById(chatroomNo);
 	}
 
 	@Override
-	public void getMessages(int chatRoomNo) {
-		
+	public ChatListRes getMessages(int userNo, int chatroomNo) {
+		List<Chat> list = chatRepository.findAllByChatroom_ChatroomNo(chatroomNo);
+		List<ChatRes> resList = new ArrayList<>();
+		ChatListRes chatListRes = new ChatListRes();
+		list.forEach(e -> resList.add(new ChatRes(userNo, e)));
+		chatListRes.setList(resList);
+		return chatListRes;
 	}
 
 	@Override
 	public void sendMessage(ChatReq chatReq) {
-		
+		Chat chat = Chat.builder()
+				.chatroom(chatroomRepository.getOne(chatReq.getChatroomNo()))
+				.user(userRepository.getOne(chatReq.getUserNo()))
+				.chatMessage(chatReq.getChatMessage())
+				.chatRead(CHAT_READ_COUNT)
+				.build();
+		chatRepository.save(chat);
 	}
 	
 	private void createChatroom(int userNo1, int userNo2) {

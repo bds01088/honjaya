@@ -1,5 +1,11 @@
 package com.ssafy.honjaya.api.response;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+import com.ssafy.honjaya.db.entity.Chat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,5 +38,24 @@ public class ChatRes {
 	
 	@ApiModelProperty(value = "에러 메시지")
 	private String error;
+
+	public ChatRes(int userNo, Chat chat) {
+		this.myChat = chat.getUser().getUserNo() == userNo;
+		this.chatMessage = chat.getChatMessage();
+		this.chatTime = datetimeToChatTime(chat.getChatTime());
+		this.chatRead = chat.getChatRead();
+	}
+	
+	private String datetimeToChatTime(LocalDateTime t) {
+		LocalDateTime now = LocalDateTime.now();
+		String chatDay = "";
+		String chatTime = t.format(DateTimeFormatter.ofPattern("a h:mm").withLocale(Locale.forLanguageTag("ko")));
+		if (t.getYear() != now.getYear()) {
+			chatDay += t.getYear() + "년 ";
+		} else if (t.getDayOfYear() == now.getDayOfYear()) {
+			return chatTime;
+		}
+		return chatDay + t.getMonth() + "월 " + t.getDayOfMonth() + "일 " + chatTime;
+	}
 	
 }

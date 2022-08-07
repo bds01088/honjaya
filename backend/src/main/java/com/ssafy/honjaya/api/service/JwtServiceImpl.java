@@ -23,7 +23,8 @@ public class JwtServiceImpl implements JwtService {
 	public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
 	private static final String SALT = "ssafySecret";
-	private static final int EXPIRE_MINUTES = 60; // 토큰 만료 시간
+//	private static final int EXPIRE_MINUTES = 60; // 토큰 만료 시간
+	private static final int EXPIRE_MINUTES = 600; // 토큰 만료 시간
 
 	// 토큰 발급 메서드를 활용한 refresh 토큰 생성
 	@Override
