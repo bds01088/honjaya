@@ -144,6 +144,7 @@ const StyledInput = styled.input`
 
   &.birth {
     width: 75%;
+    cursor: pointer;
   }
 `
 
@@ -358,7 +359,7 @@ const UpdateProfile = () => {
     dispatch(checkNickname(userNickname))
       .unwrap()
       .then((res) => {
-        if (res.data.trueOrFalse === false) {
+        if (userNickname === nowUserNickname || res.data.trueOrFalse === false) {
           return setisDuplicateNicknameChecked(true)
         } else return setisDuplicateNicknameChecked(false)
       })
@@ -396,10 +397,11 @@ const UpdateProfile = () => {
       })
   }
 
-  // 밑 모든 조건 만족시 수정 버튼 활성화
+  // 아래 모든 조건 만족시 수정 버튼 활성화
   let disabled = true
   if (
     isDuplicateNicknameChecked && // 닉네임 중복확인
+    nicknameValid && // 닉네임 유효성 확인
     checkedPwd && // 비밀번호 재확인
     pwdValid && // 비밀번호 유효성 확인
     userBirthday && // 생일 입력 확인
