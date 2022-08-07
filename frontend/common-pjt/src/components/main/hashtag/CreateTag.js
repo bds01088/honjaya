@@ -51,14 +51,18 @@ const SubmitBtn = styled.button`
   margin-top: 1rem;
 `
 
+
 const CreateTag = (props) => {
   const dispatch = useDispatch()
   const [tag01, setTag01] = useState('')
 
-  const sendToMain = () => {
-    props.openModalHash01(false)
-    props.setHash01(tag01)
-    dispatch(putHash(tag01))
+  const sendToMain = (e) => { 
+
+    if (tag01.trimStart().trimEnd() !== ''){
+      dispatch(putHash(tag01))
+      console.log("해시태그생성후 응답")    
+      props.openModalHash(false) 
+    }
   }
 
   return (
@@ -68,11 +72,16 @@ const CreateTag = (props) => {
         <h1>해시태그를 입력하세요</h1>
         <Form>
           <InputHash type="text" onChange={(e) => setTag01(e.target.value)} />
-          <SubmitBtn onClick={sendToMain}>등록</SubmitBtn>
+          <SubmitBtn onClick={(e) => sendToMain(e)}
+            onKeyUp={(e) => e.key==='Enter' ? sendToMain(e) : null }
+          >등록</SubmitBtn>
         </Form>
       </ModalView>
     </ModalBackdrop>
   )
 }
+
+
+
 
 export default CreateTag

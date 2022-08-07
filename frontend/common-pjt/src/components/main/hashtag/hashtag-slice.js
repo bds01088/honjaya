@@ -4,10 +4,10 @@ import { deleteToken, saveToken, getToken } from '../../../api/JWT'
 
 //해시태그 데이터 가져오기
 export const getHash = createAsyncThunk(
-  'GETHASH',
-  async ( data, { rejectWithValue }) => {
+  'GET_HASH',
+  async (arg, { rejectWithValue }) => {
     try {
-      console.log("데이터가 오나?")
+      console.log('데이터가 오나?')
       const res = await axios.get(
         '/honjaya/hashtags',
         //원래 headers에 토큰을 넣어주어야하지만
@@ -18,115 +18,101 @@ export const getHash = createAsyncThunk(
         //   headers: {"access-Token": `${getToken()}` },
         // }
       )
-      console.log("해시태그 데이터 받아옴")
+      console.log('해시태그 데이터 받아옴')
       //extraReducer가 지켜보고 있기 때문에,
       //진행상황에 따라 extraReducer도 실행된다.
-      // console.log(res)
       return res
-      } catch (err) {
-        // console.log("err가 오고있나?")
-        // console.log(err)
-        return rejectWithValue(err.response) //err안에 response로 담겨있음
-      }
+    } catch (err) {
+      return rejectWithValue(err.response) //err안에 response로 담겨있음
     }
+  },
 )
 
 //해시태그 데이터 삭제요청 보내기
 export const delHash = createAsyncThunk(
-    'DELHASH',
-    async ( hashNo, { rejectWithValue }) => {
-      try {
-        const res = await axios.delete(
-          `/honjaya/hashtags/${hashNo}`,
-        // {
-        //   headers: {"access-Token": `${getToken()}` },
-        // }
-        )
-        console.log("해시태그 데이터 삭제성공")
-        return res
-        } catch (err) {
-          console.log("err가 오고있나?")
-          console.log(err)
-          return rejectWithValue(err.response) //err안에 response로 담겨있음
-        }
+  'DEL_HASH',
+  async (hashNo, { rejectWithValue }) => {
+    console.log(hashNo)
+    try {
+      const res = await axios.delete(`/honjaya/hashtags/${hashNo}`)
+      console.log('해시태그 데이터 삭제성공')
+      return res
+    } catch (err) {
+      console.log('err가 오고있나?')
+      console.log(err)
+      return rejectWithValue(err.response) //err안에 response로 담겨있음
     }
+  },
 )
 
 //해시태그 입력하기
 export const putHash = createAsyncThunk(
   'PUTHASH',
-  async ( hashContent, { rejectWithValue }) => {
+  async (hashContent, { rejectWithValue }) => {
     try {
       const res = await axios.post(
         `/honjaya/hashtags/`,
         {
-          body: {"hashText": `${hashContent}`}
-        }
-      // {
-      //   headers: {"access-Token": `${getToken()}` },
-      // }
+          hashText: `${hashContent}`,
+        },
       )
       console.log(res)
-      console.log("해시태그 생성 성공")
+      console.log('해시태그 생성 성공')
       return res
-      } catch (err) {
-        console.log("err가 오고있나?")
-        console.log(err)
-        return rejectWithValue(err.response) //err안에 response로 담겨있음
-      }
-  }
+    } catch (err) {
+      console.log('해시태그 생성 에러')
+      console.log(err)
+      return rejectWithValue(err.response) //err안에 response로 담겨있음
+    }
+  },
 )
 
-
 const initialState = {
-  loading: false,
-  list: [],
-  success: false,
-  error: null
+  hashesOwned: [],
 }
 
 const hashTagSlice = createSlice({
   name: 'hashtag',
   initialState,
   reducers: {
-    resetUser: (state) => {
-      state.user = {}
-    }
   },
   extraReducers: {
-    [getHash.pending]: (state) => {
-      state.loading = true
-    },
     [getHash.fulfilled]: (state, action) => {
-      state.loading = false
-      // console.log(action.payload)
-      // action.payload는 response와 동일하다.
-      state.list = action.payload.data.list
-      console.log(state.list)
-      state.success = action.payload.data.success
-    },
-    [getHash.rejected]: (state, action) => {
-      console.log(action.payload)
-      state.error = action.payload.error
-    },
-    [delHash.pending]: (state) => {
-      state.loading = true
-    },
-    [delHash.fulfilled]: (state, action) => {
-      state.loading = false
-      state.list = action.pyaload.data.list
-    },
-    [delHash.rejected]: (state, action) => {
-      state.loading = false
-      state.error = action.payload.error
-    },
-    [putHash.fulfilled]: (state, action) => {
-      console.log(action.payload)
-    }
-  }
+      const hashArray = action.payload.data.list
+      console.log(hashArray)
+      const tempHash = []
+      //현재 hashArray 구조
+      // [{hashNo: 1, hashText: "내용"}, ...]
+      //hashNo랑 hashText만 필요함
+      //map 
+      hashArray.map((item, idx) => {
+        const temp = [item.hashNo, item.hashText];
+        tempHash.push(temp)
+      })
+      // 아래와 같이 값을 명시해서 콘솔에 찍어줄 수도 있음
+      console.log("결과는", tempHash)
+      state.hashesOwned = tempHash
 
+    },
+
+    [delHash.fulfilled]: (state, action) => {
+      console.log(action.payload.data)
+      const response = action.payload.data
+      
+
+   
+    },
+
+    [putHash.fulfilled]: (state, action) => {
+      // console.log(action.payload)
+      // putHash 요청 뒤에 초기값에 값이 제대로 세팅되지 않아서 아래로직을 이용해 추가해줌
+      const response = action.payload.data
+      const temp = [response.hashNo, response.hashText];
+      state.hashesOwned.push(temp)
+      console.log("추가 후", state.hashesOwned)      
+    },
+  },
 })
 
-
-export const { resetUser } = hashTagSlice.actions 
+export const { } = hashTagSlice.actions
 export default hashTagSlice.reducer
