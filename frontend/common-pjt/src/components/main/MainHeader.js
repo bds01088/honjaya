@@ -41,9 +41,6 @@ const PointImg = styled.img`
   height: 50%;
 `
 
-// const point = 100000
-// const pointShow = point.toLocaleString('ko-KR')
-
 const Helper = styled(MdHelpOutline)`
   margin-right: 2rem;
   color: #333333;
@@ -63,8 +60,7 @@ const MainHeader = () => {
   
   const [isOpen, setIsOpen] = useState(false)
 
-  //toLocaleString에서 에러남  
-  // const pointShow = userPoint.toLocaleString('ko-KR')
+  const pointShow = userPoint.toLocaleString('ko-KR')
   const openModalHelper = () => {
     setIsOpen(!isOpen)
   }
@@ -86,7 +82,7 @@ const MainHeader = () => {
         <p
           style={{ color: '#333333', fontSize: '1.5rem', marginRight: '1rem' }}
         >
-          {userPoint}
+          {pointShow}
         </p>
         <Link to="/profile" style={{ fontSize: '0' }}>
           <MdAccountCircle
