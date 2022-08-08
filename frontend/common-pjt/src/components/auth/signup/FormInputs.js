@@ -48,6 +48,7 @@ const StyledInput = styled.input`
 
   &.birth {
     width: 75%;
+    cursor: pointer;
   }
 `
 
@@ -88,10 +89,14 @@ const InBtn = styled.button`
   margin: 1rem 0;
   font-size: 1.2rem;
   font-family: Jua;
-
+  cursor: pointer;
   &:hover{
     background-color: #009c87;
     color: #e0e0e0;
+  }
+
+  &:disabled{
+    cursor: not-allowed;
   }
 `
 
@@ -249,6 +254,7 @@ const FormInputs = () => {
   }
 
   // 전화번호 유효성 검사 및 형식 자동 변환
+  const [checkedPhone, setCheckedPhone] = useState(true) 
   const checkPhone = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
@@ -259,11 +265,15 @@ const FormInputs = () => {
 
   useEffect(() => {
     if (userPhone.length === 10) {
+      
       setUserPhone(userPhone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
     if (userPhone.length === 13) {
+      setCheckedPhone(true)
       setUserPhone(userPhone.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
-    }
+    } else ((
+      setCheckedPhone(false))
+    )
   }, [userPhone]);
 
 
@@ -324,6 +334,20 @@ const FormInputs = () => {
         }
       });
   }
+  
+  // 아래 모든 조건 만족시 계정 생성하기 버튼 활성화
+  let btnDisabled = true
+  if (checkedEmail &&                 // 이메일 인증
+      checkedPwd &&                   // 비밀번호 재확인
+      pwdValid &&                     // 비밀번호 유효성
+      isDuplicateNicknameChecked &&   // 닉네임 중복
+      nicknameValid &&                // 닉네임 유효성
+      nameValid &&                    // 이름 유효성
+      userBirthday &&                 // 생일 입력
+      userGender &&                   // 성별 체크
+      checkedPhone ) {                // 휴대폰 유효성
+        btnDisabled = false
+      }
   
   return (
     <FormInputsBlock onSubmit={(e) =>  { if (checkedEmail && checkedPwd && isDuplicateNicknameChecked && nameValid && userBirthday && userGender && userPhone) handleSubmit(e) }}>
@@ -424,7 +448,7 @@ const FormInputs = () => {
 
         <div>
           <label>
-            <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender}/>남
+            <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender} />남
           </label>
           <label>
             <input name="userGender" type="radio" value="f" checked={userGender==="f"} onChange={changeGender}/>여
@@ -444,6 +468,7 @@ const FormInputs = () => {
         }}
         value={userPhone}
       ></StyledInput>
+      { !checkedPhone && userPhone ? <ErrorText>전화번호를 11자리 모두 입력해주세요.</ErrorText> : null }
 
       {/* <StyledInput
         autoComplete="userProfilePicUrl"
@@ -453,7 +478,7 @@ const FormInputs = () => {
         value={form.userProfilePicUrl}
       ></StyledInput> */}
 
-      <InBtn>계정 생성하기</InBtn>
+      <InBtn disabled={btnDisabled}>계정 생성하기</InBtn>
 
     </FormInputsBlock>
   )
