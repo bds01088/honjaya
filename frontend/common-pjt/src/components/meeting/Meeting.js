@@ -10,8 +10,8 @@ import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
 import { MdHelpOutline } from 'react-icons/md'
 
-// const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
-const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
+const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+// const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
