@@ -5,7 +5,8 @@ import { MdLogout, MdVideocam, MdVideocamOff, MdCheckCircleOutline, MdOutlineHig
 import timerImg from '../assets/timer.png'
 import { HashLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
-import Webcam from "react-webcam"
+import axios from 'axios'
+import Webcam from 'react-webcam'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -304,7 +305,7 @@ class Waiting extends Component {
   componentDidMount() {
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
-      if (this.state.timeLimit > 0) {
+      if (this.state.timeLimit >= 0) {
         this.setState((prevState) => ({
           timeLimit: prevState.timeLimit+1,
           minute: parseInt((prevState.timeLimit+1)/60),
@@ -336,6 +337,33 @@ class Waiting extends Component {
     this.setState({ videoSet: val })
   }
 
+  getUuid() {
+    const val = !this.state.videoSet
+    console.log("uuid 요청보냄")
+    this.setState({ videoSet: val })
+    axios.post(
+        'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
+        {
+          "userGender": "m",
+          "total": 2,
+          "oppositeGender": "false",
+          "roleCode": 1
+        }
+      ).then(res => {
+        console.log("uuid 받아옴")
+        console.log(res.data.uuid)
+        this.setState({
+          uuid : res.data.uuid,
+          nowmatching : false
+        })
+        }
+      ).catch(err => {
+        console.log(err)
+        }
+      )
+  }
+
+
   render() {
 
     return (
@@ -348,44 +376,46 @@ class Waiting extends Component {
           </LeaveBox>
         </Header>
 
-        <SpinnerBox>
-          <TimerBox>
-            <TimerImg/>
-            <Timer onClick={this.stopTimer}>
-              {this.state.minute}:{this.state.sec < 10 ? 0: null}
-              {this.state.sec}
-            </Timer>
-          </TimerBox>
-          { this.state.timeLimit ? 
-            <><HashLoader color="#e5a0a0" /><StatusText>유저를 찾고 있습니다 ...</StatusText></> 
-            : <><StatusText>현재 매칭 가능한 상대가 없습니다<br/>다시 연결하시겠습니까?</StatusText>
-              <div><ChoiceBtn className="yes" onClick={this.resetTimer}>O</ChoiceBtn> / <Link to="/main"><ChoiceBtn className="no">X</ChoiceBtn></Link></div>
-          </>  }
-        </SpinnerBox>
-        
-        <CamGuideBox>
-          <CamBox>
-            <CamOffContainer>
-              <LogoImg/>
-              {this.state.videoSet ? 
-                <CamContainer /> : null
-              }
-            </CamOffContainer>
-            { this.state.videoSet ? <CamOn onClick={this.videoOnOff}/> : <CamOff onClick={this.videoOnOff}/> }
-          </CamBox>
-          <GuideBox>
-            <GuideContainer>
-              <GuideHeader>이것만은 지켜주세요 !</GuideHeader>
-              <GuideText><CheckIcon/>서로를 존중해요</GuideText>
-              <GuideText><CheckIcon/>다른 사람의 이야기를 경청해요</GuideText>
-              <GuideText><CheckIcon/>본인의 역할에 집중해요</GuideText>
-              <GuideText><BanIcon/>과도한 요구는 자제해요</GuideText>
-              <GuideText><BanIcon/>욕설 및 비속어는 금지해요</GuideText>
-              <GuideText><BanIcon/>성적인 콘텐츠 및 행위를 금지해요</GuideText>
-            </GuideContainer>
-          </GuideBox>
-        </CamGuideBox>
-        
+        { this.state.uuid === undefined ? 
+        <Background>
+          <SpinnerBox>
+            <TimerBox>
+              <TimerImg/>
+              <Timer>
+                {this.state.minute}:{this.state.sec < 10 ? 0: null}
+                {this.state.sec}
+              </Timer>
+            </TimerBox>
+            { this.state.nowmatching === true && this.state.uuid === undefined ? 
+              <><HashLoader color="#e5a0a0" /><StatusText>유저를 찾고 있습니다 ...</StatusText></> 
+              : <><StatusText>현재 매칭 가능한 상대가 없습니다<br/>다시 연결하시겠습니까?</StatusText>
+                <div><ChoiceBtn className="yes" onClick={this.resetTimer}>O</ChoiceBtn> / <Link to="/main"><ChoiceBtn className="no">X</ChoiceBtn></Link></div>
+            </>  }
+          </SpinnerBox>
+          
+          <CamGuideBox>
+            <CamBox>
+              <CamOffContainer>
+                <LogoImg/>
+                {this.state.videoSet ? 
+                  <CamContainer /> : null
+                }
+              </CamOffContainer>
+              { this.state.videoSet ? <CamOn onClick={this.videoOnOff}/> : <CamOff onClick={this.videoOnOff}/> }
+            </CamBox>
+            <GuideBox>
+              <GuideContainer>
+                <GuideHeader>이것만은 지켜주세요 !</GuideHeader>
+                <GuideText><CheckIcon/>서로를 존중해요</GuideText>
+                <GuideText><CheckIcon/>다른 사람의 이야기를 경청해요</GuideText>
+                <GuideText><CheckIcon/>본인의 역할에 집중해요</GuideText>
+                <GuideText><BanIcon/>과도한 요구는 자제해요</GuideText>
+                <GuideText><BanIcon/>욕설 및 비속어는 금지해요</GuideText>
+                <GuideText><BanIcon/>성적인 콘텐츠 및 행위를 금지해요</GuideText>
+              </GuideContainer>
+            </GuideBox>
+          </CamGuideBox>
+        </Background> : null }
         
       </Background>
     )
