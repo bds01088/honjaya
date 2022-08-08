@@ -20,12 +20,16 @@ public class RateServiceImpl implements RateService {
 
 	@Override
 	public double getAverageRate(int userNo) {
-		return rateRepository.getAverageRate(userNo);
+		Double averageRate = rateRepository.getAverageRate(userNo);
+		return averageRate != null ? averageRate : 0.0;
 	}
 
 	@Override
 	public RateRes findRate(int rateFrom, int rateTo) {
 		Rate rate = rateRepository.findByRateFrom_UserNoAndRateTo_UserNo(rateFrom, rateTo);
+		if (rate == null) {
+			return new RateRes(0, rateFrom, rateTo, 0.0, true, null);
+		}
 		return new RateRes(rate);
 	}
 

@@ -40,18 +40,29 @@ public class ChatController {
 
 //	@Autowired
 //	private RateService rateService;
-
-	@ApiOperation(value = "채팅방 개설", response = CommonRes.class)
+	
+	@ApiOperation(value = "채팅 신청", response = CommonRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@PostMapping("/create/{userNo}")
-	public ResponseEntity<CommonRes> createChatroom(@PathVariable int userNo, HttpServletRequest request) {
+	@PostMapping("/ask/{userNo}")
+	public ResponseEntity<CommonRes> createAsk(@PathVariable int userNo, HttpServletRequest request) {
 		return null;
 	}
 	
+	@ApiOperation(value = "본인에게 온 채팅 신청 삭제 (미팅 나가기 버튼 누를 때)", response = CommonRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@DeleteMapping("/ask")
+	public ResponseEntity<CommonRes> deleteAsk(@PathVariable int userNo, HttpServletRequest request) {
+		return null;
+	}
+
 	@ApiOperation(value = "채팅방 목록 조회", response = ChatroomListRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
@@ -62,8 +73,19 @@ public class ChatController {
 	public ResponseEntity<ChatroomListRes> listChatroom(HttpServletRequest request) {
 		return null;
 	}
+	
+	@ApiOperation(value = "채팅방 삭제", response = CommonRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@DeleteMapping("/exit/{chatroomNo}")
+	public ResponseEntity<CommonRes> deleteChatroom(@PathVariable int chatroomNo, HttpServletRequest request) {
+		return null;
+	}
 
-	@ApiOperation(value = "채팅방 메시지 조회", response = ChatListRes.class)
+	@ApiOperation(value = "채팅방 메시지 불러오기", response = ChatListRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
@@ -82,17 +104,6 @@ public class ChatController {
 	})
 	@PostMapping("/message")
 	public ResponseEntity<CommonRes> insertChat(@RequestBody ChatReq chatReq, HttpServletRequest request) {
-		return null;
-	}
-	
-	@ApiOperation(value = "채팅방 삭제", response = CommonRes.class)
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "성공 (success: true)"),
-		@ApiResponse(code = 401, message = "토큰 만료"),
-		@ApiResponse(code = 500, message = "서버 오류")
-	})
-	@DeleteMapping("/exit/{chatroomNo}")
-	public ResponseEntity<CommonRes> deleteChatroom(@PathVariable int chatroomNo, HttpServletRequest request) {
 		return null;
 	}
 }
