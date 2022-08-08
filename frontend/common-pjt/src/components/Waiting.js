@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Webcam from 'react-webcam'
 
+
 const Background = styled.div`
   background-color: #fffdde;
   width: 100vw;
@@ -291,6 +292,9 @@ class Waiting extends Component {
     super(props);
 
     this.state = {
+      uuid: undefined,
+      nowmatching: true,
+
       // 3분의 시간제한
       timeLimit: 0,
       minute: 0,
@@ -303,6 +307,7 @@ class Waiting extends Component {
   }
 
   componentDidMount() {
+    this.getUuid()
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
       if (this.state.timeLimit >= 0) {
@@ -332,15 +337,14 @@ class Waiting extends Component {
     this.setState({ timeLimit: 0 })
   }
 
+
   videoOnOff = () => {
     const val = !this.state.videoSet
     this.setState({ videoSet: val })
   }
 
   getUuid() {
-    const val = !this.state.videoSet
     console.log("uuid 요청보냄")
-    this.setState({ videoSet: val })
     axios.post(
         'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
         {
@@ -416,7 +420,6 @@ class Waiting extends Component {
             </GuideBox>
           </CamGuideBox>
         </Background> : null }
-        
       </Background>
     )
   }

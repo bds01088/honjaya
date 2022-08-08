@@ -4,7 +4,7 @@ $(function () {
   const TIMEOUT = -1;
 
   var ChatManager = (function () {
-    function ChatManager() {}
+    function ChatManager() { }
 
     ChatManager.textarea = $("#chat-content");
     ChatManager.socket = null;
@@ -68,14 +68,12 @@ $(function () {
             ChatManager.sessionId = chatResponse.sessionId;
             ChatManager.chatRoomId = chatResponse.chatRoomId;
             ChatManager.updateTemplate("chat");
-            ChatManager.updateText(">> Connected anonymous user :)\n", false);
+            ChatManager.updateText(">> Connected roomId :" + ChatManager.chatRoomId + ")\n", false);
             ChatManager.connectAndSubscribe();
           } else if (chatResponse.result == CANCEL) {
             ChatManager.updateText(">> Success to cancel", false);
-            $("#btnJoin").text("Join");
           } else if (chatResponse.result == TIMEOUT) {
             ChatManager.updateText(">> Can`t find user :(", false);
-            $("#btnJoin").text("Join");
           }
         },
         error: function (jqxhr) {

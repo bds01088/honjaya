@@ -62,7 +62,6 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.springframework/spring-messaging
 	implementation 'org.springframework:spring-messaging:5.3.22'
-	
     
 }
 
