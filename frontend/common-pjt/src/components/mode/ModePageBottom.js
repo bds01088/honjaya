@@ -5,6 +5,8 @@ import {
   MdRadioButtonChecked,
 } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setOppositeGender, setRoleCode, setTotal, setUserGender } from './mode-slice'
 
 const BottomBox = styled.div`
   width: 90%;
@@ -95,6 +97,7 @@ const Start = styled.button`
 `
 
 const ModePageBottom = ({ data, setData }) => {
+  const dispatch = useDispatch()
   // 인원 선택 (라디오 버튼)
   const [personnel, setPersonnel] = useState("2")
 
@@ -109,8 +112,12 @@ const ModePageBottom = ({ data, setData }) => {
   const navigate = useNavigate()
 
   const moveToWait = () => {
-    console.log(data)
-    navigate('/waiting', data)
+    dispatch(setOppositeGender(data.oppositeGender))
+    dispatch(setTotal(data.total))  
+    dispatch(setUserGender(data.userGender))
+    dispatch(setRoleCode(data.roleCode))    
+    console.log("mode에서 출발",data)
+    navigate('/waiting')
   }
 
 
