@@ -16,13 +16,13 @@ import {
 import React, { useState, useEffect } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { getHash, delHash, putHash } from './hashtag/hashtag-slice'
+import { getHash, delHash } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
 
 
 import { useSelector } from 'react-redux'
 import { loadUser,logout } from '../auth/login/login-slice'
-import { ConnectedTvOutlined, NavigateBefore } from '@mui/icons-material'
+// import { ConnectedTvOutlined, NavigateBefore } from '@mui/icons-material'
 import HashDeleteModal from './HashDeleteModal'
 
 
