@@ -5,6 +5,7 @@ import { MdHelpOutline } from 'react-icons/md'
 import timerImg from '../assets/timer.png'
 import { HashLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -172,6 +173,9 @@ class Waiting extends Component {
     super(props);
 
     this.state = {
+      uuid: undefined,
+      nowmatching: true,
+
       // 3분의 시간제한
       timeLimit: 0,
       minute: 0,
@@ -182,6 +186,7 @@ class Waiting extends Component {
   }
 
   componentDidMount() {
+    this.getUuid()
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
       if (this.state.timeLimit > 0) {
@@ -211,6 +216,29 @@ class Waiting extends Component {
     this.setState({ timeLimit: 0 })
   }
 
+  getUuid() {
+    console.log("uuid 요청보냄")
+    axios.post(
+        'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
+        {
+          "userGender": "m",
+          "total": 2,
+          "oppositeGender": "false",
+          "roleCode": 1
+        }
+      ).then(res => {
+        console.log("uuid 받아옴")
+        console.log(res.data.uuid)
+        this.setState({
+          uuid : res.data.uuid,
+          nowmatching : false
+        })
+        }
+      ).catch(err => {
+        console.log(err)
+        }
+      )
+  }
 
   render() {
     return (
@@ -219,33 +247,36 @@ class Waiting extends Component {
           <Logo/>
           <Helper/>
         </Header>
+        { this.state.uuid === undefined ? 
+        <Background>
+          <SpinnerBox>
+            <TimerBox>
+              <TimerImg/>
+              <Timer onClick={this.stopTimer}>
+                {this.state.minute}:{this.state.sec < 10 ? 0: null}
+                {this.state.sec}
+              </Timer>
+            </TimerBox>
+            { this.state.nowmatching === true && this.state.uuid === undefined ? 
+              <><HashLoader color="#e5a0a0" /><StatusText>유저를 찾고 있습니다 ...</StatusText></> 
+              : <><StatusText>현재 매칭 가능한 상대가 없습니다<br/>다시 연결하시겠습니까?</StatusText>
+                <div><ChoiceBtn className="yes" onClick={this.resetTimer}>O</ChoiceBtn> / <Link to="/main"><ChoiceBtn className="no">X</ChoiceBtn></Link></div>
+            </>  }
+          </SpinnerBox>
+          
+          <CamGuideBox>
+            <CamBox>
+              <CamContainer>
 
-        <SpinnerBox>
-          <TimerBox>
-            <TimerImg/>
-            <Timer onClick={this.stopTimer}>
-              {this.state.minute}:{this.state.sec < 10 ? 0: null}
-              {this.state.sec}
-            </Timer>
-          </TimerBox>
-          { this.state.timeLimit ? 
-            <><HashLoader color="#e5a0a0" /><StatusText>유저를 찾고 있습니다 ...</StatusText></> 
-            : <><StatusText>현재 매칭 가능한 상대가 없습니다<br/>다시 연결하시겠습니까?</StatusText>
-              <div><ChoiceBtn className="yes" onClick={this.resetTimer}>O</ChoiceBtn> / <Link to="/main"><ChoiceBtn className="no">X</ChoiceBtn></Link></div>
-          </>  }
-        </SpinnerBox>
-        
-        <CamGuideBox>
-          <CamBox>
-            <CamContainer>
-
-            </CamContainer>
-          </CamBox>
-          <GuideBox>
-            <GuideContainer>
-            </GuideContainer>
-          </GuideBox>
-        </CamGuideBox>
+              </CamContainer>
+            </CamBox>
+            <GuideBox>
+              <GuideContainer>
+              </GuideContainer>
+            </GuideBox>
+          </CamGuideBox>
+        </Background>
+         : <div>SSAFY</div>}
       </Background>
     )
   }
