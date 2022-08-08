@@ -71,6 +71,7 @@ const RadioIconOn = styled(MdRadioButtonChecked)`
   color: #00c3a9;
 `
 
+
 const StartDiv = styled.div`
   display: flex;
   align-items: center;
@@ -106,11 +107,12 @@ const ModePageBottom = ({ data, setData }) => {
   }
 
   const navigate = useNavigate()
-  
+
   const moveToWait = () => {
     console.log(data)
-    navigate('/waiting', { state: data })
+    navigate('/waiting', data)
   }
+
 
   return (
     <BottomBox>
