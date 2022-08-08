@@ -8,6 +8,7 @@ textarea {
 
 #main-content {
   max-width: 80%;
+  height: 600px;
   padding: 2em 3em;
   margin: 0 auto 20px;
   background-color: #fff;
@@ -15,4 +16,8 @@ textarea {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+}
+
+#chat-content {
+  height: 470px;
 }
