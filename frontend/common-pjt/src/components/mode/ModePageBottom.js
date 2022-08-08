@@ -73,6 +73,7 @@ const RadioIconOn = styled(MdRadioButtonChecked)`
   color: #00c3a9;
 `
 
+
 const StartDiv = styled.div`
   display: flex;
   align-items: center;
@@ -109,7 +110,7 @@ const ModePageBottom = ({ data, setData }) => {
   }
 
   const navigate = useNavigate()
-  
+
   const moveToWait = () => {
     dispatch(setOppositeGender(data.oppositeGender))
     dispatch(setTotal(data.total))  
@@ -118,6 +119,7 @@ const ModePageBottom = ({ data, setData }) => {
     console.log("mode에서 출발",data)
     navigate('/waiting')
   }
+
 
   return (
     <BottomBox>
