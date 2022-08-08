@@ -62,6 +62,7 @@ const loginSlice = createSlice({
     resetUser: (state) => {
       state.user = {}
     }
+
   },
   extraReducers: {
     [login.fulfilled]: (state) => {
@@ -76,6 +77,9 @@ const loginSlice = createSlice({
   }
 
 })
+
+
+
 
 
 export const { resetUser } = loginSlice.actions 
