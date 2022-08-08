@@ -1,6 +1,7 @@
 package com.ssafy.honjaya.api.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +42,12 @@ public class MeetingServiceImpl implements MeetingService {
 	
 	// {key : websocket session id, value : room id}
 	private Map<String, String> connectedUsers;
+	
+	
+	private Map<String, Map<MeetingReq, DeferredResult<MeetingRes>>> whereByUserNo;
+	private Map<String, Integer> totalByUserNo; // 0 or 1
+	// 나중에 String -> Integer로 바꿔야 함
+	
 
 //	@Autowired
 //	private UserRepository userRepository;
@@ -52,6 +59,8 @@ public class MeetingServiceImpl implements MeetingService {
 		this.waitingAvatar = new ArrayList<>();
 		this.waitingCommander = new ArrayList<>();
 		this.waitingPair = new ArrayList<>();
+		this.whereByUserNo = new HashMap<>();
+		this.totalByUserNo = new HashMap<>();
 		for (int i = 0; i < 2; i++) {
 			this.waitingUsers.add(new LinkedHashMap<>());
 			this.waitingUsersOfCommanders.add(new LinkedHashMap<>());
@@ -80,6 +89,8 @@ public class MeetingServiceImpl implements MeetingService {
 					switch (meetingReq.getRoleCode()) {
 					case 1:
 						waitingUsers.get(i).put(meetingReq, deferredResult);
+						whereByUserNo.put(meetingReq.getSessionId(), waitingUsers.get(i));
+						totalByUserNo.put(meetingReq.getSessionId(), i);
 						break;
 					case 2: // 아바타
 						if (waitingCommander.get(i).size() > 0) { // 기다리고 있는 지시자가 있을 경우 꺼내옴
@@ -88,10 +99,14 @@ public class MeetingServiceImpl implements MeetingService {
 							waitingPair.get(i).put(meetingReq, commanderReq);
 							waitingPair.get(i).put(commanderReq, meetingReq);
 							waitingUsers.get(i).put(meetingReq, deferredResult); // 아바타는 유저 대기 맵에 저장
+							whereByUserNo.put(meetingReq.getSessionId(), waitingUsers.get(i));
 							waitingUsersOfCommanders.get(i).put(commanderReq, commanderResult); // 지시자는 지시자용 대기 맵에 저장
+							whereByUserNo.put(commanderReq.getSessionId(), waitingUsersOfCommanders.get(i));
 						} else {
 							waitingAvatar.get(i).put(meetingReq, deferredResult);
+							whereByUserNo.put(meetingReq.getSessionId(), waitingAvatar.get(i));
 						}
+						totalByUserNo.put(meetingReq.getSessionId(), i);
 						break;
 					case 3: // 지시자
 						if (waitingAvatar.get(i).size() > 0) { // 기다리고 있는 아바타가 있을 경우 꺼내옴
@@ -100,10 +115,14 @@ public class MeetingServiceImpl implements MeetingService {
 							waitingPair.get(i).put(meetingReq, avatarReq);
 							waitingPair.get(i).put(avatarReq, meetingReq);
 							waitingUsers.get(i).put(avatarReq, avatarResult); // 아바타는 유저 대기 맵에 저장
+							whereByUserNo.put(avatarReq.getSessionId(), waitingUsers.get(i));
 							waitingUsersOfCommanders.get(i).put(meetingReq, deferredResult); // 지시자는 지시자용 대기 맵에 저장
+							whereByUserNo.put(meetingReq.getSessionId(), waitingUsersOfCommanders.get(i));
 						} else {
 							waitingCommander.get(i).put(meetingReq, deferredResult);
+							whereByUserNo.put(meetingReq.getSessionId(), waitingCommander.get(i));
 						}
+						totalByUserNo.put(meetingReq.getSessionId(), i);
 						break;
 					default:
 						logger.error("Wrong Role Code!!!");
@@ -123,9 +142,11 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public void cancelChatRoom(MeetingReq meetingReq) {
 		try {
+			System.out.println("cancelChatRoom() 호출! before lock");
 			lock.writeLock().lock();
+			System.out.println("cancelChatRoom() 호출! after lock");
+			System.out.println("total: " + meetingReq.getTotal() + " / roleCode: " + meetingReq.getRoleCode());
 			DeferredResult<MeetingRes> result = cancelAndMakeResult(meetingReq);
-			System.out.println("cancel called");
 			setJoinResult(result, new MeetingRes(null, meetingReq.getSessionId(), 0, 0, 0, CANCEL, null));
 		} finally {
 			lock.writeLock().unlock();
@@ -136,7 +157,9 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public void timeout(MeetingReq meetingReq) {
 		try {
+			System.out.println("timeout() 호출! before lock");
 			lock.writeLock().lock();
+			System.out.println("timeout() 호출! after lock");
 			DeferredResult<MeetingRes> result = cancelAndMakeResult(meetingReq);
 			setJoinResult(result, new MeetingRes(null, meetingReq.getSessionId(), 0, 0, 0, TIMEOUT, null));
 		} finally {
@@ -151,7 +174,7 @@ public class MeetingServiceImpl implements MeetingService {
 
 	@Override
 	public void disconnectUser(String websocketSessionId) {
-		System.out.println("떠났습니다."); //1234
+		System.out.println("떠났습니다.");
 	}
 
 	private void establishRoom() {
@@ -178,7 +201,12 @@ public class MeetingServiceImpl implements MeetingService {
 						res.setUuid(uuid);
 						res.setSessionId(reqs[j].getSessionId());
 						res.setResult(SUCCESS);
+						
+						whereByUserNo.remove(reqs[j].getSessionId());
+						totalByUserNo.remove(reqs[j].getSessionId());
+						
 						waitingUsers.get(i).remove(reqs[j]).setResult(res);
+						
 						if (reqs[j].getRoleCode() == 2) {
 							MeetingReq commanderReq = waitingPair.get(i).remove(reqs[j]);
 							waitingPair.get(i).remove(commanderReq);
@@ -186,24 +214,16 @@ public class MeetingServiceImpl implements MeetingService {
 							commanderRes.setUuid(uuid);
 							commanderRes.setSessionId(commanderReq.getSessionId());
 							commanderRes.setResult(SUCCESS);
+							
+							whereByUserNo.remove(commanderReq.getSessionId());
+							totalByUserNo.remove(commanderReq.getSessionId());
+							
 							waitingUsersOfCommanders.get(i).remove(commanderReq).setResult(commanderRes);
 						}
 					}
 					return;
 				}
 			}
-//				MeetingReq[] reqs = new MeetingReq[2];
-//				MeetingRes[] ress = new MeetingRes[2];
-////				ArrayList<DeferredResult<MeetingRes>> userResults = new ArrayList<>();
-//				reqs[0] = itr.next();
-//				reqs[1] = itr.next();
-//				for (int i = 0; i < 2; i++) {
-////					userResults.add(waitingUsers.get(0).remove(reqs[i]));
-//					ress[i] = new MeetingRes();
-//					ress[i].setUuid(uuid);
-//					ress[i].setSessionId(reqs[i].getSessionId());
-////					ress[i].setPairUserNo(reqs[i].getUserNo());
-//					waitingUsers.get(0).remove(reqs[i]).setResult(ress[i]);
 		} catch (Exception e) {
 			logger.warn("Exception occur while checking waiting users", e);
 		} finally {
@@ -214,36 +234,81 @@ public class MeetingServiceImpl implements MeetingService {
 	private DeferredResult<MeetingRes> cancelAndMakeResult(MeetingReq meetingReq) {
 		DeferredResult<MeetingRes> result = null;
 		
-		int index = meetingReq.getTotal() / 2 - 1;
-		switch (meetingReq.getRoleCode()) {
-		case 1:
-			result = waitingUsers.get(index).remove(meetingReq);
-			System.out.println("이거 왜 안 됨3");
-			break;
-		case 2:
-			result = waitingUsers.get(index).remove(meetingReq);
-			System.out.println("이거 왜 안 됨1");
-			if (result == null) {
-				System.out.println("이거 왜 안 됨2");
-				result = waitingAvatar.get(index).remove(meetingReq);
-			} else {
-				MeetingReq pair = waitingPair.get(index).remove(meetingReq);
-				waitingPair.get(index).remove(pair);
+		int index = totalByUserNo.get(meetingReq.getSessionId());
+		
+		Map<MeetingReq, DeferredResult<MeetingRes>> where = whereByUserNo.get(meetingReq.getSessionId());
+		
+		result = where.remove(meetingReq);
+		whereByUserNo.remove(meetingReq.getSessionId());
+		totalByUserNo.remove(meetingReq.getSessionId());
+		
+		if (waitingPair.get(index).containsKey(meetingReq)) { // Cancel 할 때 이미 페어가 정해져 있었을 경우
+			MeetingReq pairReq = waitingPair.get(index).remove(meetingReq);
+			waitingPair.get(index).remove(pairReq);
+			
+			if (where == waitingUsersOfCommanders.get(index)) { // Cancel 한 사람이 Commander일 경우, Avatar를 다시 대기열로
+				
+				if (waitingCommander.get(index).size() > 0) { // 기다리고 있는 지시자가 있을 경우 꺼내옴
+					MeetingReq commanderReq = waitingCommander.get(index).keySet().iterator().next();
+					DeferredResult<MeetingRes> commanderResult = waitingCommander.get(index).remove(commanderReq);
+					waitingPair.get(index).put(pairReq, commanderReq);
+					waitingPair.get(index).put(commanderReq, pairReq);
+					waitingUsers.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
+					// 아바타는 유저 대기 맵에 저장
+					whereByUserNo.put(pairReq.getSessionId(), waitingUsers.get(index));
+					waitingUsersOfCommanders.get(index).put(commanderReq, commanderResult); // 지시자는 지시자용 대기 맵에 저장
+					whereByUserNo.put(commanderReq.getSessionId(), waitingUsersOfCommanders.get(index));
+				} else {
+					waitingAvatar.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
+					whereByUserNo.put(pairReq.getSessionId(), waitingAvatar.get(index));
+				}
+				
+			} else { // Cancel 한 사람이 Avatar일 경우, Commander를 다시 대기열로
+				
+				if (waitingAvatar.get(index).size() > 0) { // 기다리고 있는 아바타가 있을 경우 꺼내옴
+					MeetingReq avatarReq = waitingAvatar.get(index).keySet().iterator().next();
+					DeferredResult<MeetingRes> avatarResult = waitingAvatar.get(index).remove(avatarReq);
+					waitingPair.get(index).put(pairReq, avatarReq);
+					waitingPair.get(index).put(avatarReq, pairReq);
+					waitingUsers.get(index).put(avatarReq, avatarResult); // 아바타는 유저 대기 맵에 저장
+					whereByUserNo.put(avatarReq.getSessionId(), waitingUsers.get(index));
+					waitingUsersOfCommanders.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
+					// 지시자는 지시자용 대기 맵에 저장
+					whereByUserNo.put(pairReq.getSessionId(), waitingUsersOfCommanders.get(index));
+				} else {
+					waitingCommander.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
+					whereByUserNo.put(pairReq.getSessionId(), waitingCommander.get(index));
+				}
 			}
-			break;
-		case 3:
-			result = waitingUsersOfCommanders.get(index).remove(meetingReq);
-			if (result == null) {
-				result = waitingCommander.get(index).remove(meetingReq);
-			} else {
-				MeetingReq pair = waitingPair.get(index).remove(meetingReq);
-				waitingPair.get(index).remove(pair);
-			}
-			break;
-		default:
-			break;
 		}
 		return result;
+		
+//		switch (meetingReq.getRoleCode()) {
+//		case 1:
+//			result = waitingUsers.get(index).remove(meetingReq);
+//			break;
+//		case 2:
+//			result = waitingUsers.get(index).remove(meetingReq);
+//			if (result == null) {
+//				result = waitingAvatar.get(index).remove(meetingReq);
+//			} else {
+//				MeetingReq pair = waitingPair.get(index).remove(meetingReq);
+//				waitingPair.get(index).remove(pair);
+//			}
+//			break;
+//		case 3:
+//			result = waitingUsersOfCommanders.get(index).remove(meetingReq);
+//			if (result == null) {
+//				result = waitingCommander.get(index).remove(meetingReq);
+//			} else {
+//				MeetingReq pair = waitingPair.get(index).remove(meetingReq);
+//				waitingPair.get(index).remove(pair);
+//			}
+//			break;
+//		default:
+//			break;
+//		}
+//		return result;
 	}
 	
 //	private MeetingReq findRealMeetingReq(MeetingReq meetingReq) {
