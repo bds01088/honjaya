@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import ModeHeader from './ModeHeader'
 import ModePageTop from './ModePageTop'
 import ModePageBottom from './ModePageBottom'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadUser } from '../auth/login/login-slice'
+
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -23,6 +26,24 @@ const ModeContainer = styled.div`
 
 // 모드 default = [Solo, 1:1, 성별무관]
 const Mode = () => {
+  
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadUser())
+      .unwrap()
+      .catch((err)=> {alert('유저로드에러')})
+  }, [])
+
+
+  const { userGender } = useSelector((state) => state.login.user)
+
+  const [data, setData] = useState({
+    userGender: userGender,
+    total: 2,
+    oppositeGender: false,
+    roleCode: 1,
+  })
 
   return (
     <Background>
@@ -30,10 +51,10 @@ const Mode = () => {
       <ModeContainer>
 
         {/* 역할 선택 */}
-        <ModePageTop/> 
+        <ModePageTop setData={setData} data={data}/> 
 
         {/* 인원, 성별 선택 */}
-        <ModePageBottom/> 
+        <ModePageBottom setData={setData} data={data}/> 
       </ModeContainer>
     </Background>
   )
