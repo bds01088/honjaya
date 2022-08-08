@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 import logoImg from '../assets/logo.png'
 import React, { Component } from 'react'
-import { MdHelpOutline } from 'react-icons/md'
+import { MdLogout, MdVideocam, MdVideocamOff, MdCheckCircleOutline, MdOutlineHighlightOff } from 'react-icons/md'
 import timerImg from '../assets/timer.png'
 import { HashLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import Webcam from 'react-webcam'
+
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -34,11 +36,37 @@ const Logo = styled.img.attrs({ src:`${logoImg}` })`
   margin: 0 2rem;
 `
 
-const Helper = styled(MdHelpOutline)`
+const LeaveBox = styled.div`
+  position: relative;
+  margin-bottom: 1rem;
+
+  &:hover .leaveTip {
+    visibility: visible;
+  }
+`
+
+
+const Leave = styled(MdLogout)`
   height: 100%;
-  width: 2.5rem;
+  width: 2.3rem;
   margin: 0 2rem;
   color: #333333;
+`
+
+const LeaveText = styled.p`
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Jua;
+  opacity: 80%;
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  left: 50%;
+  margin-left: -2rem;
 `
 
 const SpinnerBox = styled.div`
@@ -98,13 +126,17 @@ const CamGuideBox = styled.div`
   width: 90%;
   height: 70%;
   margin-bottom: 2rem;
+
+  @media (max-height: 620px){
+    margin: 0;
+  }
 `
 
 const CamBox = styled.div`
-  /* border: 3px solid black; */
   width: 49%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -117,12 +149,15 @@ const CamBox = styled.div`
   }
 `
 
-const CamContainer = styled.div`
-  width: 27rem;
-  height: 27rem;
+const CamContainer = styled(Webcam)`
+  width: 100%;
+  height: 100%;
   margin: 0 2rem;
-  background-color: #B5EAEA;
+  background-color: none;
   border-radius: 50%;
+  border: 1rem solid #B5EAEA;
+  object-fit: cover;
+  z-index: 1;
 
   @media (max-width: 960px){
     height: 350px;
@@ -135,8 +170,36 @@ const CamContainer = styled.div`
   }
 `
 
+const CamOffContainer = styled.div`
+  width: 25rem;
+  height: 25rem;
+  margin: 0 2rem;
+  background-color: #CCF3EE;
+  border-radius: 50%;
+  border: 1rem solid #B5EAEA;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 960px){
+    height: 350px;
+    width: 350px;
+  }
+
+  @media (max-height: 620px){
+    height: 350px;
+    width: 350px;
+  }
+`
+
+const LogoImg = styled.img.attrs({ src:`${logoImg}` })`
+  position: absolute;
+  width: 80%;
+  margin-bottom: 1.5rem;
+`
+
 const GuideBox = styled.div`
-  /* border: 3px solid black; */
   width: 49%;
   height: 100%;
   display: flex;
@@ -154,9 +217,12 @@ const GuideBox = styled.div`
 const GuideContainer = styled.div`
   width: 70%;
   height: 93%;
-  margin: 0 2rem;
+  margin: 0 2rem 1rem 2rem;
   background-color: #B5EAEA;
   border-radius: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 
   @media (max-width: 960px){
     width: 300px;
@@ -166,7 +232,60 @@ const GuideContainer = styled.div`
     height: 370px;
   }
 `
+const CheckIcon = styled(MdCheckCircleOutline)`
+  text-align: center;
+  margin-right: 0.5rem;
+  color: green;
+`
 
+const BanIcon = styled(MdOutlineHighlightOff)`
+  text-align: center;
+  margin-right: 0.5rem;
+  color: #FF0000;
+`
+
+const GuideHeader = styled.div`
+  padding: 1rem;
+  text-align: center;
+  font-size: 2rem;
+  font-family: Jua;
+  color: #333333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px ridge  #333333;
+
+  @media (max-width: 960px){
+    font-size: 1.5rem;
+  }
+
+`
+
+const GuideText = styled.div`
+  padding: 1rem 2.5rem;
+  font-size: 1.5rem;
+  font-family: Jua;
+  color: #333333;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 960px){
+    font-size: 1rem;
+    padding: 0.8rem 2.5rem;
+  }
+`
+
+const CamOn = styled(MdVideocam)`
+  font-size: 2.5rem;
+  color: #333333;
+  margin-top: 1.5rem;
+`
+
+const CamOff = styled(MdVideocamOff)`
+  font-size: 2.5rem;
+  color: #333333;
+  margin-top: 1.5rem;
+`
 
 class Waiting extends Component {
   constructor(props) {
@@ -179,7 +298,9 @@ class Waiting extends Component {
       // 3분의 시간제한
       timeLimit: 0,
       minute: 0,
-      sec: 0
+      sec: 0,
+
+      videoSet: true,
     }
 
     this.intervalRef = React.createRef();
@@ -189,7 +310,7 @@ class Waiting extends Component {
     this.getUuid()
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
-      if (this.state.timeLimit > 0) {
+      if (this.state.timeLimit >= 0) {
         this.setState((prevState) => ({
           timeLimit: prevState.timeLimit+1,
           minute: parseInt((prevState.timeLimit+1)/60),
@@ -216,6 +337,12 @@ class Waiting extends Component {
     this.setState({ timeLimit: 0 })
   }
 
+
+  videoOnOff = () => {
+    const val = !this.state.videoSet
+    this.setState({ videoSet: val })
+  }
+
   getUuid() {
     console.log("uuid 요청보냄")
     axios.post(
@@ -240,19 +367,25 @@ class Waiting extends Component {
       )
   }
 
+
   render() {
+
     return (
       <Background>
         <Header>
           <Logo/>
-          <Helper/>
+          <LeaveBox>
+            <Leave />
+            <LeaveText className="leaveTip">나가기</LeaveText>
+          </LeaveBox>
         </Header>
+
         { this.state.uuid === undefined ? 
         <Background>
           <SpinnerBox>
             <TimerBox>
               <TimerImg/>
-              <Timer onClick={this.stopTimer}>
+              <Timer>
                 {this.state.minute}:{this.state.sec < 10 ? 0: null}
                 {this.state.sec}
               </Timer>
@@ -266,17 +399,27 @@ class Waiting extends Component {
           
           <CamGuideBox>
             <CamBox>
-              <CamContainer>
-
-              </CamContainer>
+              <CamOffContainer>
+                <LogoImg/>
+                {this.state.videoSet ? 
+                  <CamContainer /> : null
+                }
+              </CamOffContainer>
+              { this.state.videoSet ? <CamOn onClick={this.videoOnOff}/> : <CamOff onClick={this.videoOnOff}/> }
             </CamBox>
             <GuideBox>
               <GuideContainer>
+                <GuideHeader>이것만은 지켜주세요 !</GuideHeader>
+                <GuideText><CheckIcon/>서로를 존중해요</GuideText>
+                <GuideText><CheckIcon/>다른 사람의 이야기를 경청해요</GuideText>
+                <GuideText><CheckIcon/>본인의 역할에 집중해요</GuideText>
+                <GuideText><BanIcon/>과도한 요구는 자제해요</GuideText>
+                <GuideText><BanIcon/>욕설 및 비속어는 금지해요</GuideText>
+                <GuideText><BanIcon/>성적인 콘텐츠 및 행위를 금지해요</GuideText>
               </GuideContainer>
             </GuideBox>
           </CamGuideBox>
-        </Background>
-         : <div>SSAFY</div>}
+        </Background> : null }
       </Background>
     )
   }
