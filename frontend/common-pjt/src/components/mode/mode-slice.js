@@ -12,7 +12,6 @@ const modeSlice = createSlice({
     initialState,
     reducers: {
         setUserGender: (state, action) => {
-            console.log("setUserGender",action.payload)
             state.userGender = action.payload
         },
         setTotal: (state, action) => {
