@@ -10,8 +10,8 @@ import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
 import { MdHelpOutline } from 'react-icons/md'
 
-const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
-// const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
+// const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
@@ -149,6 +149,12 @@ class Meeting extends Component {
       timeLimit: 60 * 10,
       minute: 10,
       sec: 0,
+
+      //랜덤주제
+      randomTopic: 'aaa',
+
+      //이건 flag 역할인가
+      check: false
     }
 
     // openVidu
@@ -162,6 +168,9 @@ class Meeting extends Component {
 
     // 타이머 설정
     this.intervalRef = React.createRef()
+    
+    // 랜덤 주제 설정
+    this.pickTopic = this.pickTopic.bind(this)
   }
 
   componentDidMount() {
@@ -184,7 +193,7 @@ class Meeting extends Component {
   }
 
   componentWillUnmount() {
-    // openVidu
+    //openVidu
     window.removeEventListener('beforeunload', this.onbeforeunload)
 
     // unmount 될때, 스톱워치 종료
@@ -203,7 +212,9 @@ class Meeting extends Component {
   }
 
   onbeforeunload(event) {
+    
     this.leaveSession()
+
   }
 
   handleChangeSessionId(e) {
@@ -278,6 +289,14 @@ class Meeting extends Component {
           console.warn(exception)
         })
 
+        //랜덤 주제에서 보낸 시그널을 들어보자
+        mySession.on('signal:randomTopic', (event) => {
+          this.setState({randomTopic: event.data})
+          
+          console.log(event)
+          console.log(event.data)
+        }) 
+        
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -390,6 +409,27 @@ class Meeting extends Component {
       console.error(e)
     }
   }
+ //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
+  //랜덤주제Pick
+  async pickTopic() {
+      await this.setState({
+        randomTopic: `바뀌긴 바뀜?`
+      })
+      this.state.session
+        .signal({
+          data: `${this.state.randomTopic}`,
+          to: [],
+          type: 'randomTopic'
+        })
+        .then(() => {
+          this.setState({check: false})
+        })
+        .catch((error) => {})
+
+  }
+  // pickTopic() {
+    //   console.log(this.state.randomTopic)
+        
 
   render() {
     const mySessionId = this.state.mySessionId
@@ -472,6 +512,8 @@ class Meeting extends Component {
                   onClick={this.leaveSession}
                   value="나가기"
                 />
+                {this.state.randomTopic}
+                <button onClick={this.pickTopic}>주제변경</button>
               </Header>
 
               {/* mainStreamMnager가 있다면 */}
