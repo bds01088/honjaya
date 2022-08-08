@@ -112,7 +112,7 @@ const ModeChoice = ({ data, setData }) => {
       </LabelDiv>
 
       <LabelDiv>
-        <ModeTitle>지시자로 참여하기</ModeTitle>
+        <ModeTitle>아바타로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
@@ -121,16 +121,16 @@ const ModeChoice = ({ data, setData }) => {
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
-            지시자로 참여해서
+            아바타로 참여해서 
           </Explain>
           <Explain>
-          아바타에게 지시를 내려보세요. 
+            색다른 경험을 해보세요.
           </Explain>
         </Label>
       </LabelDiv>
     
       <LabelDiv>
-        <ModeTitle>아바타로 참여하기</ModeTitle>
+        <ModeTitle>지시자로 참여하기</ModeTitle>
         <Label>
           <Input
             type="radio"
@@ -139,10 +139,10 @@ const ModeChoice = ({ data, setData }) => {
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
-            아바타로 참여해서 
+            지시자로 참여해서 
           </Explain>
           <Explain>
-          색다른 경험을 해보세요. 
+            아바타에게 지시를 내려보세요. 
           </Explain>
         </Label>
       </LabelDiv>
