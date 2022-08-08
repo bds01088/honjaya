@@ -99,6 +99,7 @@ const Button = styled.button`
   padding: 0.5rem 2rem;
   margin: 1rem 0;
   background: #ff728e;
+  cursor: pointer;
 
   &:disabled {
     background: #8a3849;
@@ -111,6 +112,8 @@ const Button = styled.button`
     background: #ff728e;
   } */
 `
+
+
 
 const Pledge = () => {
   // 동의 체크 여부 판별
