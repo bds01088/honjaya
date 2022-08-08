@@ -194,7 +194,6 @@ class Waiting extends Component {
 
   componentDidMount() {
     const { mode } = this.props
-    console.log("???",mode)
     const {userGender} = mode.userGender
     const {total} = mode.total
     const {oppositeGender} = mode.oppositeGender
@@ -202,7 +201,6 @@ class Waiting extends Component {
     const data = {
       userGender, total, oppositeGender, roleCode
     }
-    console.log("제발되라", data)
     this.getUuid(data)
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
