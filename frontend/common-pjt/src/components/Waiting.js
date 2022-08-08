@@ -173,8 +173,8 @@ class Waiting extends Component {
 
     this.state = {
       // 3분의 시간제한
-      timeLimit: 180,
-      minute: 3,
+      timeLimit: 0,
+      minute: 0,
       sec: 0
     }
 
@@ -186,9 +186,9 @@ class Waiting extends Component {
       // timeLimit이 남은 경우, 카운팅
       if (this.state.timeLimit > 0) {
         this.setState((prevState) => ({
-          timeLimit: prevState.timeLimit - 1,
-          minute: parseInt((prevState.timeLimit-1)/60),
-          sec: (prevState.timeLimit-1)%60
+          timeLimit: prevState.timeLimit+1,
+          minute: parseInt((prevState.timeLimit+1)/60),
+          sec: (prevState.timeLimit+1)%60
         }));
       } else {
         // 스톱워치 종료
@@ -208,7 +208,7 @@ class Waiting extends Component {
   }
 
   resetTimer = () => {
-    this.setState({ timeLimit: 180 })
+    this.setState({ timeLimit: 0 })
   }
 
 

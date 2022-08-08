@@ -79,14 +79,16 @@ const Explain = styled.div`
   /* outline: 2px solid; */
 `
 
-const ModeChoice = () => {
+const ModeChoice = ({ data, setData }) => {
 
-  const [Role, setRole] = useState('Solo')
+  const [Role, setRole] = useState("1")
   const handleClickRadioButton = (e) => {
     setRole(e.target.value)
+    setData({
+      ...data, roleCode: parseInt(e.target.value)
+    })
   }
 
-  console.log(Role)
   return (
     <ModeSelectBox className="box">
       <RoleSelectTitle>역할선택</RoleSelectTitle>
@@ -96,8 +98,8 @@ const ModeChoice = () => {
         <Label>
           <Input
             type="radio"
-            value="Solo"
-            checked={Role === 'Solo'}
+            value="1"
+            checked={Role === "1"}
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
@@ -114,8 +116,8 @@ const ModeChoice = () => {
         <Label>
           <Input
             type="radio"
-            value="Commander"
-            checked={Role === 'Commander'}
+            value="2"
+            checked={Role === '2'}
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
@@ -132,8 +134,8 @@ const ModeChoice = () => {
         <Label>
           <Input
             type="radio"
-            value="Avatar"
-            checked={Role === 'Avatar'}
+            value="3"
+            checked={Role === '3'}
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
@@ -150,8 +152,8 @@ const ModeChoice = () => {
         <Label>
           <Input
             type="radio"
-            value="Random"
-            checked={Role === 'Random'}
+            value="4"
+            checked={Role === '4'}
             onChange={handleClickRadioButton}/>
           <Mode src={TempImg}></Mode>
           <Explain>
