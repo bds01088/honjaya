@@ -55,8 +55,9 @@ public class MeetingController {
 		String sessionId = ServletUtil.getSession().getId(); // 테스트에서는 세션 아이디, 나중에는 액세스 토큰에서 유저 아이디를 추출함
 		logger.info(">> Cancel request. session id : {}", sessionId);
 
-		final MeetingReq user = new MeetingReq(sessionId, 0, "m", 0, false, 0);
-		meetingService.cancelChatRoom(user);
+//		final MeetingReq user = new MeetingReq(sessionId, 0, "m", 0, false, 0);
+		meetingReq.setSessionId(sessionId);
+		meetingService.cancelChatRoom(meetingReq);
 
 		return ResponseEntity.ok().build();
 	}
