@@ -15,6 +15,7 @@ import signupReducer from '../components/auth/signup/signup-slice'
 import loginReducer from '../components/auth/login/login-slice'
 import hashtagReducer from '../components/main/hashtag/hashtag-slice'
 import rateReducer from '../components/main/hashtag/rate-slice'
+import modeReducer from '../components/mode/mode-slice'
 //떵크 관련
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
@@ -28,7 +29,8 @@ const rootReducers = combineReducers({
   signup: signupReducer,
   login: loginReducer,
   hashtag: hashtagReducer,
-  rate: rateReducer
+  rate: rateReducer,
+  mode: modeReducer
 })
 
 

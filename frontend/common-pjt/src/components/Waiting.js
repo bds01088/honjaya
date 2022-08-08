@@ -6,6 +6,7 @@ import timerImg from '../assets/timer.png'
 import { HashLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import {connect} from 'react-redux'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -176,6 +177,12 @@ class Waiting extends Component {
       uuid: undefined,
       nowmatching: true,
 
+      // userGender: undefined,
+      // total : undefined,
+      // oppositeGender: false,
+      // roleCode: undefined,
+
+
       // 3분의 시간제한
       timeLimit: 0,
       minute: 0,
@@ -186,7 +193,17 @@ class Waiting extends Component {
   }
 
   componentDidMount() {
-    this.getUuid()
+    const { mode } = this.props
+    console.log("???",mode)
+    const {userGender} = mode.userGender
+    const {total} = mode.total
+    const {oppositeGender} = mode.oppositeGender
+    const {roleCode} = mode.roleCode
+    const data = {
+      userGender, total, oppositeGender, roleCode
+    }
+    console.log("제발되라", data)
+    this.getUuid(data)
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
       if (this.state.timeLimit > 0) {
@@ -216,15 +233,15 @@ class Waiting extends Component {
     this.setState({ timeLimit: 0 })
   }
 
-  getUuid() {
+  getUuid(data) {
     console.log("uuid 요청보냄")
     axios.post(
         'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
         {
-          "userGender": "m",
-          "total": 2,
-          "oppositeGender": "false",
-          "roleCode": 1
+          "userGender": data.userGender,
+          "total": data.total,
+          "oppositeGender": data.oppositeGender,
+          "roleCode": data.roleCode
         }
       ).then(res => {
         console.log("uuid 받아옴")
@@ -282,4 +299,8 @@ class Waiting extends Component {
   }
 }
 
-export default Waiting
+const mapStateToProps = (state) => ({
+  mode: state.mode,
+})
+
+export default connect(mapStateToProps)(Waiting)
