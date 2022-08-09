@@ -482,6 +482,7 @@ class Meeting extends Component {
     }
   }
 
+
   async pickTopic() {
     try {
       await this.setState({
@@ -493,14 +494,15 @@ class Meeting extends Component {
         to: [],
         type: 'randomTopic',
       })
-
-      await myAxios.put('/honjaya/points', {
+        
+      const res = await myAxios.put('/honjaya/points',{
         point: 300,
       })
-      console.log('로드유저전', this.state.myUserPoint)
+      console.log("포인트수정",res)
 
-      await this.props.doLoadUser()
-      console.log('로드유저후', this.state.myUserPoint)
+      await this.setState({
+        myUserPoint: res.data.point
+      })
     } catch (err) {
       console.log('error')
     }
