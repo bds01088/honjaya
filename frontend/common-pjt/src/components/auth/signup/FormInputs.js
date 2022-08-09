@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
 import { checkNickname, checkEmail, signup } from './signup-slice'
@@ -285,7 +285,6 @@ const FormInputs = () => {
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
-      console.log(res.data)
       if (res.data.trueOrFalse) { return setisDuplicateNicknameChecked(false) 
       } else return setisDuplicateNicknameChecked(true)
     })
@@ -302,7 +301,6 @@ const FormInputs = () => {
     .unwrap()
     .then((res) => {
       //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜
-      console.log(res.data.isDuplicated)
       if (res.data.isDuplicated) { return setisDuplicateEmailChecked(false) 
       } else return setisDuplicateEmailChecked(true)
     })
@@ -423,9 +421,6 @@ const FormInputs = () => {
           setConfirmNickname(true)
         }}>중복확인</StyledBtn>
       </CheckDiv>
-      {console.log('1 defaultNickname', defaultNickname)}
-      {console.log('2 nicknameValid', nicknameValid)}
-      {console.log('3 isDuplicateNicknameChecked', isDuplicateNicknameChecked)}
       { defaultNickname && !nicknameValid ? <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText> : null }
       { defaultNickname && nicknameValid && !isDuplicateNicknameChecked && !confirmNickname ? <ErrorText>닉네임 중복확인이 필요합니다</ErrorText> : null }
       { defaultNickname && nicknameValid && !isDuplicateNicknameChecked && confirmNickname ? <ErrorText>사용불가능한 닉네임입니다</ErrorText> : null }
@@ -474,7 +469,6 @@ const FormInputs = () => {
         placeholder="전화번호 ex)010-0000-0000"
         onChange={checkPhone}
         onBlur={(e) => {
-          console.log(e.target.value);
           this.onChange(e)
         }}
         value={userPhone}
