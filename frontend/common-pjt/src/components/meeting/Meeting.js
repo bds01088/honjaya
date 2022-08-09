@@ -425,26 +425,8 @@ class Meeting extends Component {
       console.error(e)
     }
   }
- //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
-  //랜덤주제Pick
-  // async pickTopic() {
-  //     await this.setState({
-  //       randomTopic: `바뀌긴 바뀜?`
-  //     })
-  //     this.state.session
-  //       .signal({
-  //         data: `${this.state.randomTopic}`,
-  //         to: [],
-  //         type: 'randomTopic'
-  //       })
-  //       .then(() => {
-  //       })
-  //       .catch((error) => {})
-  // }
-
-  // }
-  // pickTopic() {
-  //     console.log(this.state.randomTopic)
+  //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
+  //랜덤 주제 픽
    
 
     async pickTopic() {
@@ -707,11 +689,9 @@ class Meeting extends Component {
     login: state.login,
 
   });
-// slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
+// slice에 있는 actions(방찾기)을 사용하고 싶을 때
   const mapDispatchToProps = (dispatch) => {
     return {
-      // 빠른시작
-      // quickStart는 import { quickStart } from './homeSlice'; 구문을 이용해서 action 가져온 것
       doLoadUser: () => dispatch(loadUser())
 
     };
