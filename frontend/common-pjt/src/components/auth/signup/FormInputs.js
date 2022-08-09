@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 // import { toast } from 'react-toastify'
 import { checkNickname, checkEmail, signup } from './signup-slice'
@@ -148,6 +148,8 @@ const FormInputs = () => {
   const [defaultNickname, setDefaultNickname] = useState(false)
   const [defaultName, setDefaultName] = useState(false)
 
+  const [confirmNickname, setConfirmNickname] = useState(false)
+
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -283,8 +285,8 @@ const FormInputs = () => {
     dispatch(checkNickname(userNickname))
     .unwrap()
     .then((res) => {
-      if (res.data.trueOrFalse === false) { return setisDuplicateNicknameChecked(true) 
-      } else return setisDuplicateNicknameChecked(false)
+      if (res.data.trueOrFalse) { return setisDuplicateNicknameChecked(false) 
+      } else return setisDuplicateNicknameChecked(true)
     })
     .catch((err) => {
       if (err.status === 500) {
@@ -299,7 +301,8 @@ const FormInputs = () => {
     .unwrap()
     .then((res) => {
       //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜
-      res.data.duplicated ? setisDuplicateEmailChecked(false) : setisDuplicateEmailChecked(true)
+      if (res.data.isDuplicated) { return setisDuplicateEmailChecked(false) 
+      } else return setisDuplicateEmailChecked(true)
     })
     .catch((err) => {
       if (err.status === 500) {
@@ -370,7 +373,7 @@ const FormInputs = () => {
         <StyledBtn type="button" onClick={openEmailModal} disabled={checkedEmail}>인증하기</StyledBtn>
       </CheckDiv>
       { defaultEmail && !emailValid ? <ErrorText className="errorText">유효하지 않은 이메일입니다.</ErrorText> : null }
-      { defaultEmail && isDuplicateEmailChecked && emailValid ? <ErrorText className="errorText">이미 존재하는 이메일입니다</ErrorText> : null }
+      { defaultEmail && !isDuplicateEmailChecked && emailValid ? <ErrorText className="errorText">이미 존재하는 이메일입니다</ErrorText> : null }
       { emailModal ? <EmailCheck closeEmailModal={closeEmailModal} setCheckedEmail={setCheckedEmail} code={code} /> : null }
       { checkedEmail ? <SuccessText>인증된 이메일입니다</SuccessText> : null }
 
@@ -404,6 +407,7 @@ const FormInputs = () => {
           onChange={(e) => {
             setUserNickname(e.target.value) 
             if(isDuplicateNicknameChecked) { setisDuplicateNicknameChecked(false) }
+            if(confirmNickname) { setConfirmNickname(false) }
           }}
           value={userNickname}
           onBlur={(e) => {
@@ -414,11 +418,13 @@ const FormInputs = () => {
           if(nicknameValid && defaultNickname){
             isValidNickname(e)
           }
+          setConfirmNickname(true)
         }}>중복확인</StyledBtn>
       </CheckDiv>
-      { defaultNickname && !nicknameValid ? <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText> : 
-        ( defaultNickname && nicknameValid && !isDuplicateNicknameChecked ? <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText> : null )}
-      { isDuplicateNicknameChecked ? <SuccessText>사용 가능한 닉네임입니다.</SuccessText> : null}
+      { defaultNickname && !nicknameValid ? <ErrorText>닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요</ErrorText> : null }
+      { defaultNickname && nicknameValid && !isDuplicateNicknameChecked && !confirmNickname ? <ErrorText>닉네임 중복확인이 필요합니다</ErrorText> : null }
+      { defaultNickname && nicknameValid && !isDuplicateNicknameChecked && confirmNickname ? <ErrorText>사용불가능한 닉네임입니다</ErrorText> : null }
+      { isDuplicateNicknameChecked ? <SuccessText>사용 가능한 닉네임입니다</SuccessText> : null}
 
       <StyledInput
         autoComplete="userName"
@@ -463,7 +469,6 @@ const FormInputs = () => {
         placeholder="전화번호 ex)010-0000-0000"
         onChange={checkPhone}
         onBlur={(e) => {
-          console.log(e.target.value);
           this.onChange(e)
         }}
         value={userPhone}
