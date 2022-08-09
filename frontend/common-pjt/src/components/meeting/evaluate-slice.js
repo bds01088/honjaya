@@ -7,7 +7,7 @@ export const usePoint = createAsyncThunk(
   'USE_POINT',
   async ( pointData, {rejectWithValue}) => {
     try {
-      console.log("포인트 감소됨")
+      console.log("포인트 변경됨")
       const res = await axios.put(
         '/honjaya/points',
         {

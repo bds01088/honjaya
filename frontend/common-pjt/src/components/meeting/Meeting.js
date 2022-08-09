@@ -427,39 +427,55 @@ class Meeting extends Component {
   }
  //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
   //랜덤주제Pick
-  async pickTopic() {
-      await this.setState({
-        randomTopic: `바뀌긴 바뀜?`
-      })
-      this.state.session
+  // async pickTopic() {
+  //     await this.setState({
+  //       randomTopic: `바뀌긴 바뀜?`
+  //     })
+  //     this.state.session
+  //       .signal({
+  //         data: `${this.state.randomTopic}`,
+  //         to: [],
+  //         type: 'randomTopic'
+  //       })
+  //       .then(() => {
+  //       })
+  //       .catch((error) => {})
+  // }
+
+  // }
+  // pickTopic() {
+  //     console.log(this.state.randomTopic)
+   
+
+    async pickTopic() {
+      try{
+        await this.setState({
+          randomTopic: `바뀌긴 바뀜?`
+        })
+
+        this.state.session
         .signal({
           data: `${this.state.randomTopic}`,
           to: [],
           type: 'randomTopic'
         })
-        .then(() => {
+        
+        await myAxios.put('/honjaya/points',{
+          point: 300,
         })
-        .catch((error) => {})
-  }
+        console.log("로드유저전", this.state.myUserPoint)
+        
 
+        await this.props.doLoadUser()
+        console.log("로드유저후", this.state.myUserPoint)
+
+      } catch(err) {
+        console.log("error")
+      }
+    }
+        
   // }
-  // pickTopic() {
-    //   console.log(this.state.randomTopic)
-    // async pickTopic() {
-    //   let mySession = this.state.session
-    //   await this.setState({
-    //     randomTopic: `바뀌긴 바뀜?`
-    //   })
-    //   myAxios
-    //     .put('')
-    //     .then((res) => {
-    //       mySession.signal({
-    //         data: `${this.state.randomTopic}`,
-    //         to: [],
-    //         type: 'randomTopic'
-    //       })
-    //     })
-    // }
+
 
         
     getToken() {
