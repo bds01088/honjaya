@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit'
 import axios from '../../../api/http'
 import { deleteToken, saveToken, getToken } from '../../../api/JWT'
 
@@ -52,7 +52,9 @@ export const logout = createAsyncThunk(
 const initialState = {
   user: {},
   loading: false,
-  error: null
+  error: null,
+  
+  updateUserPoint: 0
 }
 
 const loginSlice = createSlice({
@@ -61,6 +63,14 @@ const loginSlice = createSlice({
   reducers: {
     resetUser: (state) => {
       state.user = {}
+    },
+    savePoint: (state ) => {
+    
+      state.updateUserPoint = state.user.userPoint
+      //data unwrap 하고 싶을때 current 리덕스 툴킷에서 가져다 써야함
+      // console.log(current(state))
+      //왜 어쩔땐 action.payload가 담기고 어쩔댄 안담기지..?
+
     }
 
   },
@@ -82,5 +92,5 @@ const loginSlice = createSlice({
 
 
 
-export const { resetUser } = loginSlice.actions 
+export const { resetUser,savePoint } = loginSlice.actions 
 export default loginSlice.reducer

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from './login-slice'
+import { login,savePoint } from './login-slice'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -68,6 +68,7 @@ const LoginFormInputs = () => {
     .then(() => {
       // console.log(res) 이렇게 쓸려면 ()안에 인자로 담으면됨
       navigate('/main')
+
     })
     .catch((err) => {
       // console.log("error 도착")
