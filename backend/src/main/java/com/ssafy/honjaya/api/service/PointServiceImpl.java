@@ -21,7 +21,7 @@ public class PointServiceImpl implements PointService {
 	@Override
 	public int updatePoint(PointReq pointReq) {
 		User user = userRepository.findById(pointReq.getUserNo()).get();
-		user.setUserPoint(pointReq.getPoint());
+		user.setUserPoint(user.getUserPoint() + pointReq.getPoint());
 		return userRepository.save(user).getUserPoint();
 	}
 	

@@ -45,7 +45,7 @@ public class MeetingServiceImpl implements MeetingService {
 	
 	
 	private Map<String, Map<MeetingReq, DeferredResult<MeetingRes>>> whereByUserNo;
-	private Map<String, Integer> totalByUserNo; // 0 or 1
+	private Map<String, MeetingReq> userNoMeetingReq; // 0 or 1
 	// 나중에 String -> Integer로 바꿔야 함
 	
 
@@ -60,7 +60,7 @@ public class MeetingServiceImpl implements MeetingService {
 		this.waitingCommander = new ArrayList<>();
 		this.waitingPair = new ArrayList<>();
 		this.whereByUserNo = new HashMap<>();
-		this.totalByUserNo = new HashMap<>();
+		this.userNoMeetingReq = new HashMap<>();
 		for (int i = 0; i < 2; i++) {
 			this.waitingUsers.add(new LinkedHashMap<>());
 			this.waitingUsersOfCommanders.add(new LinkedHashMap<>());
@@ -90,7 +90,7 @@ public class MeetingServiceImpl implements MeetingService {
 					case 1:
 						waitingUsers.get(i).put(meetingReq, deferredResult);
 						whereByUserNo.put(meetingReq.getSessionId(), waitingUsers.get(i));
-						totalByUserNo.put(meetingReq.getSessionId(), i);
+						userNoMeetingReq.put(meetingReq.getSessionId(), meetingReq);
 						break;
 					case 2: // 아바타
 						if (waitingCommander.get(i).size() > 0) { // 기다리고 있는 지시자가 있을 경우 꺼내옴
@@ -98,15 +98,17 @@ public class MeetingServiceImpl implements MeetingService {
 							DeferredResult<MeetingRes> commanderResult = waitingCommander.get(i).remove(commanderReq);
 							waitingPair.get(i).put(meetingReq, commanderReq);
 							waitingPair.get(i).put(commanderReq, meetingReq);
+							
 							waitingUsers.get(i).put(meetingReq, deferredResult); // 아바타는 유저 대기 맵에 저장
 							whereByUserNo.put(meetingReq.getSessionId(), waitingUsers.get(i));
+							
 							waitingUsersOfCommanders.get(i).put(commanderReq, commanderResult); // 지시자는 지시자용 대기 맵에 저장
 							whereByUserNo.put(commanderReq.getSessionId(), waitingUsersOfCommanders.get(i));
 						} else {
 							waitingAvatar.get(i).put(meetingReq, deferredResult);
 							whereByUserNo.put(meetingReq.getSessionId(), waitingAvatar.get(i));
 						}
-						totalByUserNo.put(meetingReq.getSessionId(), i);
+						userNoMeetingReq.put(meetingReq.getSessionId(), meetingReq);
 						break;
 					case 3: // 지시자
 						if (waitingAvatar.get(i).size() > 0) { // 기다리고 있는 아바타가 있을 경우 꺼내옴
@@ -114,15 +116,17 @@ public class MeetingServiceImpl implements MeetingService {
 							DeferredResult<MeetingRes> avatarResult = waitingAvatar.get(i).remove(avatarReq);
 							waitingPair.get(i).put(meetingReq, avatarReq);
 							waitingPair.get(i).put(avatarReq, meetingReq);
+							
 							waitingUsers.get(i).put(avatarReq, avatarResult); // 아바타는 유저 대기 맵에 저장
 							whereByUserNo.put(avatarReq.getSessionId(), waitingUsers.get(i));
+							
 							waitingUsersOfCommanders.get(i).put(meetingReq, deferredResult); // 지시자는 지시자용 대기 맵에 저장
 							whereByUserNo.put(meetingReq.getSessionId(), waitingUsersOfCommanders.get(i));
 						} else {
 							waitingCommander.get(i).put(meetingReq, deferredResult);
 							whereByUserNo.put(meetingReq.getSessionId(), waitingCommander.get(i));
 						}
-						totalByUserNo.put(meetingReq.getSessionId(), i);
+						userNoMeetingReq.put(meetingReq.getSessionId(), meetingReq);
 						break;
 					default:
 						logger.error("Wrong Role Code!!!");
@@ -144,13 +148,15 @@ public class MeetingServiceImpl implements MeetingService {
 		try {
 			System.out.println("cancelChatRoom() 호출! before lock");
 			lock.writeLock().lock();
-			System.out.println("cancelChatRoom() 호출! after lock");
-			System.out.println("total: " + meetingReq.getTotal() + " / roleCode: " + meetingReq.getRoleCode());
+			if (!userNoMeetingReq.containsKey(meetingReq.getSessionId())) {
+				return;
+			}
+			meetingReq = userNoMeetingReq.get(meetingReq.getSessionId());
 			DeferredResult<MeetingRes> result = cancelAndMakeResult(meetingReq);
 			setJoinResult(result, new MeetingRes(null, meetingReq.getSessionId(), 0, 0, 0, CANCEL, null));
 		} finally {
 			lock.writeLock().unlock();
-			System.out.println("cancel finished");
+			System.out.println("cancelChatRoom() 호출! after lock");
 		}
 	}
 
@@ -159,11 +165,15 @@ public class MeetingServiceImpl implements MeetingService {
 		try {
 			System.out.println("timeout() 호출! before lock");
 			lock.writeLock().lock();
-			System.out.println("timeout() 호출! after lock");
+			if (!userNoMeetingReq.containsKey(meetingReq.getSessionId())) {
+				return;
+			}
+			meetingReq = userNoMeetingReq.get(meetingReq.getSessionId());
 			DeferredResult<MeetingRes> result = cancelAndMakeResult(meetingReq);
 			setJoinResult(result, new MeetingRes(null, meetingReq.getSessionId(), 0, 0, 0, TIMEOUT, null));
 		} finally {
 			lock.writeLock().unlock();
+			System.out.println("timeout() 호출! after lock");
 		}
 	}
 
@@ -203,7 +213,7 @@ public class MeetingServiceImpl implements MeetingService {
 						res.setResult(SUCCESS);
 						
 						whereByUserNo.remove(reqs[j].getSessionId());
-						totalByUserNo.remove(reqs[j].getSessionId());
+						userNoMeetingReq.remove(reqs[j].getSessionId());
 						
 						waitingUsers.get(i).remove(reqs[j]).setResult(res);
 						
@@ -216,7 +226,7 @@ public class MeetingServiceImpl implements MeetingService {
 							commanderRes.setResult(SUCCESS);
 							
 							whereByUserNo.remove(commanderReq.getSessionId());
-							totalByUserNo.remove(commanderReq.getSessionId());
+							userNoMeetingReq.remove(commanderReq.getSessionId());
 							
 							waitingUsersOfCommanders.get(i).remove(commanderReq).setResult(commanderRes);
 						}
@@ -232,51 +242,54 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 	
 	private DeferredResult<MeetingRes> cancelAndMakeResult(MeetingReq meetingReq) {
-		DeferredResult<MeetingRes> result = null;
+		DeferredResult<MeetingRes> result;
 		
-		int index = totalByUserNo.get(meetingReq.getSessionId());
+		int index = meetingReq.getTotal() / 2 - 1;
 		
 		Map<MeetingReq, DeferredResult<MeetingRes>> where = whereByUserNo.get(meetingReq.getSessionId());
 		
 		result = where.remove(meetingReq);
 		whereByUserNo.remove(meetingReq.getSessionId());
-		totalByUserNo.remove(meetingReq.getSessionId());
+		userNoMeetingReq.remove(meetingReq.getSessionId());
 		
 		if (waitingPair.get(index).containsKey(meetingReq)) { // Cancel 할 때 이미 페어가 정해져 있었을 경우
 			MeetingReq pairReq = waitingPair.get(index).remove(meetingReq);
 			waitingPair.get(index).remove(pairReq);
+			DeferredResult<MeetingRes> pairResult = whereByUserNo.get(pairReq.getSessionId()).remove(pairReq);
 			
-			if (where == waitingUsersOfCommanders.get(index)) { // Cancel 한 사람이 Commander일 경우, Avatar를 다시 대기열로
+			if (meetingReq.getRoleCode() == 3) { // Cancel 한 사람이 Commander일 경우, Avatar를 다시 대기열로
 				
 				if (waitingCommander.get(index).size() > 0) { // 기다리고 있는 지시자가 있을 경우 꺼내옴
 					MeetingReq commanderReq = waitingCommander.get(index).keySet().iterator().next();
 					DeferredResult<MeetingRes> commanderResult = waitingCommander.get(index).remove(commanderReq);
 					waitingPair.get(index).put(pairReq, commanderReq);
 					waitingPair.get(index).put(commanderReq, pairReq);
-					waitingUsers.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
-					// 아바타는 유저 대기 맵에 저장
+					
+					waitingUsers.get(index).put(pairReq, pairResult); // 아바타는 유저 대기 맵에 저장
 					whereByUserNo.put(pairReq.getSessionId(), waitingUsers.get(index));
+					
 					waitingUsersOfCommanders.get(index).put(commanderReq, commanderResult); // 지시자는 지시자용 대기 맵에 저장
 					whereByUserNo.put(commanderReq.getSessionId(), waitingUsersOfCommanders.get(index));
 				} else {
-					waitingAvatar.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
+					waitingAvatar.get(index).put(pairReq, pairResult);
 					whereByUserNo.put(pairReq.getSessionId(), waitingAvatar.get(index));
 				}
 				
-			} else { // Cancel 한 사람이 Avatar일 경우, Commander를 다시 대기열로
+			} else if (meetingReq.getRoleCode() == 2) { // Cancel 한 사람이 Avatar일 경우, Commander를 다시 대기열로
 				
 				if (waitingAvatar.get(index).size() > 0) { // 기다리고 있는 아바타가 있을 경우 꺼내옴
 					MeetingReq avatarReq = waitingAvatar.get(index).keySet().iterator().next();
 					DeferredResult<MeetingRes> avatarResult = waitingAvatar.get(index).remove(avatarReq);
 					waitingPair.get(index).put(pairReq, avatarReq);
 					waitingPair.get(index).put(avatarReq, pairReq);
+					
 					waitingUsers.get(index).put(avatarReq, avatarResult); // 아바타는 유저 대기 맵에 저장
 					whereByUserNo.put(avatarReq.getSessionId(), waitingUsers.get(index));
-					waitingUsersOfCommanders.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
-					// 지시자는 지시자용 대기 맵에 저장
+					
+					waitingUsersOfCommanders.get(index).put(pairReq, pairResult); // 지시자는 지시자용 대기 맵에 저장
 					whereByUserNo.put(pairReq.getSessionId(), waitingUsersOfCommanders.get(index));
 				} else {
-					waitingCommander.get(index).put(pairReq, whereByUserNo.get(pairReq.getSessionId()).get(pairReq));
+					waitingCommander.get(index).put(pairReq, pairResult);
 					whereByUserNo.put(pairReq.getSessionId(), waitingCommander.get(index));
 				}
 			}
