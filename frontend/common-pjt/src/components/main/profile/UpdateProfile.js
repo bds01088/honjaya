@@ -98,7 +98,7 @@ const RightBox = styled.div`
 `
 
 const GenderSelect = styled.select`
-  width: 78%;
+  width: 75%;
   height: 3rem;
   display: flex;
   border-radius: 0.5rem;
@@ -138,7 +138,7 @@ const StyledInput = styled.input`
   }
 
   &.nickname {
-    width: 50%;
+    width: 55%;
     margin-right: 1.5rem;
   }
 
@@ -207,12 +207,15 @@ const ErrorText = styled.span`
   color: #ff0000;
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  font-family: "Jua";
 `
 const SuccessText = styled.span`
   width: 100%;
   color: #009c87;
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  font-family: "Jua";
+
 `
 
 const UpdateDiv = styled.div`
@@ -236,6 +239,8 @@ const UpdateProfile = () => {
   const nowUserGender = nowUserInfo.userGender
   const nowUserPassword = nowUserInfo.userPassword
 
+
+
   //이름이랑 이메일은 수정불가
   //필드 값 변경
   const [userNickname, setUserNickname] = useState(nowUserNickname)
@@ -255,6 +260,8 @@ const UpdateProfile = () => {
   // 비밀번호 재확인 변수
   const [checkedPwd, setCheckedPwd] = useState(false)
 
+  console.log(userPassword)
+  console.log(checkedPwd)
   // 비밀번호 유효성 검사
   const validatePwd = (e) => {
     var patternEngAtListOne = new RegExp(/[a-zA-Z]+/) // + for at least one
@@ -278,6 +285,7 @@ const UpdateProfile = () => {
     } else return setPwdValid(false)
   }
 
+  
   // 비밀번호 확인
   const checkPassword = (e) => {
     if (
@@ -396,7 +404,7 @@ const UpdateProfile = () => {
         }
       })
   }
-
+  
   // 아래 모든 조건 만족시 수정 버튼 활성화
   let disabled = true
   if (
@@ -468,20 +476,22 @@ const UpdateProfile = () => {
                     확인
                   </StyledBtn>
                 </div>
-              </CheckDiv>
 
               {defaultNickname && !nicknameValid ? (
                 <ErrorText>
                   닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요
                 </ErrorText>
               ) : defaultNickname &&
-                nicknameValid &&
-                !isDuplicateNicknameChecked ? (
+              nicknameValid &&
+              !isDuplicateNicknameChecked ? (
                 <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText>
-              ) : null}
-              {isDuplicateNicknameChecked ? (
+                ) : null}
+              {(nowUserNickname !== userNickname) && isDuplicateNicknameChecked ? (
                 <SuccessText>사용 가능한 닉네임입니다.</SuccessText>
-              ) : null}
+                ) : null}
+
+              
+              </CheckDiv>
 
               <div>
                 <Label>이름(수정불가)</Label>
@@ -570,7 +580,7 @@ const UpdateProfile = () => {
                   type="password"
                   autoComplete="userPassword"
                   placeholder="비밀번호 확인"
-                  onBlur={checkPassword}
+                  onBlur={checkPassword()}
                 ></StyledInput>
                 <div>
                   {pwdValid ? (
