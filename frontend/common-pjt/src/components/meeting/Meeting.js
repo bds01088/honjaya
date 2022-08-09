@@ -3,7 +3,7 @@ import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
 import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import addTimerImg from '../../assets/add-timer.png'
@@ -56,7 +56,9 @@ const TimerBox = styled.div`
   display: flex;
   align-items: center;
   margin-right: 1rem;
+  position: relative;
 `
+
 const Timer = styled.p`
   font-size: 1.6rem;
   font-family: Jua;
@@ -95,7 +97,32 @@ const AddText = styled.span`
   margin-left: -3rem;
 `
 
-// 포인트 및 시간 연장
+const TimerCheckBox = styled.div`
+  position: absolute;
+  top: 110%;
+  left: 18%;
+  display: flex;
+`
+
+const TimerCheckBtn = styled.button`
+  border: 0;
+  border-radius: 0.3rem;
+  font-family: Jua;
+  font-size: 1.1rem;
+  width: 3rem;
+  padding: 0.4rem 0.3rem;
+
+  &.ok {
+    background-color: #b5eaea;
+    margin-right: 0.2rem;
+  }
+
+  &.no {
+    background-color: #ff728e;
+  }
+`
+
+// 포인트
 const LeftBox = styled.div`
   display: flex;
   align-items: center;
@@ -134,10 +161,7 @@ const VideoBox = styled.div`
   height: 50%;
 `
 
-
-
 class Meeting extends Component {
-  
   constructor(props) {
     super(props)
 
@@ -156,12 +180,13 @@ class Meeting extends Component {
       minute: 10,
       sec: 0,
       myUserPoint: 0,
+      showAddTimer: false,
 
       //랜덤주제
       randomTopic: 'default주제',
 
       //이건 flag 역할인가
-      check: false
+      check: false,
     }
 
     // openVidu
@@ -175,19 +200,21 @@ class Meeting extends Component {
 
     // 타이머 설정
     this.intervalRef = React.createRef()
-    
+
     // 랜덤 주제 설정
     this.pickTopic = this.pickTopic.bind(this)
+    this.addTimer = this.addTimer.bind(this)
   }
 
   componentDidMount() {
-    const { login } = this.props;
+    const { login } = this.props
     const { userNickname, userPoint } = login.user
-    console.log("콘솔에 있냐", userNickname)
-    console.log("콘솔에 있냐", userPoint)
+    console.log('콘솔에 있냐', userNickname)
+    console.log('콘솔에 있냐', userPoint)
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
 
+    // 타이머
     this.intervalRef.current = setInterval(() => {
       // timeLimit이 남은 경우, 카운팅
       if (this.state.timeLimit > 0) {
@@ -204,7 +231,7 @@ class Meeting extends Component {
 
     this.setState({
       myUserName: userNickname,
-      myUserPoint: userPoint
+      myUserPoint: userPoint,
     })
   }
 
@@ -222,15 +249,37 @@ class Meeting extends Component {
   }
 
   // 스톱워치 시간 추가 함수
-  addTimer = () => {
-    const plusTime = this.state.timeLimit + 180
-    this.setState({ timeLimit: plusTime })
+  async addTimer() {
+    try {
+      await this.setState({ timeLimit: this.state.timeLimit + 180 })
+      await this.setState({ showAddTimer: false })
+      await this.state.session.signal({
+        data: `${this.state.timeLimit}`,
+        to: [],
+        type: 'addTime'
+      })
+
+      const res = await myAxios.put('/honjaya/points', {
+        point: 100,
+      })
+      console.log("포인트수정", res)
+
+      await this.setState({
+        myUserPoint: res.data.point
+      })
+    } catch(err) {
+      console.log("error")
+    }
+
+  }
+
+  // 스톱워치 시간 모달 함수
+  showSelectTimer = () => {
+    this.setState({ showAddTimer: !this.state.showAddTimer })
   }
 
   onbeforeunload(event) {
-    
     this.leaveSession()
-
   }
 
   handleChangeSessionId(e) {
@@ -307,12 +356,19 @@ class Meeting extends Component {
 
         //랜덤 주제에서 보낸 시그널을 들어보자
         mySession.on('signal:randomTopic', (event) => {
-          this.setState({randomTopic: event.data})
-          
+          this.setState({ randomTopic: event.data })
+
           console.log(event)
           console.log(event.data)
-        }) 
-        
+        })
+
+        // 시간 추가 시그널
+        mySession.on('signal:addTime', (event) => {
+          this.setState({ timeLimit: event.data })
+          
+          console.log('event', event)
+        })
+
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -425,121 +481,112 @@ class Meeting extends Component {
       console.error(e)
     }
   }
+
   //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
   //랜덤 주제 픽
    
 
-    async pickTopic() {
-      try{
-        await this.setState({
-          randomTopic: `바뀌긴 바뀜?`
-        })
 
-        this.state.session
-        .signal({
-          data: `${this.state.randomTopic}`,
-          to: [],
-          type: 'randomTopic'
-        })
+  async pickTopic() {
+    try {
+      await this.setState({
+        randomTopic: `바뀌긴 바뀜?`,
+      })
+
+      this.state.session.signal({
+        data: `${this.state.randomTopic}`,
+        to: [],
+        type: 'randomTopic',
+      })
         
-        const res = await myAxios.put('/honjaya/points',{
-          point: 300,
-        })
-        console.log("포인트수정",res)
-        
+      const res = await myAxios.put('/honjaya/points',{
+        point: 300,
+      })
+      console.log("포인트수정",res)
 
-        
-
-        
-        await this.setState({
-          myUserPoint: res.data.point
-        })
-
-
-      } catch(err) {
-        console.log("error")
-      }
+      await this.setState({
+        myUserPoint: res.data.point
+      })
+    } catch (err) {
+      console.log('error')
     }
-        
-  // }
+  }
 
+  getToken() {
+    return this.createSession(this.state.mySessionId).then((sessionId) =>
+      this.createToken(sessionId),
+    )
+  }
 
-        
-    getToken() {
-      return this.createSession(this.state.mySessionId).then((sessionId) =>
-        this.createToken(sessionId),
-      )
-    }
-    
-    createSession(sessionId) {
-      return new Promise((resolve, reject) => {
-        var data = JSON.stringify({ customSessionId: sessionId })
-        axios
-          .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
+  createSession(sessionId) {
+    return new Promise((resolve, reject) => {
+      var data = JSON.stringify({ customSessionId: sessionId })
+      axios
+        .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
+          headers: {
+            Authorization:
+              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log('CREATE SESION', response)
+          resolve(response.data.id)
+        })
+        .catch((response) => {
+          var error = Object.assign({}, response)
+          if (error?.response?.status === 409) {
+            resolve(sessionId)
+          } else {
+            console.log(error)
+            console.warn(
+              'No connection to OpenVidu Server. This may be a certificate error at ' +
+                OPENVIDU_SERVER_URL,
+            )
+            if (
+              window.confirm(
+                'No connection to OpenVidu Server. This may be a certificate error at "' +
+                  OPENVIDU_SERVER_URL +
+                  '"\n\nClick OK to navigate and accept it. ' +
+                  'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
+                  OPENVIDU_SERVER_URL +
+                  '"',
+              )
+            ) {
+              window.location.assign(
+                OPENVIDU_SERVER_URL + '/accept-certificate',
+              )
+            }
+          }
+        })
+    })
+  }
+
+  createToken(sessionId) {
+    return new Promise((resolve, reject) => {
+      var data = {}
+      axios
+        .post(
+          OPENVIDU_SERVER_URL +
+            '/openvidu/api/sessions/' +
+            sessionId +
+            '/connection',
+          data,
+          {
             headers: {
               Authorization:
                 'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
               'Content-Type': 'application/json',
             },
-          })
-          .then((response) => {
-            console.log('CREATE SESION', response)
-            resolve(response.data.id)
-          })
-          .catch((response) => {
-            var error = Object.assign({}, response)
-            if (error?.response?.status === 409) {
-              resolve(sessionId)
-            } else {
-              console.log(error)
-              console.warn(
-                'No connection to OpenVidu Server. This may be a certificate error at ' +
-                  OPENVIDU_SERVER_URL,
-              )
-              if (
-                window.confirm(
-                  'No connection to OpenVidu Server. This may be a certificate error at "' +
-                    OPENVIDU_SERVER_URL +
-                    '"\n\nClick OK to navigate and accept it. ' +
-                    'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
-                    OPENVIDU_SERVER_URL +
-                    '"',
-                )
-              ) {
-                window.location.assign(
-                  OPENVIDU_SERVER_URL + '/accept-certificate',
-                )
-              }
-            }
-          })
-      })
-    }
-    
-    createToken(sessionId) {
-      return new Promise((resolve, reject) => {
-        var data = {}
-        axios
-          .post(
-            OPENVIDU_SERVER_URL +
-              '/openvidu/api/sessions/' +
-              sessionId +
-              '/connection',
-            data,
-            {
-              headers: {
-                Authorization:
-                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-                'Content-Type': 'application/json',
-              },
-            },
-          )
-          .then((response) => {
-            console.log('TOKEN', response)
-            resolve(response.data.token)
-          })
-          .catch((error) => reject(error))
-      })
-    }
+          },
+        )
+        .then((response) => {
+          console.log('TOKEN', response)
+          resolve(response.data.token)
+        })
+        .catch((error) => reject(error))
+    })
+  }
 
   render() {
     const mySessionId = this.state.mySessionId
@@ -557,10 +604,24 @@ class Meeting extends Component {
               {this.state.minute}:{this.state.sec < 10 ? 0 : null}
               {this.state.sec}
             </Timer>
-            <AddBox>
+            <AddBox onClick={this.showSelectTimer}>
               <AddTimerImg />
-              <AddText className="timerTip">시간 연장</AddText>
+              <AddText className="timerTip">
+                3분 추가
+                <br />
+                (-100 Lupin)
+              </AddText>
             </AddBox>
+            {this.state.showAddTimer ? (
+              <TimerCheckBox>
+                <TimerCheckBtn className="ok" onClick={this.addTimer}>
+                  연장
+                </TimerCheckBtn>
+                <TimerCheckBtn className="no" onClick={this.showSelectTimer}>
+                  취소
+                </TimerCheckBtn>
+              </TimerCheckBox>
+            ) : null}
           </TimerBox>
           <LeftBox>
             <PointImg />
@@ -621,7 +682,7 @@ class Meeting extends Component {
                   id="buttonLeaveSession"
                   onClick={this.leaveSession}
                   value="나가기"
-                  />
+                />
                 {this.state.randomTopic}
                 {this.state.userNickname}
                 {this.state.myUserName}
@@ -643,6 +704,7 @@ class Meeting extends Component {
                   />
                 </div>
               ) : null}
+
               <VideoBox id="video-container">
                 {this.state.publisher !== undefined ? (
                   <div
@@ -656,9 +718,9 @@ class Meeting extends Component {
                 ) : null}
                 {this.state.subscribers.map((sub, i) => (
                   <div
-                  key={i}
-                  className="stream-container col-md-6 col-xs-6"
-                  onClick={() => this.handleMainVideoStream(sub)}
+                    key={i}
+                    className="stream-container col-md-6 col-xs-6"
+                    onClick={() => this.handleMainVideoStream(sub)}
                   >
                     <UserVideoComponent streamManager={sub} />
                   </div>
@@ -671,33 +733,33 @@ class Meeting extends Component {
     )
   }
 }
-  /**
-   * --------------------------
-   * SERVER-SIDE RESPONSIBILITY
-   * --------------------------
-   * These methods retrieve the mandatory user token from OpenVidu Server.
-   * This behavior MUST BE IN YOUR SERVER-SIDE IN PRODUCTION (by using
-   * the API REST, openvidu-java-client or openvidu-node-client):
-   *   1) Initialize a Session in OpenVidu Server	(POST /openvidu/api/sessions)
-   *   2) Create a Connection in OpenVidu Server (POST /openvidu/api/sessions/<SESSION_ID>/connection)
-   *   3) The Connection.token must be consumed in Session.connect() method
-   */
-  
-  //중앙 관리소에서 슬라이스 가져와서 사용할 수 있음
-  const mapStateToProps = (state) => ({
-    // loginSlice
-    login: state.login,
+/**
+ * --------------------------
+ * SERVER-SIDE RESPONSIBILITY
+ * --------------------------
+ * These methods retrieve the mandatory user token from OpenVidu Server.
+ * This behavior MUST BE IN YOUR SERVER-SIDE IN PRODUCTION (by using
+ * the API REST, openvidu-java-client or openvidu-node-client):
+ *   1) Initialize a Session in OpenVidu Server	(POST /openvidu/api/sessions)
+ *   2) Create a Connection in OpenVidu Server (POST /openvidu/api/sessions/<SESSION_ID>/connection)
+ *   3) The Connection.token must be consumed in Session.connect() method
+ */
 
-  });
-// slice에 있는 actions(방찾기)을 사용하고 싶을 때
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      doLoadUser: () => dispatch(loadUser())
 
-    };
-  };
-
+//중앙 관리소에서 슬라이스 가져와서 사용할 수 있음
+const mapStateToProps = (state) => ({
+  // loginSlice
+  login: state.login,
+})
+// slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // 빠른시작
+    // quickStart는 import { quickStart } from './homeSlice'; 구문을 이용해서 action 가져온 것
+    doLoadUser: () => dispatch(loadUser()),
+  }
+}
 
 
 // export default Meeting(중앙 관리소에서 슬라이스 가져와서 사용하기 위해 connect)
-export default connect(mapStateToProps,mapDispatchToProps)(Meeting);
+export default connect(mapStateToProps, mapDispatchToProps)(Meeting)
