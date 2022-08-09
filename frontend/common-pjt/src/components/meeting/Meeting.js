@@ -3,15 +3,17 @@ import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
 import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
-
+import { connect } from 'react-redux';
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
 import { MdHelpOutline } from 'react-icons/md'
 
-const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
-// const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
+import myAxios from '../../api/http'
+import { loadUser } from '../auth/login/login-slice'
+// const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
@@ -132,23 +134,34 @@ const VideoBox = styled.div`
   height: 50%;
 `
 
+
+
 class Meeting extends Component {
+  
   constructor(props) {
     super(props)
 
     this.state = {
       // 세션 정보
       mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      // myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-
+      // myUserNickname: undefined,
+      myUserName: undefined,
       // 10분의 시간제한
       timeLimit: 60 * 10,
       minute: 10,
       sec: 0,
+      myUserPoint: 0,
+
+      //랜덤주제
+      randomTopic: 'default주제',
+
+      //이건 flag 역할인가
+      check: false
     }
 
     // openVidu
@@ -162,9 +175,16 @@ class Meeting extends Component {
 
     // 타이머 설정
     this.intervalRef = React.createRef()
+    
+    // 랜덤 주제 설정
+    this.pickTopic = this.pickTopic.bind(this)
   }
 
   componentDidMount() {
+    const { login } = this.props;
+    const { userNickname, userPoint } = login.user
+    console.log("콘솔에 있냐", userNickname)
+    console.log("콘솔에 있냐", userPoint)
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
 
@@ -181,10 +201,15 @@ class Meeting extends Component {
         this.stopTimer()
       }
     }, 1000)
+
+    this.setState({
+      myUserName: userNickname,
+      myUserPoint: userPoint
+    })
   }
 
   componentWillUnmount() {
-    // openVidu
+    //openVidu
     window.removeEventListener('beforeunload', this.onbeforeunload)
 
     // unmount 될때, 스톱워치 종료
@@ -203,7 +228,9 @@ class Meeting extends Component {
   }
 
   onbeforeunload(event) {
+    
     this.leaveSession()
+
   }
 
   handleChangeSessionId(e) {
@@ -278,6 +305,14 @@ class Meeting extends Component {
           console.warn(exception)
         })
 
+        //랜덤 주제에서 보낸 시그널을 들어보자
+        mySession.on('signal:randomTopic', (event) => {
+          this.setState({randomTopic: event.data})
+          
+          console.log(event)
+          console.log(event.data)
+        }) 
+        
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -390,6 +425,134 @@ class Meeting extends Component {
       console.error(e)
     }
   }
+ //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
+  //랜덤주제Pick
+  // async pickTopic() {
+  //     await this.setState({
+  //       randomTopic: `바뀌긴 바뀜?`
+  //     })
+  //     this.state.session
+  //       .signal({
+  //         data: `${this.state.randomTopic}`,
+  //         to: [],
+  //         type: 'randomTopic'
+  //       })
+  //       .then(() => {
+  //       })
+  //       .catch((error) => {})
+  // }
+
+  // }
+  // pickTopic() {
+  //     console.log(this.state.randomTopic)
+   
+
+    async pickTopic() {
+      try{
+        await this.setState({
+          randomTopic: `바뀌긴 바뀜?`
+        })
+
+        this.state.session
+        .signal({
+          data: `${this.state.randomTopic}`,
+          to: [],
+          type: 'randomTopic'
+        })
+        
+        await myAxios.put('/honjaya/points',{
+          point: 300,
+        })
+        console.log("로드유저전", this.state.myUserPoint)
+        
+
+        await this.props.doLoadUser()
+        console.log("로드유저후", this.state.myUserPoint)
+
+      } catch(err) {
+        console.log("error")
+      }
+    }
+        
+  // }
+
+
+        
+    getToken() {
+      return this.createSession(this.state.mySessionId).then((sessionId) =>
+        this.createToken(sessionId),
+      )
+    }
+    
+    createSession(sessionId) {
+      return new Promise((resolve, reject) => {
+        var data = JSON.stringify({ customSessionId: sessionId })
+        axios
+          .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
+            headers: {
+              Authorization:
+                'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+              'Content-Type': 'application/json',
+            },
+          })
+          .then((response) => {
+            console.log('CREATE SESION', response)
+            resolve(response.data.id)
+          })
+          .catch((response) => {
+            var error = Object.assign({}, response)
+            if (error?.response?.status === 409) {
+              resolve(sessionId)
+            } else {
+              console.log(error)
+              console.warn(
+                'No connection to OpenVidu Server. This may be a certificate error at ' +
+                  OPENVIDU_SERVER_URL,
+              )
+              if (
+                window.confirm(
+                  'No connection to OpenVidu Server. This may be a certificate error at "' +
+                    OPENVIDU_SERVER_URL +
+                    '"\n\nClick OK to navigate and accept it. ' +
+                    'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
+                    OPENVIDU_SERVER_URL +
+                    '"',
+                )
+              ) {
+                window.location.assign(
+                  OPENVIDU_SERVER_URL + '/accept-certificate',
+                )
+              }
+            }
+          })
+      })
+    }
+    
+    createToken(sessionId) {
+      return new Promise((resolve, reject) => {
+        var data = {}
+        axios
+          .post(
+            OPENVIDU_SERVER_URL +
+              '/openvidu/api/sessions/' +
+              sessionId +
+              '/connection',
+            data,
+            {
+              headers: {
+                Authorization:
+                  'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+          .then((response) => {
+            console.log('TOKEN', response)
+            resolve(response.data.token)
+          })
+          .catch((error) => reject(error))
+      })
+    }
 
   render() {
     const mySessionId = this.state.mySessionId
@@ -414,7 +577,7 @@ class Meeting extends Component {
           </TimerBox>
           <LeftBox>
             <PointImg />
-            <PointText>10,000</PointText>
+            <PointText>{this.state.myUserPoint}</PointText>
             <Helper />
           </LeftBox>
         </Header>
@@ -471,7 +634,11 @@ class Meeting extends Component {
                   id="buttonLeaveSession"
                   onClick={this.leaveSession}
                   value="나가기"
-                />
+                  />
+                {this.state.randomTopic}
+                {this.state.userNickname}
+                {this.state.myUserName}
+                <button onClick={this.pickTopic}>주제변경</button>
               </Header>
 
               {/* mainStreamMnager가 있다면 */}
@@ -502,9 +669,9 @@ class Meeting extends Component {
                 ) : null}
                 {this.state.subscribers.map((sub, i) => (
                   <div
-                    key={i}
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() => this.handleMainVideoStream(sub)}
+                  key={i}
+                  className="stream-container col-md-6 col-xs-6"
+                  onClick={() => this.handleMainVideoStream(sub)}
                   >
                     <UserVideoComponent streamManager={sub} />
                   </div>
@@ -516,7 +683,7 @@ class Meeting extends Component {
       </Background>
     )
   }
-
+}
   /**
    * --------------------------
    * SERVER-SIDE RESPONSIBILITY
@@ -528,82 +695,24 @@ class Meeting extends Component {
    *   2) Create a Connection in OpenVidu Server (POST /openvidu/api/sessions/<SESSION_ID>/connection)
    *   3) The Connection.token must be consumed in Session.connect() method
    */
+  
+  //중앙 관리소에서 슬라이스 가져와서 사용할 수 있음
+  const mapStateToProps = (state) => ({
+    // loginSlice
+    login: state.login,
 
-  getToken() {
-    return this.createSession(this.state.mySessionId).then((sessionId) =>
-      this.createToken(sessionId),
-    )
-  }
+  });
+// slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      // 빠른시작
+      // quickStart는 import { quickStart } from './homeSlice'; 구문을 이용해서 action 가져온 것
+      doLoadUser: () => dispatch(loadUser())
 
-  createSession(sessionId) {
-    return new Promise((resolve, reject) => {
-      var data = JSON.stringify({ customSessionId: sessionId })
-      axios
-        .post(OPENVIDU_SERVER_URL + '/openvidu/api/sessions', data, {
-          headers: {
-            Authorization:
-              'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((response) => {
-          console.log('CREATE SESION', response)
-          resolve(response.data.id)
-        })
-        .catch((response) => {
-          var error = Object.assign({}, response)
-          if (error?.response?.status === 409) {
-            resolve(sessionId)
-          } else {
-            console.log(error)
-            console.warn(
-              'No connection to OpenVidu Server. This may be a certificate error at ' +
-                OPENVIDU_SERVER_URL,
-            )
-            if (
-              window.confirm(
-                'No connection to OpenVidu Server. This may be a certificate error at "' +
-                  OPENVIDU_SERVER_URL +
-                  '"\n\nClick OK to navigate and accept it. ' +
-                  'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
-                  OPENVIDU_SERVER_URL +
-                  '"',
-              )
-            ) {
-              window.location.assign(
-                OPENVIDU_SERVER_URL + '/accept-certificate',
-              )
-            }
-          }
-        })
-    })
-  }
+    };
+  };
 
-  createToken(sessionId) {
-    return new Promise((resolve, reject) => {
-      var data = {}
-      axios
-        .post(
-          OPENVIDU_SERVER_URL +
-            '/openvidu/api/sessions/' +
-            sessionId +
-            '/connection',
-          data,
-          {
-            headers: {
-              Authorization:
-                'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-              'Content-Type': 'application/json',
-            },
-          },
-        )
-        .then((response) => {
-          console.log('TOKEN', response)
-          resolve(response.data.token)
-        })
-        .catch((error) => reject(error))
-    })
-  }
-}
 
-export default Meeting
+
+// export default Meeting(중앙 관리소에서 슬라이스 가져와서 사용하기 위해 connect)
+export default connect(mapStateToProps,mapDispatchToProps)(Meeting);
