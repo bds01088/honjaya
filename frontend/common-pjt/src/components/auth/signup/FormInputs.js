@@ -370,7 +370,7 @@ const FormInputs = () => {
         <StyledBtn type="button" onClick={openEmailModal} disabled={checkedEmail}>인증하기</StyledBtn>
       </CheckDiv>
       { defaultEmail && !emailValid ? <ErrorText className="errorText">유효하지 않은 이메일입니다.</ErrorText> : null }
-      { defaultEmail && !isDuplicateEmailChecked && emailValid ? <ErrorText className="errorText">이미 존재하는 이메일입니다</ErrorText> : null }
+      { defaultEmail && isDuplicateEmailChecked && emailValid ? <ErrorText className="errorText">이미 존재하는 이메일입니다</ErrorText> : null }
       { emailModal ? <EmailCheck closeEmailModal={closeEmailModal} setCheckedEmail={setCheckedEmail} code={code} /> : null }
       { checkedEmail ? <SuccessText>인증된 이메일입니다</SuccessText> : null }
 
