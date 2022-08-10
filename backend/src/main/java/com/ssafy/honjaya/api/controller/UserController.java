@@ -25,6 +25,8 @@ import com.ssafy.honjaya.api.response.BooleanRes;
 import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.EmailCheckRes;
 import com.ssafy.honjaya.api.response.LoginRes;
+import com.ssafy.honjaya.api.response.RateRes;
+import com.ssafy.honjaya.api.response.UserNoRes;
 import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 import com.ssafy.honjaya.api.service.MailService;
@@ -351,5 +353,34 @@ public class UserController {
 			res.setError(e.getMessage());
 		}
 		return new ResponseEntity<CommonRes>(res, status);
+	}
+	
+	@ApiOperation(value = "회원 번호 (userNo) 가져오기", response = UserNoRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/userno")
+	public ResponseEntity<UserNoRes> getUserNo(HttpServletRequest request) {
+		UserNoRes userNoRes = new UserNoRes();
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				userNoRes.setUserNo(jwtService.extractUserNo(accessToken));
+				userNoRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				userNoRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			userNoRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<UserNoRes>(userNoRes, status);
 	}
 }
