@@ -10,6 +10,8 @@ import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
 import { MdHelpOutline } from 'react-icons/md'
 
+import Messages from './meeting-chat/Messages'
+
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
 // import randomTopic from '../../DATA/randomTopic.json'
@@ -185,6 +187,10 @@ class Meeting extends Component {
       myUserPoint: 0,
       showAddTimer: false,
 
+      //채팅관련
+      message: '',
+      messages: [],
+
       hashList : [],
 
       //랜덤주제
@@ -211,6 +217,11 @@ class Meeting extends Component {
     // 랜덤 주제 설정
     this.pickTopic = this.pickTopic.bind(this)
     this.addTimer = this.addTimer.bind(this)
+
+    //채팅
+    this.sendmessageByClick = this.sendmessageByClick.bind(this);
+    this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
+    this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
 
     // 해쉬태그 로드
     this.sendHash = this.sendHash.bind(this);
@@ -330,6 +341,65 @@ class Meeting extends Component {
     }
   }
 
+  //채팅 보내는 함수
+  handleChatMessageChange(e) {
+    this.setState({
+      message: e.target.value,
+    });
+  }
+
+  sendmessageByClick() {
+    this.setState({
+      messages: [
+        ...this.state.messages,
+        {
+          userName: this.state.myUserName,
+          text: this.state.message,
+          chatClass: 'messages__item--operator',
+        },
+      ],
+    });
+    const mySession = this.state.session;
+
+    mySession.signal({
+      data: `${this.state.myUserName},${this.state.message}`,
+      to: [],
+      type: 'chat',
+    });
+
+    this.setState({
+      message: '',
+    });
+  }
+
+  sendmessageByEnter(e) {
+    if (e.key === 'Enter') {
+      this.setState({
+        messages: [
+          ...this.state.messages,
+          {
+            userName: this.state.myUserName,
+            text: this.state.message,
+            chatClass: 'messages__item--operator',
+          },
+        ],
+      });
+      const mySession = this.state.session;
+
+      mySession.signal({
+        data: `${this.state.myUserName},${this.state.message}`,
+        to: [],
+        type: 'chat',
+      });
+
+      this.setState({
+        message: '',
+      });
+      console.log("aaaaa", this.state.publisher)
+    }
+  }
+
+
   joinSession() {
     // --- 1) Get an OpenVidu object ---
 
@@ -386,12 +456,30 @@ class Meeting extends Component {
           console.log('event', event)
         })
 
+        //채팅 듣기
+        mySession.on('signal:chat', (event) => {
+          let chatdata = event.data.split(',');
+          if (chatdata[0] !== this.state.myUserName) {
+            this.setState({
+              messages: [
+                ...this.state.messages,
+                {
+                  userName: chatdata[0],
+                  text: chatdata[1],
+                  chatClass: 'messages__item--visitor',
+                },
+              ],
+            });
+          }
+        });
+
         mySession.on('signal:hashtags', (event) => {
           this.setState({ hashtags: event.data })
 
           console.log("해쉬태그보내기", event.data)
           console.log(event.data)
         })
+
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -642,7 +730,8 @@ class Meeting extends Component {
   render() {
     const mySessionId = this.state.mySessionId
     const myUserName = this.state.myUserName
-    
+    const messages = this.state.messages;
+
     return (
       <Background>
         <Header>
@@ -778,6 +867,33 @@ class Meeting extends Component {
                   </div>
                 ))}
               </VideoBox>
+              {/* 채팅창 */}
+              <div className="chatbox">
+                <div className="chat chatbox__support chatbox--active">
+                  <div className="chat chatbox__header" />
+                  <div className="chatbox__messages" ref="chatoutput">
+                    {/* {this.displayElements} */}
+                    <Messages messages={messages} />
+                    <div />
+                  </div>
+                  <div className="chat chatbox__footer">
+                    <input
+                      id="chat_message"
+                      type="text"
+                      placeholder="Write a message..."
+                      onChange={this.handleChatMessageChange}
+                      onKeyPress={this.sendmessageByEnter}
+                      value={this.state.message}
+                    />
+                    <p
+                      className="chat chatbox__send--footer"
+                      onClick={this.sendmessageByClick}
+                    >
+                      Send
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : null}
         </Container>
