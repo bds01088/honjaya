@@ -295,11 +295,8 @@ class Waiting extends Component {
       uuid: undefined,
       nowmatching: true,
 
-      // userGender: undefined,
       // total : undefined,
-      // oppositeGender: false,
       // roleCode: undefined,
-
 
       // 3분의 시간제한
       timeLimit: 0,
@@ -314,12 +311,10 @@ class Waiting extends Component {
 
   componentDidMount() {
     const { mode } = this.props
-    const {userGender} = mode.userGender
     const {total} = mode.total
-    const {oppositeGender} = mode.oppositeGender
     const {roleCode} = mode.roleCode
     const data = {
-      userGender, total, oppositeGender, roleCode
+      total, roleCode
     }
     this.getUuid(data)
     this.intervalRef.current = setInterval(() => {
@@ -361,9 +356,7 @@ class Waiting extends Component {
     axios.post(
         'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
         {
-          "userGender": data.userGender,
           "total": data.total,
-          "oppositeGender": data.oppositeGender,
           "roleCode": data.roleCode
         }
       ).then(res => {
