@@ -12,6 +12,9 @@ import { MdHelpOutline } from 'react-icons/md'
 
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
+// import randomTopic from '../../DATA/randomTopic.json'
+
+
 // const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
 const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
@@ -182,8 +185,12 @@ class Meeting extends Component {
       myUserPoint: 0,
       showAddTimer: false,
 
+      hashList : [],
+
       //랜덤주제
-      randomTopic: 'default주제',
+      randomTopic: "리액트 vs 뷰",
+      topicList: ["좋아하는 웹툰","좋아하는 영화","좋아하는 음식","최근에 간 여행지","mbti"],
+       
 
       //이건 flag 역할인가
       check: false,
@@ -204,13 +211,20 @@ class Meeting extends Component {
     // 랜덤 주제 설정
     this.pickTopic = this.pickTopic.bind(this)
     this.addTimer = this.addTimer.bind(this)
+
+    // 해쉬태그 로드
+    this.sendHash = this.sendHash.bind(this);
   }
 
   componentDidMount() {
     const { login } = this.props
+    const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
-    console.log('콘솔에 있냐', userNickname)
-    console.log('콘솔에 있냐', userPoint)
+    const { hashesOwned } = hashtag
+    
+
+    console.log('콘솔에 있냐', hashesOwned)
+
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
 
@@ -229,12 +243,15 @@ class Meeting extends Component {
       }
     }, 1000)
 
+    
     this.setState({
       myUserName: userNickname,
       myUserPoint: userPoint,
+      hashList: hashesOwned
     })
+    this.sendHash()
   }
-
+  
   componentWillUnmount() {
     //openVidu
     window.removeEventListener('beforeunload', this.onbeforeunload)
@@ -369,6 +386,12 @@ class Meeting extends Component {
           console.log('event', event)
         })
 
+        mySession.on('signal:hashtags', (event) => {
+          this.setState({ hashtags: event.data })
+
+          console.log("해쉬태그보내기", event.data)
+          console.log(event.data)
+        })
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -482,13 +505,26 @@ class Meeting extends Component {
     }
   }
 
+  //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
+  //랜덤 주제 픽
+   
 
+
+  shuffleTopic() {
+    //shuffle arr
+    let arr = new Array()
+    for (var i = 0; i<5; i++){
+      arr[i] = i;
+    }
+    arr.sort(() => Math.random() - 0.5)
+    // randomTopic 바꿔주기
+    this.setState({ randomTopic: this.state.topicList[arr[0]]})
+    
+  }
   async pickTopic() {
     try {
-      await this.setState({
-        randomTopic: `바뀌긴 바뀜?`,
-      })
-
+      //토픽바꾸기
+      await this.shuffleTopic()
       this.state.session.signal({
         data: `${this.state.randomTopic}`,
         to: [],
@@ -503,10 +539,29 @@ class Meeting extends Component {
       await this.setState({
         myUserPoint: res.data.point
       })
+
+    
     } catch (err) {
       console.log('error')
     }
   }
+
+  //loadHash
+  async sendHash() {
+      
+
+      this.setState({
+        hashList: this.state.hashesOwned
+      })
+      this.state.session.signal({
+        data: `${this.state.hashList}`,
+        to: [],
+        type: 'hashtags',
+      })
+      .then(()=>{console.log("슬라이스로드완료")})
+      .catch(() => {})
+  }
+
 
   getToken() {
     return this.createSession(this.state.mySessionId).then((sessionId) =>
@@ -587,7 +642,7 @@ class Meeting extends Component {
   render() {
     const mySessionId = this.state.mySessionId
     const myUserName = this.state.myUserName
-
+    
     return (
       <Background>
         <Header>
@@ -680,8 +735,9 @@ class Meeting extends Component {
                   value="나가기"
                 />
                 {this.state.randomTopic}
-                {this.state.userNickname}
-                {this.state.myUserName}
+                {/* {this.hashList.map((item, idx) => (
+                  <h1># {item[1]}</h1>))} */}
+    
                 <button onClick={this.pickTopic}>주제변경</button>
               </Header>
 
@@ -741,10 +797,12 @@ class Meeting extends Component {
  *   3) The Connection.token must be consumed in Session.connect() method
  */
 
+
 //중앙 관리소에서 슬라이스 가져와서 사용할 수 있음
 const mapStateToProps = (state) => ({
   // loginSlice
   login: state.login,
+  hashtag: state.hashtag
 })
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
 const mapDispatchToProps = (dispatch) => {
@@ -754,6 +812,7 @@ const mapDispatchToProps = (dispatch) => {
     doLoadUser: () => dispatch(loadUser()),
   }
 }
+
 
 // export default Meeting(중앙 관리소에서 슬라이스 가져와서 사용하기 위해 connect)
 export default connect(mapStateToProps, mapDispatchToProps)(Meeting)
