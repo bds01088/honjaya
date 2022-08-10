@@ -17,8 +17,8 @@ import { loadUser } from '../auth/login/login-slice'
 // import randomTopic from '../../DATA/randomTopic.json'
 
 
-// const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
-const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
+const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+// const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
