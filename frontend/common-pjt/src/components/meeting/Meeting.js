@@ -172,7 +172,7 @@ class Meeting extends Component {
 
     this.state = {
       // 세션 정보
-      mySessionId: 'SessionA',
+      mySessionId: this.props.matchResponse.uuid,
       // myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -548,7 +548,7 @@ class Meeting extends Component {
       session: undefined,
       subscribers: [],
       mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      myUserName: '',
       mainStreamManager: undefined,
       publisher: undefined,
     })
@@ -918,7 +918,8 @@ class Meeting extends Component {
 const mapStateToProps = (state) => ({
   // loginSlice
   login: state.login,
-  hashtag: state.hashtag
+  hashtag: state.hashtag,
+  mode: state.mode
 })
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
 const mapDispatchToProps = (dispatch) => {
