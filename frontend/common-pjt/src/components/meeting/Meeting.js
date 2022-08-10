@@ -17,8 +17,8 @@ import { loadUser } from '../auth/login/login-slice'
 // import randomTopic from '../../DATA/randomTopic.json'
 
 
-// const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
-const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
+const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443';
+// const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
@@ -172,7 +172,7 @@ class Meeting extends Component {
 
     this.state = {
       // 세션 정보
-      mySessionId: 'SessionA',
+      mySessionId: this.props.matchResponse.uuid,
       // myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -606,7 +606,7 @@ class Meeting extends Component {
       session: undefined,
       subscribers: [],
       mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      myUserName: '',
       mainStreamManager: undefined,
       publisher: undefined,
     })
@@ -768,7 +768,7 @@ class Meeting extends Component {
           </TimerBox>
           <LeftBox>
             <PointImg />
-            <PointText>{this.state.myUserPoint}</PointText>
+            <PointText>{this.state.myUserPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</PointText>
             <Helper />
           </LeftBox>
         </Header>
@@ -924,7 +924,8 @@ class Meeting extends Component {
 const mapStateToProps = (state) => ({
   // loginSlice
   login: state.login,
-  hashtag: state.hashtag
+  hashtag: state.hashtag,
+  mode: state.mode
 })
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
 const mapDispatchToProps = (dispatch) => {
