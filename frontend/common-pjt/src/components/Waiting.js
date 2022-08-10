@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import styled from 'styled-components'
 import logoImg from '../assets/logo.png'
 import React, { Component } from 'react'
@@ -10,7 +11,6 @@ import myAxios from '../api/http'
 import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
 import { setMatchResponse } from './mode/mode-slice'
-// import { useNavigate } from 'react-router-dom'
 import { Navigate } from "react-router-dom"
 const Background = styled.div`
   background-color: #fffdde;
@@ -393,6 +393,8 @@ class Waiting extends Component {
             // this.props.navigate('/meeting')
             // this.state.redirect && <Navigate to='/meeting'/>
             this.setState({redirect: true})
+            // eslint-disable-next-line no-lone-blocks
+            { this.state.redirect ? <Navigate to="/meeting"/> : null }
           }
   
       }
