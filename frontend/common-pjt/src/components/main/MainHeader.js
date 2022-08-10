@@ -161,7 +161,7 @@ const MainHeader = () => {
   
   const [isOpen, setIsOpen] = useState(false)
 
-  const pointShow = userPoint.toLocaleString('ko-KR')
+  const pointShow = userPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   const openModalHelper = () => {
     setIsOpen(!isOpen)
   }
@@ -183,7 +183,7 @@ const MainHeader = () => {
         </RateBox>
 
         <PointImg src={pointImg} />
-        <PointText>{pointShow}</PointText>
+        <PointText>{userPoint}</PointText>
         
         <ProfileBox>
           <Link to="/profile" style={{ fontSize: '0' }}>
