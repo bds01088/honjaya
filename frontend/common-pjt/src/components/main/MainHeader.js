@@ -183,7 +183,7 @@ const MainHeader = () => {
         </RateBox>
 
         <PointImg src={pointImg} />
-        <PointText>{userPoint}</PointText>
+        <PointText>{pointShow}</PointText>
         
         <ProfileBox>
           <Link to="/profile" style={{ fontSize: '0' }}>

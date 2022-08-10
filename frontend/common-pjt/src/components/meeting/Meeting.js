@@ -765,7 +765,7 @@ class Meeting extends Component {
           </TimerBox>
           <LeftBox>
             <PointImg />
-            <PointText>{this.state.myUserPoint}</PointText>
+            <PointText>{this.state.myUserPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</PointText>
             <Helper />
           </LeftBox>
         </Header>
