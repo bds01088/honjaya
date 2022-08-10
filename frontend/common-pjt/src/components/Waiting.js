@@ -313,8 +313,10 @@ class Waiting extends Component {
 
   componentDidMount() {
     const { mode } = this.props
-    const {total} = mode.total
-    const {roleCode} = mode.roleCode
+    console.log("mode 출력하기", mode)
+    const total = mode.total
+    const roleCode = mode.roleCode
+    console.log("total, roleCode", total, roleCode)
     const data = {
       total, roleCode
     }
@@ -373,7 +375,7 @@ class Waiting extends Component {
               nowmatching : false
             })
             console.log("slice에 응답 저장")
-            this.setMatchResponse(res.data)
+            this.props.setMatchResponse(res.data)
             console.log("slice에 응답 저장됌")
         }else if (res.data.result === -1 ){
           console.log("응답왔지만 매칭안됌")
@@ -385,9 +387,10 @@ class Waiting extends Component {
         } else console.log("취소됌")
       }
       ).then(() => {
-        if (this.uuid !== undefined && this.nowmatching === false){
-          window.location.href = "/meeting"
-        }
+          if (this.uuid !== undefined && this.nowmatching === false){
+              window.location.href = "/meeting"
+         }
+  
       }
       ).catch(err => {
         console.log(err)
@@ -477,7 +480,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setMatchResponse: () => dispatch(setMatchResponse)
+    setMatchResponse: (res) => dispatch(setMatchResponse(res))
   }
 }
 

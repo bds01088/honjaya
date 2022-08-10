@@ -11,7 +11,7 @@ const modeSlice = createSlice({
     initialState,
     reducers: {
         setTotal: (state, action) => {
-            state.total = action.payload   
+            state.total = action.payload
         },
         setRoleCode: (state, action) => {
             state.roleCode = action.payload
