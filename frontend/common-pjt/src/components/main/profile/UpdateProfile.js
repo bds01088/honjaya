@@ -251,7 +251,7 @@ const UpdateProfile = () => {
 
   // 필드 유효성검사
   const [nicknameValid, setNicknameValid] = useState(true)
-  const [pwdValid, setPwdValid] = useState(false)
+  const [pwdValid, setPwdValid] = useState(true)
 
   //닉네임 중복 체크 여부 변수
   // t: 사용가능, f: 사용불가능
@@ -260,8 +260,6 @@ const UpdateProfile = () => {
   // 비밀번호 재확인 변수
   const [checkedPwd, setCheckedPwd] = useState(false)
 
-  console.log(userPassword)
-  console.log(checkedPwd)
   // 비밀번호 유효성 검사
   const validatePwd = (e) => {
     var patternEngAtListOne = new RegExp(/[a-zA-Z]+/) // + for at least one
@@ -348,7 +346,8 @@ const UpdateProfile = () => {
   }, [userPhone])
 
   // default에서 닉네임 에러 메시지 방지
-  const [defaultPwd, setDefaultPwd] = useState(false)
+  const [defaultPwd, setDefaultPwd] = useState(true)
+  const [defaultPwdCheck, setDefaultPwdCheck] = useState(false)
   const [defaultNickname, setDefaultNickname] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -563,7 +562,9 @@ const UpdateProfile = () => {
                   name="userPassword"
                   className="userPassword"
                   placeholder="비밀번호"
-                  onChange={(e) => setUserPassword(e.target.value)}
+                  onChange={(e) => {
+                    setUserPassword(e.target.value)
+                  }}
                   value={userPassword}
                   onBlur={validatePwd}
                 ></StyledInput>
@@ -580,14 +581,15 @@ const UpdateProfile = () => {
                   type="password"
                   autoComplete="userPassword"
                   placeholder="비밀번호 확인"
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      setDefaultPwdCheck(true)
+                    } else { setDefaultPwdCheck(false) }
+                  }}
                   onBlur={checkPassword}
                 ></StyledInput>
                 <div>
-                  {pwdValid ? (
-                    checkedPwd ? null : (
-                      <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>
-                    )
-                  ) : null}
+                  {pwdValid && !checkedPwd && defaultPwdCheck ? <ErrorText>비밀번호가 일치하지 않습니다</ErrorText> : null }
                 </div>
               </div>
             </RightBox>
