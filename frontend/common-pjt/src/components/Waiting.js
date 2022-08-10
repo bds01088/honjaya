@@ -10,7 +10,8 @@ import myAxios from '../api/http'
 import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
 import { setMatchResponse } from './mode/mode-slice'
-
+// import { useNavigate } from 'react-router-dom'
+import { Navigate } from "react-router-dom"
 const Background = styled.div`
   background-color: #fffdde;
   width: 100vw;
@@ -294,6 +295,7 @@ class Waiting extends Component {
     super(props);
 
     this.state = {
+      redirect: false,
       uuid: undefined,
       nowmatching: true,
 
@@ -388,8 +390,10 @@ class Waiting extends Component {
       }
       ).then(() => {
           if (this.uuid !== undefined && this.nowmatching === false){
-              window.location.href = "/meeting"
-         }
+            // this.props.navigate('/meeting')
+            // this.state.redirect && <Navigate to='/meeting'/>
+            this.setState({redirect: true})
+          }
   
       }
       ).catch(err => {
@@ -419,6 +423,7 @@ class Waiting extends Component {
 
   render() {
 
+    
     return (
       <Background>
         <Header>
