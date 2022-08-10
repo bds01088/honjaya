@@ -10,6 +10,7 @@ import myAxios from '../api/http'
 import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
 import { setMatchResponse } from './mode/mode-slice'
+import withNavigateHook from './withNavigateHook'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -387,9 +388,10 @@ class Waiting extends Component {
         } else console.log("취소됌")
       }
       ).then(() => {
-          if (this.uuid !== undefined && this.nowmatching === false){
-              window.location.href = "/meeting"
-         }
+        this.props.navigation('/meeting')
+          // if (this.uuid !== undefined && this.nowmatching === false){
+          //     window.location.href = "/meeting"
+          // }
   
       }
       ).catch(err => {
@@ -484,4 +486,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Waiting)
+export default withNavigateHook(connect(mapStateToProps, mapDispatchToProps)(Waiting))
