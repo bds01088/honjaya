@@ -9,7 +9,7 @@ import axios from 'axios'
 import myAxios from '../api/http'
 import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
-import { setMatchResponse } from './mode/mode-slice'
+import { matchDataGet } from './mode/mode-slice'
 import withNavigateHook from './withNavigateHook'
 
 const Background = styled.div`
@@ -358,47 +358,67 @@ class Waiting extends Component {
   }
 
   matchStart(data) {
+    const { doMatchDataGet } = this.props
     console.log("데이터잘담기나?", data.total)
     
     console.log("uuid 요청보냄")
-    myAxios.post(
-        'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
-        {
-          "total": data.total,
-          "roleCode": data.roleCode
-        }
-      ).then(res => {
-        console.log("uuid 응답 받아옴")
-        console.log(res.data)
-        if (res.data.result === 1){
-            this.setState({
-              uuid : res.data.uuid,
-              nowmatching : false
-            })
-            console.log("slice에 응답 저장")
-            this.props.setMatchResponse(res.data)
-            console.log("slice에 응답 저장됌")
-        }else if (res.data.result === -1 ){
-          console.log("응답왔지만 매칭안됌")
-          this.setState({
-            uuid : undefined,
-            nowmatching : false
-          })
-          this.resetTimer()
-        } else console.log("취소됌")
+
+    const matchData = 
+      {
+        total: data.total,
+        roleCode: data.roleCode
       }
-      ).then(() => {
+      
+      doMatchDataGet(matchData)
+      .unwrap()
+      .then((res) => {
+        console.log("요청응답", res)
         this.props.navigation('/meeting')
-          // if (this.uuid !== undefined && this.nowmatching === false){
-          //     window.location.href = "/meeting"
-          // }
-  
-      }
-      ).catch(err => {
+      })
+      .catch(err => {
         console.log(err)
         }
       )
   }
+  //   console.log("데이터잘담기나?", data.total)
+    
+  //   console.log("uuid 요청보냄")
+  //   myAxios.post(
+  //       'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
+  //       {
+  //         "total": data.total,
+  //         "roleCode": data.roleCode
+  //       }
+  //     ).then(res => {
+  //       console.log("uuid 응답 받아옴")
+  //       console.log(res.data)
+  //       if (res.data.result === 1){
+  //           this.setState({
+  //             uuid : res.data.uuid,
+  //             nowmatching : false
+  //           })
+  //           console.log("slice에 응답 저장")
+  //           this.props.setMatchResponse(res.data)
+  //           console.log("slice에 응답 저장됌")
+  //       }else if (res.data.result === -1 ){
+  //         console.log("응답왔지만 매칭안됌")
+  //         this.setState({
+  //           uuid : undefined,
+  //           nowmatching : false
+  //         })
+  //         this.resetTimer()
+  //       } else console.log("취소됌")
+  //     }
+  //     ).then(() => {
+  //       // if (this.uuid !== undefined && this.nowmatching === false){
+  //           this.props.navigation('/meeting')
+  //         // }
+  //     }
+  //     ).catch(err => {
+  //       console.log(err)
+  //       }
+  //     )
+  // }
 
   cancelMatching() {
     console.log("cancel 요청보냄")
@@ -482,7 +502,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setMatchResponse: (res) => dispatch(setMatchResponse(res))
+    doMatchDataGet: (type) => dispatch(matchDataGet(type))
   }
 }
 
