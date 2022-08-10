@@ -373,6 +373,24 @@ class Waiting extends Component {
       )
   }
 
+  cancelMatching() {
+    console.log("cancel 요청보냄")
+    axios.get(
+        'https://i7e104.p.ssafy.io/honjaya/meetings/cancel',
+      ).then(res => {
+        console.log("cancel 결과")
+        console.log(res.data)
+        // this.setState({
+        //   uuid : res.data.uuid,
+        //   nowmatching : false
+        //   })
+        }
+      ).catch(err => {
+        console.log(err)
+        }
+      )
+  }
+
 
   render() {
 
@@ -380,7 +398,7 @@ class Waiting extends Component {
       <Background>
         <Header>
           <Logo/>
-          <LeaveBox>
+          <LeaveBox onClick={this.cancelMatching}>
             <Leave />
             <LeaveText className="leaveTip">나가기</LeaveText>
           </LeaveBox>
