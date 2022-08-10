@@ -191,6 +191,7 @@ class Meeting extends Component {
       message: '',
       messages: [],
 
+      //해쉬태그
       hashList : [],
 
       //랜덤주제
@@ -228,6 +229,8 @@ class Meeting extends Component {
   }
 
   componentDidMount() {
+
+    
     const { login } = this.props
     const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
@@ -261,6 +264,7 @@ class Meeting extends Component {
       hashList: hashesOwned
     })
     this.sendHash()
+ 
   }
   
   componentWillUnmount() {
@@ -472,7 +476,7 @@ class Meeting extends Component {
             });
           }
         });
-
+        //해쉬태그보내기
         mySession.on('signal:hashtags', (event) => {
           this.setState({ hashtags: event.data })
 
@@ -824,6 +828,8 @@ class Meeting extends Component {
                 {this.state.randomTopic}
                 {/* {this.hashList.map((item, idx) => (
                   <h1># {item[1]}</h1>))} */}
+                {this.state.hashList}
+                <h1>{this.state.myUserPoint}</h1>
     
                 <button onClick={this.pickTopic}>주제변경</button>
               </Header>
