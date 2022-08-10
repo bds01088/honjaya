@@ -191,9 +191,12 @@ class Meeting extends Component {
       message: '',
       messages: [],
 
+<<<<<<< HEAD
       //해쉬태그
       hashList : [],
 
+=======
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
       //랜덤주제
       randomTopic: "리액트 vs 뷰",
       topicList: ["좋아하는 웹툰","좋아하는 영화","좋아하는 음식","최근에 간 여행지","mbti"],
@@ -223,26 +226,34 @@ class Meeting extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
-
-    // 해쉬태그 로드
-    this.sendHash = this.sendHash.bind(this);
   }
 
   componentDidMount() {
+<<<<<<< HEAD
 
 
     
 
     this.setState({mySessionId : this.props.matchResponse.uuid})
 
+=======
+    const { mode } = this.props
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
     const { login } = this.props
-    const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
-    const { hashesOwned } = hashtag
+    const { uuid } = mode
+    this.setState({
+      mySessionId: uuid,
+    })
     
+<<<<<<< HEAD
 
     
     
+=======
+    this.joinSession()
+
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
 
@@ -265,12 +276,14 @@ class Meeting extends Component {
     this.setState({
       myUserName: userNickname,
       myUserPoint: userPoint,
-      hashList: hashesOwned
     })
+<<<<<<< HEAD
 
 
     this.sendHash()
  
+=======
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
   }
   
   componentWillUnmount() {
@@ -532,6 +545,7 @@ class Meeting extends Component {
             });
           }
         });
+<<<<<<< HEAD
         //해쉬태그듣기
         mySession.on('signal:hashtags', (event) => {
           this.setState({ hashtags: event.data })
@@ -539,6 +553,8 @@ class Meeting extends Component {
           console.log("해쉬태그보내기", event.data)
           console.log(event.data)
         })
+=======
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
 
         // --- 4) Connect to the session with a valid user token ---
 
@@ -609,7 +625,7 @@ class Meeting extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: 'SessionA',
+      mySessionId: '',
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,
@@ -657,6 +673,44 @@ class Meeting extends Component {
 
 
 
+<<<<<<< HEAD
+=======
+  shuffleTopic() {
+    //shuffle arr
+    let arr = new Array()
+    for (var i = 0; i<5; i++){
+      arr[i] = i;
+    }
+    arr.sort(() => Math.random() - 0.5)
+    // randomTopic 바꿔주기
+    this.setState({ randomTopic: this.state.topicList[arr[0]]})
+    
+  }
+  async pickTopic() {
+    try {
+      //토픽바꾸기
+      await this.shuffleTopic()
+      this.state.session.signal({
+        data: `${this.state.randomTopic}`,
+        to: [],
+        type: 'randomTopic',
+      })
+        
+      const res = await myAxios.put('/honjaya/points',{
+        point: 300,
+      })
+      console.log("포인트수정",res)
+
+      await this.setState({
+        myUserPoint: res.data.point
+      })
+
+    
+    } catch (err) {
+      console.log('error')
+    }
+  }
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
 
   getToken() {
     return this.createSession(this.state.mySessionId).then((sessionId) =>
@@ -831,11 +885,14 @@ class Meeting extends Component {
                   value="나가기"
                 />
                 {this.state.randomTopic}
+<<<<<<< HEAD
 
             
 
           
               
+=======
+>>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
     
                 <button onClick={this.pickTopic}>주제변경</button>
               </Header>
@@ -928,7 +985,8 @@ class Meeting extends Component {
 const mapStateToProps = (state) => ({
   // loginSlice
   login: state.login,
-  hashtag: state.hashtag
+  hashtag: state.hashtag,
+  mode: state.mode,
 })
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
 const mapDispatchToProps = (dispatch) => {
