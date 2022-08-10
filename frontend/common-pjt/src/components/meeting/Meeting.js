@@ -238,7 +238,7 @@ class Meeting extends Component {
     
 
     
-    console.log("해쉬잇냐",hashesOwned)
+    
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
 
@@ -263,6 +263,8 @@ class Meeting extends Component {
       myUserPoint: userPoint,
       hashList: hashesOwned
     })
+
+
     this.sendHash()
  
   }
@@ -270,11 +272,11 @@ class Meeting extends Component {
   componentWillUnmount() {
     //openVidu
     window.removeEventListener('beforeunload', this.onbeforeunload)
-
+    
     // unmount 될때, 스톱워치 종료
     this.stopTimer()
   }
-
+  
   // 스톱워치 종료 함수: clearInterval(변수)
   stopTimer = () => {
     clearInterval(this.intervalRef.current)
@@ -290,12 +292,12 @@ class Meeting extends Component {
         to: [],
         type: 'addTime'
       })
-
+      
       const res = await myAxios.put('/honjaya/points', {
         point: 100,
       })
       console.log("포인트수정", res)
-
+      
       await this.setState({
         myUserPoint: res.data.point
       })
@@ -309,7 +311,7 @@ class Meeting extends Component {
   showSelectTimer = () => {
     this.setState({ showAddTimer: !this.state.showAddTimer })
   }
-
+  
   onbeforeunload(event) {
     this.leaveSession()
   }
@@ -333,7 +335,7 @@ class Meeting extends Component {
       })
     }
   }
-
+  
   deleteSubscriber(streamManager) {
     let subscribers = this.state.subscribers
     let index = subscribers.indexOf(streamManager, 0)
@@ -344,6 +346,56 @@ class Meeting extends Component {
       })
     }
   }
+  
+  //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
+  //랜덤 주제 픽
+  shuffleTopic() {
+    //shuffle arr
+    let arr = new Array()
+    for (var i = 0; i<5; i++){
+      arr[i] = i;
+    }
+    arr.sort(() => Math.random() - 0.5)
+    // randomTopic 바꿔주기
+    this.setState({ randomTopic: this.state.topicList[arr[0]]})
+    
+  }
+  async pickTopic() {
+    
+    try {
+      //토픽바꾸기
+      
+      await this.shuffleTopic()
+      this.state.session.signal({
+        data: `${this.state.randomTopic}`,
+        to: [],
+        type: 'randomTopic',
+      })
+        
+      const res = await myAxios.put('/honjaya/points',{
+        point: 300,
+      })
+      console.log("포인트수정",res)
+
+      await this.setState({
+        myUserPoint: res.data.point
+      })
+    } catch (err) {
+      console.log('error')
+    }
+  }
+    //sendHash
+    async sendHash() {
+      this.state.session.signal({
+        data: `${this.state.myUserName}`,
+        to: [],
+        type: 'hashtags',
+      })
+      .then(()=>{console.log("해쉬시그널보내기완료")})
+      .catch(() => {})
+  }
+
+
 
   //채팅 보내는 함수
   handleChatMessageChange(e) {
@@ -351,7 +403,7 @@ class Meeting extends Component {
       message: e.target.value,
     });
   }
-
+  
   sendmessageByClick() {
     this.setState({
       messages: [
@@ -476,7 +528,7 @@ class Meeting extends Component {
             });
           }
         });
-        //해쉬태그보내기
+        //해쉬태그듣기
         mySession.on('signal:hashtags', (event) => {
           this.setState({ hashtags: event.data })
 
@@ -491,8 +543,10 @@ class Meeting extends Component {
         this.getToken().then((token) => {
           // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+          
+          // 해쉬태그 넣어주기
           mySession
-            .connect(token, { clientData: this.state.myUserName })
+            .connect(token, { clientData: this.state.myUserName, hashtags: this.state.hashList })
             .then(async () => {
               var devices = await this.OV.getDevices()
               var videoDevices = devices.filter(
@@ -597,60 +651,7 @@ class Meeting extends Component {
     }
   }
 
-  //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시 
-  //랜덤 주제 픽
-   
 
-
-  shuffleTopic() {
-    //shuffle arr
-    let arr = new Array()
-    for (var i = 0; i<5; i++){
-      arr[i] = i;
-    }
-    arr.sort(() => Math.random() - 0.5)
-    // randomTopic 바꿔주기
-    this.setState({ randomTopic: this.state.topicList[arr[0]]})
-    
-  }
-  async pickTopic() {
-    
-    try {
-      //토픽바꾸기
-      
-      await this.shuffleTopic()
-      this.state.session.signal({
-        data: `${this.state.randomTopic}`,
-        to: [],
-        type: 'randomTopic',
-      })
-        
-      const res = await myAxios.put('/honjaya/points',{
-        point: 300,
-      })
-      console.log("포인트수정",res)
-
-      await this.setState({
-        myUserPoint: res.data.point
-      })
-
-    
-    } catch (err) {
-      console.log('error')
-    }
-  }
-
-  //loadHash
-  async sendHash() {
-      
-      this.state.session.signal({
-        data: `${this.state.hashList}`,
-        to: [],
-        type: 'hashtags',
-      })
-      .then(()=>{console.log("슬라이스로드완료")})
-      .catch(() => {})
-  }
 
 
   getToken() {
@@ -826,10 +827,11 @@ class Meeting extends Component {
                   value="나가기"
                 />
                 {this.state.randomTopic}
-                {/* {this.hashList.map((item, idx) => (
-                  <h1># {item[1]}</h1>))} */}
-                {this.state.hashList}
-                <h1>{this.state.myUserPoint}</h1>
+
+            
+
+          
+              
     
                 <button onClick={this.pickTopic}>주제변경</button>
               </Header>
