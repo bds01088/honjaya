@@ -15,23 +15,29 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class MeetingRes {
-	@ApiModelProperty(value = "미팅방 UUID (테스트)")
+	@ApiModelProperty(value = "미팅방 UUID")
 	private String uuid;
 	
-	@ApiModelProperty(value = "세션 ID (테스트)")
-	private String sessionId;
+	@ApiModelProperty(value = "유저 (유저 번호, 닉네임)")
+	private MeetingUserRes user;
 	
-	@ApiModelProperty(value = "미팅방 번호")
-	private int roomNo;
+	@ApiModelProperty(value = "Pair(아바타-지시자) 유저 (유저 번호, 닉네임)")
+	private MeetingUserRes pairUser;
 	
-	@ApiModelProperty(value = "유저 번호")
-	private int userNo;
+	@ApiModelProperty(value = "역할 코드 (1:솔로 / 2:아바타 / 3:지시자)")
+	private int roleCode;
 	
-	@ApiModelProperty(value = "Pair(아바타-지시자) 유저 번호")
-	private int pairUserNo;
+	@ApiModelProperty(value = "방 팀원 수")
+	private int total;
+	
+//	@ApiModelProperty(value = "총 인원 수")
+//	private int people;
 	
 	@ApiModelProperty(value = "응답 결과 (1:성공 / 0:취소 / -1:timeout)")
 	private int result;
+	
+	@ApiModelProperty(value = "토큰 비허가 (토큰 만료) -> access토큰 만료되면 true를 반환")
+	private boolean unauthorized;
 	
 	@ApiModelProperty(value = "에러 메시지")
 	private String error;
