@@ -4,7 +4,7 @@ $(function () {
   const TIMEOUT = -1;
 
   var ChatManager = (function () {
-    function ChatManager() { }
+    function ChatManager() {}
 
     ChatManager.textarea = $("#chat-content");
     ChatManager.socket = null;
@@ -92,43 +92,11 @@ $(function () {
     };
 
     ChatManager.cancel = function () {
-      var userGender;
-      var radios3 = document.getElementsByName("gender");
-      for (var radio3 of radios3) {
-        if (radio3.checked) {
-          userGender = radio3.value;
-        }
-      }
-      var roleCode;
-      var radios = document.getElementsByName("role-code");
-      for (var radio of radios) {
-        if (radio.checked) {
-          roleCode = radio.value;
-        }
-      }
-      var total;
-      var radios2 = document.getElementsByName("total");
-      for (var radio2 of radios2) {
-        if (radio2.checked) {
-          total = radio2.value;
-        }
-      }
-      var oppositeGender = document.getElementById("oppositeGender").checked;
-
-      var sendData = {
-        userGender: userGender,
-        total: total,
-        oppositeGender: oppositeGender,
-        roleCode: roleCode,
-      };
-
       $.ajax({
         url: "meetings/cancel",
         headers: {
           "Content-Type": "application/json",
         },
-        type: "POST",
-        data: JSON.stringify(sendData),
         success: function () {
           ChatManager.updateText("", false);
         },

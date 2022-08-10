@@ -161,7 +161,7 @@ const MainHeader = () => {
   
   const [isOpen, setIsOpen] = useState(false)
 
-  // const pointShow = userPoint.toLocaleString('ko-KR')
+  const pointShow = userPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   const openModalHelper = () => {
     setIsOpen(!isOpen)
   }
