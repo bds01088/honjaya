@@ -580,7 +580,7 @@ const UpdateProfile = () => {
                   type="password"
                   autoComplete="userPassword"
                   placeholder="비밀번호 확인"
-                  onBlur={checkPassword()}
+                  onBlur={checkPassword}
                 ></StyledInput>
                 <div>
                   {pwdValid ? (
