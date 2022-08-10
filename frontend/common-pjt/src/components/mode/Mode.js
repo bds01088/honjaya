@@ -35,13 +35,8 @@ const Mode = () => {
       .catch((err)=> {alert('유저로드에러')})
   }, [])
 
-
-  const { userGender } = useSelector((state) => state.login.user)
-
   const [data, setData] = useState({
-    userGender: userGender,
     total: 2,
-    oppositeGender: false,
     roleCode: 1,
   })
 
