@@ -223,8 +223,8 @@ class Meeting extends Component {
     const { hashesOwned } = hashtag
     
 
-    console.log('콘솔에 있냐', hashesOwned)
-
+    
+    console.log("해쉬잇냐",hashesOwned)
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
 
@@ -522,8 +522,10 @@ class Meeting extends Component {
     
   }
   async pickTopic() {
+    
     try {
       //토픽바꾸기
+      
       await this.shuffleTopic()
       this.state.session.signal({
         data: `${this.state.randomTopic}`,
@@ -549,10 +551,6 @@ class Meeting extends Component {
   //loadHash
   async sendHash() {
       
-
-      this.setState({
-        hashList: this.state.hashesOwned
-      })
       this.state.session.signal({
         data: `${this.state.hashList}`,
         to: [],
