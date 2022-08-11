@@ -191,8 +191,6 @@ class Meeting extends Component {
       message: '',
       messages: [],
 
-      hashList : [],
-
       //랜덤주제
       randomTopic: "리액트 vs 뷰",
       topicList: ["좋아하는 웹툰","좋아하는 영화","좋아하는 음식","최근에 간 여행지","mbti"],
@@ -222,20 +220,18 @@ class Meeting extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this);
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this);
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this);
-
-    // 해쉬태그 로드
-    this.sendHash = this.sendHash.bind(this);
   }
 
   componentDidMount() {
-    this.setState({mySessionId : this.props.matchResponse.uuid})
+    const { mode } = this.props
     const { login } = this.props
-    const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
-    const { hashesOwned } = hashtag
+    const { uuid } = mode
+    this.setState({
+      mySessionId: uuid,
+    })
     
-
-    console.log('콘솔에 있냐', hashesOwned)
+    this.joinSession()
 
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
@@ -259,9 +255,7 @@ class Meeting extends Component {
     this.setState({
       myUserName: userNickname,
       myUserPoint: userPoint,
-      hashList: hashesOwned
     })
-    this.sendHash()
   }
   
   componentWillUnmount() {
@@ -474,13 +468,6 @@ class Meeting extends Component {
           }
         });
 
-        mySession.on('signal:hashtags', (event) => {
-          this.setState({ hashtags: event.data })
-
-          console.log("해쉬태그보내기", event.data)
-          console.log(event.data)
-        })
-
         // --- 4) Connect to the session with a valid user token ---
 
         // 'getToken' method is simulating what your server-side should do.
@@ -548,7 +535,7 @@ class Meeting extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: 'SessionA',
+      mySessionId: '',
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,
@@ -634,23 +621,6 @@ class Meeting extends Component {
       console.log('error')
     }
   }
-
-  //loadHash
-  async sendHash() {
-      
-
-      this.setState({
-        hashList: this.state.hashesOwned
-      })
-      this.state.session.signal({
-        data: `${this.state.hashList}`,
-        to: [],
-        type: 'hashtags',
-      })
-      .then(()=>{console.log("슬라이스로드완료")})
-      .catch(() => {})
-  }
-
 
   getToken() {
     return this.createSession(this.state.mySessionId).then((sessionId) =>
@@ -825,8 +795,6 @@ class Meeting extends Component {
                   value="나가기"
                 />
                 {this.state.randomTopic}
-                {/* {this.hashList.map((item, idx) => (
-                  <h1># {item[1]}</h1>))} */}
     
                 <button onClick={this.pickTopic}>주제변경</button>
               </Header>
@@ -919,7 +887,8 @@ class Meeting extends Component {
 const mapStateToProps = (state) => ({
   // loginSlice
   login: state.login,
-  hashtag: state.hashtag
+  hashtag: state.hashtag,
+  mode: state.mode,
 })
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
 const mapDispatchToProps = (dispatch) => {
