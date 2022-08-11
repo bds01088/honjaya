@@ -57,7 +57,7 @@ public class MeetingController {
 				logger.error("사용 불가능 토큰!!!");
 				MeetingRes meetingRes = new MeetingRes();
 				meetingRes.setError("The token is denied");
-				meetingRes.setUnauthorized(false);
+				meetingRes.setUnauthorized(true);
 				deferredResult.setResult(meetingRes);
 			}
 		} catch (Exception e) {
