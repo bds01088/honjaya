@@ -382,8 +382,16 @@ class Waiting extends Component {
       .unwrap()
       .then((res) => {
         console.log("요청응답", res)
-        this.props.history.push('/meeting')
-        
+        if (res.result === 1) {
+          this.props.history.push('/meeting')
+        } else if (res.result === -1) {
+          this.setState({
+            uuid: undefined,
+            nowmatching: false
+          })
+        } else {
+          console.log("취소", res)
+        }
       })
     
     // myAxios.post(
