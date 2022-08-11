@@ -168,6 +168,35 @@ const VideoBox = styled.div`
 `
 
 
+const SendMsgBox = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+`
+
+const SendMsg = styled.input`
+  width: 70%;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  border: 0;
+  border-bottom: 2px solid #333333;
+  font-size: 1.3rem;
+  font-family: Minseo;
+`
+
+const SendBtn = styled.button`
+  background-color: #FCD1D1;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+  font-family: Minseo;
+  border: 0;
+  border-bottom: 2px solid #333333;
+`
+
 // 캠 on/off + 나가기
 const Footer = styled.div`
   width: 100%;
@@ -953,36 +982,26 @@ class Meeting extends Component {
               >
                 <div
                   className="chatbox"
-                  style={{ width: '26%', padding: '0 2%' }}
+                  style={{ width: '20%', padding: '0 2%', position: "relative" }}
                 >
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'ceneter',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <input
+                  <div>
+                    <Messages messages={messages} pairUser={this.state.pairUser} myRole={this.state.myRoleCode} myName={this.state.myUserName}/>
+                  </div>
+                  <SendMsgBox>
+                    <SendMsg
                       id="chat_message"
                       type="text"
                       placeholder="Write a message..."
                       onChange={this.handleChatMessageChange}
                       onKeyPress={this.sendmessageByEnter}
                       value={this.state.message}
-                      style={{ width: '60%' }}
                     />
-                    <p
+                    <SendBtn
                       onClick={this.sendmessageByClick}
-                      style={{ border: '2px solid black' }}
                     >
-                      Send
-                    </p>
-                  </div>
-                  <div className="chatbox__messages" ref="chatoutput">
-                    {/* {this.displayElements} */}
-                    <Messages messages={messages} />
-                  </div>
+                      전송
+                    </SendBtn>
+                  </SendMsgBox>
                 </div>
 
                 {/* mainStreamMnager가 있다면 */}
