@@ -5,7 +5,7 @@ export const matchDataGet = createAsyncThunk(
     'MATCH_DATA_GET',
     async (data, {rejectWithValue}) => {
         try {
-            const res = await axios.post('http://localhost:8080/honjaya/meetings/ready',data)
+            const res = await axios.post('https://i7e104.p.ssafy.io/honjaya/meetings/ready',data)
             return res.data
         } catch (err) {
         return rejectWithValue(err.response)
@@ -17,8 +17,8 @@ export const exitMatching = createAsyncThunk(
     'EXIT_MATCHING',
     async (data, {rejectWithValue}) => { 
         try {
-            // const res = await axios.get('https://i7e104.p.ssafy.io/honjaya/meetings/cancel',)
-            const res = await axios.get('http://localhost:8080/honjaya/meetings/cancel',)
+            const res = await axios.get('https://i7e104.p.ssafy.io/honjaya/meetings/cancel',)
+            // const res = await axios.get('http://localhost:8080/honjaya/meetings/cancel',)
             return res
             } catch (err) {
                 return rejectWithValue(err.response)
