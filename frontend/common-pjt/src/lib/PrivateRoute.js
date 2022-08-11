@@ -1,10 +1,17 @@
-import React from "react"
-import { Route } from "react-router-dom"
-import isAuthenticated from "../api/isAuthenticated"
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import isAuthenticated from '../api/isAuthenticated';
 
-const PrivateRoute = ({ component: Component }) => {
+export default function PrivateRoute({ component: Component, ...rest }) {
+
     return (
-        isAuthenticated() ? Component : <Route to="/" />
-        )
+        <Route
+          {...rest}
+          render={(props) =>
+            isAuthenticated() ? <Component {...props} /> : <Redirect to="/" />
+          }
+        />
+      );
     }
-  export default PrivateRoute
+    
+

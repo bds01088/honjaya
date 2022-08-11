@@ -23,11 +23,11 @@ function App() {
 
 
         {/* <Route path="/" element={<PublicRoute component={<Login />} />}/> */}
-        <Route exact path="/" component={Login}/>
+        <PublicRoute exact path="/" component={Login}/>
         {/* <Route path="/pledge" element={<PublicRoute component={<Pledge />} />}/> */}
-        <Route exact path="/pledge" component={Pledge}/>
+        <PublicRoute exact path="/pledge" component={Pledge}/>
         {/* <Route path="/signup" element={<PublicRoute component={<Signup />} />}/> */}
-        <Route exact path="/signup" component={Signup}/>
+        <PublicRoute exact path="/signup" component={Signup}/>
         
         {/* main이랑 profile에 파라미터가 필요할까? */}
         {/* <Route path="/main" element={<PrivateRoute component={<Main />}/>}/> */}
