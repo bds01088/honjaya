@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -139,6 +140,7 @@ public class MeetingServiceImpl implements MeetingService {
 //			waitingUsers.put(meetingReq, deferredResult);
 		} finally {
 			lock.writeLock().unlock();
+			testPrint(); // 테스트
 			establishRoom();
 		}
 
@@ -147,7 +149,6 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public void cancelChatRoom(MeetingReq meetingReq) {
 		try {
-			System.out.println("cancelChatRoom() 호출! before lock");
 			lock.writeLock().lock();
 			if (!userNoMeetingReq.containsKey(meetingReq.getUserNo())) {
 				return;
@@ -159,16 +160,16 @@ public class MeetingServiceImpl implements MeetingService {
 					new MeetingRes(null, new MeetingUserRes(userRepository.findById(meetingReq.getUserNo()).get()),
 							null, 0, 0, CANCEL, false, null));
 
+			System.out.println("cancelChatRoom");
+			testPrint(); // 테스트
 		} finally {
 			lock.writeLock().unlock();
-			System.out.println("cancelChatRoom() 호출! after lock");
 		}
 	}
 
 	@Override
 	public void timeout(MeetingReq meetingReq) {
 		try {
-			System.out.println("timeout() 호출! before lock");
 			lock.writeLock().lock();
 			if (!userNoMeetingReq.containsKey(meetingReq.getUserNo())) {
 				return;
@@ -178,9 +179,11 @@ public class MeetingServiceImpl implements MeetingService {
 			setJoinResult(result,
 					new MeetingRes(null, new MeetingUserRes(userRepository.findById(meetingReq.getUserNo()).get()),
 							null, 0, 0, TIMEOUT, false, null));
+			
+			System.out.println("timeout");
+			testPrint(); // 테스트
 		} finally {
 			lock.writeLock().unlock();
-			System.out.println("timeout() 호출! after lock");
 		}
 	}
 
@@ -246,6 +249,7 @@ public class MeetingServiceImpl implements MeetingService {
 						}
 						waitingUsers.get(i).remove(reqs[j]).setResult(res);
 					}
+					testPrint(); // 테스트
 					return;
 				}
 			}
@@ -352,6 +356,37 @@ public class MeetingServiceImpl implements MeetingService {
 //		this.waitingCommander.add(new LinkedHashMap<>());
 //		this.waitingPair.add(new LinkedHashMap<>());
 //	}
+	
+	private void testPrint() { // 테스트
+		for (int i = 0; i < 2; i++) {
+			int cnt = 0;
+			System.out.print("대기 중인 솔로+아바타(팀o): ");
+			for (MeetingReq e : waitingUsers.get(0).keySet()) {
+				System.out.print(e.getUserNo() + ", ");
+				cnt++;
+			}
+			System.out.println(": 총 " + cnt + "명");
+			cnt = 0;
+			System.out.print("대기 중인        지시자(팀o): ");
+			for (MeetingReq e : waitingUsersOfCommanders.get(0).keySet()) {
+				System.out.print(e.getUserNo());
+			}
+			System.out.println(": 총 " + cnt + "명");
+			cnt = 0;
+			System.out.print("대기 중인 팀 없는      아바타: ");
+			for (MeetingReq e : waitingAvatar.get(0).keySet()) {
+				System.out.print(e.getUserNo());
+			}
+			System.out.println(": 총 " + cnt + "명");
+			cnt = 0;
+			System.out.print("대기 중인 팀 없는      지시자: ");
+			for (MeetingReq e : waitingCommander.get(0).keySet()) {
+				System.out.print(e.getUserNo());
+			}
+			System.out.println(": 총 " + cnt + "명");
+//			waitingPair;
+		}
+	}
 
 	private void setJoinResult(DeferredResult<MeetingRes> result, MeetingRes response) {
 		if (result != null) {
