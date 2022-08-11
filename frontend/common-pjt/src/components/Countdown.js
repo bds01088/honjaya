@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import React, { Component } from 'react'
-import { Navigate } from 'react-router-dom'
+// import {  } from 'react-router-dom'
 import backGif from '../assets/countdown.gif'
 import logoImg from '../assets/logo.png'
 
@@ -65,7 +65,9 @@ class Countdown extends Component {
       <Background>
         <LogoImg/>
         <BackImg/>
-        { this.state.timeLimit === 0 ? <Navigate to="/result" /> : null }
+
+        {/* { this.state.timeLimit === 0 ? <Navigate to="/result" /> : null } */}
+        { this.state.timeLimit === 0 ? this.props.history.push('/main') : null}
       </Background>
     )
   }

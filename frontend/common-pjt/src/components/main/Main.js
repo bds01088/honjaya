@@ -14,7 +14,7 @@ import {
   MdKeyboardArrowDown,
 } from 'react-icons/md'
 import React, { useState, useEffect } from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link,useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getHash, delHash } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
@@ -254,7 +254,7 @@ const Main = () => {
 
   const [chatUser, setChatUser] = useState('')
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const history = useHistory()
   
   //소유한 해시태그 userSelector로 불러오기
   const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
@@ -301,11 +301,11 @@ const Main = () => {
     .then((res) => {
       //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜 
       console.log(res)
-      navigate('/')
+      history.push('/')
     })
     .catch((err) => {
       if (err.status === 500) {
-        navigate('/error')
+        history.push('/error')
       }
     })
   }

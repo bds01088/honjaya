@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 // import { toast } from 'react-toastify'
 import { checkNickname, checkEmail, signup } from './signup-slice'
 import EmailCheck from './EmailCheck'
@@ -152,7 +152,7 @@ const FormInputs = () => {
 
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const history = useHistory()
 
 
   // 이메일 인증 모달 열기
@@ -290,7 +290,7 @@ const FormInputs = () => {
     })
     .catch((err) => {
       if (err.status === 500) {
-        navigate('/error')
+        history.push('/error')
       }
     })
   }
@@ -306,7 +306,7 @@ const FormInputs = () => {
     })
     .catch((err) => {
       if (err.status === 500) {
-        navigate('/error')
+        history.push('/error')
       }
     })
   }
@@ -325,7 +325,7 @@ const FormInputs = () => {
     dispatch(signup(data))
       .unwrap()
       .then(() => {
-        navigate('/')
+        history.push('/')
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -333,7 +333,7 @@ const FormInputs = () => {
             "입력하신 정보를 한번 더 확인해주세요"
           );
         } else if (err.status === 500) {
-          navigate('/error')
+          history.push('/error')
         }
       });
   }

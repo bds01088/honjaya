@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { login,savePoint } from './login-slice'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const LoginFormInputsBlock = styled.form`
@@ -52,7 +52,7 @@ const LoginBtn = styled.button`
 
 const LoginFormInputs = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const history = useHistory()
   const [userEmail, setEmail] = useState('')
   const [userPassword, setPassword] = useState('')
 
@@ -67,7 +67,7 @@ const LoginFormInputs = () => {
     .unwrap()
     .then(() => {
       // console.log(res) 이렇게 쓸려면 ()안에 인자로 담으면됨
-      navigate('/main')
+      history.push('/main')
 
     })
     .catch((err) => {
@@ -80,7 +80,7 @@ const LoginFormInputs = () => {
       } else if (err.status === 403) {
         alert('신고누적으로 사용이 정지된 유저입니다')
       } else if (err.status === 500) {
-        navigate('/error')
+        history.push('/error')
       } 
       })
   }

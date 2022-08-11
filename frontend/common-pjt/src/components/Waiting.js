@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import styled from 'styled-components'
 import logoImg from '../assets/logo.png'
 import React, { Component } from 'react'
@@ -10,14 +9,11 @@ import axios from 'axios'
 import myAxios from '../api/http'
 import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
-<<<<<<< HEAD
-import { setMatchResponse } from './mode/mode-slice'
-import { Navigate } from "react-router-dom"
-=======
-import { matchDataGet } from './mode/mode-slice'
-import withNavigateHook from './withNavigateHook'
+import { matchDataGet, setMatchResponse } from './mode/mode-slice'
+import { CollectionsOutlined } from '@material-ui/icons'
 
->>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
+// import { matchDataGet } from './mode/mode-slice'
+
 const Background = styled.div`
   background-color: #fffdde;
   width: 100vw;
@@ -375,71 +371,57 @@ class Waiting extends Component {
         total: data.total,
         roleCode: data.roleCode
       }
-<<<<<<< HEAD
-      ).then(() => {
-          if (this.uuid !== undefined && this.nowmatching === false){
-            // this.props.navigate('/meeting')
-            // this.state.redirect && <Navigate to='/meeting'/>
-            this.setState({redirect: true})
-            // eslint-disable-next-line no-lone-blocks
-            { this.state.redirect ? <Navigate to="/meeting"/> : null }
-          }
-  
-      }
-      ).catch(err => {
-=======
       
       doMatchDataGet(matchData)
       .unwrap()
       .then((res) => {
         console.log("요청응답", res)
-        this.props.navigation('/meeting')
+        this.props.history.push('/meeting')
+        
       })
+    
+    // myAxios.post(
+    //     'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
+    //     {
+    //       "total": data.total,
+    //       "roleCode": data.roleCode
+    //     }
+    //     ).then(res => {
+    //     console.log("uuid 응답 받아옴")
+    //     console.log(res.data)
+    //     if (res.data.result === 1){
+    //         this.setState({
+    //           uuid : res.data.uuid,
+    //           nowmatching : false
+    //         })
+    //         console.log("slice에 응답 저장")
+    //         this.props.setMatchResponse(res.data)
+    //         console.log("slice에 응답 저장됌")
+    //     }else if (res.data.result === -1 ){
+    //       console.log("응답왔지만 매칭안됌")
+    //       this.setState({
+    //         uuid : undefined,
+    //         nowmatching : false
+    //       })
+    //       this.resetTimer()
+    //     } else console.log("취소됌")
+    //   }
+    //   ).then(() => {
+    //     // if (this.res.data.uuid !== undefined) {
+
+    //     // }
+    //     // if (this.uuid !== undefined && this.nowmatching === false){
+    //     //     // this.props.navigate('/meeting')
+    //     //     // this.state.redirect && <Navigate to='/meeting'/>
+    //     //     // this.setState({redirect: true})
+    //     //   }
+  
+    //   }
       .catch(err => {
->>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613
         console.log(err)
         }
       )
   }
-  //   console.log("데이터잘담기나?", data.total)
-    
-  //   console.log("uuid 요청보냄")
-  //   myAxios.post(
-  //       'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
-  //       {
-  //         "total": data.total,
-  //         "roleCode": data.roleCode
-  //       }
-  //     ).then(res => {
-  //       console.log("uuid 응답 받아옴")
-  //       console.log(res.data)
-  //       if (res.data.result === 1){
-  //           this.setState({
-  //             uuid : res.data.uuid,
-  //             nowmatching : false
-  //           })
-  //           console.log("slice에 응답 저장")
-  //           this.props.setMatchResponse(res.data)
-  //           console.log("slice에 응답 저장됌")
-  //       }else if (res.data.result === -1 ){
-  //         console.log("응답왔지만 매칭안됌")
-  //         this.setState({
-  //           uuid : undefined,
-  //           nowmatching : false
-  //         })
-  //         this.resetTimer()
-  //       } else console.log("취소됌")
-  //     }
-  //     ).then(() => {
-  //       // if (this.uuid !== undefined && this.nowmatching === false){
-  //           this.props.navigation('/meeting')
-  //         // }
-  //     }
-  //     ).catch(err => {
-  //       console.log(err)
-  //       }
-  //     )
-  // }
 
   cancelMatching() {
     console.log("cancel 요청보냄")
@@ -524,12 +506,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    // setMatchResponse: (res) => dispatch(setMatchResponse(res)),
     doMatchDataGet: (type) => dispatch(matchDataGet(type))
   }
 }
 
-<<<<<<< HEAD
 export default connect(mapStateToProps, mapDispatchToProps)(Waiting)
-=======
-export default withNavigateHook(connect(mapStateToProps, mapDispatchToProps)(Waiting))
->>>>>>> dd30022c5eebe72edb394ebaaf3343112f15c613

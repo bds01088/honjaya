@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from '../../api/http'
 
 export const matchDataGet = createAsyncThunk(
@@ -13,10 +13,22 @@ export const matchDataGet = createAsyncThunk(
     }
 )
 
+
 const initialState = {
-    total: undefined, //2, 4
-    roleCode: undefined, //1, 2, 3..
-    matchResponse: undefined
+    // total: undefined, //2, 4
+    // roleCode: undefined, //1, 2, 3..
+    // matchResponse: undefined,
+    result: undefined,
+    roleCode: undefined,
+    total: undefined,
+    unauthorized: undefined,
+    user: {},
+    uuid: undefined,
+    pairUser: {},
+
+
+
+
 }
 
 const modeSlice = createSlice({
@@ -31,7 +43,19 @@ const modeSlice = createSlice({
         },
         setMatchResponse: (state, action) => {
             state.matchResponse = action.payload
-            console.log(state.matchResponse)
+        },
+        
+    },
+    extraReducers: {
+        [matchDataGet.fulfilled]: (state, action) => {
+            const { result, roleCode, total, unauthorized, user, uuid,pairUser } = action.payload
+            state.result = result
+            state.roleCode = roleCode
+            state.total = total
+            state.unauthorized = unauthorized
+            state.user = user
+            state.uuid = uuid
+            state.pairUser = pairUser
         }
     }
 })
