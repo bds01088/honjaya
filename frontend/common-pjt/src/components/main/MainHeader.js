@@ -5,11 +5,10 @@ import Rating from '@mui/material/Rating'
 import { MdAccountCircle, MdHelpOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import MainHelper from './MainHelper'
-import React, { useState,useEffect } from 'react'
-import { useSelector,useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { loadUser } from '../auth/login/login-slice'
 import { getRate } from './hashtag/rate-slice'
-
 
 const Header = styled.div`
   display: flex;
@@ -92,7 +91,7 @@ const ProfileBox = styled.div`
   position: relative;
 
   &:hover .profileTip {
-  visibility: visible;
+    visibility: visible;
   }
 `
 
@@ -121,7 +120,7 @@ const ProfileText = styled.p`
 
 // 도움말
 const HelperBox = styled.div`
-    position: relative;
+  position: relative;
 
   &:hover .helperTip {
     visibility: visible;
@@ -149,19 +148,24 @@ const HelperText = styled.p`
   margin-left: -2.8rem;
 `
 
-
 const MainHeader = () => {
-
   //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
   //store에 있는 userNickname 불러오기
   const { userNickname, userPoint } = useSelector((state) => state.login.user)
 
   //store에서 관리중인 rate 불러오기
   const { rateScore } = useSelector((state) => state.rate.rateInfo)
-  
+
   const [isOpen, setIsOpen] = useState(false)
 
-  const pointShow = userPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  let pointShow = undefined
+
+  if (userPoint !== undefined) {
+    pointShow = userPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  } else {
+    pointShow = 0
+  }
+
   const openModalHelper = () => {
     setIsOpen(!isOpen)
   }
@@ -169,22 +173,17 @@ const MainHeader = () => {
   return (
     <Header>
       <Logo src={logoImg} />
-      
+
       <LeftBox>
         <Nickname>{userNickname}</Nickname>
         <RateBox>
-          <MannerRate
-            size="large"
-            value={rateScore}
-            precision={0.5}
-            readOnly
-          />
+          <MannerRate size="large" value={rateScore} precision={0.5} readOnly />
           <RateText className="rateTip">매너점수: {rateScore}</RateText>
         </RateBox>
 
         <PointImg src={pointImg} />
         <PointText>{pointShow}</PointText>
-        
+
         <ProfileBox>
           <Link to="/profile" style={{ fontSize: '0' }}>
             <ProfileIcon />
@@ -196,7 +195,6 @@ const MainHeader = () => {
           <Helper onClick={openModalHelper} />
           <HelperText className="helperTip">도움말</HelperText>
         </HelperBox>
-
       </LeftBox>
       {isOpen ? <MainHelper openModalHelper={openModalHelper} /> : null}
     </Header>
