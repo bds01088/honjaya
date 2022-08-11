@@ -247,9 +247,6 @@ const Main = () => {
     '배상현',
     '배송윤',
     '이승현',
-    '박준영',
-    '구두성',
-    '강태찬',
   ])
 
   const [chatUser, setChatUser] = useState('')
