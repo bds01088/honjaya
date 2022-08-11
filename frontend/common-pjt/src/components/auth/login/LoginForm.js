@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import LoginFormInputs from './LoginFormInputs'
 import logoImg from '../../../assets/logo.png'
-import { useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 
 const LoginFormBlock = styled.div`
@@ -37,14 +37,14 @@ const GoInBtn = styled.div`
 
 
 const LoginForm = () => {
-  const navigate = useNavigate()
+  const history = useHistory()
 
   return (
     <LoginFormBlock>
       <Logo/> 
       {/* <p>이미 회원이신가요? <Link to="/login" className="Login">로그인하기</Link></p> */}
       <LoginFormInputs/>
-      <GoInBtn onClick={() => navigate('/pledge')}>회원가입</GoInBtn>
+      <GoInBtn onClick={() => history.push('/pledge')}>회원가입</GoInBtn>
     </LoginFormBlock>
   );
 };

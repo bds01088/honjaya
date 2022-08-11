@@ -5,7 +5,7 @@ import profileImg from '../../../assets/shadow.png'
 import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -350,7 +350,7 @@ const UpdateProfile = () => {
   const [defaultPwdCheck, setDefaultPwdCheck] = useState(false)
   const [defaultNickname, setDefaultNickname] = useState(false)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const history = useHistory()
 
   //기존 유저 정보 로드
   useEffect(() => {
@@ -372,7 +372,7 @@ const UpdateProfile = () => {
       })
       .catch((err) => {
         if (err.status === 500) {
-          navigate('/error')
+          history.push('/error')
         }
       })
   }
@@ -399,7 +399,7 @@ const UpdateProfile = () => {
         if (err.status === 401) {
           alert('입력하신 정보를 한번 더 확인해주세요')
         } else if (err.status === 500) {
-          navigate('/error')
+          history.push('/error')
         }
       })
   }

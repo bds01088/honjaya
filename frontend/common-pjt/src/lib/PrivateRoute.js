@@ -1,10 +1,10 @@
 import React from "react"
-import { Navigate } from "react-router-dom"
+import { Route } from "react-router-dom"
 import isAuthenticated from "../api/isAuthenticated"
 
 const PrivateRoute = ({ component: Component }) => {
     return (
-        isAuthenticated() ? Component : <Navigate to="/" />
+        isAuthenticated() ? Component : <Route to="/" />
         )
     }
   export default PrivateRoute
