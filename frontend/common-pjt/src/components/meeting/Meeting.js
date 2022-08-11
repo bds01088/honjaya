@@ -190,6 +190,10 @@ class Meeting extends Component {
       //채팅관련
       message: '',
       messages: [],
+      pairUser: undefined,
+      chatConnection: [],
+
+      
 
       //해쉬태그
       hashList : [],
@@ -238,8 +242,14 @@ class Meeting extends Component {
     const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
-    const { uuid } = mode
-    
+    const { uuid, roleCode } = mode
+
+    if (roleCode !== 1){
+      const pairUser = mode.pairUser
+      console.log("페어유저 정보 저장", pairUser)
+      this.setState({ pairUser: pairUser})
+    }
+
     this.setState({
       mySessionId: uuid,
     })
@@ -428,7 +438,7 @@ class Meeting extends Component {
 
     mySession.signal({
       data: `${this.state.myUserName},${this.state.message}`,
-      to: [],
+      to: [this.state.chatConnection],
       type: 'chat',
     });
 
@@ -453,7 +463,7 @@ class Meeting extends Component {
 
       mySession.signal({
         data: `${this.state.myUserName},${this.state.message}`,
-        to: [],
+        to: [this.state.chatConnection],
         type: 'chat',
       });
 
@@ -461,6 +471,7 @@ class Meeting extends Component {
         message: '',
       });
       console.log("aaaaa", this.state.publisher)
+      console.log("bbbbb", this.state.subscribers)
     }
   }
 
@@ -488,6 +499,9 @@ class Meeting extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined)
           var subscribers = this.state.subscribers
           subscribers.push(subscriber)
+          if (JSON.parse(subscriber.stream.connection.data).clientData === this.state.pairUser.userNickname ){
+            this.setState({chatConnection : subscriber.stream.connection})
+          }
 
           // Update the state with the new subscribers
           this.setState({
