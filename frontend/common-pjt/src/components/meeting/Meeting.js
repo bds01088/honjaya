@@ -15,12 +15,7 @@ import Messages from './meeting-chat/Messages'
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
 
-import {
-  MdVideocam,
-  MdVideocamOff,
-  MdMic,
-  MdMicOff,
-} from 'react-icons/md'; // 추가
+import { MdVideocam, MdVideocamOff, MdMic, MdMicOff } from 'react-icons/md' // 추가
 // import randomTopic from '../../DATA/randomTopic.json'
 
 const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443'
@@ -168,8 +163,8 @@ const VideoBox = styled.div`
   grid-template-columns: repeat(2);
   grid-template-rows: 50% 50%;
   grid-gap: 1rem;
-  width: 50%;
-  height: 50%;
+  width: 70%;
+  /* height: 50%; */
 `
 
 class Meeting extends Component {
@@ -252,10 +247,10 @@ class Meeting extends Component {
     const { hashesOwned } = hashtag
     const { uuid, roleCode } = mode
 
-    if (roleCode !== 1){
+    if (roleCode !== 1) {
       const pairUser = mode.pairUser
-      console.log("페어유저 정보 저장", pairUser)
-      this.setState({ pairUser: pairUser})
+      console.log('페어유저 정보 저장', pairUser)
+      this.setState({ pairUser: pairUser })
     }
 
     this.setState({
@@ -266,7 +261,6 @@ class Meeting extends Component {
 
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
-
 
     // 타이머
     this.intervalRef.current = setInterval(() => {
@@ -471,9 +465,9 @@ class Meeting extends Component {
 
       this.setState({
         message: '',
-      });
-      console.log("aaaaa", this.state.publisher)
-      console.log("bbbbb", this.state.subscribers)
+      })
+      console.log('aaaaa', this.state.publisher)
+      console.log('bbbbb', this.state.subscribers)
     }
   }
 
@@ -500,9 +494,12 @@ class Meeting extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined)
           var subscribers = this.state.subscribers
           subscribers.push(subscriber)
-          if (this.state.myRoleCode === 3 &&
-              JSON.parse(subscriber.stream.connection.data).clientData === this.state.pairUser.userNickname ){
-            this.setState({chatConnection : subscriber.stream.connection})
+          if (
+            this.state.myRoleCode === 3 &&
+            JSON.parse(subscriber.stream.connection.data).clientData ===
+              this.state.pairUser.userNickname
+          ) {
+            this.setState({ chatConnection: subscriber.stream.connection })
           }
 
           // Update the state with the new subscribers
@@ -768,37 +765,37 @@ class Meeting extends Component {
           </LogoBox>
           {/* 캠,오디오 온오프 */}
           {this.state.videostate ? (
-                <MdVideocam
-                  size="3rem"
-                  onClick={() => {
-                    this.state.publisher.publishVideo(!this.state.videostate);
-                    this.setState({ videostate: !this.state.videostate });
-                  }}
-                />
-              ) : (
-                <MdVideocamOff
-                  size="3rem"
-                  onClick={() => {
-                    this.state.publisher.publishVideo(!this.state.videostate);
-                    this.setState({ videostate: !this.state.videostate });
-                  }}
-                />
-              )}
+            <MdVideocam
+              size="3rem"
+              onClick={() => {
+                this.state.publisher.publishVideo(!this.state.videostate)
+                this.setState({ videostate: !this.state.videostate })
+              }}
+            />
+          ) : (
+            <MdVideocamOff
+              size="3rem"
+              onClick={() => {
+                this.state.publisher.publishVideo(!this.state.videostate)
+                this.setState({ videostate: !this.state.videostate })
+              }}
+            />
+          )}
 
           {this.state.audiostate ? (
             <MdMic
               size="3rem"
               onClick={() => {
-                this.state.publisher.publishAudio(!this.state.audiostate);
-                this.setState({ audiostate: !this.state.audiostate });
+                this.state.publisher.publishAudio(!this.state.audiostate)
+                this.setState({ audiostate: !this.state.audiostate })
               }}
             />
           ) : (
             <MdMicOff
               size="3rem"
               onClick={() => {
-                this.state.publisher.publishAudio(!this.state.audiostate);
-                this.setState({ audiostate: !this.state.audiostate });
+                this.state.publisher.publishAudio(!this.state.audiostate)
+                this.setState({ audiostate: !this.state.audiostate })
               }}
             />
           )}
@@ -830,8 +827,11 @@ class Meeting extends Component {
           <LeftBox>
             <PointImg />
             <PointText>
-              {this.state.myUserPoint === undefined ? 
-              0 : this.state.myUserPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+              {this.state.myUserPoint === undefined
+                ? 0
+                : this.state.myUserPoint
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PointText>
             <Helper />
           </LeftBox>
@@ -839,7 +839,7 @@ class Meeting extends Component {
 
         <Container>
           {/* 세션 입장 대기 화면 */}
-          {this.state.session === undefined ? (
+          {/* {this.state.session === undefined ? (
             <div id="join">
               <div id="join-dialog" className="jumbotron vertical-center">
                 <h1> Join a video session </h1>
@@ -877,11 +877,15 @@ class Meeting extends Component {
                 </form>
               </div>
             </div>
-          ) : null}
+          ) : null} */}
 
           {/* 세션 열렸을 때 */}
           {this.state.session !== undefined ? (
-            <div id="session">
+            <div id="session" style={{ 
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center" }}>
               <Header>
                 <input
                   className="btn btn-large btn-danger"
@@ -894,54 +898,21 @@ class Meeting extends Component {
 
                 <button onClick={this.pickTopic}>주제변경</button>
               </Header>
+              
+              <div className="chatNvideo" style={{
+                display: "flex",
+                // alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%"
+              }}>
 
-              {/* mainStreamMnager가 있다면 */}
-              {this.state.mainStreamManager !== undefined ? (
-                <div id="main-video" className="col-md-6">
-                  {/* <UserVideoComponent
-                    streamManager={this.state.mainStreamManager}
-                  /> */}
-                  <input
-                    className="btn btn-large btn-success"
-                    type="button"
-                    id="buttonSwitchCamera"
-                    onClick={this.switchCamera}
-                    value="Switch Camera"
-                  />
-                </div>
-              ) : null}
-
-              <VideoBox id="video-container">
-                {this.state.publisher !== undefined ? (
-                  <div
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() =>
-                      this.handleMainVideoStream(this.state.publisher)
-                    }
-                  >
-                    <UserVideoComponent streamManager={this.state.publisher} />
-                  </div>
-                ) : null}
-                {this.state.subscribers.map((sub, i) => (
-                  <div
-                    key={i}
-                    className="stream-container col-md-6 col-xs-6"
-                    onClick={() => this.handleMainVideoStream(sub)}
-                  >
-                    <UserVideoComponent streamManager={sub} />
-                  </div>
-                ))}
-              </VideoBox>
-              {/* 채팅창 */}
-              <div className="chatbox">
-                <div className="chat chatbox__support chatbox--active">
-                  <div className="chat chatbox__header" />
-                  <div className="chatbox__messages" ref="chatoutput">
-                    {/* {this.displayElements} */}
-                    <Messages messages={messages} />
-                    <div />
-                  </div>
-                  <div className="chat chatbox__footer">
+                <div className="chatbox" style={{ width: "26%", padding: "0 2%" }}>
+                  <div style={{ 
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "ceneter",
+                    justifyContent: "space-between"
+                  }}>
                     <input
                       id="chat_message"
                       type="text"
@@ -949,16 +920,59 @@ class Meeting extends Component {
                       onChange={this.handleChatMessageChange}
                       onKeyPress={this.sendmessageByEnter}
                       value={this.state.message}
+                      style={{ width: "60%" }}
                     />
-                    <p
-                      className="chat chatbox__send--footer"
+                    <p 
                       onClick={this.sendmessageByClick}
-                    >
+                      style={{ border: "2px solid black" }}>
                       Send
                     </p>
                   </div>
+                  <div className="chatbox__messages" ref="chatoutput">
+                    {/* {this.displayElements} */}
+                    <Messages messages={messages} />
+                  </div>
                 </div>
+
+                {/* mainStreamMnager가 있다면 */}
+                {/* {this.state.mainStreamManager !== undefined ? (
+                  <div id="main-video" className="col-md-6">
+                    <UserVideoComponent
+                      streamManager={this.state.mainStreamManager}
+                    />
+                    <input
+                      className="btn btn-large btn-success"
+                      type="button"
+                      id="buttonSwitchCamera"
+                      onClick={this.switchCamera}
+                      value="Switch Camera"
+                    />
+                  </div>
+                ) : null} */}
+
+                <VideoBox id="video-container">
+                  {this.state.publisher !== undefined ? (
+                    <div
+                      className="stream-container col-md-6 col-xs-6"
+                      onClick={() =>
+                        this.handleMainVideoStream(this.state.publisher)
+                      }
+                    >
+                      <UserVideoComponent streamManager={this.state.publisher} />
+                    </div>
+                  ) : null}
+                  {this.state.subscribers.map((sub, i) => (
+                    <div
+                      key={i}
+                      className="stream-container col-md-6 col-xs-6"
+                      onClick={() => this.handleMainVideoStream(sub)}
+                    >
+                      <UserVideoComponent streamManager={sub} />
+                    </div>
+                  ))}
+                </VideoBox>
               </div>
+              {/* 채팅창 */}
             </div>
           ) : null}
         </Container>
