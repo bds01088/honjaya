@@ -258,10 +258,9 @@ const GuideHeader = styled.div`
   align-items: center;
   border-bottom: 2px ridge  #333333;
 
-  @media (max-width: 960px){
+  @media (max-width: 1400px){
     font-size: 1.5rem;
   }
-
 `
 
 const GuideText = styled.div`
@@ -272,10 +271,17 @@ const GuideText = styled.div`
   display: flex;
   align-items: center;
 
-  @media (max-width: 960px){
+  @media (max-width: 1400px){
+    font-size: 1.2rem;
+    padding: 0.8rem 2.5rem;
+  }
+
+  @media (max-width: 1170px){
     font-size: 1rem;
     padding: 0.8rem 2.5rem;
   }
+
+  
 `
 
 const CamOn = styled(MdVideocam)`
@@ -452,7 +458,7 @@ class Waiting extends Component {
         </Header>
 
         { this.state.uuid === undefined ? 
-        <Background>
+        <>
           <SpinnerBox>
             <TimerBox>
               <TimerImg/>
@@ -490,7 +496,7 @@ class Waiting extends Component {
               </GuideContainer>
             </GuideBox>
           </CamGuideBox>
-        </Background> : null }
+        </> : null }
       </Background>
     )
   }
