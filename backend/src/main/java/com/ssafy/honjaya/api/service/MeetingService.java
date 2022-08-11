@@ -12,5 +12,4 @@ public interface MeetingService {
 	
 	void connectUser(String chatRoomId, String websocketSessionId);
 	void disconnectUser(String websocketSessionId);
-	
 }

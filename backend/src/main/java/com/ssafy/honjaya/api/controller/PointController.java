@@ -68,6 +68,7 @@ public class PointController {
 	@ApiOperation(value = "포인트 증감", response = PointRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 400, message = "포인트 부족"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
@@ -81,9 +82,14 @@ public class PointController {
 			if (jwtService.checkToken(accessToken)) {
 				int userNo = jwtService.extractUserNo(accessToken);
 				pointReq.setUserNo(userNo);
-				pointRes.setPoint(pointService.updatePoint(pointReq));
-				pointRes.setSuccess(true);
-				status = HttpStatus.OK;
+				if (pointService.findPoint(userNo) + pointReq.getPoint() < 0) {
+					pointRes.setLow(true);
+					status = HttpStatus.BAD_REQUEST;
+				} else {
+					pointRes.setPoint(pointService.updatePoint(pointReq));
+					pointRes.setSuccess(true);
+					status = HttpStatus.OK;
+				}
 			} else {
 				logger.error("사용 불가능 토큰!!!");
 				pointRes.setError("The token is denied");
