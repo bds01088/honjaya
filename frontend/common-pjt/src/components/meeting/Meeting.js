@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
-import { MdHelpOutline } from 'react-icons/md'
+import { MdHelpOutline, MdLogout } from 'react-icons/md'
 
 import Messages from './meeting-chat/Messages'
 
@@ -166,6 +166,77 @@ const VideoBox = styled.div`
   width: 70%;
   height: 100%;
 `
+
+
+// 캠 on/off + 나가기
+const Footer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  bottom: 1rem;
+`
+
+const MicCamBox = styled.div`
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+// 마이크, 카메라 on/off
+const MicOn = styled(MdMic)`
+  color: #7E6752;
+`
+const MicOff = styled(MdMicOff)`
+  color: #7E6752;
+`
+const CamOn = styled(MdVideocam)`
+  color: #7E6752;
+`
+const CamOff = styled(MdVideocamOff)`
+  color: #7E6752;
+`
+
+
+
+// 나가기 버튼
+const LeaveBox = styled.div`
+  right: 0;
+  position: relative;
+
+  &:hover .leaveTip {
+    visibility: visible;
+  }
+`
+
+const Leave = styled(MdLogout)`
+  height: 100%;
+  width: 2rem;
+  margin: 0 2rem;
+  color: #f38ba0;
+`
+
+const LeaveText = styled.p`
+  visibility: hidden;
+  background-color: #f38ba0;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Jua;
+  opacity: 80%;
+  position: absolute;
+  z-index: 2;
+  top: 0%;
+  margin-top: -2rem;
+  left: 50%;
+  margin-left: -1.9rem;
+`
+
+
 
 class Meeting extends Component {
   constructor(props) {
@@ -845,47 +916,53 @@ class Meeting extends Component {
 
           {/* 세션 열렸을 때 */}
           {this.state.session !== undefined ? (
-            <div id="session" style={{ 
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "80%" }}>
-              <div styled={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                height: "20%",
-                width: "96%",
-                padding: "0.5rem 2%",
-              }}>
-                <input
-                  className="btn btn-large btn-danger"
-                  type="button"
-                  id="buttonLeaveSession"
-                  onClick={this.leaveSession}
-                  value="나가기"
-                />
+            <div
+              id="session"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '80%',
+              }}
+            >
+              <div
+                styled={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  height: '20%',
+                  width: '96%',
+                  padding: '0.5rem 2%',
+                }}
+              >
                 {this.state.randomTopic}
 
                 <button onClick={this.pickTopic}>주제변경</button>
               </div>
-              
-              <div className="chatNvideo" style={{
-                display: "flex",
-                // alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-                height: "100%"
-              }}>
 
-                <div className="chatbox" style={{ width: "26%", padding: "0 2%" }}>
-                  <div style={{ 
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "ceneter",
-                    justifyContent: "space-between"
-                  }}>
+              <div
+                className="chatNvideo"
+                style={{
+                  display: 'flex',
+                  // alignItems: "center",
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <div
+                  className="chatbox"
+                  style={{ width: '26%', padding: '0 2%' }}
+                >
+                  <div
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'ceneter',
+                      justifyContent: 'space-between',
+                    }}
+                  >
                     <input
                       id="chat_message"
                       type="text"
@@ -893,11 +970,12 @@ class Meeting extends Component {
                       onChange={this.handleChatMessageChange}
                       onKeyPress={this.sendmessageByEnter}
                       value={this.state.message}
-                      style={{ width: "60%" }}
+                      style={{ width: '60%' }}
                     />
-                    <p 
+                    <p
                       onClick={this.sendmessageByClick}
-                      style={{ border: "2px solid black" }}>
+                      style={{ border: '2px solid black' }}
+                    >
                       Send
                     </p>
                   </div>
@@ -931,7 +1009,9 @@ class Meeting extends Component {
                         this.handleMainVideoStream(this.state.publisher)
                       }
                     >
-                      <UserVideoComponent streamManager={this.state.publisher} />
+                      <UserVideoComponent
+                        streamManager={this.state.publisher}
+                      />
                     </div>
                   ) : null}
                   {this.state.subscribers.map((sub, i) => (
@@ -947,54 +1027,61 @@ class Meeting extends Component {
               </div>
               {/* 채팅창 */}
 
-              { this.state.myRoleCode !== 3 ?
-                <div className="footer" style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "fixed",
-                  bottom: "1rem"
-                }}>
-                  {this.state.videostate ? (
-                    <MdVideocam
-                      size="2rem"
-                      onClick={() => {
-                        this.state.publisher.publishVideo(!this.state.videostate)
-                        this.setState({ videostate: !this.state.videostate })
-                      }}
-                    />
-                  ) : (
-                    <MdVideocamOff
-                      size="2rem"
-                      onClick={() => {
-                        this.state.publisher.publishVideo(!this.state.videostate)
-                        this.setState({ videostate: !this.state.videostate })
-                      }}
-                    />
-                  )}
+              {this.state.myRoleCode !== 3 ? (
+                <Footer>
+                  <div/>
+                  <MicCamBox>
+                    {this.state.audiostate ? (
+                      <MicOn
+                        size="2rem"
+                        onClick={() => {
+                          this.state.publisher.publishAudio(
+                            !this.state.audiostate,
+                          )
+                          this.setState({ audiostate: !this.state.audiostate })
+                        }}
+                      />
+                    ) : (
+                      <MicOff
+                        size="2rem"
+                        onClick={() => {
+                          this.state.publisher.publishAudio(
+                            !this.state.audiostate,
+                          )
+                          this.setState({ audiostate: !this.state.audiostate })
+                        }}
+                      />
+                    )}
 
-                  {this.state.audiostate ? (
-                    <MdMic
-                      size="2rem"
-                      onClick={() => {
-                        this.state.publisher.publishAudio(!this.state.audiostate)
-                        this.setState({ audiostate: !this.state.audiostate })
-                      }}
-                    />
-                  ) : (
-                    <MdMicOff
-                      size="2rem"
-                      onClick={() => {
-                        this.state.publisher.publishAudio(!this.state.audiostate)
-                        this.setState({ audiostate: !this.state.audiostate })
-                      }}
-                    />
-                  )}
-                </div>
-                : null
-              }
+                    {this.state.videostate ? (
+                      <CamOn
+                        size="2rem"
+                        onClick={() => {
+                          this.state.publisher.publishVideo(
+                            !this.state.videostate,
+                          )
+                          this.setState({ videostate: !this.state.videostate })
+                        }}
+                      />
+                    ) : (
+                      <CamOff
+                        size="2rem"
+                        onClick={() => {
+                          this.state.publisher.publishVideo(
+                            !this.state.videostate,
+                          )
+                          this.setState({ videostate: !this.state.videostate })
+                        }}
+                      />
+                    )}
+                  </MicCamBox>
+
+                  <LeaveBox onClick={this.leaveSession}>
+                    <Leave />
+                    <LeaveText className="leaveTip">나가기</LeaveText>
+                  </LeaveBox>
+                </Footer>
+              ) : null}
             </div>
           ) : null}
         </Container>
