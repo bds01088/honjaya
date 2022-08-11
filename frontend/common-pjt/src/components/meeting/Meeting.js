@@ -164,7 +164,7 @@ const VideoBox = styled.div`
   grid-template-rows: 50% 50%;
   grid-gap: 1rem;
   width: 70%;
-  /* height: 50%; */
+  height: 100%;
 `
 
 class Meeting extends Component {
@@ -763,42 +763,6 @@ class Meeting extends Component {
           <LogoBox>
             <Logo />
           </LogoBox>
-          {/* 캠,오디오 온오프 */}
-          {this.state.videostate ? (
-            <MdVideocam
-              size="3rem"
-              onClick={() => {
-                this.state.publisher.publishVideo(!this.state.videostate)
-                this.setState({ videostate: !this.state.videostate })
-              }}
-            />
-          ) : (
-            <MdVideocamOff
-              size="3rem"
-              onClick={() => {
-                this.state.publisher.publishVideo(!this.state.videostate)
-                this.setState({ videostate: !this.state.videostate })
-              }}
-            />
-          )}
-
-          {this.state.audiostate ? (
-            <MdMic
-              size="3rem"
-              onClick={() => {
-                this.state.publisher.publishAudio(!this.state.audiostate)
-                this.setState({ audiostate: !this.state.audiostate })
-              }}
-            />
-          ) : (
-            <MdMicOff
-              size="3rem"
-              onClick={() => {
-                this.state.publisher.publishAudio(!this.state.audiostate)
-                this.setState({ audiostate: !this.state.audiostate })
-              }}
-            />
-          )}
 
           <TimerBox>
             <Timer onClick={this.stopTimer}>
@@ -885,8 +849,16 @@ class Meeting extends Component {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center" }}>
-              <Header>
+              justifyContent: "center",
+              height: "80%" }}>
+              <div styled={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                height: "20%",
+                width: "96%",
+                padding: "0.5rem 2%",
+              }}>
                 <input
                   className="btn btn-large btn-danger"
                   type="button"
@@ -897,13 +869,14 @@ class Meeting extends Component {
                 {this.state.randomTopic}
 
                 <button onClick={this.pickTopic}>주제변경</button>
-              </Header>
+              </div>
               
               <div className="chatNvideo" style={{
                 display: "flex",
                 // alignItems: "center",
                 justifyContent: "space-between",
-                width: "100%"
+                width: "100%",
+                height: "100%"
               }}>
 
                 <div className="chatbox" style={{ width: "26%", padding: "0 2%" }}>
@@ -973,6 +946,55 @@ class Meeting extends Component {
                 </VideoBox>
               </div>
               {/* 채팅창 */}
+
+              { this.state.myRoleCode !== 3 ?
+                <div className="footer" style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "fixed",
+                  bottom: "1rem"
+                }}>
+                  {this.state.videostate ? (
+                    <MdVideocam
+                      size="2rem"
+                      onClick={() => {
+                        this.state.publisher.publishVideo(!this.state.videostate)
+                        this.setState({ videostate: !this.state.videostate })
+                      }}
+                    />
+                  ) : (
+                    <MdVideocamOff
+                      size="2rem"
+                      onClick={() => {
+                        this.state.publisher.publishVideo(!this.state.videostate)
+                        this.setState({ videostate: !this.state.videostate })
+                      }}
+                    />
+                  )}
+
+                  {this.state.audiostate ? (
+                    <MdMic
+                      size="2rem"
+                      onClick={() => {
+                        this.state.publisher.publishAudio(!this.state.audiostate)
+                        this.setState({ audiostate: !this.state.audiostate })
+                      }}
+                    />
+                  ) : (
+                    <MdMicOff
+                      size="2rem"
+                      onClick={() => {
+                        this.state.publisher.publishAudio(!this.state.audiostate)
+                        this.setState({ audiostate: !this.state.audiostate })
+                      }}
+                    />
+                  )}
+                </div>
+                : null
+              }
             </div>
           ) : null}
         </Container>
