@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import TempImg from '../../assets/character.png'
+import SoloImg from '../../assets/solo.png'
+import AvatarImg from '../../assets/avatar.png'
+import CommanderImg from '../../assets/commander.png'
+import RandomImg from '../../assets/random.png'
 
 
 const ModeSelectBox = styled.div`
@@ -108,7 +111,7 @@ const ModeChoice = ({ data, setData }) => {
             value="1"
             checked={Role === "1"}
             onChange={handleClickRadioButton}/>
-          <Mode src={TempImg}></Mode>
+          <Mode src={SoloImg}></Mode>
           <Explain>
             역할 없이 즐기고 싶을 땐
           </Explain>
@@ -126,7 +129,7 @@ const ModeChoice = ({ data, setData }) => {
             value="2"
             checked={Role === '2'}
             onChange={handleClickRadioButton}/>
-          <Mode src={TempImg}></Mode>
+          <Mode src={AvatarImg}></Mode>
           <Explain>
             아바타로 참여해서 
           </Explain>
@@ -144,7 +147,7 @@ const ModeChoice = ({ data, setData }) => {
             value="3"
             checked={Role === '3'}
             onChange={handleClickRadioButton}/>
-          <Mode src={TempImg}></Mode>
+          <Mode src={CommanderImg}></Mode>
           <Explain>
             지시자로 참여해서 
           </Explain>
@@ -162,7 +165,7 @@ const ModeChoice = ({ data, setData }) => {
             value="4"
             checked={Role === '4'}
             onChange={handleClickRadioButton}/>
-          <Mode src={TempImg}></Mode>
+          <Mode src={RandomImg}></Mode>
           <Explain>
             역할을 고르기 힘들다면
           </Explain>
