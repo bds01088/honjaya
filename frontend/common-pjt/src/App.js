@@ -23,30 +23,30 @@ function App() {
 
 
         {/* <Route path="/" element={<PublicRoute component={<Login />} />}/> */}
-        <Route exact path="/" component={Login}/>
+        <PublicRoute exact path="/" component={Login}/>
         {/* <Route path="/pledge" element={<PublicRoute component={<Pledge />} />}/> */}
-        <Route exact path="/pledge" component={Pledge}/>
+        <PublicRoute exact path="/pledge" component={Pledge}/>
         {/* <Route path="/signup" element={<PublicRoute component={<Signup />} />}/> */}
-        <Route exact path="/signup" component={Signup}/>
+        <PublicRoute exact path="/signup" component={Signup}/>
         
         {/* main이랑 profile에 파라미터가 필요할까? */}
         {/* <Route path="/main" element={<PrivateRoute component={<Main />}/>}/> */}
-        <Route exact path="/main" component={Main}/>
+        <PrivateRoute exact path="/main" component={Main}/>
         {/* <Route path="/profile" element={<PrivateRoute component={<UpdateProfile />}/>}/> */}
-        <Route exact path="/profile" component={UpdateProfile}/>
+        <PrivateRoute exact path="/profile" component={UpdateProfile}/>
 
         {/* <Route path="/mode" element={<PrivateRoute component={<Mode />} />}/> */}
-        <Route exact path="/mode" component={Mode}/>
+        <PrivateRoute exact path="/mode" component={Mode}/>
         {/* <Route path="/waiting" element={<PrivateRoute component={<Waiting />} />}/> */}
-        <Route exact path="/waiting" component={Waiting}/>
+        <PrivateRoute exact path="/waiting" component={Waiting}/>
         {/* <Route path="/meeting" element={<PrivateRoute component={<Meeting />} />}/> */}
-        <Route exact path="/meeting" component={Meeting}/>
+        <PrivateRoute exact path="/meeting" component={Meeting}/>
         {/* <Route path="/countdown" element={<PrivateRoute component={<Countdown />} />}/> */}
-        <Route exact path="/countdown" component={Countdown}/>
+        <PrivateRoute exact path="/countdown" component={Countdown}/>
         {/* <Route path="/vote" element={<PrivateRoute component={<Vote />} />}/> */}
-        <Route exact path="/vote" component={Vote}/>
+        <PrivateRoute exact path="/vote" component={Vote}/>
         {/* <Route path="/result" element={<PrivateRoute component={<Result />} />}/> */}
-        <Route exact path="/result" component={Result}/>
+        <PrivateRoute exact path="/result" component={Result}/>
       
       </Switch>
     </BrowserRouter>
