@@ -192,8 +192,6 @@ class Meeting extends Component {
       pairUser: undefined,
       chatConnection: [],
 
-      
-
       //해쉬태그
       hashList: [],
 
@@ -476,7 +474,8 @@ class Meeting extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined)
           var subscribers = this.state.subscribers
           subscribers.push(subscriber)
-          if (JSON.parse(subscriber.stream.connection.data).clientData === this.state.pairUser.userNickname ){
+          if (this.state.myRoleCode === 3 &&
+              JSON.parse(subscriber.stream.connection.data).clientData === this.state.pairUser.userNickname ){
             this.setState({chatConnection : subscriber.stream.connection})
           }
 
