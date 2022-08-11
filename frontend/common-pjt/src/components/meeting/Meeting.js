@@ -243,15 +243,12 @@ class Meeting extends Component {
     const { hashesOwned } = hashtag
     const { uuid, roleCode } = mode
 
-<<<<<<< HEAD
     if (roleCode !== 1){
       const pairUser = mode.pairUser
       console.log("페어유저 정보 저장", pairUser)
       this.setState({ pairUser: pairUser})
     }
 
-=======
->>>>>>> d9bf0064807cd553e6e4d0c6e0f86098516e050f
     this.setState({
       mySessionId: uuid,
     })
@@ -450,14 +447,9 @@ class Meeting extends Component {
 
       this.setState({
         message: '',
-<<<<<<< HEAD
       });
       console.log("aaaaa", this.state.publisher)
       console.log("bbbbb", this.state.subscribers)
-=======
-      })
-      console.log('aaaaa', this.state.publisher)
->>>>>>> d9bf0064807cd553e6e4d0c6e0f86098516e050f
     }
   }
 
