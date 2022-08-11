@@ -5,7 +5,7 @@ export const matchDataGet = createAsyncThunk(
     'MATCH_DATA_GET',
     async (data, {rejectWithValue}) => {
         try {
-            const res = await axios.post('https://i7e104.p.ssafy.io/honjaya/meetings/ready',data)
+            const res = await axios.post('http://localhost:8080/honjaya/meetings/ready',data)
             return res.data
         } catch (err) {
         return rejectWithValue(err.response)

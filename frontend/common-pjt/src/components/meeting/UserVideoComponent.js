@@ -54,7 +54,7 @@ export default class UserVideoComponent extends Component {
               {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
               &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
               {this.getHashtags() &&
-                this.getHashtags().map((item, idx) => <h1># {item[1]}</h1>)}
+                this.getHashtags().map((item, idx) => <h1 key={`hashtag${idx}`}># {item[1]}</h1>)}
               <h1>{this.getRolecodes()}</h1>
             </Nickname>
           </StreamComponent>
