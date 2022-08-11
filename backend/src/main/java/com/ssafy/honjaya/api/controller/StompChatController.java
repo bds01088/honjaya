@@ -1,7 +1,5 @@
 package com.ssafy.honjaya.api.controller;
 
-import java.util.List;
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -30,27 +28,21 @@ public class StompChatController {
 
 		if (chats != null) {
 			for (ChatRes c : chats.getList()) {
-				chatReq.setWriter(c.get()); // 1234 ChatRes 수정 필요
-				chatReq.setMessage(c.getMessage());
+				chatReq.setUserNo(c.getUserNo()); // 1234 ChatRes 수정 필요
+				chatReq.setChatMessage(c.getChatMessage());
+				template.convertAndSend("/sub/chat/room/" + chatReq.getChatroomNo(), chatReq);
 			}
 		}
 
-		template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-
-		ChatRoomEntity chatRoomEntity = crr.findByRoomId(message.getRoomId());
-		ChatMessageSaveDTO chatMessageSaveDTO = new ChatMessageSaveDTO(message.getRoomId(), message.getWriter(),
-				message.getMessage());
-		cr.save(ChatMessageEntity.toChatEntity(chatMessageSaveDTO, chatRoomEntity));
+		// DB에 채팅내용 저장
+		chatService.sendMessage(chatReq);
 	}
 
 	@MessageMapping(value="/chat/message")
-	public void message(ChatMessageDetailDTO message) {
-		template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+	public void message(ChatReq chatReq) {
+		template.convertAndSend("/sub/chat/room/" + chatReq.getChatroomNo(), chatReq);
 
 		// DB에 채팅내용 저장
-		ChatRoomEntity chatRoomEntity = crr.findByRoomId(message.getRoomId());
-		ChatMessageSaveDTO chatMessageSaveDTO = new ChatMessageSaveDTO(message.getRoomId(), message.getWriter(),
-				message.getMessage());
-		cr.save(ChatMessageEntity.toChatEntity(chatMessageSaveDTO, chatRoomEntity));
+		chatService.sendMessage(chatReq);
 	}
 }

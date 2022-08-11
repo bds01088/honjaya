@@ -24,6 +24,9 @@ public class ChatRes {
 	@ApiModelProperty(value = "자신이 보낸 메시지 true / 상대 메시지 false")
 	private boolean myChat;
 	
+	@ApiModelProperty(value = "보낸 사람 유저 번호")
+	private int userNo;
+	
 	@ApiModelProperty(value = "채팅 메시지")
 	private String chatMessage;
 	
@@ -40,7 +43,9 @@ public class ChatRes {
 	private String error;
 
 	public ChatRes(int userNo, Chat chat) {
-		this.myChat = chat.getUser().getUserNo() == userNo;
+		int chatUserNo = chat.getUser().getUserNo();
+		this.myChat = chatUserNo == userNo;
+		this.userNo = chatUserNo;
 		this.chatMessage = chat.getChatMessage();
 		this.chatTime = datetimeToChatTime(chat.getChatTime());
 		this.chatRead = chat.getChatRead();
