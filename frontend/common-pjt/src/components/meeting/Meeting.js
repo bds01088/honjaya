@@ -14,6 +14,13 @@ import Messages from './meeting-chat/Messages'
 
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
+
+import {
+  MdVideocam,
+  MdVideocamOff,
+  MdMic,
+  MdMicOff,
+} from 'react-icons/md'; // 추가
 // import randomTopic from '../../DATA/randomTopic.json'
 
 const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443'
@@ -209,6 +216,9 @@ class Meeting extends Component {
       myRoleCode: undefined,
       //이건 flag 역할인가
       check: false,
+
+      videostate: true,
+      audiostate: true,
     }
 
     // openVidu
@@ -226,6 +236,7 @@ class Meeting extends Component {
     // 랜덤 주제 설정
     this.pickTopic = this.pickTopic.bind(this)
     this.addTimer = this.addTimer.bind(this)
+    this.setTimer = this.setTimer.bind(this)
 
     //채팅
     this.sendmessageByClick = this.sendmessageByClick.bind(this)
@@ -255,6 +266,7 @@ class Meeting extends Component {
 
     // openVidu
     window.addEventListener('beforeunload', this.onbeforeunload)
+
 
     // 타이머
     this.intervalRef.current = setInterval(() => {
@@ -310,6 +322,20 @@ class Meeting extends Component {
 
       await this.setState({
         myUserPoint: res.data.point,
+      })
+    } catch (err) {
+      console.log('error')
+    }
+  }
+
+  // 스톱워치 초기 설정 함수
+  async setTimer() {
+    try {
+      await this.setState({ timeLimit: 600 })
+      await this.state.session.signal({
+        data: `${this.state.timeLimit}`,
+        to: [],
+        type: 'setTime',
       })
     } catch (err) {
       console.log('error')
@@ -483,6 +509,7 @@ class Meeting extends Component {
           this.setState({
             subscribers: subscribers,
           })
+          this.setTimer()
         })
 
         // On every Stream destroyed...
@@ -502,6 +529,11 @@ class Meeting extends Component {
 
           console.log(event)
           console.log(event.data)
+        })
+
+        // 시간 설정 시그널
+        mySession.on('signal:setTime', (event) => {
+          this.setState({ timeLimit: event.data })
         })
 
         // 시간 추가 시그널
@@ -734,6 +766,42 @@ class Meeting extends Component {
           <LogoBox>
             <Logo />
           </LogoBox>
+          {/* 캠,오디오 온오프 */}
+          {this.state.videostate ? (
+                <MdVideocam
+                  size="3rem"
+                  onClick={() => {
+                    this.state.publisher.publishVideo(!this.state.videostate);
+                    this.setState({ videostate: !this.state.videostate });
+                  }}
+                />
+              ) : (
+                <MdVideocamOff
+                  size="3rem"
+                  onClick={() => {
+                    this.state.publisher.publishVideo(!this.state.videostate);
+                    this.setState({ videostate: !this.state.videostate });
+                  }}
+                />
+              )}
+
+          {this.state.audiostate ? (
+            <MdMic
+              size="3rem"
+              onClick={() => {
+                this.state.publisher.publishAudio(!this.state.audiostate);
+                this.setState({ audiostate: !this.state.audiostate });
+              }}
+            />
+          ) : (
+            <MdMicOff
+              size="3rem"
+              onClick={() => {
+                this.state.publisher.publishAudio(!this.state.audiostate);
+                this.setState({ audiostate: !this.state.audiostate });
+              }}
+            />
+          )}
 
           <TimerBox>
             <Timer onClick={this.stopTimer}>
@@ -761,7 +829,10 @@ class Meeting extends Component {
           </TimerBox>
           <LeftBox>
             <PointImg />
-            <PointText>{this.state.myUserPoint}</PointText>
+            <PointText>
+              {this.state.myUserPoint === undefined ? 
+              0 : this.state.myUserPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+            </PointText>
             <Helper />
           </LeftBox>
         </Header>
