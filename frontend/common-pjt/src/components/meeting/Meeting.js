@@ -1027,9 +1027,10 @@ class Meeting extends Component {
               </div>
               {/* 채팅창 */}
 
-              {this.state.myRoleCode !== 3 ? (
+              
                 <Footer>
                   <div/>
+                  {this.state.myRoleCode !== 3 ? (
                   <MicCamBox>
                     {this.state.audiostate ? (
                       <MicOn
@@ -1075,13 +1076,14 @@ class Meeting extends Component {
                       />
                     )}
                   </MicCamBox>
+                  ) : null}
 
                   <LeaveBox onClick={this.leaveSession}>
                     <Leave />
                     <LeaveText className="leaveTip">나가기</LeaveText>
                   </LeaveBox>
                 </Footer>
-              ) : null}
+              
             </div>
           ) : null}
         </Container>
