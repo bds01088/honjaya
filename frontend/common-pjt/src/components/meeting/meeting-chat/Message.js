@@ -3,19 +3,23 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-const Username = styled.p`
-  color: #42387a;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 5px 0 10px 0;
-`;
 
 const MessageContainer = styled.div`
-  width: 100px;
+  width: 100%;
+  margin-top: 0.5rem;
 `;
 
-const Text = styled.p`
-  font-size: 1rem;
+const Username = styled.span`
+  color: #42387a;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-right: 0.8rem;
+  font-family: Minseo;
+`;
+
+const Text = styled.span`
+  font-size: 1.2rem;
+  font-family: Minseo;
 `;
 
 class Message extends Component {
@@ -24,7 +28,7 @@ class Message extends Component {
 
     return (
       <MessageContainer>
-        <Username>{userName}</Username>
+        <Username>{userName} :</Username>
         <Text>{text}</Text>
       </MessageContainer>
     );

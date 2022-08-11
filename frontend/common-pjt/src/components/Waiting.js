@@ -9,7 +9,7 @@ import axios from 'axios'
 import myAxios from '../api/http'
 import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
-import { matchDataGet, setMatchResponse } from './mode/mode-slice'
+import { exitMatching, matchDataGet, setMatchResponse } from './mode/mode-slice'
 import { CollectionsOutlined } from '@material-ui/icons'
 
 // import { matchDataGet } from './mode/mode-slice'
@@ -316,10 +316,20 @@ class Waiting extends Component {
       sec: 0,
 
       videoSet: true,
+      
     }
 
     this.intervalRef = React.createRef();
+    this.cancelMatching = this.cancelMatching.bind(this)
+
+
+    
   }
+
+  // routeChange = ()=> {
+  //   let path = '/main';
+  //   this.props.history.push(path);
+  // }  
 
   componentDidMount() {
     const { mode } = this.props
@@ -382,8 +392,16 @@ class Waiting extends Component {
       .unwrap()
       .then((res) => {
         console.log("요청응답", res)
-        this.props.history.push('/meeting')
-        
+        if (res.result === 1) {
+          this.props.history.push('/meeting')
+        } else if (res.result === -1) {
+          this.setState({
+            uuid: undefined,
+            nowmatching: false
+          })
+        } else {
+          console.log("취소", res)
+        }
       })
     
     // myAxios.post(
@@ -429,23 +447,40 @@ class Waiting extends Component {
       )
   }
 
-  cancelMatching() {
+  cancelMatching= () => {
+    
+    const {doExitMatching} = this.props
     console.log("cancel 요청보냄")
-    axios.get(
-        'https://i7e104.p.ssafy.io/honjaya/meetings/cancel',
-      ).then(res => {
-        console.log("cancel 결과")
-        console.log(res.data)
-        // this.setState({
-        //   uuid : res.data.uuid,
-        //   nowmatching : false
-        //   })
-        }
-      ).catch(err => {
+    doExitMatching()
+      .unwrap()
+      .then((res) => {
+        console.log("취소응답결과", res)
+        if (res.status === 200) {
+        this.props.history.push('/main')}
+        })
+      .catch(err => {
         console.log(err)
-        }
-      )
+      })
   }
+
+  //   myAxios
+  //     .get('https://i7e104.p.ssafy.io/honjaya/meetings/cancel')
+  //     .then((res) => {
+  //       console.log("cancel 결과")
+  //       console.log(res)
+  //       if (res.status === 200) {
+  //         this.props.history.push('/main')
+  //       }
+  //       // this.setState({
+  //       //   uuid : res.data.uuid,
+  //       //   nowmatching : false
+  //       //   })
+  //       }
+  //     ).catch(err => {
+  //       console.log(err)
+  //       }
+  //     )
+  // }
 
 
   render() {
@@ -513,7 +548,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     // setMatchResponse: (res) => dispatch(setMatchResponse(res)),
-    doMatchDataGet: (type) => dispatch(matchDataGet(type))
+    doMatchDataGet: (type) => dispatch(matchDataGet(type)),
+    doExitMatching: () => dispatch(exitMatching())
   }
 }
 

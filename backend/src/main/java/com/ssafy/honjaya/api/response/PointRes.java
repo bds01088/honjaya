@@ -18,6 +18,9 @@ public class PointRes {
 	@ApiModelProperty(value = "포인트")
 	private int point;
 	
+	@ApiModelProperty(value = "포인트 부족 여부")
+	private boolean isLow;
+	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;
 	
