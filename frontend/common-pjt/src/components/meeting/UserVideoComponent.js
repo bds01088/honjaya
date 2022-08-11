@@ -21,13 +21,24 @@ export default class UserVideoComponent extends Component {
   getNicknameTag() {
     // Gets the nickName of the user
     
-    // console.log(JSON.parse(this.props.streamManager.stream.connection))
+        
     
     return JSON.parse(this.props.streamManager.stream.connection.data)
       .clientData
     
 
   }
+
+  getHashtags() {
+
+    const hashtags = JSON.parse(this.props.streamManager.stream.connection.data).hashtags
+    //배열반환
+    // console.log("해시태그" , hashtags)
+    return hashtags
+    
+  } 
+
+  
 
   render() {
     return (
@@ -38,6 +49,11 @@ export default class UserVideoComponent extends Component {
             />
             <Nickname>
               <p>{this.getNicknameTag()}</p>
+              {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
+              &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
+              {this.getHashtags() && this.getHashtags().map((item, idx) => (
+                  <h1># {item[1]}</h1>))}
+             
             </Nickname>
           </StreamComponent>
         ) : null}

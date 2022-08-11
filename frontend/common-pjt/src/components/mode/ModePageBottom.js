@@ -4,7 +4,7 @@ import {
   MdRadioButtonUnchecked,
   MdRadioButtonChecked,
 } from 'react-icons/md'
-import { useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setRoleCode, setTotal } from './mode-slice'
 
@@ -109,13 +109,13 @@ const ModePageBottom = ({ data, setData }) => {
     })
   }
 
-  const navigate = useNavigate()
+  const history = useHistory()
 
   const moveToWait = () => {
     dispatch(setTotal(data.total))  
     dispatch(setRoleCode(data.roleCode))    
     console.log("mode에서 출발",data)
-    navigate('/waiting')
+    history.push('/waiting')
   }
 
 
