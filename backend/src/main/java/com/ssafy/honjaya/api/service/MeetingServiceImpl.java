@@ -162,7 +162,7 @@ public class MeetingServiceImpl implements MeetingService {
 				new MeetingRes(null, new MeetingUserRes(userRepository.findById(meetingReq.getUserNo()).get()),
 						null, 0, 0, CANCEL, false, null));
 
-		System.out.println("cancel!");
+		logger.info("cancel!");
 		testPrint(); // 테스트
 	}
 
@@ -177,7 +177,7 @@ public class MeetingServiceImpl implements MeetingService {
 				new MeetingRes(null, new MeetingUserRes(userRepository.findById(meetingReq.getUserNo()).get()),
 						null, 0, 0, TIMEOUT, false, null));
 		
-		System.out.println("timeout!");
+		logger.info("timeout!");
 		testPrint(); // 테스트
 	}
 
@@ -188,7 +188,7 @@ public class MeetingServiceImpl implements MeetingService {
 
 	@Override
 	public void disconnectUser(String websocketSessionId) {
-		System.out.println("떠났습니다.");
+		logger.info("disconnectUser()");
 	}
 
 	private void establishRoom() {
@@ -357,34 +357,37 @@ public class MeetingServiceImpl implements MeetingService {
 //	}
 	
 	private void testPrint() { // 테스트
-		int cnt = 0;
-		System.out.print("대기 중인 솔로+아바타(팀o): ");
-		for (MeetingReq e : waitingUsers.get(0).keySet()) {
-			System.out.print(e.getUserNo() + ", ");
-			cnt++;
+		String s = "";
+		for (int i = 0; i < 2; i++) {
+			int cnt = 0;
+			s = "[" + ((i + 1) * 2) + "인] 대기 중인 솔로+아바타(팀o): ";
+			for (MeetingReq e : waitingUsers.get(i).keySet()) {
+				s += e.getUserNo() + ", ";
+				cnt++;
+			}
+			logger.info(s + ": 총 " + cnt + "명");
+			cnt = 0;
+			s = "[" + ((i + 1) * 2) + "인] 대기 중인        지시자(팀o): ";
+			for (MeetingReq e : waitingUsersOfCommanders.get(i).keySet()) {
+				s += e.getUserNo() + ", ";
+				cnt++;
+			}
+			logger.info(s + ": 총 " + cnt + "명");
+			cnt = 0;
+			s = "[" + ((i + 1) * 2) + "인] 대기 중인 팀 없는      아바타: ";
+			for (MeetingReq e : waitingAvatar.get(i).keySet()) {
+				s += e.getUserNo() + ", ";
+				cnt++;
+			}
+			logger.info(s + ": 총 " + cnt + "명");
+			cnt = 0;
+			s = "[" + ((i + 1) * 2) + "인] 대기 중인 팀 없는      지시자: ";
+			for (MeetingReq e : waitingCommander.get(i).keySet()) {
+				s += e.getUserNo() + ", ";
+				cnt++;
+			}
+			logger.info(s + ": 총 " + cnt + "명");
 		}
-		System.out.println(": 총 " + cnt + "명");
-		cnt = 0;
-		System.out.print("대기 중인        지시자(팀o): ");
-		for (MeetingReq e : waitingUsersOfCommanders.get(0).keySet()) {
-			System.out.print(e.getUserNo() + ", ");
-			cnt++;
-		}
-		System.out.println(": 총 " + cnt + "명");
-		cnt = 0;
-		System.out.print("대기 중인 팀 없는      아바타: ");
-		for (MeetingReq e : waitingAvatar.get(0).keySet()) {
-			System.out.print(e.getUserNo() + ", ");
-			cnt++;
-		}
-		System.out.println(": 총 " + cnt + "명");
-		cnt = 0;
-		System.out.print("대기 중인 팀 없는      지시자: ");
-		for (MeetingReq e : waitingCommander.get(0).keySet()) {
-			System.out.print(e.getUserNo() + ", ");
-			cnt++;
-		}
-		System.out.println(": 총 " + cnt + "명");
 	}
 
 	private void setJoinResult(DeferredResult<MeetingRes> result, MeetingRes response) {
