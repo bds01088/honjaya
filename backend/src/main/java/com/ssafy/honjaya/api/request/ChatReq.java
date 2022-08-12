@@ -18,7 +18,7 @@ import lombok.ToString;
 @ApiModel(value = "ChatReq", description = "채팅 Req")
 public class ChatReq {
 	@ApiModelProperty(value = "채팅방 번호")
-	private int chatroomNo;
+	private long chatroomNo;
 	
 	@ApiModelProperty(value = "유저 번호")
 	private int userNo;

@@ -20,6 +20,7 @@ import com.ssafy.honjaya.api.request.ChatReq;
 import com.ssafy.honjaya.api.response.BooleanRes;
 import com.ssafy.honjaya.api.response.ChatListRes;
 import com.ssafy.honjaya.api.response.ChatroomListRes;
+import com.ssafy.honjaya.api.response.ChatroomRes;
 import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.service.ChatService;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
@@ -134,6 +135,36 @@ public class ChatController {
 		return new ResponseEntity<ChatroomListRes>(chatroomListRes, status);
 	}
 	
+	@ApiOperation(value = "채팅방 상세", response = ChatroomRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/chatroom/{chatroomNo}")
+	public ResponseEntity<ChatroomRes> findChatroom(@PathVariable long chatroomNo, HttpServletRequest request) {
+		ChatroomRes chatroomRes = new ChatroomRes();
+		HttpStatus status;
+		
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				chatroomRes = chatService.findChatroom(chatroomNo, userNo);
+				chatroomRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				chatroomRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			chatroomRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<ChatroomRes>(chatroomRes, status);
+	}
+	
 	@ApiOperation(value = "채팅방 삭제", response = CommonRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
@@ -141,7 +172,7 @@ public class ChatController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@DeleteMapping("/exit/{chatroomNo}")
-	public ResponseEntity<CommonRes> deleteChatroom(@PathVariable int chatroomNo, HttpServletRequest request) {
+	public ResponseEntity<CommonRes> deleteChatroom(@PathVariable long chatroomNo, HttpServletRequest request) {
 		CommonRes res = new CommonRes();
 		HttpStatus status;
 		
@@ -170,7 +201,7 @@ public class ChatController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@GetMapping("/messages/{chatroomNo}")
-	public ResponseEntity<ChatListRes> average(@PathVariable int chatroomNo, HttpServletRequest request) {
+	public ResponseEntity<ChatListRes> average(@PathVariable long chatroomNo, HttpServletRequest request) {
 		return null;
 	}
 	
