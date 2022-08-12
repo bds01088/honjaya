@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
-import { MdHelpOutline, MdLogout } from 'react-icons/md'
+import { MdHelpOutline, MdLogout, MdSmartToy } from 'react-icons/md'
 
 import Messages from './meeting-chat/Messages'
 
@@ -157,6 +157,52 @@ const Container = styled.div`
   height: 90%;
 `
 
+// 채팅창 + 비디오
+const ChatVideoBox = styled.div`
+  display: flex;
+  // alignItems: "center",
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+`
+
+const ChatBox = styled.div`
+  width: 20%;
+  padding: 0 2%;
+  position: relative;
+`
+
+const MessageBox = styled.div`
+  
+`
+
+const MyInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 110%;
+  border-radius: 1rem;
+  padding: 0.3rem 0.5rem;
+  font-family: Minseo;
+  font-size: 1.3rem;
+  color: #93adeb;
+`
+
+const InfoIcon = styled(MdSmartToy)`
+  color: #1C3879;
+  font-size: 1.8rem;
+  margin-right: 0.2rem;
+`
+
+
+const InfoPoint = styled.span`
+  font-family: Minseo;
+  font-size: 1.4rem;
+  color: #4f6aa8;
+  margin: 0 0.2rem;
+  font-weight: 600;
+`
+
 const VideoBox = styled.div`
   outline: 3px solid green;
   display: grid;
@@ -166,7 +212,6 @@ const VideoBox = styled.div`
   width: 70%;
   height: 100%;
 `
-
 
 const SendMsgBox = styled.div`
   width: 100%;
@@ -188,7 +233,7 @@ const SendMsg = styled.input`
 `
 
 const SendBtn = styled.button`
-  background-color: #FCD1D1;
+  background-color: #fcd1d1;
   border-radius: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.3rem;
@@ -217,19 +262,17 @@ const MicCamBox = styled.div`
 
 // 마이크, 카메라 on/off
 const MicOn = styled(MdMic)`
-  color: #7E6752;
+  color: #7e6752;
 `
 const MicOff = styled(MdMicOff)`
-  color: #7E6752;
+  color: #7e6752;
 `
 const CamOn = styled(MdVideocam)`
-  color: #7E6752;
+  color: #7e6752;
 `
 const CamOff = styled(MdVideocamOff)`
-  color: #7E6752;
+  color: #7e6752;
 `
-
-
 
 // 나가기 버튼
 const LeaveBox = styled.div`
@@ -264,8 +307,6 @@ const LeaveText = styled.p`
   left: 50%;
   margin-left: -1.9rem;
 `
-
-
 
 class Meeting extends Component {
   constructor(props) {
@@ -309,6 +350,7 @@ class Meeting extends Component {
 
       //롤코드
       myRoleCode: undefined,
+      roleList: ['솔로', '아바타', '지시자'],
       //이건 flag 역할인가
       check: false,
 
@@ -566,8 +608,6 @@ class Meeting extends Component {
       this.setState({
         message: '',
       })
-      console.log('aaaaa', this.state.publisher)
-      console.log('bbbbb', this.state.subscribers)
     }
   }
 
@@ -969,40 +1009,33 @@ class Meeting extends Component {
 
                 <button onClick={this.pickTopic}>주제변경</button>
               </div>
-
-              <div
-                className="chatNvideo"
-                style={{
-                  display: 'flex',
-                  // alignItems: "center",
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                <div
-                  className="chatbox"
-                  style={{ width: '20%', padding: '0 2%', position: "relative" }}
-                >
-                  <div>
-                    <Messages messages={messages} pairUser={this.state.pairUser} myRole={this.state.myRoleCode} myName={this.state.myUserName}/>
-                  </div>
+              
+              <ChatVideoBox>
+                <ChatBox>
+                  <MessageBox>
+                    { this.state.myRoleCode === 1 ?
+                      <MyInfo><InfoIcon/>당신은 <InfoPoint> {this.state.roleList[this.state.myRoleCode-1]}</InfoPoint>입니다</MyInfo>
+                      : <MyInfo><InfoIcon/>당신은 <InfoPoint> {this.state.pairUser.userNickname}의 {this.state.roleList[this.state.myRoleCode-1]}</InfoPoint>입니다</MyInfo>
+                    }
+                    <Messages
+                      messages={messages}
+                      pairUser={this.state.pairUser}
+                      myRole={this.state.myRoleCode}
+                      myName={this.state.myUserName}
+                    />
+                  </MessageBox>
                   <SendMsgBox>
                     <SendMsg
                       id="chat_message"
                       type="text"
-                      placeholder="Write a message..."
+                      placeholder="메시지를 입력하세요"
                       onChange={this.handleChatMessageChange}
                       onKeyPress={this.sendmessageByEnter}
                       value={this.state.message}
                     />
-                    <SendBtn
-                      onClick={this.sendmessageByClick}
-                    >
-                      전송
-                    </SendBtn>
+                    <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
                   </SendMsgBox>
-                </div>
+                </ChatBox>
 
                 {/* mainStreamMnager가 있다면 */}
                 {/* {this.state.mainStreamManager !== undefined ? (
@@ -1043,13 +1076,11 @@ class Meeting extends Component {
                     </div>
                   ))}
                 </VideoBox>
-              </div>
-              {/* 채팅창 */}
+              </ChatVideoBox>
 
-              
-                <Footer>
-                  <div/>
-                  {this.state.myRoleCode !== 3 ? (
+              <Footer>
+                <div />
+                {this.state.myRoleCode !== 3 ? (
                   <MicCamBox>
                     {this.state.audiostate ? (
                       <MicOn
@@ -1095,14 +1126,13 @@ class Meeting extends Component {
                       />
                     )}
                   </MicCamBox>
-                  ) : null}
+                ) : null}
 
-                  <LeaveBox onClick={this.leaveSession}>
-                    <Leave />
-                    <LeaveText className="leaveTip">나가기</LeaveText>
-                  </LeaveBox>
-                </Footer>
-              
+                <LeaveBox onClick={this.leaveSession}>
+                  <Leave />
+                  <LeaveText className="leaveTip">나가기</LeaveText>
+                </LeaveBox>
+              </Footer>
             </div>
           ) : null}
         </Container>
