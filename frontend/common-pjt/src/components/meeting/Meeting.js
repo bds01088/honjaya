@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import addTimerImg from '../../assets/add-timer.png'
 import pointImg from '../../assets/carrot.png'
-import { MdHelpOutline, MdLogout, MdSmartToy } from 'react-icons/md'
+import { MdHelpOutline, MdLogout, MdSmartToy, MdOutlineChangeCircle } from 'react-icons/md'
 
 import Messages from './meeting-chat/Messages'
 
@@ -105,8 +105,9 @@ const AddText = styled.span`
 
 const TimerCheckBox = styled.div`
   position: absolute;
-  top: 110%;
-  left: 18%;
+  top: 15%;
+  right: 0%;
+  margin-right: -7rem;
   display: flex;
 `
 
@@ -152,10 +153,68 @@ const Helper = styled(MdHelpOutline)`
 `
 
 const Container = styled.div`
-  outline: 3px solid;
+  /* outline: 3px solid; */
   width: 100%;
   height: 90%;
 `
+const TopicBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5%;
+  width: 100%;
+  padding: 1rem;
+  background-color: #f6a9a9;
+  margin-bottom: 0.5rem;
+`
+
+const TopicText = styled.p`
+  font-family: Minseo;
+  font-size: 1.8rem;
+`
+
+const ChangeBox = styled.div`
+  position: relative;
+
+  &:hover .changeTip {
+    visibility: visible;
+  }
+`
+
+const TopicIcon = styled(MdOutlineChangeCircle)`
+  font-size: 2rem;
+  padding: 0 1rem;
+`
+
+const ChangeText = styled.span`
+  visibility: hidden;
+  width: 100px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 2px 0;
+  font-family: Jua;
+  opacity: 80%;
+
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -3rem;
+`
+
+
+
+const SessionBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  position: relative;
+`
+
 
 // 채팅창 + 비디오
 const ChatVideoBox = styled.div`
@@ -172,9 +231,7 @@ const ChatBox = styled.div`
   position: relative;
 `
 
-const MessageBox = styled.div`
-  
-`
+const MessageBox = styled.div``
 
 const MyInfo = styled.div`
   display: flex;
@@ -189,11 +246,10 @@ const MyInfo = styled.div`
 `
 
 const InfoIcon = styled(MdSmartToy)`
-  color: #1C3879;
+  color: #1c3879;
   font-size: 1.8rem;
   margin-right: 0.2rem;
 `
-
 
 const InfoPoint = styled.span`
   font-family: Minseo;
@@ -256,7 +312,7 @@ const Footer = styled.div`
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  bottom: 1rem;
+  bottom: 1.5rem;
 `
 
 const MicCamBox = styled.div`
@@ -353,6 +409,7 @@ class Meeting extends Component {
         '최근에 간 여행지',
         'mbti',
       ],
+      randomCount: 3,
 
       //롤코드
       myRoleCode: undefined,
@@ -536,6 +593,7 @@ class Meeting extends Component {
     // randomTopic 바꿔주기
     this.setState({ randomTopic: this.state.topicList[arr[0]] })
   }
+  
   async pickTopic() {
     try {
       //토픽바꾸기
@@ -547,14 +605,18 @@ class Meeting extends Component {
         type: 'randomTopic',
       })
 
-      const res = await myAxios.put('/honjaya/points', {
-        point: 300,
-      })
-      console.log('포인트수정', res)
-
-      await this.setState({
-        myUserPoint: res.data.point,
-      })
+      if (this.state.randomCount <= 0) {
+        const res = await myAxios.put('/honjaya/points', {
+          point: 300,
+        })
+        console.log('포인트수정', res)
+  
+        await this.setState({
+          myUserPoint: res.data.point,
+        })
+      } else {
+        this.setState({ randomCount: this.state.randomCount-1 })
+      }
     } catch (err) {
       console.log('error')
     }
@@ -989,43 +1051,51 @@ class Meeting extends Component {
             </div>
           ) : null} */}
 
+          {this.state.session !== undefined ?
+            <TopicBox>
+              <TopicText>{this.state.randomTopic}</TopicText>
+              <ChangeBox>
+                <TopicIcon onClick={this.pickTopic}></TopicIcon>
+                { this.state.randomCount > 0 ? 
+                  <ChangeText className="changeTip">주제추천<br/>(무료 {this.state.randomCount}회)</ChangeText> 
+                  : <ChangeText className="changeTip">주제추천<br/>(-50 Lupin)</ChangeText>
+                }
+              </ChangeBox>
+            </TopicBox> : null}
+
           {/* 세션 열렸을 때 */}
           {this.state.session !== undefined ? (
-            <div
-              id="session"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '80%',
-              }}
-            >
-              <div
-                styled={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  height: '20%',
-                  width: '96%',
-                  padding: '0.5rem 2%',
-                }}
-              >
-                {this.state.randomTopic}
-
-                <button onClick={this.pickTopic}>주제변경</button>
-              </div>
-              
+            <SessionBox className="SessionBox">
               <ChatVideoBox>
                 <ChatBox>
                   <MessageBox>
-                    { this.state.myRoleCode === 1 ?
-                      <MyInfo><InfoIcon/>당신은 <InfoPoint> {this.state.roleList[this.state.myRoleCode-1]}</InfoPoint>입니다</MyInfo>
-                      : <MyInfo><InfoIcon/>당신은 <InfoPoint> {this.state.pairUser.userNickname}의 {this.state.roleList[this.state.myRoleCode-1]}</InfoPoint>입니다</MyInfo>
-                    }
-                    { this.state.myRoleCode === 3 ?
-                      <CommanderWarn>* 지시자의 채팅은 아바타만 볼 수 있어요</CommanderWarn> : null
-                    }
+                    {this.state.myRoleCode === 1 ? (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    ) : (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.pairUser.userNickname}의{' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    )}
+                    {this.state.myRoleCode === 3 ? (
+                      <CommanderWarn>
+                        * 지시자의 채팅은 아바타만 볼 수 있어요
+                      </CommanderWarn>
+                    ) : null}
                     <Messages
                       messages={messages}
                       pairUser={this.state.pairUser}
@@ -1044,7 +1114,6 @@ class Meeting extends Component {
                     />
                     <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
                   </SendMsgBox>
-
                 </ChatBox>
 
                 {/* mainStreamMnager가 있다면 */}
@@ -1143,7 +1212,7 @@ class Meeting extends Component {
                   <LeaveText className="leaveTip">나가기</LeaveText>
                 </LeaveBox>
               </Footer>
-            </div>
+            </SessionBox>
           ) : null}
         </Container>
       </Background>
