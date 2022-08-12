@@ -4,8 +4,10 @@ import styled from 'styled-components'
 import { RiAlarmWarningFill } from 'react-icons/ri'
 
 const StreamDiv = styled.div`
-  width: 50%;
-
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  height: 90%;
   &.Commander {
     display: none;
   }
@@ -14,7 +16,7 @@ const StreamDiv = styled.div`
 const StreamComponent = styled.div`
   display: flex;
   flex-direction: row;
-  width: 50%;
+  width: 65%;
   justify-content: center;
   flex-direction: column-reverse;
 `
