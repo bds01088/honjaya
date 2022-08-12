@@ -62,23 +62,31 @@ const SendImg = styled(MdSend)`
   color: #6AA3F6;
 `
 
-const ChatRoom = ({chatUser, openChatList, setChatUser}) => {
-  return (
-    <Container>
-      <ChatRoomHeader chatUser={chatUser} openChatList={openChatList} setChatUser={setChatUser}/>
-      <ChatContainer>
-        <ChatRecord>
 
-        </ChatRecord>
-        <SendBox>
-          <SendInput/>
-          <SendButton>
-            <SendImg/>
-          </SendButton>
-        </SendBox>
-      </ChatContainer>
-    </Container>
-  )
-}
+const ChatRoom = ({chatUser, openChatList, setChatUser, openChatRoom}) => {
+  
+  return (
+    <div>
+      {openChatRoom ? (
+          <Container>
+            <ChatRoomHeader chatUser={chatUser} openChatList={openChatList} setChatUser={setChatUser} openChatRoom={openChatRoom}/>
+            <ChatContainer>
+              <ChatRecord>
+      
+              </ChatRecord>
+              <SendBox>
+                <SendInput/>
+                <SendButton>
+                  <SendImg/>
+                </SendButton>
+              </SendBox>
+            </ChatContainer>
+          </Container>
+  
+        ) : null}
+    </div>
+    ) 
+  }
+
 
 export default ChatRoom

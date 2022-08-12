@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
+import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
 import { connect } from 'react-redux'
 import styled from 'styled-components'

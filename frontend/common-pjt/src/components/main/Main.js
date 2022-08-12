@@ -23,8 +23,6 @@ import { getRate } from './hashtag/rate-slice'
 import { useSelector } from 'react-redux'
 import { loadUser,logout } from '../auth/login/login-slice'
 // import { ConnectedTvOutlined, NavigateBefore } from '@mui/icons-material'
-import HashDeleteModal from './HashDeleteModal'
-
 
 
 const Container = styled.div`
@@ -241,7 +239,7 @@ const Main = () => {
   })  
 
   const [openList, setOpenList] = useState(false)
-  
+  const [openRoom, setOpenRoom] = useState(false)
   const [users, setUsers] = useState([
     '김누리',
     '김효근',
@@ -336,9 +334,8 @@ const Main = () => {
     setOpenList(!openList)
   }
 
-  const [isOpen, setIsOpen] = useState(false)
-  const openHashDeleteModal = () => {
-    setIsOpen(!isOpen)
+  const openChatRoom = () => {
+    setOpenRoom(!openRoom)
   }
 
 
@@ -373,7 +370,7 @@ const Main = () => {
       <MainHeader />
       <CharacterBox>
         <MainCharacter />
-        {isOpen ? <HashDeleteModal openHashDeleteModal={openHashDeleteModal} /> : null}
+       
       </CharacterBox>
 
       { hashesOwned.length < 3 ? 
@@ -412,6 +409,7 @@ const Main = () => {
               openChatList={openChatList}
               users={users}
               setChatUser={setChatUser}
+              openChatRoom={openChatRoom}
             />
           ) : null}
         </FullChat>
@@ -422,6 +420,7 @@ const Main = () => {
           chatUser={chatUser.user}
           openChatList={openChatList}
           setChatUser={setChatUser}
+          openChatRoom={openChatRoom}
         />
       ) : null}
 

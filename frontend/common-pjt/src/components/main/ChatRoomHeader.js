@@ -1,5 +1,8 @@
 import styled from "styled-components"
 import { MdLogout, MdKeyboardBackspace, MdInfoOutline } from 'react-icons/md'
+import { useState, } from "react"
+import { useSelector, useDispatch } from "react-redux";
+import UserReportModal from "./UserReportModal";
 
 const Container = styled.div`
   width: 100%;
@@ -31,17 +34,28 @@ const UserInform = styled(MdInfoOutline)`
   margin-left: 0.2rem;
 `
 
-const ChatRoomHeader = ({chatUser, openChatList, setChatUser}) => {
+const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom }) => {
+
+  const [isOpen, setIsOpen] = useState(false)
+  const openUserReportModal = () => {
+    setIsOpen(!isOpen)
+  }
+
+
   return (
     <>
+      
       <Container>
         <Close onClick={() => {
           openChatList()
           setChatUser('')
+          openChatRoom()
         }}/>
         <User>
           {chatUser} 
-          <UserInform />
+          {/* 아 이게 아이콘이구나 */}
+          <UserInform onClick={openUserReportModal}/> 
+          {isOpen ? <UserReportModal openUserReportModal={openUserReportModal}  /> : null}
         </User>
         <Logout/>
         
