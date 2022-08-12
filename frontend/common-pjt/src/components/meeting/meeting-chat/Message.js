@@ -9,26 +9,43 @@ const MessageContainer = styled.div`
   margin-top: 0.5rem;
 `;
 
+const Myname = styled.span`
+  background-color: #c0d3ff;
+  border-radius: 1rem;
+  color: #1C3879;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-right: 0.8rem;
+  font-family: Minseo;
+`;
+
 const Username = styled.span`
-  color: #42387a;
-  font-size: 1.3rem;
+  background-color: #E4E9BE;
+  border-radius: 1rem;
+  color: #446A46;
+  font-size: 1.5rem;
   font-weight: 600;
   margin-right: 0.8rem;
   font-family: Minseo;
 `;
 
 const Text = styled.span`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-family: Minseo;
 `;
 
+
 class Message extends Component {
   render() {
-    const { text, userName } = this.props;
+    const { text, userName, myName } = this.props;
 
     return (
       <MessageContainer>
-        <Username>{userName} :</Username>
+        { userName === myName ?
+          <Myname>{userName}(Me) </Myname>
+          : <Username>{userName}</Username>
+
+        }
         <Text>{text}</Text>
       </MessageContainer>
     );

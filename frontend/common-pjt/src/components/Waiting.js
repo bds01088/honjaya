@@ -306,9 +306,10 @@ class Waiting extends Component {
       redirect: false,
       uuid: undefined,
       nowmatching: true,
+      
 
-      // total : undefined,
-      // roleCode: undefined,
+      total : undefined,
+      roleCode: undefined,
 
       // 3분의 시간제한
       timeLimit: 0,
@@ -337,6 +338,7 @@ class Waiting extends Component {
     const total = mode.total
     const roleCode = mode.roleCode
     console.log("total, roleCode", total, roleCode)
+    this.setState({total:total, roleCode:roleCode})
     const data = {
       total, roleCode
     }
@@ -404,43 +406,7 @@ class Waiting extends Component {
         }
       })
     
-    // myAxios.post(
-    //     'https://i7e104.p.ssafy.io/honjaya/meetings/ready',
-    //     {
-    //       "total": data.total,
-    //       "roleCode": data.roleCode
-    //     }
-    //     ).then(res => {
-    //     console.log("uuid 응답 받아옴")
-    //     console.log(res.data)
-    //     if (res.data.result === 1){
-    //         this.setState({
-    //           uuid : res.data.uuid,
-    //           nowmatching : false
-    //         })
-    //         console.log("slice에 응답 저장")
-    //         this.props.setMatchResponse(res.data)
-    //         console.log("slice에 응답 저장됌")
-    //     }else if (res.data.result === -1 ){
-    //       console.log("응답왔지만 매칭안됌")
-    //       this.setState({
-    //         uuid : undefined,
-    //         nowmatching : false
-    //       })
-    //       this.resetTimer()
-    //     } else console.log("취소됌")
-    //   }
-    //   ).then(() => {
-    //     // if (this.res.data.uuid !== undefined) {
-
-    //     // }
-    //     // if (this.uuid !== undefined && this.nowmatching === false){
-    //     //     // this.props.navigate('/meeting')
-    //     //     // this.state.redirect && <Navigate to='/meeting'/>
-    //     //     // this.setState({redirect: true})
-    //     //   }
-  
-    //   }
+   
       .catch(err => {
         console.log(err)
         }
@@ -463,24 +429,36 @@ class Waiting extends Component {
       })
   }
 
-  //   myAxios
-  //     .get('https://i7e104.p.ssafy.io/honjaya/meetings/cancel')
-  //     .then((res) => {
-  //       console.log("cancel 결과")
-  //       console.log(res)
-  //       if (res.status === 200) {
-  //         this.props.history.push('/main')
-  //       }
-  //       // this.setState({
-  //       //   uuid : res.data.uuid,
-  //       //   nowmatching : false
-  //       //   })
-  //       }
-  //     ).catch(err => {
-  //       console.log(err)
-  //       }
-  //     )
-  // }
+  rematchStart() {
+    console.log("total, roleCode", this.state.total, this.state.roleCode)
+    const { doMatchDataGet } = this.props
+    const data = {
+      total: this.state.total,
+      roleCode: this.state.roleCode
+    }
+    doMatchDataGet(data)
+    .unwrap()
+    .then((res) => {
+      console.log("요청응답", res)
+      if (res.result === 1) {
+        this.props.history.push('/meeting')
+      } else if (res.result === -1) {
+        this.setState({
+          uuid: undefined,
+          nowmatching: false
+        })
+      } else {
+        console.log("취소", res)
+      }
+    })
+  
+ 
+    .catch(err => {
+      console.log(err)
+      }
+    )
+  }
+
 
 
   render() {
@@ -509,7 +487,7 @@ class Waiting extends Component {
             { this.state.nowmatching === true && this.state.uuid === undefined ? 
               <><HashLoader color="#e5a0a0" /><StatusText>유저를 찾고 있습니다 ...</StatusText></> 
               : <><StatusText>현재 매칭 가능한 상대가 없습니다<br/>다시 연결하시겠습니까?</StatusText>
-                <div><ChoiceBtn className="yes" onClick={this.resetTimer}>O</ChoiceBtn> / <Link to="/main"><ChoiceBtn className="no">X</ChoiceBtn></Link></div>
+                <div><ChoiceBtn className="yes" onClick={ () => {this.resetTimer(); this.rematchStart()}}>O</ChoiceBtn> / <ChoiceBtn className="no" onClick={this.cancelMatching}>X</ChoiceBtn></div>
             </>  }
           </SpinnerBox>
           
