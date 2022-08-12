@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.PostConstruct;
@@ -45,10 +44,6 @@ public class MeetingServiceImpl implements MeetingService {
 	
 	private List<Map<MeetingReq, MeetingReq>> waitingPair;
 	
-	// {key : websocket session id, value : room id}
-	private Map<String, String> connectedUsers;
-	
-	
 	private Map<Integer, Map<MeetingReq, DeferredResult<MeetingRes>>> whereByUserNo;
 	private Map<Integer, MeetingReq> userNoMeetingReq; // 0 or 1
 	// 나중에 String -> Integer로 바꿔야 함
@@ -70,7 +65,6 @@ public class MeetingServiceImpl implements MeetingService {
 			this.waitingPair.add(new LinkedHashMap<>());
 		}
 		this.lock = new ReentrantReadWriteLock();
-		this.connectedUsers = new ConcurrentHashMap<>();
 	}
 
 	@Override
@@ -179,16 +173,6 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		logger.info("timeout!");
 		testPrint(); // 테스트
-	}
-
-	@Override
-	public void connectUser(String chatRoomId, String websocketSessionId) {
-		connectedUsers.put(websocketSessionId, chatRoomId);
-	}
-
-	@Override
-	public void disconnectUser(String websocketSessionId) {
-		logger.info("disconnectUser()");
 	}
 
 	private void establishRoom() {

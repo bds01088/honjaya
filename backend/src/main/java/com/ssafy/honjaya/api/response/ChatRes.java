@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import com.ssafy.honjaya.db.entity.Chat;
+import com.ssafy.honjaya.db.entity.User;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,11 +22,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ChatRes {
-	@ApiModelProperty(value = "자신이 보낸 메시지 true / 상대 메시지 false")
-	private boolean myChat;
-	
 	@ApiModelProperty(value = "보낸 사람 유저 번호")
 	private int userNo;
+	
+	@ApiModelProperty(value = "보낸 사람 유저 닉네임")
+	private String userNickname;
 	
 	@ApiModelProperty(value = "채팅 메시지")
 	private String chatMessage;
@@ -42,10 +43,10 @@ public class ChatRes {
 	@ApiModelProperty(value = "에러 메시지")
 	private String error;
 
-	public ChatRes(int userNo, Chat chat) {
-		int chatUserNo = chat.getUser().getUserNo();
-		this.myChat = chatUserNo == userNo;
-		this.userNo = chatUserNo;
+	public ChatRes(Chat chat) {
+		User user = chat.getUser();
+		this.userNo = user.getUserNo();
+		this.userNickname = user.getUserNickname();
 		this.chatMessage = chat.getChatMessage();
 		this.chatTime = datetimeToChatTime(chat.getChatTime());
 		this.chatRead = chat.getChatRead();

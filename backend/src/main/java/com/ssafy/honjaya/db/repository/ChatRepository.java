@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ssafy.honjaya.db.entity.Chat;
 
-public interface ChatRepository extends JpaRepository<Chat, Integer> {
-	List<Chat> findAllByChatroom_ChatroomNo(int chatroomNo);
+public interface ChatRepository extends JpaRepository<Chat, Long> {
+	List<Chat> findAllByChatroom_ChatroomNo(long chatroomNo);
 }

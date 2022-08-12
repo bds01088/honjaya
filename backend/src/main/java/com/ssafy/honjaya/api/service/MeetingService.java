@@ -9,7 +9,4 @@ public interface MeetingService {
 	void readyMeeting(MeetingReq meetingReq, DeferredResult<MeetingRes> deferredResult);
 	void cancelChatRoom(MeetingReq meetingReq);
 	void timeout(MeetingReq meetingReq);
-	
-	void connectUser(String chatRoomId, String websocketSessionId);
-	void disconnectUser(String websocketSessionId);
 }
