@@ -311,11 +311,17 @@ public class UserController {
 		}
 		
 		int userNo = jwtService.extractUserNo(refreshToken);
-
+		
+		if (userNo == -1) {
+			logger.error("리프레쉬 토큰 유효하지 않음");
+			loginRes.setError("리프레쉬 토큰이 유효하지 않습니다. 다시 로그인 하세요.");
+			return new ResponseEntity<LoginRes>(loginRes, HttpStatus.UNAUTHORIZED);
+		}
+		
 		if (!jwtService.checkToken(refreshToken)) {
 			logger.error("리프레쉬 토큰도 만료");
 			loginRes.setError("리프레쉬 토큰도 만료됐습니다. 다시 로그인 하세요.");
-
+			
 			userService.deleRefreshToken(userNo);
 			return new ResponseEntity<LoginRes>(loginRes, HttpStatus.UNAUTHORIZED);
 		}

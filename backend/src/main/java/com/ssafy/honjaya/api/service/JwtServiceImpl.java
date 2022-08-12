@@ -103,12 +103,15 @@ public class JwtServiceImpl implements JwtService {
 	@Override
 	public int extractUserNo(String jwt) {
 		Jws<Claims> claims = null;
+		int userNo = -1;
 		try {
 			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
+			userNo = (int) claims.getBody().get("userNo");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			userNo = -1;
 		}
-		return (int) claims.getBody().get("userNo");
+		return userNo;
 	}
 
 //	@Override
