@@ -230,7 +230,27 @@ const ChatBox = styled.div`
   position: relative;
 `
 
-const MessageBox = styled.div``
+const MessageBox = styled.div`
+  height: 76%;
+  width: 100%;
+  /* border: 2px solid; */
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar{
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb{
+    height: 15%;
+    background-color: #ffcaca;
+    border-radius: 2rem;
+  }
+
+  &::-webkit-scrollbar-track{
+    background-color: #ffecec;
+    border-radius: 2rem;
+    }
+`
 
 const MyInfo = styled.div`
   display: flex;
@@ -1040,34 +1060,34 @@ class Meeting extends Component {
             <SessionBox className="SessionBox">
               <ChatVideoBox>
                 <ChatBox>
+                  {this.state.myRoleCode === 1 ? (
+                    <MyInfo>
+                      <InfoIcon />
+                      당신은{' '}
+                      <InfoPoint>
+                        {' '}
+                        {this.state.roleList[this.state.myRoleCode - 1]}
+                      </InfoPoint>
+                      입니다
+                    </MyInfo>
+                  ) : (
+                    <MyInfo>
+                      <InfoIcon />
+                      당신은{' '}
+                      <InfoPoint>
+                        {' '}
+                        {this.state.pairUser.userNickname}의{' '}
+                        {this.state.roleList[this.state.myRoleCode - 1]}
+                      </InfoPoint>
+                      입니다
+                    </MyInfo>
+                  )}
+                  {this.state.myRoleCode === 3 ? (
+                    <CommanderWarn>
+                      * 지시자의 채팅은 아바타만 볼 수 있어요
+                    </CommanderWarn>
+                  ) : null}
                   <MessageBox>
-                    {this.state.myRoleCode === 1 ? (
-                      <MyInfo>
-                        <InfoIcon />
-                        당신은{' '}
-                        <InfoPoint>
-                          {' '}
-                          {this.state.roleList[this.state.myRoleCode - 1]}
-                        </InfoPoint>
-                        입니다
-                      </MyInfo>
-                    ) : (
-                      <MyInfo>
-                        <InfoIcon />
-                        당신은{' '}
-                        <InfoPoint>
-                          {' '}
-                          {this.state.pairUser.userNickname}의{' '}
-                          {this.state.roleList[this.state.myRoleCode - 1]}
-                        </InfoPoint>
-                        입니다
-                      </MyInfo>
-                    )}
-                    {this.state.myRoleCode === 3 ? (
-                      <CommanderWarn>
-                        * 지시자의 채팅은 아바타만 볼 수 있어요
-                      </CommanderWarn>
-                    ) : null}
                     <Messages
                       messages={messages}
                       pairUser={this.state.pairUser}
