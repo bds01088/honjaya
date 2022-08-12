@@ -242,6 +242,12 @@ const SendBtn = styled.button`
   border-bottom: 2px solid #333333;
 `
 
+const CommanderWarn = styled.div`
+  font-family: Minseo;
+  color: red;
+  padding: 0 1rem;
+`
+
 // 캠 on/off + 나가기
 const Footer = styled.div`
   width: 100%;
@@ -1017,6 +1023,9 @@ class Meeting extends Component {
                       <MyInfo><InfoIcon/>당신은 <InfoPoint> {this.state.roleList[this.state.myRoleCode-1]}</InfoPoint>입니다</MyInfo>
                       : <MyInfo><InfoIcon/>당신은 <InfoPoint> {this.state.pairUser.userNickname}의 {this.state.roleList[this.state.myRoleCode-1]}</InfoPoint>입니다</MyInfo>
                     }
+                    { this.state.myRoleCode === 3 ?
+                      <CommanderWarn>* 지시자의 채팅은 아바타만 볼 수 있어요</CommanderWarn> : null
+                    }
                     <Messages
                       messages={messages}
                       pairUser={this.state.pairUser}
@@ -1035,6 +1044,7 @@ class Meeting extends Component {
                     />
                     <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
                   </SendMsgBox>
+
                 </ChatBox>
 
                 {/* mainStreamMnager가 있다면 */}
