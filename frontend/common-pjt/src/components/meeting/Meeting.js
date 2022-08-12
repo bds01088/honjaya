@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
-import './meeting.css'
+// import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -416,6 +416,7 @@ class Meeting extends Component {
       messages: [],
       pairUser: undefined,
       chatConnection: [],
+      user: undefined,
 
       //해쉬태그
       hashList: [],
@@ -470,7 +471,7 @@ class Meeting extends Component {
     const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
-    const { uuid, roleCode } = mode
+    const { uuid, roleCode, user } = mode
 
     if (roleCode !== 1) {
       const pairUser = mode.pairUser
@@ -502,11 +503,14 @@ class Meeting extends Component {
       }
     }, 1000)
 
+    //음 this.setState를 왜 따로 해주고 있지
     this.setState({
       myUserName: userNickname,
       myUserPoint: userPoint,
       hashList: hashesOwned,
       myRoleCode: roleCode,
+      myUserData: user
+
     })
   }
 
@@ -793,12 +797,13 @@ class Meeting extends Component {
           // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
 
-          // 해쉬태그 넣어주기
+          // 모두가 알 수 있어야 하는 정보 통신하기(닉네임, 해시태그, 롤코드, 유저넘버)
           mySession
             .connect(token, {
               clientData: this.state.myUserName,
               hashtags: this.state.hashList,
               roleCodes: this.state.myRoleCode,
+              userDatas: this.state.myUserData
             })
             .then(async () => {
               var devices = await this.OV.getDevices()

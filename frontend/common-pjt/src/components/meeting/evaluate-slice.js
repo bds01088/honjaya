@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from '../../../api/http'
+import axios from '../../api/http'
+
 
 
 //포인트 감소
