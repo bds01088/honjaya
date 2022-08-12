@@ -22,27 +22,28 @@ public class StompChatController {
 	// "/pub/chat/enter"
 	@MessageMapping(value="/chat/enter")
 	public void enter(ChatReq chatReq) {
-		chatReq.setChatMessage(chatReq.getUserNo() + "님이 채팅방에 참여하였습니다.");
+//		chatReq.setChatMessage(chatReq.getUserNo() + "님이 채팅방에 참여하였습니다.");
+		System.out.println("enter called");
 
-		ChatListRes chats = chatService.getMessages(chatReq.getUserNo(), chatReq.getChatroomNo());
+		ChatListRes chats = chatService.getMessages(chatReq.getChatroomNo());
 
 		if (chats != null) {
-			for (ChatRes c : chats.getList()) {
-				chatReq.setUserNo(c.getUserNo()); // 1234 ChatRes 수정 필요
-				chatReq.setChatMessage(c.getChatMessage());
-				template.convertAndSend("/sub/chat/room/" + chatReq.getChatroomNo(), chatReq);
+			for (ChatRes chatRes : chats.getList()) {
+				template.convertAndSend("/sub/chat/room/" + chatReq.getChatroomNo(), chatRes);
 			}
 		}
 
 		// DB에 채팅내용 저장
-		chatService.sendMessage(chatReq);
+//		chatService.sendMessage(chatReq);
 	}
 
 	@MessageMapping(value="/chat/message")
 	public void message(ChatReq chatReq) {
-		template.convertAndSend("/sub/chat/room/" + chatReq.getChatroomNo(), chatReq);
-
-		// DB에 채팅내용 저장
-		chatService.sendMessage(chatReq);
+		System.out.println("send called");
+		
+		ChatRes chatRes = chatService.sendMessage(chatReq); // DB에 채팅내용 저장
+		
+		template.convertAndSend("/sub/chat/room/" + chatReq.getChatroomNo(), chatRes);
+		
 	}
 }

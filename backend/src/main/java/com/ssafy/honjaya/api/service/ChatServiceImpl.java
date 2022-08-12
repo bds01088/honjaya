@@ -3,6 +3,8 @@ package com.ssafy.honjaya.api.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +69,7 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	@Transactional
 	public ChatroomListRes listChatroom(int userNo) {
 		List<ChatroomUser> list = chatroomUserRepository.listChatroom(userNo);
 		List<ChatroomRes> resList = new ArrayList<>();
@@ -75,31 +78,39 @@ public class ChatServiceImpl implements ChatService {
 		chatroomListRes.setList(resList);
 		return chatroomListRes;
 	}
+	
+	@Override
+	@Transactional
+	public ChatroomRes findChatroom(long chatroomNo, int myUserNo) {
+		return new ChatroomRes(chatroomUserRepository.findChatroom(chatroomNo, myUserNo));
+	}
 
 	@Override
-	public void deleteChatroom(int chatroomNo) { // 둘 중 한 명이 채팅을 나갔거나 탈퇴를 한 경우 발동
+	public void deleteChatroom(long chatroomNo) { // 둘 중 한 명이 채팅을 나갔거나 탈퇴를 한 경우 발동
 		chatroomRepository.deleteById(chatroomNo);
 	}
 
 	@Override
-	public ChatListRes getMessages(int userNo, int chatroomNo) {
+	@Transactional
+	public ChatListRes getMessages(long chatroomNo) {
 		List<Chat> list = chatRepository.findAllByChatroom_ChatroomNo(chatroomNo);
 		List<ChatRes> resList = new ArrayList<>();
 		ChatListRes chatListRes = new ChatListRes();
-		list.forEach(e -> resList.add(new ChatRes(userNo, e)));
+		list.forEach(e -> resList.add(new ChatRes(e)));
 		chatListRes.setList(resList);
 		return chatListRes;
 	}
 
 	@Override
-	public void sendMessage(ChatReq chatReq) {
+	@Transactional
+	public ChatRes sendMessage(ChatReq chatReq) {
 		Chat chat = Chat.builder()
 				.chatroom(chatroomRepository.getOne(chatReq.getChatroomNo()))
 				.user(userRepository.getOne(chatReq.getUserNo()))
 				.chatMessage(chatReq.getChatMessage())
 				.chatRead(CHAT_READ_COUNT)
 				.build();
-		chatRepository.save(chat);
+		return new ChatRes(chatRepository.save(chat));
 	}
 	
 	private void createChatroom(int userNo1, int userNo2) {
