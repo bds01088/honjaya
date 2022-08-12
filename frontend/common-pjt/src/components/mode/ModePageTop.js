@@ -167,7 +167,7 @@ const ModeChoice = ({ data, setData }) => {
             onChange={handleClickRadioButton}/>
           <Mode src={RandomImg}></Mode>
           <Explain>
-            역할을 고르기 힘들다면
+            역할이 고민된다면
           </Explain>
           <Explain>
             랜덤모드로 참여해보세요.
