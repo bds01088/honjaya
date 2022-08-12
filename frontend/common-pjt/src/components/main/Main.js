@@ -283,7 +283,8 @@ const Main = () => {
       .unwrap()
       .catch((err)=> {
         console.log('유저로드에러', err)
-        // alert('유저로드에러')})
+        // alert('유저로드에러')
+      })
   }, [])
 
 
@@ -294,7 +295,8 @@ const Main = () => {
     // .then((res) => {console.log(res)})
     .catch((err) => {
       console.log("별점로드에러", err)
-      // alert('별점로드에러')})
+      // alert('별점로드에러')
+    })
   }, [])
 
 
