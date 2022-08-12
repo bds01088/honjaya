@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit'
 import axios from '../../../api/http'
-import { deleteToken, saveToken, getToken } from '../../../api/JWT'
+import { deleteToken, saveToken, getToken, saveRefreshToken } from '../../../api/JWT'
 
 // 로그인
 export const login = createAsyncThunk(
@@ -9,9 +9,10 @@ export const login = createAsyncThunk(
     try {
       const res = await axios.post('/honjaya/users/login', userData)
       const {
-        data: { accessToken },
+        data: { accessToken, refreshToken },
       } = res
       saveToken(accessToken)
+      saveRefreshToken(refreshToken)
       return res
       // saveToken(token)
       } catch (err) {
