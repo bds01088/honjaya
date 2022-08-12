@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import backImg from '../../assets/main_img.jpg'
+import backImg from '../../assets/main_img.jpeg'
 import MainHeader from './MainHeader'
 import ChatList from './ChatList'
 import MainCharacter from './MainCharacter'
