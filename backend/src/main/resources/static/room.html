@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:v-on="http://www.w3.org/1999/xhtml"
+  xmlns:v-bind="http://www.w3.org/1999/xhtml"
+>
+  <head>
+    <title>Websocket Chat</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css" />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="app" v-cloak>
+      <div class="row">
+        <div class="col-md-12">
+          <h3>채팅방 리스트</h3>
+        </div>
+      </div>
+
+      <label for="chatAskTo">채팅 신청할 유저 번호</label>
+      <input id="chatAskTo" v-model="chatAskTo" type="text" />
+      <button class="btn btn-sm btn-primary" @click="askChat">대화 요청하기</button>
+
+      <ul class="list-group">
+        <li
+          class="list-group-item list-group-item-action"
+          v-for="item in chatrooms"
+          v-bind:key="item.chatroomNo"
+          v-on:click="enterRoom(item.chatroomNo)"
+        >
+          {{item.userNickname}}
+        </li>
+      </ul>
+    </div>
+    <!-- JavaScript -->
+    <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+    <script>
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          chatrooms: [],
+          chatAskTo: 0,
+        },
+        created() {
+          this.findAllRoom();
+        },
+        methods: {
+          findAllRoom: function () {
+            let headers = {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "access-token": "",
+            };
+            axios.get("/honjaya/chats/list", { headers: headers }).then((response) => {
+              let { data } = response;
+              if (data.success) {
+                this.chatrooms = data.list;
+              } else {
+                console.log(data.error);
+              }
+            });
+          },
+          askChat: function () {
+            if ("" === this.room_name) {
+              alert("방 제목을 입력해 주십시요.");
+              return;
+            } else {
+              var params = new URLSearchParams();
+              params.append("name", this.room_name);
+              axios
+                .post("/honjaya/chats/ask/" + this.chatAskTo)
+                .then((response) => {
+                  let { data } = response;
+                  if (data.trueOrFalse) {
+                    alert(response.data.roomName + "방 개설 성공");
+                    this.findAllRoom(); // <- 이거는 어차피 메인에서만 작동시키는 거라서 실제 서비스에서는 지우면 됨
+                  } else {
+                    alert(response.data.roomName + "상대가 신청 아직 안 함");
+                  }
+                })
+                .catch((response) => {
+                  alert("채팅방 개설에 실패하였습니다.");
+                });
+            }
+          },
+          enterRoom: function (chatroomNo) {
+            let userNo;
+
+            let headers = {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "access-token": "",
+            };
+            axios.get("/honjaya/users/userno", { headers: headers }).then((response) => {
+              let { data } = response;
+              if (data.success) {
+                userNo = data.userNo;
+                localStorage.setItem("wschat.userNo", userNo);
+                localStorage.setItem("wschat.chatroomNo", chatroomNo);
+                location.href = "/chat/room/enter/" + chatroomNo;
+              } else {
+                console.log(data.error);
+              }
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
