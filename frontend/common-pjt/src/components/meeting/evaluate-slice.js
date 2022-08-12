@@ -21,6 +21,26 @@ export const usePoint = createAsyncThunk(
   }
 )
 
+//이용자 신고
+export const userReport = createAsyncThunk(
+  'USER_REPORT',
+  async ( data, {rejectWithValue}) => {
+    try {
+      console.log("신고하기", data)
+      const res = await axios.post('/honjaya/reports', data)
+      console.log(res)
+      return res
+    }
+    catch (err) {
+      return rejectWithValue(err.response)
+    }
+  }
+)
+
+
+
+
+
 
 const initialState = {
 

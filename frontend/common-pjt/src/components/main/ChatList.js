@@ -32,13 +32,13 @@ const Container = styled.div`
     }
 `
 
-const ChatList = ({users, openChatList, setChatUser}) => {
+const ChatList = ({users, openChatList, setChatUser, openChatRoom}) => {
 
   return (
     <Container>
       {users.map(user => (
         <>
-          <ChatListItem openChatList={openChatList} user={user} setChatUser={setChatUser}/><hr/>
+          <ChatListItem openChatList={openChatList} user={user} setChatUser={setChatUser} openChatRoom={openChatRoom}/><hr/>
         </>
       ))}
     </Container>
