@@ -10,7 +10,7 @@ const LoginFormInputsBlock = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 70%;
   height: 100%;
   margin: 0;
 `
@@ -44,7 +44,7 @@ const LoginBtn = styled.button`
   font-family: Jua;
 
   &:hover{
-    background-color: #FF728E;
+    background-color: #df6079;
     color: #e0e0e0;
   }
 `

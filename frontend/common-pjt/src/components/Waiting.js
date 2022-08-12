@@ -11,10 +11,14 @@ import {connect} from 'react-redux'
 import Webcam from 'react-webcam'
 import { exitMatching, matchDataGet, setMatchResponse } from './mode/mode-slice'
 import { CollectionsOutlined } from '@material-ui/icons'
+import backImg from '../assets/base.PNG'
 
 // import { matchDataGet } from './mode/mode-slice'
 
 const Background = styled.div`
+  background-image: url(${backImg});
+  background-size: cover;
+  background-repeat: no-repeat;
   background-color: #fffdde;
   width: 100vw;
   height: 100vh;

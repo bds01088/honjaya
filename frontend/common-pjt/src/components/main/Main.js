@@ -169,6 +169,7 @@ const Logout = styled(MdLogout)`
 `
 const LogoutText = styled.p`
   font-family: Jua;
+  margin: 0.5rem;
   color: #ff728e;
 `
 

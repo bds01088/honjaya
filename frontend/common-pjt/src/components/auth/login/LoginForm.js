@@ -14,14 +14,14 @@ const LoginFormBlock = styled.div`
 `
 
 const Logo = styled.img.attrs({ src: `${logoImg}` })`
-  height: 10%;
-  margin-bottom: 1.5rem;
+  width: 85%;
+  margin: 1rem 0;
 `
 
 const GoInBtn = styled.div`
   background-color: #00cfb4;
   color: white;
-  width: 100%;
+  width: 70%;
   text-align: center;
   border-radius: 0.5rem;
   padding: 1rem 0rem;
