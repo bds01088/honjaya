@@ -5,9 +5,13 @@ import ModePageTop from './ModePageTop'
 import ModePageBottom from './ModePageBottom'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadUser } from '../auth/login/login-slice'
+import backImg from '../../assets/base.PNG'
 
 
 const Background = styled.div`
+  background-image: url(${backImg});
+  background-size: cover;
+  background-repeat: no-repeat;
   background-color: #fffdde;
   width: 100vw;
   height: 100vh;
