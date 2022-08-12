@@ -270,7 +270,10 @@ const Main = () => {
       .then(() => {
         console.log("해시테그 데이터 로드 완료")
       })
-      .catch((err)=> {alert('해쉬태그로드에러')})
+      .catch((err)=> {
+        console.log("해시태그로드에러", err)
+        // alert('해쉬태그로드에러')
+      })
   }, []) 
 
 
@@ -278,7 +281,9 @@ const Main = () => {
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .catch((err)=> {alert('유저로드에러')})
+      .catch((err)=> {
+        console.log('유저로드에러', err)
+        // alert('유저로드에러')})
   }, [])
 
 
@@ -287,7 +292,9 @@ const Main = () => {
     dispatch(getRate())
     .unwrap()
     // .then((res) => {console.log(res)})
-    .catch((err) => {alert('별점로드에러')})
+    .catch((err) => {
+      console.log("별점로드에러", err)
+      // alert('별점로드에러')})
   }, [])
 
 
