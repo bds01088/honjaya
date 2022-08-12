@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
-import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -220,9 +219,9 @@ const SessionBox = styled.div`
 const ChatVideoBox = styled.div`
   display: flex;
   // alignItems: "center",
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
-  height: 100%;
+  height: 95%;
 `
 
 const ChatBox = styled.div`
@@ -265,12 +264,12 @@ const VideoBox = styled.div`
   grid-template-columns: repeat(2);
   grid-template-rows: 50% 50%;
   grid-gap: 1rem;
-  width: 70%;
+  width: 65%;
   height: 100%;
 `
 
 const SendMsgBox = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -288,7 +287,7 @@ const SendMsg = styled.input`
   font-family: Minseo;
 `
 
-const SendBtn = styled.button`
+const SendBtn = styled.p`
   background-color: #fcd1d1;
   border-radius: 1rem;
   padding: 0.5rem 1rem;
@@ -787,19 +786,33 @@ class Meeting extends Component {
               )
 
               // --- 5) Get your own camera stream ---
+              let publisher
 
-              // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-              // element: we will manage it on our own) and with the desired properties
-              let publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined, // The source of audio. If undefined default microphone
-                videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                resolution: '640x480', // The resolution of your video
-                frameRate: 30, // The frame rate of your video
-                insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-                mirror: false, // Whether to mirror your local video or not
-              })
+              if (this.state.myRoleCode === 3) {
+                // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
+                // element: we will manage it on our own) and with the desired properties
+                publisher = this.OV.initPublisher(undefined, {
+                  audioSource: undefined, // The source of audio. If undefined default microphone
+                  videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
+                  publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                  publishVideo: false, // Whether you want to start publishing with your video enabled or not
+                  resolution: '640x480', // The resolution of your video
+                  frameRate: 30, // The frame rate of your video
+                  insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+                  mirror: false, // Whether to mirror your local video or not
+                })
+              } else {
+                publisher = this.OV.initPublisher(undefined, {
+                  audioSource: undefined, // The source of audio. If undefined default microphone
+                  videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
+                  publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                  publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                  resolution: '640x480', // The resolution of your video
+                  frameRate: 30, // The frame rate of your video
+                  insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+                  mirror: false, // Whether to mirror your local video or not
+                })
+              }
 
               // --- 6) Publish your stream ---
 
@@ -1010,47 +1023,6 @@ class Meeting extends Component {
         </Header>
 
         <Container>
-          {/* 세션 입장 대기 화면 */}
-          {/* {this.state.session === undefined ? (
-            <div id="join">
-              <div id="join-dialog" className="jumbotron vertical-center">
-                <h1> Join a video session </h1>
-                <form className="form-group" onSubmit={this.joinSession}>
-                  <p>
-                    <label>Participant: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="userName"
-                      value={myUserName}
-                      onChange={this.handleChangeUserName}
-                      required
-                    />
-                  </p>
-                  <p>
-                    <label> Session: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="sessionId"
-                      value={mySessionId}
-                      onChange={this.handleChangeSessionId}
-                      required
-                    />
-                  </p>
-                  <p className="text-center">
-                    <input
-                      className="btn btn-lg btn-success"
-                      name="commit"
-                      type="submit"
-                      value="JOIN"
-                    />
-                  </p>
-                </form>
-              </div>
-            </div>
-          ) : null} */}
-
           {this.state.session !== undefined ?
             <TopicBox>
               <TopicText>{this.state.randomTopic}</TopicText>
@@ -1116,44 +1088,18 @@ class Meeting extends Component {
                   </SendMsgBox>
                 </ChatBox>
 
-                {/* mainStreamMnager가 있다면 */}
-                {/* {this.state.mainStreamManager !== undefined ? (
-                  <div id="main-video" className="col-md-6">
-                    <UserVideoComponent
-                      streamManager={this.state.mainStreamManager}
-                    />
-                    <input
-                      className="btn btn-large btn-success"
-                      type="button"
-                      id="buttonSwitchCamera"
-                      onClick={this.switchCamera}
-                      value="Switch Camera"
-                    />
-                  </div>
-                ) : null} */}
-
-                <VideoBox id="video-container">
+                <VideoBox>
+                  {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
-                    <div
-                      className="stream-container col-md-6 col-xs-6"
-                      onClick={() =>
-                        this.handleMainVideoStream(this.state.publisher)
-                      }
-                    >
-                      <UserVideoComponent
-                        streamManager={this.state.publisher}
-                      />
-                    </div>
+                    <UserVideoComponent
+                      streamManager={this.state.publisher}
+                    />
                   ) : null}
+
                   {this.state.subscribers.map((sub, i) => (
-                    <div
-                      key={i}
-                      className="stream-container col-md-6 col-xs-6"
-                      onClick={() => this.handleMainVideoStream(sub)}
-                    >
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
+                    <UserVideoComponent streamManager={sub} />
                   ))}
+
                 </VideoBox>
               </ChatVideoBox>
 
@@ -1219,6 +1165,7 @@ class Meeting extends Component {
     )
   }
 }
+
 /**
  * --------------------------
  * SERVER-SIDE RESPONSIBILITY
