@@ -20,7 +20,7 @@ export default class OpenViduVideoComponent extends Component {
     }
 
     render() {
-        return <video style={{borderRadius:"1rem"}} autoPlay={true} ref={this.videoRef} />;
+        return <video style={{ borderRadius:"1rem" }} autoPlay={true} ref={this.videoRef} />;
     }
 
 }
