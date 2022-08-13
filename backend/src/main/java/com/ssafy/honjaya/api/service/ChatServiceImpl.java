@@ -1,7 +1,11 @@
 package com.ssafy.honjaya.api.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.transaction.Transactional;
 
@@ -86,16 +90,24 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void deleteChatroom(long chatroomNo) { // 둘 중 한 명이 채팅을 나갔거나 탈퇴를 한 경우 발동
+	public void deleteChatroom(long chatroomNo) { // 둘 중 한 명이 채팅을 나갔을 때 발동
 		chatroomRepository.deleteById(chatroomNo);
 	}
 
 	@Override
 	@Transactional
-	public ChatListRes getMessages(long chatroomNo) {
-		List<Chat> list = chatRepository.findAllByChatroom_ChatroomNo(chatroomNo);
-		List<ChatRes> resList = new ArrayList<>();
+	public ChatListRes getMessages(long chatroomNo, int myUserNo) {
 		ChatListRes chatListRes = new ChatListRes();
+		List<ChatRes> resList = new ArrayList<>();
+		if (chatroomRepository.countByChatroomNo(chatroomNo) < 1) {
+			resList.add(new ChatRes(myUserNo, "", "/001.png", "[알림] 상대방이 대화방을 나갔거나 탈퇴하였습니다.",
+					ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+							.format(DateTimeFormatter.ofPattern("a h:mm").withLocale(Locale.forLanguageTag("ko"))),
+					1, false, null));
+			chatListRes.setList(resList);
+			return chatListRes;
+		}
+		List<Chat> list = chatRepository.findAllByChatroom_ChatroomNo(chatroomNo);
 		list.forEach(e -> resList.add(new ChatRes(e)));
 		chatListRes.setList(resList);
 		return chatListRes;
@@ -104,13 +116,26 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	@Transactional
 	public ChatRes sendMessage(ChatReq chatReq) {
+		if (chatroomRepository.countByChatroomNo(chatReq.getChatroomNo()) < 1) {
+			return new ChatRes(chatReq.getUserNo(), "", "/001.png", "[알림] 상대방이 대화방을 나갔거나 탈퇴하였습니다.",
+					ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+							.format(DateTimeFormatter.ofPattern("a h:mm").withLocale(Locale.forLanguageTag("ko"))),
+					1, false, null);
+		}
 		Chat chat = Chat.builder()
 				.chatroom(chatroomRepository.getOne(chatReq.getChatroomNo()))
 				.user(userRepository.getOne(chatReq.getUserNo()))
 				.chatMessage(chatReq.getChatMessage())
 				.chatRead(CHAT_READ_COUNT)
 				.build();
-		return new ChatRes(chatRepository.save(chat));
+		chat = chatRepository.save(chat);
+		if (chat == null) {
+			return new ChatRes(chatReq.getUserNo(), "", "/001.png", "[알림] 서버 오류로 채팅이 전송되지 않았습니다.",
+					ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+							.format(DateTimeFormatter.ofPattern("a h:mm").withLocale(Locale.forLanguageTag("ko"))),
+					1, false, null);
+		}
+		return new ChatRes(chat);
 	}
 	
 	private void createChatroom(int userNo1, int userNo2) {

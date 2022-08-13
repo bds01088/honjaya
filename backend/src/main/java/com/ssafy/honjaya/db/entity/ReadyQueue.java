@@ -1,6 +1,8 @@
 package com.ssafy.honjaya.db.entity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,6 +70,6 @@ public class ReadyQueue {
 	
 	@PrePersist
 	public void createdAt() {
-		this.queueStartTime = LocalDateTime.now();
+		this.queueStartTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 	}
 }
