@@ -329,11 +329,11 @@ const UpdateProfile = () => {
 
 
   useEffect(() => {
-    if (userPhone.length === 10) {
+    if (userPhone !== undefined && userPhone.length === 10) {
       setUserPhone(userPhone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'))
       
     }
-    if (userPhone.length === 13) {
+    if (userPhone !== undefined && userPhone.length === 13) {
       setCheckedPhone(true)
       setUserPhone(
         userPhone

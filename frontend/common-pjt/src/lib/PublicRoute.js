@@ -4,15 +4,14 @@ import isAuthenticated from '../api/isAuthenticated';
 
 export default function PublicRoute({
   component: Component,
-  restricted,
   ...rest
 }) {
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated() && restricted ? (
-          <Redirect to="/" />
+        isAuthenticated() ? (
+          <Redirect to="/main" />
         ) : (
           <Component {...props} />
         )
