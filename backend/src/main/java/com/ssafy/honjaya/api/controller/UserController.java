@@ -25,7 +25,7 @@ import com.ssafy.honjaya.api.response.BooleanRes;
 import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.EmailCheckRes;
 import com.ssafy.honjaya.api.response.LoginRes;
-import com.ssafy.honjaya.api.response.RateRes;
+import com.ssafy.honjaya.api.response.ProfileRes;
 import com.ssafy.honjaya.api.response.UserNoRes;
 import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
@@ -388,5 +388,65 @@ public class UserController {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		return new ResponseEntity<UserNoRes>(userNoRes, status);
+	}
+	
+	@ApiOperation(value = "프로필 캐릭터 url 불러오기", response = ProfileRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/profile")
+	public ResponseEntity<ProfileRes> getProfileImg(HttpServletRequest request) {
+		ProfileRes profileRes = new ProfileRes();
+		HttpStatus status;
+
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				profileRes = userService.getProfileImg(userNo);
+				profileRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				profileRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			profileRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<ProfileRes>(profileRes, status);
+	}
+	
+	@ApiOperation(value = "프로필 캐릭터 수정", response = ProfileRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@PutMapping("/profile/{imgNo}")
+	public ResponseEntity<ProfileRes> updateProfileImg(@PathVariable int imgNo, HttpServletRequest request) {
+		ProfileRes profileRes = new ProfileRes();
+		HttpStatus status;
+
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				profileRes = userService.updateProfileImg(userNo, imgNo);
+				profileRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				profileRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			profileRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<ProfileRes>(profileRes, status);
 	}
 }

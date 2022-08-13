@@ -27,6 +27,9 @@ public class ChatroomRes {
 	@ApiModelProperty(value = "채팅방 상대방 유저 닉네임")
 	private String userNickname;
 	
+	@ApiModelProperty(value = "채팅방 상대방 유저 프로필 이미지 url")
+	private String userProfilePicUrl;
+	
 	@ApiModelProperty(value = "성공 여부 (boolean)")
 	private boolean success;
 	
@@ -38,6 +41,7 @@ public class ChatroomRes {
 		User user = chatroomUser.getUser();
 		this.userNo = user.getUserNo();
 		this.userNickname = user.getUserNickname();
-	}	
+		this.userProfilePicUrl = user.getUserProfilePicUrl();
+	}
 	
 }

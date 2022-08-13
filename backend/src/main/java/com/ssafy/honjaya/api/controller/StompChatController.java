@@ -25,7 +25,7 @@ public class StompChatController {
 //		chatReq.setChatMessage(chatReq.getUserNo() + "님이 채팅방에 참여하였습니다.");
 		System.out.println("enter called");
 
-		ChatListRes chats = chatService.getMessages(chatReq.getChatroomNo());
+		ChatListRes chats = chatService.getMessages(chatReq.getChatroomNo(), chatReq.getUserNo());
 
 		if (chats != null) {
 			for (ChatRes chatRes : chats.getList()) {

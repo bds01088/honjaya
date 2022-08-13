@@ -1,6 +1,8 @@
 package com.ssafy.honjaya.api.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,31 +46,38 @@ public class ReportServiceImpl implements ReportService {
 		int reportedCount = reportRepository.countByReportTo_UserNo(reportTo);
 		
 		Ban ban;
+		LocalDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 		switch (reportedCount) {
 		case REPORT_COUNT_TO_BAN_DAYS_3:
-			ban = banRepository.findByBanUserEmail(reportedUser.getUserEmail());
 			banRepository.deleteByBanUserEmail(reportedUser.getUserEmail());
 			ban = Ban.builder()
 					.banUserEmail(reportedUser.getUserEmail())
 					.banTerm(3)
+					.banStartTime(now)
+					.banEndTime(now.plusDays(3))
+					.banMessage("이용자들의 신고 누적으로 인해 3일 정지되었습니다.")
 					.build();
 			banRepository.save(ban);
 			break;
 		case REPORT_COUNT_TO_BAN_DAYS_7:
-			ban = banRepository.findByBanUserEmail(reportedUser.getUserEmail());
 			banRepository.deleteByBanUserEmail(reportedUser.getUserEmail());
 			ban = Ban.builder()
 					.banUserEmail(reportedUser.getUserEmail())
 					.banTerm(7)
+					.banStartTime(now)
+					.banEndTime(now.plusDays(7))
+					.banMessage("이용자들의 신고 누적으로 인해 7일 정지되었습니다.")
 					.build();
 			banRepository.save(ban);
 			break;
 		case REPORT_COUNT_TO_BAN_DAYS_30:
-			ban = banRepository.findByBanUserEmail(reportedUser.getUserEmail());
 			banRepository.deleteByBanUserEmail(reportedUser.getUserEmail());
 			ban = Ban.builder()
 					.banUserEmail(reportedUser.getUserEmail())
 					.banTerm(30)
+					.banStartTime(now)
+					.banEndTime(now.plusDays(30))
+					.banMessage("이용자들의 신고 누적으로 인해 30일 정지되었습니다.")
 					.build();
 			banRepository.save(ban);
 			break;
@@ -77,7 +86,9 @@ public class ReportServiceImpl implements ReportService {
 			ban = Ban.builder()
 					.banUserEmail(reportedUser.getUserEmail())
 					.banTerm(-1)
+					.banStartTime(now)
 					.banEndTime(LocalDateTime.of(2100, 12, 31, 23, 59))
+					.banMessage("이용자들의 신고 누적으로 인해 영구 정지되었습니다.")
 					.build();
 			banRepository.save(ban);
 			break;
