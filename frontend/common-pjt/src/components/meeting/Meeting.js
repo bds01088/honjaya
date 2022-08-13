@@ -6,8 +6,14 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 import addTimerImg from '../../assets/add-timer.png'
+import backImg from '../../assets/base.PNG'
 import pointImg from '../../assets/carrot.png'
-import { MdHelpOutline, MdLogout, MdSmartToy, MdOutlineChangeCircle } from 'react-icons/md'
+import {
+  MdHelpOutline,
+  MdLogout,
+  MdSmartToy,
+  MdOutlineChangeCircle,
+} from 'react-icons/md'
 
 import Messages from './meeting-chat/Messages'
 
@@ -23,6 +29,9 @@ const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
 const Background = styled.div`
+  background-image: url(${backImg});
+  background-size: cover;
+  background-repeat: no-repeat;
   background-color: #fffdde;
   width: 100vw;
   height: 100vh;
@@ -203,8 +212,6 @@ const ChangeText = styled.span`
   margin-left: -3rem;
 `
 
-
-
 const SessionBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -213,7 +220,6 @@ const SessionBox = styled.div`
   height: 80%;
   position: relative;
 `
-
 
 // 채팅창 + 비디오
 const ChatVideoBox = styled.div`
@@ -235,21 +241,22 @@ const MessageBox = styled.div`
   width: 100%;
   /* border: 2px solid; */
   overflow-y: scroll;
+  overflow-x: auto;
 
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     width: 0.5rem;
   }
 
-  &::-webkit-scrollbar-thumb{
+  &::-webkit-scrollbar-thumb {
     height: 15%;
     background-color: #ffcaca;
     border-radius: 2rem;
   }
 
-  &::-webkit-scrollbar-track{
+  &::-webkit-scrollbar-track {
     background-color: #ffecec;
     border-radius: 2rem;
-    }
+  }
 `
 
 const MyInfo = styled.div`
@@ -406,7 +413,7 @@ class Meeting extends Component {
       // myUserNickname: undefined,
       myUserName: undefined,
       // 10분의 시간제한
-      timeLimit: 60 * 10,
+      timeLimit: 600,
       minute: 10,
       sec: 0,
       myUserPoint: 0,
@@ -441,6 +448,11 @@ class Meeting extends Component {
 
       videostate: true,
       audiostate: true,
+
+      // 시간 분리
+      meetingTime: true,
+      voteTime: false,
+      resultTime: false,
     }
 
     // openVidu
@@ -460,6 +472,10 @@ class Meeting extends Component {
     this.addTimer = this.addTimer.bind(this)
     this.setTimer = this.setTimer.bind(this)
 
+    // 페이지 이동
+    this.moveToVote = this.moveToVote.bind(this)
+    this.moveToResult = this.moveToResult.bind(this)
+
     //채팅
     this.sendmessageByClick = this.sendmessageByClick.bind(this)
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this)
@@ -473,7 +489,7 @@ class Meeting extends Component {
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
     const { uuid, roleCode, user } = mode
-    
+
     if (roleCode !== 1) {
       const pairUser = mode.pairUser
       console.log('페어유저 정보 저장', pairUser)
@@ -499,8 +515,12 @@ class Meeting extends Component {
           sec: (prevState.timeLimit - 1) % 60,
         }))
       } else {
-        // 스톱워치 종료
-        this.stopTimer()
+        if (this.state.meetingTime) {
+          this.moveToVote()
+        } 
+        else if (this.state.voteTime) {
+          this.moveToResult()
+        }
       }
     }, 1000)
 
@@ -510,8 +530,7 @@ class Meeting extends Component {
       myUserPoint: userPoint,
       hashList: hashesOwned,
       myRoleCode: roleCode,
-      myUserData: user
-
+      myUserData: user,
     })
   }
 
@@ -555,12 +574,56 @@ class Meeting extends Component {
   // 스톱워치 초기 설정 함수
   async setTimer() {
     try {
-      await this.setState({ timeLimit: 600 })
+      await this.setState({ 
+        meetingTime: true,
+        voteTime: false,
+        resultTime: false,
+        timeLimit: 600
+      })
       await this.state.session.signal({
         data: `${this.state.timeLimit}`,
         to: [],
         type: 'setTime',
       })
+    } catch (err) {
+      console.log('error')
+    }
+  }
+
+  // 투표화면으로 이동
+  async moveToVote() {
+    try {
+      await this.setState({
+        meetingTime: false,
+        voteTime: true,
+        resultTime: false,
+        timeLimit: 21,
+      })
+      await this.state.session.signal({
+        data: `${this.state.timeLimit}`,
+        to: [],
+        type: 'timeToVote',
+      })
+    } catch (err) {
+      console.log('error')
+    }
+  }
+
+  // 결과화면으로 이동
+  async moveToResult() {
+    try {
+      await this.setState({
+        meetingTime: false,
+        voteTime: false,
+        resultTime: true,
+        timeLimit: 0,
+      })
+      await this.state.session.signal({
+        data: `${this.state.timeLimit}`,
+        to: [],
+        type: 'timeToResult',
+      })
+      await this.stopTimer()
     } catch (err) {
       console.log('error')
     }
@@ -618,7 +681,7 @@ class Meeting extends Component {
     // randomTopic 바꿔주기
     this.setState({ randomTopic: this.state.topicList[arr[0]] })
   }
-  
+
   async pickTopic() {
     try {
       //토픽바꾸기
@@ -635,12 +698,12 @@ class Meeting extends Component {
           point: 300,
         })
         console.log('포인트수정', res)
-  
+
         await this.setState({
           myUserPoint: res.data.point,
         })
       } else {
-        this.setState({ randomCount: this.state.randomCount-1 })
+        this.setState({ randomCount: this.state.randomCount - 1 })
       }
     } catch (err) {
       console.log('error')
@@ -704,6 +767,7 @@ class Meeting extends Component {
     }
   }
 
+
   joinSession() {
     // --- 1) Get an OpenVidu object ---
 
@@ -763,7 +827,32 @@ class Meeting extends Component {
 
         // 시간 설정 시그널
         mySession.on('signal:setTime', (event) => {
-          this.setState({ timeLimit: event.data })
+          this.setState({ 
+            meetingTime: true,
+            voteTime: false,
+            resultTime: false,
+            timeLimit: 600,
+          })
+        })
+
+        // 투표로 전환
+        mySession.on('signal:timeToVote', (event) => {
+          this.setState({
+            meetingTime: false,
+            voteTime: true,
+            resultTime: false,
+            timeLimit: 21,
+          })
+        })
+
+        // 결과화면으로 전환
+        mySession.on('signal:timeToResult', (event) => {
+          this.setState({
+            meetingTime: false,
+            voteTime: false,
+            resultTime: true,
+            timeLimit: 0,
+          })
         })
 
         // 시간 추가 시그널
@@ -797,15 +886,14 @@ class Meeting extends Component {
         this.getToken().then((token) => {
           // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-         
+
           // 모두가 알 수 있어야 하는 정보 통신하기(닉네임, 해시태그, 롤코드, 유저넘버)
           mySession
             .connect(token, {
               clientData: this.state.myUserName,
               hashtags: this.state.hashList,
               roleCodes: this.state.myRoleCode,
-              userDatas: this.state.myUserData
-
+              userDatas: this.state.myUserData,
             })
             .then(async () => {
               var devices = await this.OV.getDevices()
@@ -884,6 +972,8 @@ class Meeting extends Component {
       mainStreamManager: undefined,
       publisher: undefined,
     })
+
+    this.props.history.push('/main')
   }
 
   async switchCamera() {
@@ -1005,7 +1095,7 @@ class Meeting extends Component {
     const mySessionId = this.state.mySessionId
     const myUserName = this.state.myUserName
     const messages = this.state.messages
-    
+
     return (
       <Background>
         <Header>
@@ -1013,30 +1103,38 @@ class Meeting extends Component {
             <Logo />
           </LogoBox>
 
-          <TimerBox>
-            <Timer onClick={this.stopTimer}>
-              {this.state.minute}:{this.state.sec < 10 ? 0 : null}
-              {this.state.sec}
-            </Timer>
-            <AddBox onClick={this.showSelectTimer}>
-              <AddTimerImg />
-              <AddText className="timerTip">
-                3분 추가
-                <br />
-                (-100 Lupin)
-              </AddText>
-            </AddBox>
-            {this.state.showAddTimer ? (
-              <TimerCheckBox>
-                <TimerCheckBtn className="ok" onClick={this.addTimer}>
-                  연장
-                </TimerCheckBtn>
-                <TimerCheckBtn className="no" onClick={this.showSelectTimer}>
-                  취소
-                </TimerCheckBtn>
-              </TimerCheckBox>
-            ) : null}
-          </TimerBox>
+          { !this.state.resultTime ?
+            <TimerBox>
+              <Timer onClick={this.stopTimer}>
+                {this.state.minute}:{this.state.sec < 10 ? 0 : null}
+                {this.state.sec}
+              </Timer>
+              
+              { this.state.meetingTime ? (
+                <AddBox onClick={this.showSelectTimer}>
+                  <AddTimerImg />
+                  <AddText className="timerTip">
+                    3분 추가
+                    <br />
+                    (-100 Lupin)
+                  </AddText>
+                </AddBox>
+              ) : null }
+              
+              { this.state.meetingTime && this.state.showAddTimer ? (
+                  <TimerCheckBox>
+                    <TimerCheckBtn className="ok" onClick={this.addTimer}>
+                      연장
+                    </TimerCheckBtn>
+                    <TimerCheckBtn className="no" onClick={this.showSelectTimer}>
+                      취소
+                    </TimerCheckBtn>
+                  </TimerCheckBox>
+              ) : null}
+            </TimerBox>
+            : null
+          }
+
           <LeftBox>
             <PointImg />
             <PointText>
@@ -1051,51 +1149,69 @@ class Meeting extends Component {
         </Header>
 
         <Container>
-          {this.state.session !== undefined ?
+          {this.state.session !== undefined ? (
             <TopicBox>
-              <TopicText>{this.state.randomTopic}</TopicText>
-              <ChangeBox>
-                <TopicIcon onClick={this.pickTopic}></TopicIcon>
-                { this.state.randomCount > 0 ? 
-                  <ChangeText className="changeTip">주제추천<br/>(무료 {this.state.randomCount}회)</ChangeText> 
-                  : <ChangeText className="changeTip">주제추천<br/>(-50 Lupin)</ChangeText>
-                }
-              </ChangeBox>
-            </TopicBox> : null}
+              { this.state.meetingTime ? <TopicText>{this.state.randomTopic}</TopicText> : null }
+              { this.state.voteTime ? 
+                <TopicText>❓ 아바타는 누구일까요 ❔<br/> 아바타로 예상되는 유저의 화면을 눌러 투표하세요 !</TopicText> 
+              : null }
+              { this.state.resultTime ? <TopicText>✨ 투표가 종료되었습니다 ✨<br/>서로의 정체를 밝히고 자유롭게 대화하세요 !</TopicText> : null }
+
+              
+              { this.state.meetingTime ?
+                <ChangeBox>
+                  <TopicIcon onClick={this.pickTopic}></TopicIcon>
+                  {this.state.randomCount > 0 ? (
+                    <ChangeText className="changeTip">
+                      주제추천
+                      <br />
+                      (무료 {this.state.randomCount}회)
+                    </ChangeText>
+                  ) : (
+                    <ChangeText className="changeTip">
+                      주제추천
+                      <br />
+                      (-50 Lupin)
+                    </ChangeText>
+                  )}
+                </ChangeBox>
+              : null }
+            </TopicBox>
+          ) : null}
 
           {/* 세션 열렸을 때 */}
           {this.state.session !== undefined ? (
             <SessionBox className="SessionBox">
               <ChatVideoBox>
                 <ChatBox>
+                  {this.state.myRoleCode === 1 ? (
+                    <MyInfo>
+                      <InfoIcon />
+                      당신은{' '}
+                      <InfoPoint>
+                        {' '}
+                        {this.state.roleList[this.state.myRoleCode - 1]}
+                      </InfoPoint>
+                      입니다
+                    </MyInfo>
+                  ) : (
+                    <MyInfo>
+                      <InfoIcon />
+                      당신은{' '}
+                      <InfoPoint>
+                        {' '}
+                        {this.state.pairUser.userNickname}의{' '}
+                        {this.state.roleList[this.state.myRoleCode - 1]}
+                      </InfoPoint>
+                      입니다
+                    </MyInfo>
+                  )}
+                  {this.state.myRoleCode === 3 ? (
+                    <CommanderWarn>
+                      * 지시자의 채팅은 아바타만 볼 수 있어요
+                    </CommanderWarn>
+                  ) : null}
                   <MessageBox>
-                    {this.state.myRoleCode === 1 ? (
-                      <MyInfo>
-                        <InfoIcon />
-                        당신은{' '}
-                        <InfoPoint>
-                          {' '}
-                          {this.state.roleList[this.state.myRoleCode - 1]}
-                        </InfoPoint>
-                        입니다
-                      </MyInfo>
-                    ) : (
-                      <MyInfo>
-                        <InfoIcon />
-                        당신은{' '}
-                        <InfoPoint>
-                          {' '}
-                          {this.state.pairUser.userNickname}의{' '}
-                          {this.state.roleList[this.state.myRoleCode - 1]}
-                        </InfoPoint>
-                        입니다
-                      </MyInfo>
-                    )}
-                    {this.state.myRoleCode === 3 ? (
-                      <CommanderWarn>
-                        * 지시자의 채팅은 아바타만 볼 수 있어요
-                      </CommanderWarn>
-                    ) : null}
                     <Messages
                       messages={messages}
                       pairUser={this.state.pairUser}
@@ -1115,20 +1231,17 @@ class Meeting extends Component {
                     <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
                   </SendMsgBox>
                 </ChatBox>
-                
+
                 <VideoBox>
                   {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
-                    <UserVideoComponent
-                      streamManager={this.state.publisher}
-                    />
+                    <UserVideoComponent streamManager={this.state.publisher} />
                   ) : null}
                   {/* 상대카메라 */}
                   {this.state.subscribers.map((sub, i) => (
                     <UserVideoComponent streamManager={sub} />
                   ))}
                 </VideoBox>
-                
               </ChatVideoBox>
 
               <Footer>
