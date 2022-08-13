@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
-// import './meeting.css'
 import UserVideoComponent from './UserVideoComponent'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -231,27 +230,7 @@ const ChatBox = styled.div`
   position: relative;
 `
 
-const MessageBox = styled.div`
-  height: 76%;
-  width: 100%;
-  /* border: 2px solid; */
-  overflow-y: scroll;
-
-  &::-webkit-scrollbar{
-    width: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-thumb{
-    height: 15%;
-    background-color: #ffcaca;
-    border-radius: 2rem;
-  }
-
-  &::-webkit-scrollbar-track{
-    background-color: #ffecec;
-    border-radius: 2rem;
-    }
-`
+const MessageBox = styled.div``
 
 const MyInfo = styled.div`
   display: flex;
@@ -280,13 +259,15 @@ const InfoPoint = styled.span`
 `
 
 const VideoBox = styled.div`
-  outline: 3px solid green;
   display: grid;
-  grid-template-columns: repeat(2);
-  grid-template-rows: 50% 50%;
-  grid-gap: 1rem;
-  width: 65%;
+  /* align-items: end; */
+  grid-template-columns: 55% 55%;
+  grid-template-rows: repeat(2 1fr);
+  /* grid-gap: 1rem; */
+  width: 60%;
   height: 100%;
+
+  /* outline: 1px solid green; */
 `
 
 const SendMsgBox = styled.div`
@@ -416,7 +397,6 @@ class Meeting extends Component {
       messages: [],
       pairUser: undefined,
       chatConnection: [],
-      user: undefined,
 
       //해쉬태그
       hashList: [],
@@ -471,8 +451,8 @@ class Meeting extends Component {
     const { hashtag } = this.props
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
-    const { uuid, roleCode, user } = mode
-
+    const { uuid, roleCode } = mode
+    
     if (roleCode !== 1) {
       const pairUser = mode.pairUser
       console.log('페어유저 정보 저장', pairUser)
@@ -503,14 +483,11 @@ class Meeting extends Component {
       }
     }, 1000)
 
-    //음 this.setState를 왜 따로 해주고 있지
     this.setState({
       myUserName: userNickname,
       myUserPoint: userPoint,
       hashList: hashesOwned,
       myRoleCode: roleCode,
-      myUserData: user
-
     })
   }
 
@@ -797,13 +774,12 @@ class Meeting extends Component {
           // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
 
-          // 모두가 알 수 있어야 하는 정보 통신하기(닉네임, 해시태그, 롤코드, 유저넘버)
+          // 해쉬태그 넣어주기
           mySession
             .connect(token, {
               clientData: this.state.myUserName,
               hashtags: this.state.hashList,
               roleCodes: this.state.myRoleCode,
-              userDatas: this.state.myUserData
             })
             .then(async () => {
               var devices = await this.OV.getDevices()
@@ -1003,7 +979,7 @@ class Meeting extends Component {
     const mySessionId = this.state.mySessionId
     const myUserName = this.state.myUserName
     const messages = this.state.messages
-
+    
     return (
       <Background>
         <Header>
@@ -1066,34 +1042,34 @@ class Meeting extends Component {
             <SessionBox className="SessionBox">
               <ChatVideoBox>
                 <ChatBox>
-                  {this.state.myRoleCode === 1 ? (
-                    <MyInfo>
-                      <InfoIcon />
-                      당신은{' '}
-                      <InfoPoint>
-                        {' '}
-                        {this.state.roleList[this.state.myRoleCode - 1]}
-                      </InfoPoint>
-                      입니다
-                    </MyInfo>
-                  ) : (
-                    <MyInfo>
-                      <InfoIcon />
-                      당신은{' '}
-                      <InfoPoint>
-                        {' '}
-                        {this.state.pairUser.userNickname}의{' '}
-                        {this.state.roleList[this.state.myRoleCode - 1]}
-                      </InfoPoint>
-                      입니다
-                    </MyInfo>
-                  )}
-                  {this.state.myRoleCode === 3 ? (
-                    <CommanderWarn>
-                      * 지시자의 채팅은 아바타만 볼 수 있어요
-                    </CommanderWarn>
-                  ) : null}
                   <MessageBox>
+                    {this.state.myRoleCode === 1 ? (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    ) : (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.pairUser.userNickname}의{' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    )}
+                    {this.state.myRoleCode === 3 ? (
+                      <CommanderWarn>
+                        * 지시자의 채팅은 아바타만 볼 수 있어요
+                      </CommanderWarn>
+                    ) : null}
                     <Messages
                       messages={messages}
                       pairUser={this.state.pairUser}
@@ -1113,7 +1089,7 @@ class Meeting extends Component {
                     <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
                   </SendMsgBox>
                 </ChatBox>
-
+                
                 <VideoBox>
                   {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
@@ -1121,12 +1097,12 @@ class Meeting extends Component {
                       streamManager={this.state.publisher}
                     />
                   ) : null}
-
+                  {/* 상대카메라 */}
                   {this.state.subscribers.map((sub, i) => (
                     <UserVideoComponent streamManager={sub} />
                   ))}
-
                 </VideoBox>
+                
               </ChatVideoBox>
 
               <Footer>
