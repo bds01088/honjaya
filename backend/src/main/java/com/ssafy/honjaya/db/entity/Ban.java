@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.sun.istack.NotNull;
 
@@ -26,7 +26,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="ban")
+@Table(
+name="ban",
+uniqueConstraints = {
+		@UniqueConstraint(name="UK_BAN_USER_EMAIL", columnNames="ban_user_email"),
+}
+)
 public class Ban {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
@@ -41,11 +46,12 @@ public class Ban {
 	@NotNull
 	private int banTerm; // 며칠 밴, 0은 영구 정지
 	
-	@Column(name="ban_start_time", nullable=false, updatable=false, columnDefinition = "datetime")
+	@Column(name="ban_start_time", nullable=false, columnDefinition = "datetime")
 	@NotNull
 	private LocalDateTime banStartTime;
 	
-	@Column(name="ban_end_time", columnDefinition = "datetime")
+	@Column(name="ban_end_time", nullable=false, columnDefinition = "datetime")
+	@NotNull
 	private LocalDateTime banEndTime;
 	
 	@Column(name="ban_type", columnDefinition="char(3)")
@@ -54,16 +60,4 @@ public class Ban {
 	@Column(name="ban_message", length=255)
 	@NotNull
 	private String banMessage;
-	
-	@PrePersist
-	public void createdAt() {
-		this.banStartTime = LocalDateTime.now();
-		if (this.banTerm != -1) {
-			this.banEndTime = this.banStartTime.plusDays(this.banTerm);
-			this.banMessage = "이용자들의 신고 누적으로 인해 " + banTerm + "일 정지되었습니다.";
-		} else {
-			this.banEndTime = LocalDateTime.of(2100, 12, 31, 23, 59);
-			this.banMessage = "이용자들의 신고 누적으로 인해 영구 정지되었습니다.";
-		}
-	}
 }
