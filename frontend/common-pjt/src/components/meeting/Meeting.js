@@ -535,6 +535,7 @@ class Meeting extends Component {
   }
 
   componentWillUnmount() {
+
     //openVidu
     window.removeEventListener('beforeunload', this.onbeforeunload)
 
@@ -862,6 +863,14 @@ class Meeting extends Component {
           console.log('event', event)
         })
 
+        // 세션 나가기
+        mySession.on('signal:endMeeting', (event) => {
+          const leaveName = event.data
+          console.log(leaveName)
+          alert(`${leaveName}님이 미팅을 나가 메인화면으로 돌아갑니다.`)
+          this.leaveSession()
+        })
+
         //채팅 듣기
         mySession.on('signal:chat', (event) => {
           let chatdata = event.data.split(',')
@@ -956,6 +965,7 @@ class Meeting extends Component {
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
 
+    
     const mySession = this.state.session
 
     if (mySession) {
@@ -1294,7 +1304,16 @@ class Meeting extends Component {
                   </MicCamBox>
                 ) : null}
 
-                <LeaveBox onClick={this.leaveSession}>
+                <LeaveBox onClick={() => {
+                  const mySession = this.state.session
+
+                  mySession.signal({
+                    data: `${this.state.myUserName}`,
+                    to: [],
+                    type: 'endMeeting',
+                  })
+                  this.leaveSession()
+                }}>
                   <Leave />
                   <LeaveText className="leaveTip">나가기</LeaveText>
                 </LeaveBox>
