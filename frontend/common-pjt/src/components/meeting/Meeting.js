@@ -1068,7 +1068,6 @@ class Meeting extends Component {
             <SessionBox className="SessionBox">
               <ChatVideoBox>
                 <ChatBox>
-                  <MessageBox>
                     {this.state.myRoleCode === 1 ? (
                       <MyInfo>
                         <InfoIcon />
@@ -1096,6 +1095,7 @@ class Meeting extends Component {
                         * 지시자의 채팅은 아바타만 볼 수 있어요
                       </CommanderWarn>
                     ) : null}
+                  <MessageBox>
                     <Messages
                       messages={messages}
                       pairUser={this.state.pairUser}
