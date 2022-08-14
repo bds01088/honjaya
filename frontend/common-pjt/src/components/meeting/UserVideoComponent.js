@@ -26,6 +26,7 @@ const StreamComponent = styled.div`
 
   &.role2 {
     border: 1rem solid #5fcac3;
+    border-radius: 1rem;
   }
 `
 
@@ -157,7 +158,8 @@ class UserVideoComponent extends Component {
   // 인물들의 connection 결과값 저장 ( signal 전송용 )
   storeConnection() {
     const { doStoreConnection } = this.props
-    doStoreConnection([this.state.data.clientData, this.props.streamManager.stream.connection])
+    const streamData = this.props.streamManager.stream.connection
+    doStoreConnection([this.state.data.clientData, streamData])
   }
 
   // 나의 투표 저장
