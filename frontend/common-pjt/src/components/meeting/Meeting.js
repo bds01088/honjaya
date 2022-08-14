@@ -686,10 +686,7 @@ class Meeting extends Component {
     // 최종 포인트 보내기
     await setTimeout(() => {
       this.state.session.signal({
-        data: [
-          this.state.myUserName,
-          this.state.correctPoint + this.state.wrongPoint
-        ],
+        data: this.state.correctPoint + this.state.wrongPoint,
         to: [],
         type: 'sendScore',
       })
