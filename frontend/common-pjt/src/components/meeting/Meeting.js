@@ -462,6 +462,7 @@ class Meeting extends Component {
       // result: {},
       getPoint: 0,
       calcReult: false,
+      pairConnection: null,
     }
 
     // openVidu
@@ -657,7 +658,7 @@ class Meeting extends Component {
         (!vote[item[0]] && item[1] === 1) ||
         (vote[item[0]] && item[1] === vote[item[0]])
       ) {
-        console.log('오예 맞았다 !', item[0], item[1], vote[item[0]])
+        console.log('오예 맞았다 !', item[0], item[1], vote[item[0]], this.state.getPoint + 100)
         this.setState({ getPoint: this.state.getPoint + 100 })
       } else {
         // 틀린 경우에는 해당 유저의 점수 + 50
@@ -860,6 +861,13 @@ class Meeting extends Component {
           ) {
             this.setState({ chatConnection: subscriber.stream.connection })
           }
+          if (
+            this.state.myRoleCode === 2 &&
+            JSON.parse(subscriber.stream.connection.data).clientData ===
+              this.state.pairUser.userNickname
+          ) {
+            this.setState({ pairConnection: subscriber.stream.connection })
+          }
 
           // Update the state with the new subscribers
           this.setState({
@@ -919,15 +927,15 @@ class Meeting extends Component {
 
         // 누군가가 틀려서 내가 점수를 받는 경우
         mySession.on('signal:plusPoint', (event) => {
-          console.log('쟤가 나한테 점수줌 ㅋ', event.data)
+          console.log('쟤가 나한테 점수줌 ㅋ', event.data, this.state.getPoint + 50)
           this.setState({ getPoint: this.state.getPoint + 50 })
-          // if (this.state.myRoleCode === 2) {
-          //   this.state.session.signal({
-          //     data: 50,
-          //     to: [this.state.pairUser.userNickname],
-          //     type: 'plusPoint',
-          //   })
-          // }
+          if (this.state.myRoleCode === 2) {
+            this.state.session.signal({
+              data: 50,
+              to: [this.state.pairConnection],
+              type: 'plusPoint',
+            })
+          }
         })
 
         // 시간 추가 시그널
