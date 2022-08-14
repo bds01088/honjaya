@@ -23,6 +23,10 @@ const StreamComponent = styled.div`
   width: 65%;
   justify-content: center;
   flex-direction: column-reverse;
+
+  &.role2 {
+    border: 1rem solid #5fcac3;
+  }
 `
 
 const Profile = styled.div`
@@ -74,8 +78,10 @@ class UserVideoComponent extends Component {
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
     // 1. 내가 아니어야 한다
-    // 2-1. 솔로거나 아바타여야한다.
-    // 2-2. 내가 지시자라면, 내 아바타가 아니어야 한다.
+    // 2. 상대가 솔로인 경우
+    // 3. 상대가 아바타이고,
+    // 3-1. 내가 지시자일 때, 내 아바타가 아니어야 함
+    // 3-2. 내가 지시자가 아니어야 함.
     if (this.state.data.clientData !== this.state.myUserName) {
       if (this.state.data.roleCodes === 1)  {
         this.storeResult()
@@ -148,7 +154,7 @@ class UserVideoComponent extends Component {
     doStoreResult(this.state.data)
   }
 
-  // 인물들의 역할코드 결과값 저장 ( 결과 비교용 )
+  // 인물들의 connection 결과값 저장 ( signal 전송용 )
   storeConnection() {
     const { doStoreConnection } = this.props
     doStoreConnection([this.state.data.clientData, this.props.streamManager.stream.connection])
@@ -206,7 +212,7 @@ class UserVideoComponent extends Component {
         { this.props.voteTime ? 
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
           { this.props.streamManager !== undefined ? (
-            <StreamComponent onClick={()=> this.doingVote()}>
+            <StreamComponent onClick={()=> this.doingVote()} className={`role${this.state.voteRole}`}>
               <OpenViduVideoComponent streamManager={this.props.streamManager} />
               <Profile>
                 <Nickname>
