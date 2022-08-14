@@ -467,6 +467,7 @@ class Meeting extends Component {
       wrongPoint: 0,
       calcReult: false,
       pairConnection: null,
+      ranking: [],
     }
 
     // openVidu
@@ -618,16 +619,9 @@ class Meeting extends Component {
     }
   }
 
-  // 투표결과 세팅
-  // async setResult() {
-  //   const { result } = this.props.vote
-  //   this.setState({ result: result })
-  // }
-
   // 투표화면으로 이동
   async moveToVote() {
     try {
-      // await this.setResult()
       await this.setState({
         meetingTime: false,
         voteTime: true,
@@ -673,6 +667,7 @@ class Meeting extends Component {
     
     await console.log('땡', wrongList)
 
+    // 내가 틀린 사람들에게 점수 주기
     await wrongList.map((item, idx) => {
       return this.state.session.signal({
         data: this.state.myUserName,
@@ -681,6 +676,25 @@ class Meeting extends Component {
       })
     })
 
+    // 점수 집계를 위해 내 포인트 전송
+    await setTimeout(() => {
+      const data = {
+        name: this.state.myUserName,
+        score: this.state.correctPoint + this.state.wrongPoint,
+      }
+
+      // 최종 포인트 보내기
+      this.state.session.signal({
+        data: data,
+        to: [],
+        type: 'sendScore',
+      })
+    }, 2000);
+
+        // 점수 집계를 위해 내 포인트 전송
+    await setTimeout(() => {
+      console.log(this.state.ranking)
+    }, 1000);
     await this.setState({ calcResult: true })
   }
 
@@ -936,12 +950,19 @@ class Meeting extends Component {
           })
         })
 
+        // 결과화면으로 전환
+        mySession.on('signal:sendScore', (event) => {
+          const replace = [ ...this.state.result, event.data ]
+          this.setState({
+            ranking: replace
+          })
+        })
+
         // 누군가가 틀려서 내가 점수를 받는 경우
         mySession.on('signal:plusPoint', (event) => {
           console.log('쟤가 나한테 점수줌 ㅋ', event.data, this.state.wrongPoint + 50)
           this.setState({ wrongPoint: this.state.wrongPoint + 50 })
           if (this.state.myRoleCode === 2) {
-            console.log('내 페어한테도 줘야지', this.state.pairConnection)
             this.state.session.signal({
               data: event.data,
               to: [this.state.pairConnection],
@@ -953,8 +974,6 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
-
-          console.log('event', event)
         })
 
         // 세션 나가기
