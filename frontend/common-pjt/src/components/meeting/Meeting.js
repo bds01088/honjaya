@@ -682,24 +682,21 @@ class Meeting extends Component {
     })
 
     // 점수 집계를 위해 내 포인트 전송
-    await setTimeout(() => {
-      const data = {
-        name: this.state.myUserName,
-        score: this.state.correctPoint + this.state.wrongPoint,
-      }
+    const data = {
+      name: this.state.myUserName,
+      score: this.state.correctPoint + this.state.wrongPoint,
+    }
 
-      // 최종 포인트 보내기
-      this.state.session.signal({
-        data: data,
-        to: [],
-        type: 'sendScore',
-      })
-    }, 2000)
+    // 최종 포인트 보내기
+    this.state.session.signal({
+      data: data,
+      to: [],
+      type: 'sendScore',
+    })
 
     // 점수 집계를 위해 내 포인트 전송
-    await setTimeout(() => {
-      console.log(this.state.ranking)
-    }, 1000)
+    console.log(this.state.ranking)
+
     await this.setState({ calcResult: true })
   }
 
