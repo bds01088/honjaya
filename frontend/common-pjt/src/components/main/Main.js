@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import backImg from '../../assets/main_img.jpg'
 import MainHeader from './MainHeader'
-import ChatList from './ChatList'
+
 import MainCharacter from './MainCharacter'
 import CreateTag from './hashtag/CreateTag'
-import ChatRoom from './ChatRoom'
+
 import {
   MdAddCircle,
   MdRemoveCircle,
@@ -18,10 +18,12 @@ import { Link,useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getHash, delHash } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
-
+import { findAllRoom } from './chat/chat-slice'
 
 import { useSelector } from 'react-redux'
 import { loadUser,logout } from '../auth/login/login-slice'
+import ChatList from './chat/ChatList'
+import ChatRoom from './chat/ChatRoom'
 // import { ConnectedTvOutlined, NavigateBefore } from '@mui/icons-material'
 
 
@@ -240,15 +242,12 @@ const Main = () => {
 
   const [openList, setOpenList] = useState(false)
   const [openRoom, setOpenRoom] = useState(false)
-  const [users, setUsers] = useState([
-    '김누리',
-    '김효근',
-    '배상현',
-    '배송윤',
-    '이승현',
-  ])
 
+  //채팅방 개설 관련 변수
   const [chatUser, setChatUser] = useState('')
+  const [chatUserNo, setChatUserNo] = useState(1)
+  const [chatRoomNo, setChatRoomNo] = useState(1)
+  
   const dispatch = useDispatch()
   const history = useHistory()
   
@@ -257,8 +256,8 @@ const Main = () => {
   console.log('해쉬', hashesOwned)
 
 
-  // 차라리 컴포넌트 단에서
-  // hashesOwned.map(<div></div>)  
+  //채팅목록 불러오기
+  const chatRooms = useSelector((state) => state.chat.chatRooms)
 
   
     
@@ -297,6 +296,20 @@ const Main = () => {
       // alert('별점로드에러')
     })
   }, [])
+
+
+  //main에서 채팅 목록 불러오기
+  useEffect(() => {
+    dispatch(findAllRoom())
+      .unwrap()
+      .then(() => {
+        console.log("채팅목록생성완료")
+      })
+      .catch((err)=> {
+        console.log("채팅목록로드에러", err)
+        // alert('해쉬태그로드에러')
+      })
+  }, []) 
 
 
   //로그아웃 
@@ -407,9 +420,12 @@ const Main = () => {
           {openList ? (
             <ChatList
               openChatList={openChatList}
-              users={users}
               setChatUser={setChatUser}
+              setChatRoomNo={setChatRoomNo}
+              setChatUserNo={setChatUserNo}
               openChatRoom={openChatRoom}
+              chatRooms={chatRooms}
+              
             />
           ) : null}
         </FullChat>
@@ -420,7 +436,12 @@ const Main = () => {
           chatUser={chatUser.user}
           openChatList={openChatList}
           setChatUser={setChatUser}
+          setChatRoomNo={setChatRoomNo}
+          setChatUserNo={setChatUserNo}
           openChatRoom={openChatRoom}
+          chatRooms = {chatRooms}
+          chatRoomNo={chatRoomNo.roomNo}
+          chatUserNo={chatUserNo.userNo}
         />
       ) : null}
 
