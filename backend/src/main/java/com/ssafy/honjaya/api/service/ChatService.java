@@ -8,6 +8,7 @@ import com.ssafy.honjaya.api.response.ChatroomListRes;
 import com.ssafy.honjaya.api.response.ChatroomRes;
 
 public interface ChatService {
+	boolean alreadyAskedChat(ChatAskReq chatAskReq);
 	boolean askChat(ChatAskReq chatAskReq);
 	void deleteAsk(int userNo);
 	

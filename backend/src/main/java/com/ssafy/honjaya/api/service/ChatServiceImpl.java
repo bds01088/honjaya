@@ -49,9 +49,24 @@ public class ChatServiceImpl implements ChatService {
 	private ChatroomUserRepository chatroomUserRepository;
 	
 	@Override
+	public boolean alreadyAskedChat(ChatAskReq chatAskReq) {
+		int chatAskFrom = chatAskReq.getChatAskFrom();
+		int chatAskTo = chatAskReq.getChatAskTo();
+		if (chatAskRepository.countByChatAskFrom_UserNoAndChatAskTo_UserNo(chatAskFrom, chatAskTo) > 0
+				|| chatroomUserRepository.hasChatroomWithHim(chatAskFrom, chatAskTo) > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean askChat(ChatAskReq chatAskReq) {
 		int chatAskFrom = chatAskReq.getChatAskFrom();
 		int chatAskTo = chatAskReq.getChatAskTo();
+		if (chatAskRepository.countByChatAskFrom_UserNoAndChatAskTo_UserNo(chatAskFrom, chatAskTo) > 0
+				|| chatroomUserRepository.hasChatroomWithHim(chatAskFrom, chatAskTo) > 0) {
+			return false;
+		}
 		ChatAsk chatAsk = chatAskRepository.findByChatAskFrom_UserNoAndChatAskTo_UserNo(chatAskTo, chatAskFrom);
 		if (chatAsk != null) {
 			// 지금 대화 신청을 받는 사람이 지금 대화 신청을 한 사람에게 이전에 대화 신청을 한 적이 있는 경우 (방을 나가기 전)
