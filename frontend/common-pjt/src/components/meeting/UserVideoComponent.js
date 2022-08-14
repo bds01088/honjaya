@@ -55,6 +55,8 @@ class UserVideoComponent extends Component {
       voteTo: '',  // 투표 대상
       voteRole: 1, // 1: 솔로, 2: 아바타
       myUserName: this.props.myUserName,
+      myRoleCode: this.props.myRoleCode,
+      myPairUser: this.props.myPairUser,
     }
     // this.userReport = this.userReoport.bind(this)
   }
@@ -71,7 +73,9 @@ class UserVideoComponent extends Component {
     })
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
-    if (this.state.data.clientData !== this.state.myUserName && this.state.data.roleCodes !== 3) {
+    if (this.state.data.clientData !== this.state.myUserName 
+        && this.state.data.roleCodes !== 3 
+        && (this.state.myRoleCode === 3 || this.state.data.clientData !== this.state.myPairUser)) {
       this.storeResult()
       this.storeConnection()
     }

@@ -670,6 +670,8 @@ class Meeting extends Component {
         return wrongList.push(item[0])
       }
     })
+    
+    await console.log('땡', wrongList)
 
     await wrongList.map((item, idx) => {
       return this.state.session.signal({
@@ -1358,6 +1360,8 @@ class Meeting extends Component {
                     <UserVideoComponent 
                       streamManager={this.state.publisher} 
                       myUserName={this.state.myUserName}
+                      myRoleCode={this.state.myRoleCode}
+                      myPairUser={this.state.pairUser.userNickname}
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}/>
@@ -1368,6 +1372,8 @@ class Meeting extends Component {
                     <UserVideoComponent
                       streamManager={sub}
                       myUserName={this.state.myUserName}
+                      myRoleCode={this.state.myRoleCode}
+                      myPairUser={this.state.pairUser.userNickname}
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}
