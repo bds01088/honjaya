@@ -32,13 +32,19 @@ const Container = styled.div`
     }
 `
 
-const ChatList = ({users, openChatList, setChatUser, openChatRoom}) => {
+const ChatList = ({ openChatList, setChatUser, openChatRoom, chatRooms, setChatRoomNo, setChatUserNo}) => {
 
+  //채팅상대유저
+  const users = chatRooms.map((chatRoom ) => ( chatRoom.userNickname )
+  )
+  const chatRoomNos = chatRooms.map((chatRoom) => (chatRoom.chatroomNo))
+  const chatUserNos = chatRooms.map((chatRoom) => (chatRoom.userNo))
   return (
     <Container>
-      {users.map(user => (
+   
+      {chatRooms.map((chatRoom) => (
         <>
-          <ChatListItem openChatList={openChatList} user={user} setChatUser={setChatUser} openChatRoom={openChatRoom}/><hr/>
+          <ChatListItem openChatList={openChatList} user={chatRoom.userNickname} roomNo={chatRoom.chatroomNo} setChatUser={setChatUser} setChatRoomNo={setChatRoomNo} userNo={chatRoom.userNo} setChatUserNo={setChatUserNo} openChatRoom={openChatRoom}  /><hr/>
         </>
       ))}
     </Container>
