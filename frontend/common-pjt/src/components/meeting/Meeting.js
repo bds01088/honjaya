@@ -19,6 +19,7 @@ import Messages from './meeting-chat/Messages'
 
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
+// import { setResult } from '../meeting/vote-slice'
 
 import { MdVideocam, MdVideocamOff, MdMic, MdMicOff } from 'react-icons/md' // 추가
 // import randomTopic from '../../DATA/randomTopic.json'
@@ -540,7 +541,6 @@ class Meeting extends Component {
       myRoleCode: roleCode,
       myUserData: user,
     })
-
   }
 
   componentWillUnmount() {

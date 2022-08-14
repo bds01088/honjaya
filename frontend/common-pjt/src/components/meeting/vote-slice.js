@@ -1,6 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 
+// export const setResult = createAsyncThunk(
+//   'SET_RESULT',
+//   async ({ rejectWithValue }) => {
+//     try {
+//       const data = {}
+//       return data
+//     } catch (err) {
+//       return rejectWithValue(err.response);
+//     }
+//   }
+// )
+
 // 투표 결과 저장
 export const storeResult = createAsyncThunk(
   'STORE_RESULT',
@@ -35,6 +47,12 @@ const voteSlice = createSlice({
   name: 'vote',
   initialState,
   reducers: {
+    setResult: (state) => {
+      state.result = null || {}
+    },
+    setVote: (state) => {
+      state.vote = null || {}
+    },
   },
   extraReducers: {
     [storeResult.fulfilled]: (state, action) => {
@@ -47,6 +65,6 @@ const voteSlice = createSlice({
 });
 
 
-// export const { } = voteSlice.actions
+export const { setResult, setVote } = voteSlice.actions
 
 export default voteSlice.reducer
