@@ -1,6 +1,8 @@
 package com.ssafy.honjaya.api.response;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -28,6 +30,9 @@ public class ChatRes {
 	@ApiModelProperty(value = "보낸 사람 유저 닉네임")
 	private String userNickname;
 	
+	@ApiModelProperty(value = "보낸 사람 프로필 이미지")
+	private String userProfilePicUrl;
+	
 	@ApiModelProperty(value = "채팅 메시지")
 	private String chatMessage;
 	
@@ -47,13 +52,14 @@ public class ChatRes {
 		User user = chat.getUser();
 		this.userNo = user.getUserNo();
 		this.userNickname = user.getUserNickname();
+		this.userProfilePicUrl = user.getUserProfilePicUrl();
 		this.chatMessage = chat.getChatMessage();
 		this.chatTime = datetimeToChatTime(chat.getChatTime());
 		this.chatRead = chat.getChatRead();
 	}
 	
 	private String datetimeToChatTime(LocalDateTime t) {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 		String chatDay = "";
 		String chatTime = t.format(DateTimeFormatter.ofPattern("a h:mm").withLocale(Locale.forLanguageTag("ko")));
 		if (t.getYear() != now.getYear()) {

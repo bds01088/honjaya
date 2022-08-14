@@ -16,7 +16,7 @@ public interface ChatService {
 	ChatroomRes findChatroom(long chatroomNo, int myUserNo);
 	void deleteChatroom(long chatroomNo);
 	
-	ChatListRes getMessages(long chatroomNo);
+	ChatListRes getMessages(long chatroomNo, int myUserNo);
 	ChatRes sendMessage(ChatReq chatReq);
 	
 }

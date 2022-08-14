@@ -19,9 +19,11 @@ import Messages from './meeting-chat/Messages'
 
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
+// import { setResult } from '../meeting/vote-slice'
 
 import { MdVideocam, MdVideocamOff, MdMic, MdMicOff } from 'react-icons/md' // 추가
 // import randomTopic from '../../DATA/randomTopic.json'
+
 
 const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443'
 // const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
@@ -413,7 +415,7 @@ class Meeting extends Component {
       // myUserNickname: undefined,
       myUserName: undefined,
       // 10분의 시간제한
-      timeLimit: 600,
+      timeLimit: 10,
       minute: 10,
       sec: 0,
       myUserPoint: 0,
@@ -446,6 +448,7 @@ class Meeting extends Component {
       //이건 flag 역할인가
       check: false,
 
+      // 비디오, 오디오 기본 설정
       videostate: true,
       audiostate: true,
 
@@ -453,6 +456,9 @@ class Meeting extends Component {
       meetingTime: true,
       voteTime: false,
       resultTime: false,
+
+      // 투표 결과
+      result: {},
     }
 
     // openVidu
@@ -480,6 +486,9 @@ class Meeting extends Component {
     this.sendmessageByClick = this.sendmessageByClick.bind(this)
     this.sendmessageByEnter = this.sendmessageByEnter.bind(this)
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this)
+
+    // 투표결과 불러오기
+    this.setResult = this.setResult.bind(this)
   }
 
   componentDidMount() {
@@ -535,6 +544,7 @@ class Meeting extends Component {
   }
 
   componentWillUnmount() {
+
     //openVidu
     window.removeEventListener('beforeunload', this.onbeforeunload)
 
@@ -571,6 +581,15 @@ class Meeting extends Component {
     }
   }
 
+
+  componentDidUpdate() {
+    this.scrollToBottom()
+  }
+
+  scrollToBottom = () => {
+    // this.messagesEnd.scrollIntoView({ behavior: "smooth" })
+  }
+
   // 스톱워치 초기 설정 함수
   async setTimer() {
     try {
@@ -578,7 +597,7 @@ class Meeting extends Component {
         meetingTime: true,
         voteTime: false,
         resultTime: false,
-        timeLimit: 600
+        timeLimit: 10
       })
       await this.state.session.signal({
         data: `${this.state.timeLimit}`,
@@ -590,9 +609,16 @@ class Meeting extends Component {
     }
   }
 
+  // 투표결과 세팅
+  async setResult() {
+    const { result } = this.props.vote
+    this.setState({ result: result })
+  }
+
   // 투표화면으로 이동
   async moveToVote() {
     try {
+      await this.setResult()
       await this.setState({
         meetingTime: false,
         voteTime: true,
@@ -607,6 +633,8 @@ class Meeting extends Component {
     } catch (err) {
       console.log('error')
     }
+
+    console.log(this.state.result)
   }
 
   // 결과화면으로 이동
@@ -831,7 +859,7 @@ class Meeting extends Component {
             meetingTime: true,
             voteTime: false,
             resultTime: false,
-            timeLimit: 600,
+            timeLimit: 10,
           })
         })
 
@@ -860,6 +888,14 @@ class Meeting extends Component {
           this.setState({ timeLimit: event.data })
 
           console.log('event', event)
+        })
+
+        // 세션 나가기
+        mySession.on('signal:endMeeting', (event) => {
+          const leaveName = event.data
+          console.log(leaveName)
+          alert(`${leaveName}님이 미팅을 나가 메인화면으로 돌아갑니다.`)
+          this.leaveSession()
         })
 
         //채팅 듣기
@@ -956,6 +992,7 @@ class Meeting extends Component {
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
 
+    
     const mySession = this.state.session
 
     if (mySession) {
@@ -1092,8 +1129,8 @@ class Meeting extends Component {
   }
 
   render() {
-    const mySessionId = this.state.mySessionId
-    const myUserName = this.state.myUserName
+    // const mySessionId = this.state.mySessionId
+    // const myUserName = this.state.myUserName
     const messages = this.state.messages
 
     return (
@@ -1184,52 +1221,61 @@ class Meeting extends Component {
             <SessionBox className="SessionBox">
               <ChatVideoBox>
                 <ChatBox>
-                  {this.state.myRoleCode === 1 ? (
-                    <MyInfo>
-                      <InfoIcon />
-                      당신은{' '}
-                      <InfoPoint>
-                        {' '}
-                        {this.state.roleList[this.state.myRoleCode - 1]}
-                      </InfoPoint>
-                      입니다
-                    </MyInfo>
-                  ) : (
-                    <MyInfo>
-                      <InfoIcon />
-                      당신은{' '}
-                      <InfoPoint>
-                        {' '}
-                        {this.state.pairUser.userNickname}의{' '}
-                        {this.state.roleList[this.state.myRoleCode - 1]}
-                      </InfoPoint>
-                      입니다
-                    </MyInfo>
-                  )}
-                  {this.state.myRoleCode === 3 ? (
-                    <CommanderWarn>
-                      * 지시자의 채팅은 아바타만 볼 수 있어요
-                    </CommanderWarn>
-                  ) : null}
-                  <MessageBox>
-                    <Messages
-                      messages={messages}
-                      pairUser={this.state.pairUser}
-                      myRole={this.state.myRoleCode}
-                      myName={this.state.myUserName}
-                    />
-                  </MessageBox>
-                  <SendMsgBox>
-                    <SendMsg
-                      id="chat_message"
-                      type="text"
-                      placeholder="메시지를 입력하세요"
-                      onChange={this.handleChatMessageChange}
-                      onKeyPress={this.sendmessageByEnter}
-                      value={this.state.message}
-                    />
-                    <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
-                  </SendMsgBox>
+                  { this.state.meetingTime || this.state.resultTime ? 
+                    ( <>
+                        {this.state.myRoleCode === 1 ? (
+                          <MyInfo>
+                            <InfoIcon />
+                            당신은{' '}
+                            <InfoPoint>
+                              {' '}
+                              {this.state.roleList[this.state.myRoleCode - 1]}
+                            </InfoPoint>
+                            입니다
+                          </MyInfo>
+                        ) : (
+                          <MyInfo>
+                            <InfoIcon />
+                            당신은{' '}
+                            <InfoPoint>
+                              {' '}
+                              {this.state.pairUser.userNickname}의{' '}
+                              {this.state.roleList[this.state.myRoleCode - 1]}
+                            </InfoPoint>
+                            입니다
+                          </MyInfo>
+                        )}
+                        {this.state.myRoleCode === 3 ? (
+                          <CommanderWarn>
+                            * 지시자의 채팅은 아바타만 볼 수 있어요
+                          </CommanderWarn>
+                        ) : null}
+                        <MessageBox>
+                          <Messages
+                            messages={messages}
+                            pairUser={this.state.pairUser}
+                            myRole={this.state.myRoleCode}
+                            myName={this.state.myUserName}
+                          />
+                          <div 
+                            style={{ float:"left", clear: "both" }}
+                            ref={(el) => { this.messagesEnd = el; }}>
+                          </div>
+                        </MessageBox>
+                        <SendMsgBox>
+                          <SendMsg
+                            id="chat_message"
+                            type="text"
+                            placeholder="메시지를 입력하세요"
+                            onChange={this.handleChatMessageChange}
+                            onKeyPress={this.sendmessageByEnter}
+                            value={this.state.message}
+                          />
+                          <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
+                        </SendMsgBox>
+                      </>
+                    ) : null
+                  }
                 </ChatBox>
 
                 <VideoBox>
@@ -1238,8 +1284,9 @@ class Meeting extends Component {
                     <UserVideoComponent streamManager={this.state.publisher} />
                   ) : null}
                   {/* 상대카메라 */}
+                  
                   {this.state.subscribers.map((sub, i) => (
-                    <UserVideoComponent streamManager={sub} />
+                    <UserVideoComponent streamManager={sub} meetingTime={this.state.meetingTime} voteTime={this.state.voteTime} resultTime={this.state.resultTime}/>
                   ))}
                 </VideoBox>
               </ChatVideoBox>
@@ -1294,12 +1341,23 @@ class Meeting extends Component {
                   </MicCamBox>
                 ) : null}
 
-                <LeaveBox onClick={this.leaveSession}>
-                  <Leave />
-                  <LeaveText className="leaveTip">나가기</LeaveText>
-                </LeaveBox>
-              </Footer>
-            </SessionBox>
+                { !this.state.voteTime ?                 
+                  <LeaveBox onClick={() => {
+                    const mySession = this.state.session
+
+                    mySession.signal({
+                      data: `${this.state.myUserName}`,
+                      to: [],
+                      type: 'endMeeting',
+                    })
+                    this.leaveSession()
+                  }}>
+                    <Leave />
+                    <LeaveText className="leaveTip">나가기</LeaveText>
+                  </LeaveBox>
+                : <div/>  }
+                </Footer>
+              </SessionBox>
           ) : null}
         </Container>
       </Background>
@@ -1325,7 +1383,9 @@ const mapStateToProps = (state) => ({
   login: state.login,
   hashtag: state.hashtag,
   mode: state.mode,
+  vote: state.vote,
 })
+
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
 const mapDispatchToProps = (dispatch) => {
   return {

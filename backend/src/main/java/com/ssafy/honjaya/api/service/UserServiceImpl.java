@@ -10,15 +10,17 @@ import com.ssafy.honjaya.api.request.LoginReq;
 import com.ssafy.honjaya.api.request.SignUpReq;
 import com.ssafy.honjaya.api.request.UserUpdateReq;
 import com.ssafy.honjaya.api.response.BanRes;
+import com.ssafy.honjaya.api.response.ProfileRes;
 import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.db.entity.Ban;
 import com.ssafy.honjaya.db.entity.User;
 import com.ssafy.honjaya.db.repository.BanRepository;
+import com.ssafy.honjaya.db.repository.ChatroomRepository;
 import com.ssafy.honjaya.db.repository.UserRepository;
 import com.ssafy.honjaya.util.CommonUtil;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	private static final int SIGN_UP_POINT = 0; // 가입 시 포인트
 	
@@ -26,12 +28,16 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	
 	@Autowired
+	private ChatroomRepository chatroomRepository;
+	
+	@Autowired
 	private BanRepository banRepository;
 	
 	@Override
 	@Transactional
 	public boolean signUp(SignUpReq signUpReq) {
-		
+		int randomProfileNo = (int) (Math.random() * 5) + 1;
+		String userProfilePicUrl = "/" + String.format("%03d", randomProfileNo) + ".png";
 		User user = User.builder()
 				.userEmail(signUpReq.getUserEmail())
 				.userPassword(signUpReq.getUserPassword())
@@ -40,7 +46,7 @@ public class UserServiceImpl implements UserService{
 				.userBirthday(CommonUtil.stringToDate(signUpReq.getUserBirthday()))
 				.userGender(signUpReq.getUserGender())
 				.userPhone(signUpReq.getUserPhone())
-				.userProfilePicUrl(signUpReq.getUserProfilePicUrl())
+				.userProfilePicUrl(userProfilePicUrl)
 				.userPoint(SIGN_UP_POINT)
 				.build();
 		return userRepository.save(user) != null;
@@ -108,6 +114,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public boolean userDelete(int userNo) {
+		chatroomRepository.deleteByUserNo(userNo);
 		userRepository.deleteById(userNo);
 		return true;
 	}
@@ -133,6 +140,25 @@ public class UserServiceImpl implements UserService{
 		user.setUserToken(null);
 		
 		userRepository.save(user);
+	}
+	
+	@Override
+	public ProfileRes getProfileImg(int userNo) {
+		ProfileRes profileRes = new ProfileRes();
+		User user = userRepository.findById(userNo).get();
+		profileRes.setProfileUrl(user.getUserProfilePicUrl());
+		return profileRes;
+	}
+	
+	@Override
+	public ProfileRes updateProfileImg(int userNo, int imgNo) {
+		ProfileRes profileRes = new ProfileRes();
+		User user = userRepository.findById(userNo).get();
+		String userProfilePicUrl = "/" + String.format("%03d", imgNo) + ".png";
+		user.setUserProfilePicUrl(userProfilePicUrl);
+		userRepository.save(user);
+		profileRes.setProfileUrl(user.getUserProfilePicUrl());
+		return profileRes;
 	}
 	
 	@Override

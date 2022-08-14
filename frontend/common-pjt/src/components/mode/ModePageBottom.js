@@ -7,6 +7,7 @@ import {
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setRoleCode, setTotal } from './mode-slice'
+import { setResult, setVote } from '../meeting/vote-slice'
 
 const BottomBox = styled.div`
   width: 90%;
@@ -43,7 +44,8 @@ const Title = styled.div`
   top: -1rem;
   z-index: 1;
   padding: 0 1rem;
-  background-color: #fffdde;
+  background-color: #FAE8E8;
+  border-radius: 1rem;
 `
 
 const PersonnelRadio = styled.input`
@@ -114,6 +116,8 @@ const ModePageBottom = ({ data, setData }) => {
   const moveToWait = () => {
     dispatch(setTotal(data.total))  
     dispatch(setRoleCode(data.roleCode))    
+    dispatch(setResult())
+    dispatch(setVote())
     console.log("mode에서 출발",data)
     history.push('/waiting')
   }

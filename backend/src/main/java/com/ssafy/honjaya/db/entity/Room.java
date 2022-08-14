@@ -1,6 +1,8 @@
 package com.ssafy.honjaya.db.entity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +44,6 @@ public class Room {
 	
 	@PrePersist
 	public void createdAt() {
-		this.roomStartTime = LocalDateTime.now();
+		this.roomStartTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 	}
 }
