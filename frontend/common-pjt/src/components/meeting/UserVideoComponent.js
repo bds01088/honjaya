@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { RiAlarmWarningFill } from 'react-icons/ri'
 import { connect } from 'react-redux'
 import { userReport } from './evaluate-slice'
-import { storeResult, doingVote } from './vote-slice'
+import { storeResult, doingVote, storeConnection } from './vote-slice'
 import axios from '../../api/http'
 import { requestDirectMessage } from '../main/chat/chat-slice'
 const StreamDiv = styled.div`
@@ -23,6 +23,11 @@ const StreamComponent = styled.div`
   width: 65%;
   justify-content: center;
   flex-direction: column-reverse;
+
+  &.role2 {
+    border: 1rem solid #5fcac3;
+    border-radius: 1rem;
+  }
 `
 
 const Profile = styled.div`
@@ -54,6 +59,9 @@ class UserVideoComponent extends Component {
       data: JSON.parse(this.props.streamManager.stream.connection.data),
       voteTo: '',  // 투표 대상
       voteRole: 1, // 1: 솔로, 2: 아바타
+      myUserName: this.props.myUserName,
+      myRoleCode: this.props.myRoleCode,
+      myPairUser: this.props.myPairUser,
     }
     // this.userReport = this.userReoport.bind(this)
   }
@@ -70,8 +78,24 @@ class UserVideoComponent extends Component {
     })
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
-    if (this.state.data.roleCodes !== 3) {
-      this.storeResult()
+    // 1. 내가 아니어야 한다
+    // 2. 상대가 솔로인 경우
+    // 3. 상대가 아바타이고,
+    // 3-1. 내가 지시자일 때, 내 아바타가 아니어야 함
+    // 3-2. 내가 지시자가 아니어야 함.
+    if (this.state.data.clientData !== this.state.myUserName) {
+      if (this.state.data.roleCodes === 1)  {
+        this.storeResult()
+        this.storeConnection()
+      } else if (this.state.data.roleCodes === 2) {
+        if (this.state.myRoleCode === 3 && (this.state.data.clientData !== this.state.myPairUser.userNickname)) {
+          this.storeResult()
+          this.storeConnection()
+        } else if (this.state.myRoleCode !== 3) {
+          this.storeResult()
+          this.storeConnection()
+        }
+      }
     }
   }
 
@@ -131,6 +155,13 @@ class UserVideoComponent extends Component {
     doStoreResult(this.state.data)
   }
 
+  // 인물들의 connection 결과값 저장 ( signal 전송용 )
+  storeConnection() {
+    const { doStoreConnection } = this.props
+    const streamData = this.props.streamManager.stream.connection
+    doStoreConnection([this.state.data.clientData, streamData])
+  }
+
   // 나의 투표 저장
   changeVote() {
     if(this.state.voteRole === 1) {
@@ -155,6 +186,7 @@ class UserVideoComponent extends Component {
   render() {
     return (
       <>
+        {/* 미팅시간 */}
         { this.props.meetingTime ? (
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
             {this.props.streamManager !== undefined ? (
@@ -182,7 +214,7 @@ class UserVideoComponent extends Component {
         { this.props.voteTime ? 
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
           { this.props.streamManager !== undefined ? (
-            <StreamComponent onClick={()=> this.doingVote()}>
+            <StreamComponent onClick={()=> this.doingVote()} className={`role${this.state.voteRole}`}>
               <OpenViduVideoComponent streamManager={this.props.streamManager} />
               <Profile>
                 <Nickname>
@@ -232,6 +264,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     doUserReport: (data) => dispatch(userReport(data)),
     doStoreResult: (data) => dispatch(storeResult(data)),
+    doStoreConnection: (data) => dispatch(storeConnection(data)),
     doDoingVote: (data) => dispatch(doingVote(data)),
     doRequestDirectMessage: (data) => dispatch(requestDirectMessage(data))
   }
