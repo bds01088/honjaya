@@ -143,9 +143,8 @@ const recvMessage = (recv) => {
 
 }
 
-const connect = () => {
-  // pub/sub event
 
+const connect = () => {
   stomp.connect(
     {},
     function (frame) {
