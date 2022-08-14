@@ -7,7 +7,7 @@ import {
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setRoleCode, setTotal } from './mode-slice'
-import { setResult, setVote } from '../meeting/vote-slice'
+import { setResult, setVote, setCorrect, setWrong } from '../meeting/vote-slice'
 
 const BottomBox = styled.div`
   width: 90%;
@@ -117,7 +117,9 @@ const ModePageBottom = ({ data, setData }) => {
     dispatch(setTotal(data.total))  
     dispatch(setRoleCode(data.roleCode))    
     dispatch(setResult())
-    dispatch(setVote())
+    dispatch(setVote()) 
+    dispatch(setCorrect()) 
+    dispatch(setWrong()) 
     console.log("mode에서 출발",data)
     history.push('/waiting')
   }
