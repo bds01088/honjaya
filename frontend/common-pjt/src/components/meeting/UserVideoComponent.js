@@ -77,12 +77,17 @@ class UserVideoComponent extends Component {
     // 2-1. 솔로거나 아바타여야한다.
     // 2-2. 내가 지시자라면, 내 아바타가 아니어야 한다.
     if (this.state.data.clientData !== this.state.myUserName) {
-      if (this.state.myRoleCode === 3 && this.state.data.clientData !== this.state.myPairUser.userNickname) {
+      if (this.state.data.roleCodes === 1)  {
         this.storeResult()
         this.storeConnection()
-      } else if (this.state.data.roleCodes !== 3) {
-        this.storeResult()
-        this.storeConnection()
+      } else if (this.state.data.roleCodes === 2) {
+        if (this.state.myRoleCode === 3 && (this.state.data.clientData !== this.state.myPairUser.userNickname)) {
+          this.storeResult()
+          this.storeConnection()
+        } else if (this.state.myRoleCode !== 3) {
+          this.storeResult()
+          this.storeConnection()
+        }
       }
     }
   }
