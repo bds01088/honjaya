@@ -955,11 +955,11 @@ class Meeting extends Component {
 
         // 결과화면으로 전환
         mySession.on('signal:sendScore', (event) => {
-          const replace = [...this.state.result, event.data]
-          console.log('sendScore', replace)
-          this.setState({
-            ranking: replace,
-          })
+          // const replace = [...this.state.result, event.data]
+          console.log('sendScore', event)
+          // this.setState({
+          //   ranking: replace,
+          // })
         })
 
         // 누군가가 틀려서 내가 점수를 받는 경우
