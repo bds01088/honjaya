@@ -38,13 +38,29 @@ const BackIcon = styled(MdClear)`
   color: #88866f;
 `
 
-// import React from 'react';
+const ReportInputsBlock = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+`
 
 const UserReportModal = ({openUserReportModal, }) => {
   const dispatch = useDispatch()
   const closeUserReportModal = () => {
-      openUserReportModal(false)     
-}
+      openUserReportModal(false)   
+  }
+  
+  //신고 타입
+  const [reportType, setReportType] = useState('')    
+  const [extraReport, setExtraReport] = useState('') 
 
 
   
@@ -59,7 +75,9 @@ const UserReportModal = ({openUserReportModal, }) => {
             closeUserReportModal()
 
           }}/>
-            <button>{"신고"}</button>
+            <ReportInputsBlock>
+              <button>{"신고"}</button>
+            </ReportInputsBlock>
           </ModalView>
         </ModalBackdrop>
     </div>
