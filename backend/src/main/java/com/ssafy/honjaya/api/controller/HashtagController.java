@@ -19,7 +19,6 @@ import com.ssafy.honjaya.api.request.HashtagReq;
 import com.ssafy.honjaya.api.response.CommonRes;
 import com.ssafy.honjaya.api.response.HashtagListRes;
 import com.ssafy.honjaya.api.response.HashtagRes;
-import com.ssafy.honjaya.api.response.RateRes;
 import com.ssafy.honjaya.api.service.HashtagService;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 

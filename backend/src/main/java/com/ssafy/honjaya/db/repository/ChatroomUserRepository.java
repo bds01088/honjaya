@@ -15,7 +15,6 @@ public interface ChatroomUserRepository extends JpaRepository<ChatroomUser, Long
 	@Query(value = "select * from chatroom_user where chatroom_no = ?1 and user_no != ?2", nativeQuery = true)
 	ChatroomUser findChatroom(long chatroomNo, int myUserNo);
 	
-	@Query(value = "select count(*) from chatroom_user where chatroom_no in (select chatroom_no from chatroom_user where user_no = ?1) and user_no = ?2", nativeQuery = true)
+	@Query(value = "select count(*) from chatroom_user where user_no = ?1 and chatroom_no in (select chatroom_no from chatroom_user where user_no = ?2)", nativeQuery = true)
 	int hasChatroomWithHim(int userNo, int him);
-	
 }

@@ -63,11 +63,11 @@ public class ChatRes {
 		String chatDay = "";
 		String chatTime = t.format(DateTimeFormatter.ofPattern("a h:mm").withLocale(Locale.forLanguageTag("ko")));
 		if (t.getYear() != now.getYear()) {
-			chatDay += t.getYear() + "년 ";
+			chatDay += t.getYear() + ". ";
 		} else if (t.getDayOfYear() == now.getDayOfYear()) {
 			return chatTime;
 		}
-		return chatDay + t.getMonth() + "월 " + t.getDayOfMonth() + "일 " + chatTime;
+		return chatDay + t.getMonthValue() + ". " + t.getDayOfMonth() + ". " + chatTime;
 	}
 	
 }
