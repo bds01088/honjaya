@@ -296,6 +296,9 @@ const VideoBox = styled.div`
   /* grid-gap: 1rem; */
   width: 60%;
   height: 100%;
+  background-color: #B5EAEA;
+  border-radius: 1rem;
+  border: 4px dashed #5fcac3;
 
   /* outline: 1px solid green; */
 `
@@ -646,6 +649,7 @@ class Meeting extends Component {
     const { result } = this.props.vote
     const { vote } = this.props.vote
     const { connections } = this.props.vote
+    let wrongList = null || []
 
     console.log('결과 비교할거야 아아아 !!!!!!')
     await Object.entries(result).map((item, idx) => {
@@ -660,18 +664,22 @@ class Meeting extends Component {
         (vote[item[0]] && item[1] === vote[item[0]])
       ) {
         console.log('오예 맞았다 !', item[0], item[1], vote[item[0]], this.state.correctPoint + 100)
-        this.setState({ correctPoint: this.state.correctPoint + 100 })
+        return this.setState({ correctPoint: this.state.correctPoint + 100 })
       } else {
         // 틀린 경우에는 해당 유저의 점수 + 50
-        this.state.session.signal({
-          data: this.state.myUserName,
-          to: [connections[item[0]]],
-          type: 'plusPoint',
-        })
+        return wrongList.push(item[0])
       }
-
     })
-    return await this.setState({ calcResult: true })
+
+    await wrongList.map((item, idx) => {
+      return this.state.session.signal({
+        data: this.state.myUserName,
+        to: [connections[item]],
+        type: 'plusPoint',
+      })
+    })
+
+    await this.setState({ calcResult: true })
   }
 
   // 결과화면으로 이동
@@ -932,7 +940,7 @@ class Meeting extends Component {
           this.setState({ wrongPoint: this.state.wrongPoint + 50 })
           if (this.state.myRoleCode === 2) {
             this.state.session.signal({
-              data: this.state.myUserName,
+              data: event.data,
               to: [this.state.pairConnection],
               type: 'plusPoint',
             })

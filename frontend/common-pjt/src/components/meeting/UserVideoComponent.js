@@ -163,6 +163,7 @@ class UserVideoComponent extends Component {
   render() {
     return (
       <>
+        {/* 미팅시간 */}
         { this.props.meetingTime ? (
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
             {this.props.streamManager !== undefined ? (
