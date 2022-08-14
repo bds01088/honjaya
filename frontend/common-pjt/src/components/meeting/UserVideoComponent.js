@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { RiAlarmWarningFill } from 'react-icons/ri'
 import { connect } from 'react-redux'
 import { userReport } from './evaluate-slice'
-import { storeResult, doingVote } from './vote-slice'
+import { storeResult, doingVote, storeConnection } from './vote-slice'
 import axios from '../../api/http'
 import { requestDirectMessage } from '../main/chat/chat-slice'
 const StreamDiv = styled.div`
@@ -54,6 +54,7 @@ class UserVideoComponent extends Component {
       data: JSON.parse(this.props.streamManager.stream.connection.data),
       voteTo: '',  // 투표 대상
       voteRole: 1, // 1: 솔로, 2: 아바타
+      myUserName: this.props.myUserName,
     }
     // this.userReport = this.userReoport.bind(this)
   }
@@ -70,8 +71,9 @@ class UserVideoComponent extends Component {
     })
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
-    if (this.state.data.roleCodes !== 3) {
+    if (this.state.data.clientData !== this.state.myUserName && this.state.data.roleCodes !== 3) {
       this.storeResult()
+      this.storeConnection()
     }
   }
 
@@ -129,6 +131,12 @@ class UserVideoComponent extends Component {
   storeResult() {
     const { doStoreResult } = this.props
     doStoreResult(this.state.data)
+  }
+
+  // 인물들의 역할코드 결과값 저장 ( 결과 비교용 )
+  storeConnection() {
+    const { doStoreConnection } = this.props
+    doStoreConnection([this.state.data.clientData, this.props.streamManager.stream.connection])
   }
 
   // 나의 투표 저장
@@ -232,6 +240,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     doUserReport: (data) => dispatch(userReport(data)),
     doStoreResult: (data) => dispatch(storeResult(data)),
+    doStoreConnection: (data) => dispatch(storeConnection(data)),
     doDoingVote: (data) => dispatch(doingVote(data)),
     doRequestDirectMessage: (data) => dispatch(requestDirectMessage(data))
   }
