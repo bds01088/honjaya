@@ -460,7 +460,8 @@ class Meeting extends Component {
 
       // 투표 결과
       // result: {},
-      getPoint: 0,
+      correctPoint: 0,
+      wrongPoint: 0,
       calcReult: false,
       pairConnection: null,
     }
@@ -651,15 +652,15 @@ class Meeting extends Component {
 
       // user를 안 누른 경우, default = 1
       // 1. 결과가 vote에 없는 경우(누르지 않은 경우), 해당 유저가 솔로거나
-      // 2. 결과가 vote에 있는 경우, vote에 저장된 결과와 실제 역할이 일치한다면 getPoint + 100
+      // 2. 결과가 vote에 있는 경우, vote에 저장된 결과와 실제 역할이 일치한다면 correctPoint + 100
       console.log('확인할거다 딱대 !!!!!!!!!!!!!!!!!!!!!!!!!!!!')
       console.log('vote', item[0], item[1], vote[item[0]])
       if (
         (!vote[item[0]] && item[1] === 1) ||
         (vote[item[0]] && item[1] === vote[item[0]])
       ) {
-        console.log('오예 맞았다 !', item[0], item[1], vote[item[0]], this.state.getPoint + 100)
-        this.setState({ getPoint: this.state.getPoint + 100 })
+        console.log('오예 맞았다 !', item[0], item[1], vote[item[0]], this.state.correctPoint + 100)
+        this.setState({ correctPoint: this.state.correctPoint + 100 })
       } else {
         // 틀린 경우에는 해당 유저의 점수 + 50
         this.state.session.signal({
@@ -927,11 +928,11 @@ class Meeting extends Component {
 
         // 누군가가 틀려서 내가 점수를 받는 경우
         mySession.on('signal:plusPoint', (event) => {
-          console.log('쟤가 나한테 점수줌 ㅋ', event.data, this.state.getPoint + 50)
-          this.setState({ getPoint: this.state.getPoint + 50 })
+          console.log('쟤가 나한테 점수줌 ㅋ', event.data, this.state.wrongPoint + 50)
+          this.setState({ wrongPoint: this.state.wrongPoint + 50 })
           if (this.state.myRoleCode === 2) {
             this.state.session.signal({
-              data: 50,
+              data: this.state.myUserName,
               to: [this.state.pairConnection],
               type: 'plusPoint',
             })
