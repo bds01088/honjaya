@@ -296,7 +296,7 @@ const VideoBox = styled.div`
   /* grid-gap: 1rem; */
   width: 60%;
   height: 100%;
-  background-color: #B5EAEA;
+  background-color: #b5eaea;
   border-radius: 1rem;
   border: 4px dashed #5fcac3;
 
@@ -467,6 +467,7 @@ class Meeting extends Component {
       wrongPoint: 0,
       calcReult: false,
       pairConnection: null,
+      ranking: null || {},
     }
 
     // openVidu
@@ -618,16 +619,9 @@ class Meeting extends Component {
     }
   }
 
-  // 투표결과 세팅
-  // async setResult() {
-  //   const { result } = this.props.vote
-  //   this.setState({ result: result })
-  // }
-
   // 투표화면으로 이동
   async moveToVote() {
     try {
-      // await this.setResult()
       await this.setState({
         meetingTime: false,
         voteTime: true,
@@ -653,7 +647,6 @@ class Meeting extends Component {
 
     console.log('결과 비교할거야 아아아 !!!!!!')
     await Object.entries(result).map((item, idx) => {
-
       // user를 안 누른 경우, default = 1
       // 1. 결과가 vote에 없는 경우(누르지 않은 경우), 해당 유저가 솔로거나
       // 2. 결과가 vote에 있는 경우, vote에 저장된 결과와 실제 역할이 일치한다면 correctPoint + 100
@@ -663,16 +656,23 @@ class Meeting extends Component {
         (!vote[item[0]] && item[1] === 1) ||
         (vote[item[0]] && item[1] === vote[item[0]])
       ) {
-        console.log('오예 맞았다 !', item[0], item[1], vote[item[0]], this.state.correctPoint + 100)
+        console.log(
+          '오예 맞았다 !',
+          item[0],
+          item[1],
+          vote[item[0]],
+          this.state.correctPoint + 100,
+        )
         return this.setState({ correctPoint: this.state.correctPoint + 100 })
       } else {
         // 틀린 경우에는 해당 유저의 점수 + 50
         return wrongList.push(item[0])
       }
     })
-    
+
     await console.log('땡', wrongList)
 
+    // 내가 틀린 사람들에게 점수 주기
     await wrongList.map((item, idx) => {
       return this.state.session.signal({
         data: this.state.myUserName,
@@ -682,6 +682,15 @@ class Meeting extends Component {
     })
 
     await this.setState({ calcResult: true })
+
+    // 최종 포인트 보내기
+    await setTimeout(() => {
+      this.state.session.signal({
+        data: this.state.correctPoint + this.state.wrongPoint,
+        to: [],
+        type: 'sendScore',
+      })
+    }, 4000)
   }
 
   // 결과화면으로 이동
@@ -936,12 +945,32 @@ class Meeting extends Component {
           })
         })
 
+        // 투표점수 받기
+        mySession.on('signal:sendScore', (event) => {
+          // console.log('sendScore', event)
+          const name = JSON.parse(event.from.data).clientData
+          const score = parseInt(event.data)
+
+          let replace = {
+            ...this.state.ranking,
+          }
+          replace[name] = score
+
+          console.log('replace', replace)
+          this.setState({
+            ranking: replace,
+          })
+        })
+
         // 누군가가 틀려서 내가 점수를 받는 경우
         mySession.on('signal:plusPoint', (event) => {
-          console.log('쟤가 나한테 점수줌 ㅋ', event.data, this.state.wrongPoint + 50)
+          console.log(
+            '쟤가 나한테 점수줌 ㅋ',
+            event.data,
+            this.state.wrongPoint + 50,
+          )
           this.setState({ wrongPoint: this.state.wrongPoint + 50 })
           if (this.state.myRoleCode === 2) {
-            console.log('내 페어한테도 줘야지', this.state.pairConnection)
             this.state.session.signal({
               data: event.data,
               to: [this.state.pairConnection],
@@ -953,8 +982,6 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
-
-          console.log('event', event)
         })
 
         // 세션 나가기
@@ -1294,78 +1321,76 @@ class Meeting extends Component {
           {this.state.session !== undefined ? (
             <SessionBox className="SessionBox">
               <ChatVideoBox>
-                <ChatBox>
-                  {this.state.meetingTime || this.state.resultTime ? (
-                    <>
-                      {this.state.myRoleCode === 1 ? (
-                        <MyInfo>
-                          <InfoIcon />
-                          당신은{' '}
-                          <InfoPoint>
-                            {' '}
-                            {this.state.roleList[this.state.myRoleCode - 1]}
-                          </InfoPoint>
-                          입니다
-                        </MyInfo>
-                      ) : (
-                        <MyInfo>
-                          <InfoIcon />
-                          당신은{' '}
-                          <InfoPoint>
-                            {' '}
-                            {this.state.pairUser.userNickname}의{' '}
-                            {this.state.roleList[this.state.myRoleCode - 1]}
-                          </InfoPoint>
-                          입니다
-                        </MyInfo>
-                      )}
-                      {this.state.myRoleCode === 3 ? (
-                        <CommanderWarn>
-                          * 지시자의 채팅은 아바타만 볼 수 있어요
-                        </CommanderWarn>
-                      ) : null}
-                      <MessageBox>
-                        <Messages
-                          messages={messages}
-                          pairUser={this.state.pairUser}
-                          myRole={this.state.myRoleCode}
-                          myName={this.state.myUserName}
-                        />
-                        <div
-                          style={{ float: 'left', clear: 'both' }}
-                          ref={(el) => {
-                            this.messagesEnd = el
-                          }}
-                        ></div>
-                      </MessageBox>
-                      <SendMsgBox>
-                        <SendMsg
-                          id="chat_message"
-                          type="text"
-                          placeholder="메시지를 입력하세요"
-                          onChange={this.handleChatMessageChange}
-                          onKeyPress={this.sendmessageByEnter}
-                          value={this.state.message}
-                        />
-                        <SendBtn onClick={this.sendmessageByClick}>
-                          전송
-                        </SendBtn>
-                      </SendMsgBox>
-                    </>
-                  ) : null}
-                </ChatBox>
+                
+                {this.state.meetingTime || this.state.resultTime ? (
+                  <ChatBox>
+                    {this.state.myRoleCode === 1 ? (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    ) : (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.pairUser.userNickname}의{' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    )}
+                    {this.state.myRoleCode === 3 ? (
+                      <CommanderWarn>
+                        * 지시자의 채팅은 아바타만 볼 수 있어요
+                      </CommanderWarn>
+                    ) : null}
+                    <MessageBox>
+                      <Messages
+                        messages={messages}
+                        pairUser={this.state.pairUser}
+                        myRole={this.state.myRoleCode}
+                        myName={this.state.myUserName}
+                      />
+                      <div
+                        style={{ float: 'left', clear: 'both' }}
+                        ref={(el) => {
+                          this.messagesEnd = el
+                        }}
+                      ></div>
+                    </MessageBox>
+                    <SendMsgBox>
+                      <SendMsg
+                        id="chat_message"
+                        type="text"
+                        placeholder="메시지를 입력하세요"
+                        onChange={this.handleChatMessageChange}
+                        onKeyPress={this.sendmessageByEnter}
+                        value={this.state.message}
+                      />
+                      <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
+                    </SendMsgBox>
+                  </ChatBox>
+                ) : null}
 
                 <VideoBox>
                   {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
-                    <UserVideoComponent 
-                      streamManager={this.state.publisher} 
+                    <UserVideoComponent
+                      streamManager={this.state.publisher}
                       myUserName={this.state.myUserName}
                       myRoleCode={this.state.myRoleCode}
                       myPairUser={this.state.pairUser}
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
-                      resultTime={this.state.resultTime}/>
+                      resultTime={this.state.resultTime}
+                    />
                   ) : null}
 
                   {/* 상대카메라 */}

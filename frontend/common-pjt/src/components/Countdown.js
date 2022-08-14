@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import React, { Component } from 'react'
-// import {  } from 'react-router-dom'
 import backGif from '../assets/countdown.gif'
 import logoImg from '../assets/logo.png'
 
@@ -12,20 +11,20 @@ const Background = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: 10;
 `
 
 const BackImg = styled.img.attrs({ src: `${backGif}`})`
   height: 100%;
+  z-index: 10;
 `
 
 const LogoImg = styled.img.attrs({ src: `${logoImg}`})`
   position: absolute;
   top: 2rem;
   height: 20%;
+  z-index: 11;
 `
-
-
-
 
 class Countdown extends Component {
   constructor(props) {
@@ -62,13 +61,14 @@ class Countdown extends Component {
 
   render() {
     return (
-      <Background>
-        <LogoImg/>
-        <BackImg/>
-
-        {/* { this.state.timeLimit === 0 ? <Navigate to="/result" /> : null } */}
-        { this.state.timeLimit === 0 ? this.props.history.push('/main') : null}
-      </Background>
+      <>
+        { this.state.timeLimit > 0 ? 
+          <Background>
+            <LogoImg/>
+            <BackImg/>
+          </Background>
+        : null }
+      </>
     )
   }
 
