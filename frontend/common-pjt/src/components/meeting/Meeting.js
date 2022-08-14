@@ -372,9 +372,51 @@ const CamOff = styled(MdVideocamOff)`
   color: #7e6752;
 `
 
+const FooterRight = styled.div`
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
+const ShowRanking = styled.div`
+  color: #333333;
+  background-color: #F38BA0;
+  border-radius: 1rem;
+  padding: 0.6rem 0.8rem;
+  font-family: Minseo;
+  font-weight: 600;
+  font-size: 1.3rem;
+
+  position: relative;
+
+  &:hover .rankingTip {
+    visibility: visible;
+}
+`
+
+const RankingContainer = styled.div`
+  /* border: 4px solid #333333; */
+  visibility: hidden;
+  background-color: #f6a9a9;
+  opacity: 90%;
+  color: #333333;
+  font-family: Minseo;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-family: Minseo;
+  position: absolute;
+  bottom: 110%;
+  right: -30%;
+  z-index: 3;
+  text-align: center;
+  width: 20vw;
+  height: 30vw;
+`
+
 // 나가기 버튼
 const LeaveBox = styled.div`
-  right: 0;
   position: relative;
 
   &:hover .leaveTip {
@@ -694,7 +736,7 @@ class Meeting extends Component {
         to: [],
         type: 'sendScore',
       })
-    }, 4000)
+    }, 5000)
   }
 
   // 결과화면으로 이동
@@ -960,9 +1002,10 @@ class Meeting extends Component {
           }
           replace[name] = score
 
-          console.log('replace', replace)
+          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => a - b))
+          console.log('sortReplace', sortReplace)
           this.setState({
-            ranking: replace,
+            ranking: sortReplace,
           })
         })
 
@@ -1463,25 +1506,37 @@ class Meeting extends Component {
                   </MicCamBox>
                 ) : null}
 
-                {!this.state.voteTime ? (
-                  <LeaveBox
-                    onClick={() => {
-                      const mySession = this.state.session
+                <FooterRight>
+                  {/* { this.state.resultTime ? ( */}
+                    <>
+                      <ShowRanking>👑순위보기👑
+                        <RankingContainer className="rankingTip">
 
-                      mySession.signal({
-                        data: `${this.state.myUserName}`,
-                        to: [],
-                        type: 'endMeeting',
-                      })
-                      this.leaveSession()
-                    }}
-                  >
-                    <Leave />
-                    <LeaveText className="leaveTip">나가기</LeaveText>
-                  </LeaveBox>
-                ) : (
-                  <div />
-                )}
+                        </RankingContainer>
+                      </ShowRanking>
+                    </>
+                   {/* ) : null } */}
+
+                  {!this.state.voteTime ? (
+                    <LeaveBox
+                      onClick={() => {
+                        const mySession = this.state.session
+
+                        mySession.signal({
+                          data: `${this.state.myUserName}`,
+                          to: [],
+                          type: 'endMeeting',
+                        })
+                        this.leaveSession()
+                      }}
+                    >
+                      <Leave />
+                      <LeaveText className="leaveTip">나가기</LeaveText>
+                    </LeaveBox>
+                  ) : null }
+                </FooterRight>
+
+
               </Footer>
             </SessionBox>
           ) : null}
