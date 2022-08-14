@@ -23,11 +23,6 @@ const StreamComponent = styled.div`
   width: 65%;
   justify-content: center;
   flex-direction: column-reverse;
-
-  &.role2 {
-    border: 1rem solid #5fcac3;
-    border-radius: 1rem;
-  }
 `
 
 const Profile = styled.div`
@@ -42,6 +37,11 @@ const Nickname = styled.div`
   margin: 0;
   display: flex;
   align-items: center;
+
+  &.role2 {
+    background-color: #5fcac3;
+    border-radius: 1rem;
+  }
 `
 
 const Hashtag = styled.span`
@@ -214,10 +214,10 @@ class UserVideoComponent extends Component {
         { this.props.voteTime ? 
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
           { this.props.streamManager !== undefined ? (
-            <StreamComponent onClick={()=> this.doingVote()} className={`role${this.state.voteRole}`}>
+            <StreamComponent onClick={()=> this.doingVote()} >
               <OpenViduVideoComponent streamManager={this.props.streamManager} />
               <Profile>
-                <Nickname>
+                <Nickname className={`role${this.state.voteRole}`}>
                   {this.state.data.clientData}
                 </Nickname>
               </Profile>

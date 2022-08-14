@@ -2,6 +2,7 @@ import axios from 'axios'
 import { OpenVidu } from 'openvidu-browser'
 import React, { Component } from 'react'
 import UserVideoComponent from './UserVideoComponent'
+import Countdown from '../Countdown'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
@@ -227,14 +228,15 @@ const SessionBox = styled.div`
 // 채팅창 + 비디오
 const ChatVideoBox = styled.div`
   display: flex;
-  // alignItems: "center",
-  /* justify-content: space-between; */
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 95%;
 `
 
 const ChatBox = styled.div`
   width: 20%;
+  height: 95%;
   padding: 0 2%;
   position: relative;
 `
@@ -597,7 +599,9 @@ class Meeting extends Component {
   }
 
   scrollToBottom = () => {
-    // this.messagesEnd.scrollIntoView({ behavior: "smooth" })
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" })
+    }
   }
 
   // 스톱워치 초기 설정 함수
@@ -1228,6 +1232,7 @@ class Meeting extends Component {
 
     return (
       <Background>
+        { this.state.resultTime ? <Countdown/> : null }
         <Header>
           <LogoBox>
             <Logo />
@@ -1321,8 +1326,8 @@ class Meeting extends Component {
           {this.state.session !== undefined ? (
             <SessionBox className="SessionBox">
               <ChatVideoBox>
-                
-                {this.state.meetingTime || this.state.resultTime ? (
+
+                {this.state.meetingTime ? (
                   <ChatBox>
                     {this.state.myRoleCode === 1 ? (
                       <MyInfo>
