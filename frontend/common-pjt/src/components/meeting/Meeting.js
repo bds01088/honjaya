@@ -682,6 +682,22 @@ class Meeting extends Component {
     })
 
     await this.setState({ calcResult: true })
+
+    // 최종 포인트 보내기
+    await setTimeout(() => {
+      this.state.session.signal({
+        data: {
+          name: this.state.myUserName,
+          score: this.state.correctPoint + this.state.wrongPoint,
+        },
+        to: [],
+        type: 'sendScore',
+      })
+
+      console.log(this.state.ranking)
+    }, 3000);
+
+
   }
 
   // 결과화면으로 이동
@@ -699,22 +715,6 @@ class Meeting extends Component {
         type: 'timeToResult',
       })
       await this.stopTimer()
-
-      // 점수 집계를 위해 내 포인트 전송
-      const data = {
-        name: this.state.myUserName,
-        score: this.state.correctPoint + this.state.wrongPoint,
-      }
-  
-      // 최종 포인트 보내기
-      await this.state.session.signal({
-        data: data,
-        to: [],
-        type: 'sendScore',
-      })
-  
-      // 점수 집계를 위해 내 포인트 전송
-      console.log(this.state.ranking)
       
     } catch (err) {
       console.log('error')
