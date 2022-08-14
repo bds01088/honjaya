@@ -43,7 +43,8 @@ const Title = styled.div`
   top: -1rem;
   z-index: 1;
   padding: 0 1rem;
-  background-color: #fffdde;
+  background-color: #FAE8E8;
+  border-radius: 1rem;
 `
 
 const PersonnelRadio = styled.input`
