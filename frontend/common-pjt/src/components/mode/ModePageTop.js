@@ -27,6 +27,7 @@ const RoleSelectTitle = styled.div`
   font-size: 2.8em;
   background-color: #fffdde;
   font-family: 'Jua';
+  border-radius: 1rem;
 `
 const ModeTitle = styled.div`
   z-index: 2;
