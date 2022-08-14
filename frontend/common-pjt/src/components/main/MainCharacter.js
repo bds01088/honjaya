@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
+import axios from '../../api/http'
 import styled from 'styled-components'
-import Character from '../../assets/character.png'
+import cat from './../../assets/profile/001.png'
 import Shadow from '../../assets/shadow.png'
 
 const Container = styled.div`
@@ -45,15 +47,52 @@ const BackImg = styled.img`
 `
 
 const MainCharacter = () => {
+  const [character, setCharacter] = useState({})
+
+  useEffect(() => {
+    getCharacter()
+    console.log("useEffect안", character)
+  },[])
+
+  const getCharacter = async() => {
+    try {
+      const res = await axios.get('/honjaya/users/profile')
+      console.log(res)
+      await setCharacter({ url : res.data.profileUrl})
+    }
+    catch(err) {
+        console.log(err)
+    }
+  }
+  
+  const handleProfileChange = (profileNo) => {
+    axios.put(`/honjaya/users/profile/${profileNo}`)
+    .then((res) => {
+      console.log("put 응답", res)
+      setCharacter({ url : res.data.profileUrl })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+  
+
   return (
+    <div>
     <Container>
-      <CardFront className="front">
-        <FrontImg src={Character} />
-      </CardFront>
-      <CardBack className="back">
-        <BackImg src={Shadow} />
-      </CardBack>
-    </Container>
+        <CardFront className="front">
+          { character.url !== undefined ? 
+          <FrontImg src={require(`./../../assets/profile${character.url}`)} /> 
+          : null }
+        </CardFront>
+        <CardBack className="back">
+          <BackImg src={Shadow} />
+        </CardBack>
+      </Container>
+      <div>
+        <button onClick={() => handleProfileChange(1)}>프로필 사진 바꾸기</button>
+      </div>
+    </div>
   )
 }
 
