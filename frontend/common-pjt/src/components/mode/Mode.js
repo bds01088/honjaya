@@ -36,7 +36,7 @@ const Mode = () => {
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .catch((err)=> {alert('유저로드에러')})
+      .catch((err)=> {console.log('유저로드에러')})
   }, [])
 
   const [data, setData] = useState({

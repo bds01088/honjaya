@@ -11,7 +11,7 @@ const Name = styled.p`
   font-size: 1.2rem;
 `
 
-const ChatListItem = ({user, openChatList, setChatUser}) => {
+const ChatListItem = ({user , openChatList, setChatRoomNo, setChatUser, userNo, roomNo, setChatUserNo,  }) => {
 
 
   return (
@@ -19,6 +19,8 @@ const ChatListItem = ({user, openChatList, setChatUser}) => {
       <Container onClick={() => {
         openChatList()
         setChatUser({user})
+        setChatUserNo({userNo})
+        setChatRoomNo({roomNo})
       }}>
         <Name>{user}</Name>
         <MdClose/>

@@ -513,6 +513,8 @@ class Meeting extends Component {
       myUserData: user
 
     })
+
+    
   }
 
   componentWillUnmount() {
