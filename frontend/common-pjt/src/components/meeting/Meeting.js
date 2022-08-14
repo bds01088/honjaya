@@ -941,6 +941,7 @@ class Meeting extends Component {
           console.log('쟤가 나한테 점수줌 ㅋ', event.data, this.state.wrongPoint + 50)
           this.setState({ wrongPoint: this.state.wrongPoint + 50 })
           if (this.state.myRoleCode === 2) {
+            console.log('내 페어한테도 줘야지', this.state.pairConnection)
             this.state.session.signal({
               data: event.data,
               to: [this.state.pairConnection],
