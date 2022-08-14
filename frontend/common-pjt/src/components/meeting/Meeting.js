@@ -1361,7 +1361,7 @@ class Meeting extends Component {
                       streamManager={this.state.publisher} 
                       myUserName={this.state.myUserName}
                       myRoleCode={this.state.myRoleCode}
-                      myPairUser={this.state.pairUser.userNickname}
+                      myPairUser={this.state.pairUser}
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}/>
@@ -1373,7 +1373,7 @@ class Meeting extends Component {
                       streamManager={sub}
                       myUserName={this.state.myUserName}
                       myRoleCode={this.state.myRoleCode}
-                      myPairUser={this.state.pairUser.userNickname}
+                      myPairUser={this.state.pairUser}
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}
