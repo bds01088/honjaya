@@ -643,34 +643,33 @@ class Meeting extends Component {
   async compareResult() {
     const { result } = this.props.vote
     const { vote } = this.props.vote
+    const { connections } = this.props.vote
 
     console.log('결과 비교할거야 아아아 !!!!!!')
     await Object.entries(result).map((item, idx) => {
-      // 내가 아닐때
-      if (item[0] !== this.state.myUserName) {
-        // user를 안 누른 경우, default = 1
-        // 1. 결과가 vote에 없는 경우(누르지 않은 경우), 해당 유저가 솔로거나
-        // 2. 결과가 vote에 있는 경우, vote에 저장된 결과와 실제 역할이 일치한다면 getPoint + 100
-        console.log('확인할거다 딱대 !!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        console.log('vote', vote[item[0]])
-        console.log('item[1]', item[1])
-        if (
-          (!vote[item[0]] && item[1] === 1) ||
-          (vote[item[0]] && item[1] === vote[item[0]])
-        ) {
-          console.log('오예 맞았다 !', item[0], item[1], vote[item[0]])
-          this.setState({ getPoint: this.state.getPoint + 100 })
-        } else {
-          // 틀린 경우에는 해당 유저의 점수 + 50
-          this.state.session.signal({
-            data: 50,
-            to: [item[0]],
-            type: 'plusPoint',
-          })
-        }
+
+      // user를 안 누른 경우, default = 1
+      // 1. 결과가 vote에 없는 경우(누르지 않은 경우), 해당 유저가 솔로거나
+      // 2. 결과가 vote에 있는 경우, vote에 저장된 결과와 실제 역할이 일치한다면 getPoint + 100
+      console.log('확인할거다 딱대 !!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+      console.log('vote', item[0], item[1], vote[item[0]])
+      if (
+        (!vote[item[0]] && item[1] === 1) ||
+        (vote[item[0]] && item[1] === vote[item[0]])
+      ) {
+        console.log('오예 맞았다 !', item[0], item[1], vote[item[0]])
+        this.setState({ getPoint: this.state.getPoint + 100 })
+      } else {
+        // 틀린 경우에는 해당 유저의 점수 + 50
+        this.state.session.signal({
+          data: this.state.myUserName,
+          to: [connections[item[0]]],
+          type: 'plusPoint',
+        })
       }
+
     })
-    await this.setState({ calcResult: true })
+    return await this.setState({ calcResult: true })
   }
 
   // 결과화면으로 이동
@@ -920,15 +919,15 @@ class Meeting extends Component {
 
         // 누군가가 틀려서 내가 점수를 받는 경우
         mySession.on('signal:plusPoint', (event) => {
-          console.log('쟤가 나한테 점수줌 ㅋ')
+          console.log('쟤가 나한테 점수줌 ㅋ', event.data)
           this.setState({ getPoint: this.state.getPoint + 50 })
-          if (this.state.myRoleCode === 2) {
-            this.state.session.signal({
-              data: 50,
-              to: [this.state.pairUser.userNickname],
-              type: 'plusPoint',
-            })
-          }
+          // if (this.state.myRoleCode === 2) {
+          //   this.state.session.signal({
+          //     data: 50,
+          //     to: [this.state.pairUser.userNickname],
+          //     type: 'plusPoint',
+          //   })
+          // }
         })
 
         // 시간 추가 시그널
@@ -1339,13 +1338,19 @@ class Meeting extends Component {
                 <VideoBox>
                   {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
-                    <UserVideoComponent streamManager={this.state.publisher} />
+                    <UserVideoComponent 
+                      streamManager={this.state.publisher} 
+                      myUserName={this.state.myUserName}
+                      meetingTime={this.state.meetingTime}
+                      voteTime={this.state.voteTime}
+                      resultTime={this.state.resultTime}/>
                   ) : null}
-                  {/* 상대카메라 */}
 
+                  {/* 상대카메라 */}
                   {this.state.subscribers.map((sub, i) => (
                     <UserVideoComponent
                       streamManager={sub}
+                      myUserName={this.state.myUserName}
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}
