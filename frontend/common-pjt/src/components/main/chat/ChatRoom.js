@@ -108,7 +108,7 @@ function sendMessage() {
     "/pub/chat/message",
     {},
     JSON.stringify({
-      chatRoomNo: `${chatRoomNo}`,
+      chatroomNo: `${chatRoomNo}`,
       userNo: `${myUserNo}`,
       chatMessage: chatMessage,
     })
@@ -126,13 +126,14 @@ function recvMessage(recv) {
     chatTime: recv.chatTime,
   })
 }
+
 function connect() {
   // pub/sub event
 
   stomp.connect(
     {},
     function (frame) {
-      console.log(chatRoomNo);
+      console.log("방번호",chatRoomNo);
       
       stomp.subscribe(`/sub/chat/room/${chatRoomNo}` , function (message) {
         var recv = JSON.parse(message.body);
@@ -142,7 +143,7 @@ function connect() {
         "/pub/chat/enter",
         {},
         JSON.stringify({
-          chatRoomNo: `${chatRoomNo}`,
+          chatroomNo: `${chatRoomNo}`,
           userNo: `${myUserNo}`,
         })
         );
