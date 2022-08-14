@@ -690,10 +690,7 @@ class Meeting extends Component {
         to: [],
         type: 'sendScore',
       })
-
-    }, 3000);
-
-
+    }, 4000)
   }
 
   // 결과화면으로 이동
@@ -711,7 +708,6 @@ class Meeting extends Component {
         type: 'timeToResult',
       })
       await this.stopTimer()
-      
     } catch (err) {
       console.log('error')
     }
@@ -951,7 +947,7 @@ class Meeting extends Component {
 
         // 투표점수 받기
         mySession.on('signal:sendScore', (event) => {
-          console.log('sendScore', event)
+          // console.log('sendScore', event)
           const name = JSON.parse(event.from.data).clientData
           const score = parseInt(event.data)
 
@@ -959,10 +955,10 @@ class Meeting extends Component {
             ...this.state.ranking,
           }
           replace[name] = score
-          
+
           console.log('replace', replace)
           this.setState({
-            ranking: replace
+            ranking: replace,
           })
         })
 
@@ -1325,66 +1321,63 @@ class Meeting extends Component {
           {this.state.session !== undefined ? (
             <SessionBox className="SessionBox">
               <ChatVideoBox>
-                <ChatBox>
-                  {this.state.meetingTime || this.state.resultTime ? (
-                    <>
-                      {this.state.myRoleCode === 1 ? (
-                        <MyInfo>
-                          <InfoIcon />
-                          당신은{' '}
-                          <InfoPoint>
-                            {' '}
-                            {this.state.roleList[this.state.myRoleCode - 1]}
-                          </InfoPoint>
-                          입니다
-                        </MyInfo>
-                      ) : (
-                        <MyInfo>
-                          <InfoIcon />
-                          당신은{' '}
-                          <InfoPoint>
-                            {' '}
-                            {this.state.pairUser.userNickname}의{' '}
-                            {this.state.roleList[this.state.myRoleCode - 1]}
-                          </InfoPoint>
-                          입니다
-                        </MyInfo>
-                      )}
-                      {this.state.myRoleCode === 3 ? (
-                        <CommanderWarn>
-                          * 지시자의 채팅은 아바타만 볼 수 있어요
-                        </CommanderWarn>
-                      ) : null}
-                      <MessageBox>
-                        <Messages
-                          messages={messages}
-                          pairUser={this.state.pairUser}
-                          myRole={this.state.myRoleCode}
-                          myName={this.state.myUserName}
-                        />
-                        <div
-                          style={{ float: 'left', clear: 'both' }}
-                          ref={(el) => {
-                            this.messagesEnd = el
-                          }}
-                        ></div>
-                      </MessageBox>
-                      <SendMsgBox>
-                        <SendMsg
-                          id="chat_message"
-                          type="text"
-                          placeholder="메시지를 입력하세요"
-                          onChange={this.handleChatMessageChange}
-                          onKeyPress={this.sendmessageByEnter}
-                          value={this.state.message}
-                        />
-                        <SendBtn onClick={this.sendmessageByClick}>
-                          전송
-                        </SendBtn>
-                      </SendMsgBox>
-                    </>
-                  ) : null}
-                </ChatBox>
+                
+                {this.state.meetingTime || this.state.resultTime ? (
+                  <ChatBox>
+                    {this.state.myRoleCode === 1 ? (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    ) : (
+                      <MyInfo>
+                        <InfoIcon />
+                        당신은{' '}
+                        <InfoPoint>
+                          {' '}
+                          {this.state.pairUser.userNickname}의{' '}
+                          {this.state.roleList[this.state.myRoleCode - 1]}
+                        </InfoPoint>
+                        입니다
+                      </MyInfo>
+                    )}
+                    {this.state.myRoleCode === 3 ? (
+                      <CommanderWarn>
+                        * 지시자의 채팅은 아바타만 볼 수 있어요
+                      </CommanderWarn>
+                    ) : null}
+                    <MessageBox>
+                      <Messages
+                        messages={messages}
+                        pairUser={this.state.pairUser}
+                        myRole={this.state.myRoleCode}
+                        myName={this.state.myUserName}
+                      />
+                      <div
+                        style={{ float: 'left', clear: 'both' }}
+                        ref={(el) => {
+                          this.messagesEnd = el
+                        }}
+                      ></div>
+                    </MessageBox>
+                    <SendMsgBox>
+                      <SendMsg
+                        id="chat_message"
+                        type="text"
+                        placeholder="메시지를 입력하세요"
+                        onChange={this.handleChatMessageChange}
+                        onKeyPress={this.sendmessageByEnter}
+                        value={this.state.message}
+                      />
+                      <SendBtn onClick={this.sendmessageByClick}>전송</SendBtn>
+                    </SendMsgBox>
+                  </ChatBox>
+                ) : null}
 
                 <VideoBox>
                   {/* 내 카메라 */}
