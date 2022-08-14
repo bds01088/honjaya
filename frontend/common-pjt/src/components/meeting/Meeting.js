@@ -960,7 +960,7 @@ class Meeting extends Component {
           }
           replace[name] = score
 
-          const sortReplace = Object.entries(replace).sort(([, a], [, b]) => a - b)
+          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => a - b))
           console.log('sortReplace', sortReplace)
           this.setState({
             ranking: sortReplace,
