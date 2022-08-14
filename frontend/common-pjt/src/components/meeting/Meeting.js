@@ -467,7 +467,7 @@ class Meeting extends Component {
       wrongPoint: 0,
       calcReult: false,
       pairConnection: null,
-      ranking: [],
+      ranking: null || {},
     }
 
     // openVidu
@@ -686,15 +686,14 @@ class Meeting extends Component {
     // 최종 포인트 보내기
     await setTimeout(() => {
       this.state.session.signal({
-        data: {
-          name: this.state.myUserName,
-          score: this.state.correctPoint + this.state.wrongPoint,
-        },
+        data: [
+          this.state.myUserName,
+          this.state.correctPoint + this.state.wrongPoint
+        ],
         to: [],
         type: 'sendScore',
       })
 
-      console.log(this.state.ranking)
     }, 3000);
 
 
@@ -953,13 +952,19 @@ class Meeting extends Component {
           })
         })
 
-        // 결과화면으로 전환
+        // 투표점수 보내기
         mySession.on('signal:sendScore', (event) => {
-          // const replace = [...this.state.result, event.data]
           console.log('sendScore', event)
-          // this.setState({
-          //   ranking: replace,
-          // })
+          const name = event.data[0]
+          const score = event.data[1]
+          let replace = {
+            ...this.state.ranking,
+          }
+          replace[name] = score
+          
+          this.setState({
+            ranking: replace
+          })
         })
 
         // 누군가가 틀려서 내가 점수를 받는 경우
