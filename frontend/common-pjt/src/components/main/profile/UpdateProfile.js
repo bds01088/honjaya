@@ -5,7 +5,7 @@ import profileImg from '../../../assets/shadow.png'
 import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -182,25 +182,47 @@ const BirthdayDiv = styled.div`
   flex-direction: column;
 `
 
-const InBtn = styled.button`
-  background-color: #ff728e;
-  color: white;
-  width: 10%;
-  border-radius: 0.5rem;
-  border: 0;
-  padding: 0.5rem;
-  font-size: 1.2rem;
-  font-family: Jua;
-  cursor: pointer;
+const Btn = styled.button`
+  &.update {
+    background-color: #00cfb4;
+    color: white;
+    width: 10%;
+    border-radius: 0.5rem;
+    border: 0;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    font-family: Jua;
+    cursor: pointer;
 
-  &:hover {
-    background-color: #ff5066;
-    color: #e0e0e0;
+    &:hover {
+      background-color: #009c87;
+      color: #e0e0e0;
+    }
   }
+
+
+  &.cancel {
+    background-color: red;
+    color: white;
+    width: 10%;
+    border-radius: 0.5rem;
+    border: 0;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    font-family: Jua;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ad0c45;
+      color: #e0e0e0;
+    }
+  }
+
 
   &:disabled {
     cursor: not-allowed
   }
+
 `
 const ErrorText = styled.span`
   width: 100%;
@@ -223,6 +245,14 @@ const UpdateDiv = styled.div`
   justify-content: center;
   width: 100%;
   margin-right: 4rem;
+`
+
+const CancelLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 1rem 4rem 0 0;
+
 `
 
 const UpdateProfile = () => {
@@ -596,8 +626,15 @@ const UpdateProfile = () => {
           </InfoBox>
 
           <UpdateDiv>
-            <InBtn disabled={disabled}>수정</InBtn>
+            <Btn className='update' disabled={disabled}>수정</Btn>
           </UpdateDiv>
+          
+            <CancelLink to="/main" style={{ textDecoration: 'none' }}>
+              
+                <Btn className='cancel'>취소</Btn>
+              
+            </CancelLink>
+          
         </FormBox>
       </Container>
     </Background>
