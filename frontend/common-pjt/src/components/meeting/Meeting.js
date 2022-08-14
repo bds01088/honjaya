@@ -949,16 +949,18 @@ class Meeting extends Component {
           })
         })
 
-        // 투표점수 보내기
+        // 투표점수 받기
         mySession.on('signal:sendScore', (event) => {
           console.log('sendScore', event)
-          const name = event.data[0]
-          const score = event.data[1]
+          const name = JSON.parse(event.from.data).clientData
+          const score = parseInt(event.data)
+
           let replace = {
             ...this.state.ranking,
           }
           replace[name] = score
           
+          console.log('replace', replace)
           this.setState({
             ranking: replace
           })
