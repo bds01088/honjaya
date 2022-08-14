@@ -102,6 +102,7 @@ const dispatch = useDispatch()
 const [chatMessage, setChatMessage] = useState(" ")
 const [messages, setMessages] = useState([])
 
+
 var sockJs = new SockJS("https://i7e104.p.ssafy.io/honjaya/stomp/chat");
 var stomp = Stomp.over(sockJs);
 var reconnect = 0;
@@ -128,7 +129,8 @@ const recvMessage = (recv) => {
     chatTime: recv.chatTime,
   })
   setMessages(messages)
-  
+
+
   //바뀐 값 인식 못할때 새로운 배열을 만들어서 구조분해할당후 수정해주기 이부분 주석은 남겨줘!
   // const temp = {
   //   userNo: recv.userNo,
@@ -154,13 +156,15 @@ const connect = () => {
         var recv = JSON.parse(message.body);
         //이게 내 메시지인지 아닌지 비교할려면 여기담긴 상대 userNo 이랑 내가 컴포넌트에 myUserNo 쓸수있게 해놔서 그거 비교하면 될듯!
         console.log("여기에 받아오는 정보 다 있음 확인해서 사용하면됨", recv)
-        
+        // setIsRecived(true)
         recvMessage(recv)
         //시간 차 사용해서 재랜더링 강제로 일으키기
         setTimeout(() => {
           setChatMessage("")
+          
         }, 200);
-
+      //상대방 대화도 업데이트 필요함
+      setChatMessage(" ")      
       })
       stomp.send(
         "/pub/chat/enter",
@@ -169,7 +173,7 @@ const connect = () => {
           chatroomNo: `${chatRoomNo}`,
           userNo: `${myUserNo}`,
         })
-        );
+        )
     },
     function (error) {
       if (reconnect++ <= 5) {
@@ -184,19 +188,18 @@ const connect = () => {
 }
 
 
-
 //dependency 넣어서 커넥팅 한번만 되게 하기
 useEffect(() => {
   connect()
 },[])
 
+
+
 return (
   <div>
       {openChatRoom ? (
         <Container>
-            {chatUser}
-            {chatRoomNo}
-            {chatUserNo}
+
             <ChatRoomHeader chatUser={chatUser} openChatList={openChatList} setChatUser={setChatUser} openChatRoom={openChatRoom}/>
             <ChatContainer>
               <ChatRecord>
@@ -219,6 +222,7 @@ return (
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       sendMessage(chatMessage);
+                     
                       ;
                     }
                   }}
@@ -227,7 +231,8 @@ return (
                 <SendButton
                   onClick={() => {
                     sendMessage(chatMessage);
-                    }}
+                    
+                  }}
                 >
                   <SendImg/>
                 </SendButton>
