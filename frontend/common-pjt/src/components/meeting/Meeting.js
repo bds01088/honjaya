@@ -694,7 +694,7 @@ class Meeting extends Component {
         to: [],
         type: 'sendScore',
       })
-    }, 4000)
+    }, 6000)
   }
 
   // 결과화면으로 이동
