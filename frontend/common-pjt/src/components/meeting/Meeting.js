@@ -553,9 +553,11 @@ class Meeting extends Component {
     const { mode } = this.props
     const { login } = this.props
     const { hashtag } = this.props
+    const { rate } = this.props 
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
     const { uuid, roleCode, user } = mode
+    const { userRate } = rate.rateInfo
 
     if (roleCode !== 1) {
       const pairUser = mode.pairUser
@@ -1082,6 +1084,7 @@ class Meeting extends Component {
               hashtags: this.state.hashList,
               roleCodes: this.state.myRoleCode,
               userDatas: this.state.myUserData,
+              userRate: this.state.userRate
             })
             .then(async () => {
               var devices = await this.OV.getDevices()
@@ -1457,6 +1460,7 @@ class Meeting extends Component {
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}
+                      myRate={this.state.userRate}
                     />
                   ) : null}
 
@@ -1470,6 +1474,7 @@ class Meeting extends Component {
                       meetingTime={this.state.meetingTime}
                       voteTime={this.state.voteTime}
                       resultTime={this.state.resultTime}
+                      myRate={this.state.userRate}
                     />
                   ))}
                 </VideoBox>
@@ -1584,6 +1589,7 @@ const mapStateToProps = (state) => ({
   hashtag: state.hashtag,
   mode: state.mode,
   vote: state.vote,
+  rate: state.rate,
 })
 
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
