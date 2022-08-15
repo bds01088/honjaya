@@ -25,7 +25,7 @@ export const getOtherRate = createAsyncThunk(
   async ( userNo, { rejectWithValue }) => {
     try {
       console.log("해당유저 점수 get", userNo)
-      const res = await axios.get(`/honjaya/rates/${userNo}`)
+      const res = await axios.get(`/honjaya/rates/average/${userNo}`)
       return res.data
     } catch (err) {
       return rejectWithValue(err.response)
