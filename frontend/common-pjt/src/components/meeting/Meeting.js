@@ -629,8 +629,13 @@ class Meeting extends Component {
             await this.setState({ addTimeLimit: this.state.addTimeLimit-1})
             await this.setState({ timeLimit: this.state.timeLimit + 180 })
             await this.setState({ showAddTimer: false })
+            let json_data = {
+              timeLimit : this.state.timeLimit,
+              userNickname : this.state.userNickname,
+            }
+            json_data = JSON.stringify(json_data)
             await this.state.session.signal({
-              data: [`${this.state.timeLimit}`,`${this.state.myUserName}`],
+              data: json_data,
               to: [],
               type: 'addTime',
             })
@@ -1049,9 +1054,11 @@ class Meeting extends Component {
 
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
-          this.setState({ timeLimit: event.data[0] })
+
+          this.setState({ timeLimit: event.data.timeLimit })
           this.setState({ addTimeLimit: this.state.addTimeLimit-1})
-          ToastsStore.info(`${event.data[1]}(이)가 시간 연장을 하였습니다`)
+          // ToastsStore.info('누군가 시간 연장을 하였습니다')
+          ToastsStore.info(`${event.data.userNickname}(이)가 시간 연장을 하였습니다`)
           ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
         })
 
