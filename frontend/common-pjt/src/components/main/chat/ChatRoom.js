@@ -9,7 +9,9 @@ import React, { useState } from 'react';
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 
+
 import { enterRoom, getChatRoomDetail } from "./chat-slice";
+
 
 
 // import { randomColor } from './utils/common';
@@ -190,10 +192,6 @@ const connect = () => {
 }
 
 
-//dependency 넣어서 커넥팅 한번만 되게 하기
-// useEffect(() => {
-//   connect()
-// },[])
 
 
 useEffect(() => {
@@ -214,7 +212,8 @@ useEffect(() => {
     .catch((err) => {
       console.log('채팅방입장에러', err)
     })
-},[])
+  }
+)
 
 
 
@@ -222,8 +221,7 @@ return (
   <div>
       {openChatRoom ? (
         <Container>
-            {opponentUserNo}
-            {chatRoomNo}
+
             <ChatRoomHeader chatUser={chatUser} openChatList={openChatList} setChatUser={setChatUser} openChatRoom={openChatRoom}/>
             <ChatContainer>
               <ChatRecord>

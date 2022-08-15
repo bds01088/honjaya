@@ -1,9 +1,17 @@
 import styled from 'styled-components'
 import React, { Component } from 'react'
-// import {  } from 'react-router-dom'
 import backGif from '../assets/countdown.gif'
 import logoImg from '../assets/logo.png'
 
+const Container = styled.div`
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+`
 const Background = styled.div`
   width: 100vw;
   height: 100vh;
@@ -11,21 +19,33 @@ const Background = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 `
 
 const BackImg = styled.img.attrs({ src: `${backGif}`})`
   height: 100%;
+  z-index: 10;
 `
 
 const LogoImg = styled.img.attrs({ src: `${logoImg}`})`
-  position: absolute;
+  position: fixed;
   top: 2rem;
   height: 20%;
+  z-index: 11;
 `
 
-
-
+const Text = styled.div`
+  font-family: Minseo;
+  color: #333333;
+  font-size: 2rem;
+  position: fixed;
+  top: 12rem;
+  height: 20%;
+  z-index: 11;
+`
 
 class Countdown extends Component {
   constructor(props) {
@@ -62,13 +82,17 @@ class Countdown extends Component {
 
   render() {
     return (
-      <Background>
-        <LogoImg/>
-        <BackImg/>
-
-        {/* { this.state.timeLimit === 0 ? <Navigate to="/result" /> : null } */}
-        { this.state.timeLimit === 0 ? this.props.history.push('/main') : null}
-      </Background>
+      <>
+        { this.state.timeLimit > 0 ? 
+        <Container>
+          <Background>
+            <LogoImg/>
+            <Text>결과 집계중입니다 .. 🧐</Text>
+            <BackImg/>
+          </Background>
+        </Container>
+        : null }
+      </>
     )
   }
 

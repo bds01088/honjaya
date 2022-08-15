@@ -37,6 +37,11 @@ const Nickname = styled.div`
   margin: 0;
   display: flex;
   align-items: center;
+
+  &.role2 {
+    background-color: #5fcac3;
+    border-radius: 1rem;
+  }
 `
 
 const Hashtag = styled.span`
@@ -55,6 +60,8 @@ class UserVideoComponent extends Component {
       voteTo: '',  // 투표 대상
       voteRole: 1, // 1: 솔로, 2: 아바타
       myUserName: this.props.myUserName,
+      myRoleCode: this.props.myRoleCode,
+      myPairUser: this.props.myPairUser,
     }
     // this.userReport = this.userReoport.bind(this)
   }
@@ -71,9 +78,24 @@ class UserVideoComponent extends Component {
     })
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
-    if (this.state.data.clientData !== this.state.myUserName && this.state.data.roleCodes !== 3) {
-      this.storeResult()
-      this.storeConnection()
+    // 1. 내가 아니어야 한다
+    // 2. 상대가 솔로인 경우
+    // 3. 상대가 아바타이고,
+    // 3-1. 내가 지시자일 때, 내 아바타가 아니어야 함
+    // 3-2. 내가 지시자가 아니어야 함.
+    if (this.state.data.clientData !== this.state.myUserName) {
+      if (this.state.data.roleCodes === 1)  {
+        this.storeResult()
+        this.storeConnection()
+      } else if (this.state.data.roleCodes === 2) {
+        if (this.state.myRoleCode === 3 && (this.state.data.clientData !== this.state.myPairUser.userNickname)) {
+          this.storeResult()
+          this.storeConnection()
+        } else if (this.state.myRoleCode !== 3) {
+          this.storeResult()
+          this.storeConnection()
+        }
+      }
     }
   }
 
@@ -133,10 +155,11 @@ class UserVideoComponent extends Component {
     doStoreResult(this.state.data)
   }
 
-  // 인물들의 역할코드 결과값 저장 ( 결과 비교용 )
+  // 인물들의 connection 결과값 저장 ( signal 전송용 )
   storeConnection() {
     const { doStoreConnection } = this.props
-    doStoreConnection([this.state.data.clientData, this.props.streamManager.stream.connection])
+    const streamData = this.props.streamManager.stream.connection
+    doStoreConnection([this.state.data.clientData, streamData])
   }
 
   // 나의 투표 저장
@@ -163,6 +186,7 @@ class UserVideoComponent extends Component {
   render() {
     return (
       <>
+        {/* 미팅시간 */}
         { this.props.meetingTime ? (
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
             {this.props.streamManager !== undefined ? (
@@ -190,10 +214,10 @@ class UserVideoComponent extends Component {
         { this.props.voteTime ? 
           <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
           { this.props.streamManager !== undefined ? (
-            <StreamComponent onClick={()=> this.doingVote()}>
+            <StreamComponent onClick={()=> this.doingVote()} >
               <OpenViduVideoComponent streamManager={this.props.streamManager} />
               <Profile>
-                <Nickname>
+                <Nickname className={`role${this.state.voteRole}`}>
                   {this.state.data.clientData}
                 </Nickname>
               </Profile>
