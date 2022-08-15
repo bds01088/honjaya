@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import OpenViduVideoComponent from './OvVideo'
 import styled from 'styled-components'
-import { RiAlarmWarningFill } from 'react-icons/ri'
+import { TiMessages } from 'react-icons/ti'
+import {
+  IoPersonCircleOutline
+} from 'react-icons/io5'
+import UserProfileModal from '../main/profile/UserProfileModal'
 import { connect } from 'react-redux'
 import { userReport } from './evaluate-slice'
 import { storeResult, doingVote, storeConnection } from './vote-slice'
 import axios from '../../api/http'
 import { requestDirectMessage } from '../main/chat/chat-slice'
+import MainHelper from '../main/MainHelper'
+
 const StreamDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -48,7 +54,17 @@ const Hashtag = styled.span`
   font-family: Minseo;
 `
 
-const RiAlarmWarning = styled(RiAlarmWarningFill)``
+
+
+const TiMsg = styled(TiMessages)`
+  cursor: pointer;
+  color: #FF728E;
+`
+
+const ProfileIcon = styled(IoPersonCircleOutline)`
+  cursor: pointer;
+  color: #00C3A9;
+`
 
 class UserVideoComponent extends Component {
   constructor(props) {
@@ -62,19 +78,27 @@ class UserVideoComponent extends Component {
       myUserName: this.props.myUserName,
       myRoleCode: this.props.myRoleCode,
       myPairUser: this.props.myPairUser,
+      showIcons: false,
+      isDuplicated: false,
+      isOpen: false,
+      oppositeUserNo: 1
     }
     // this.userReport = this.userReoport.bind(this)
   }
 
+ 
 
   componentDidMount() {
     const { mode } = this.props
     const userNo = mode.user.userNo
     const userNickname = this.state.data.clientData
+    const oppositeUserNo = this.state.data.userDatas.userNo
+
 
     this.setState({
       myUserNo: userNo,
       voteTo: userNickname,
+      oppositeUserNo: oppositeUserNo
     })
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
@@ -96,7 +120,14 @@ class UserVideoComponent extends Component {
           this.storeConnection()
         }
       }
+    } else {
+      this.setState({showIcons:true})
     }
+  }
+
+  //모달 관련
+  openUserProfileModal = () => {
+    this.setState({isOpen:!this.state.isOpen})
   }
 
   // 유저 신고
@@ -108,12 +139,12 @@ class UserVideoComponent extends Component {
     const reportData = {
       reportTo: this.state.data.userDatas.userNo,
       reportType: 1,
-      reportMessage: '신고체크',
+      reportMessage: '유저신고',
     }
 
     axios.get(`/honjaya/reports/${this.state.myUserNo}`).then((res) => {
       if (res.data.trueOrFalse) {
-        alert('중복신고금지')
+        this.setState({isDuplicated:true})
       } else {
         doUserReport(reportData)
           .unwrap()
@@ -196,7 +227,10 @@ class UserVideoComponent extends Component {
                   <Nickname>
                     {/* 화살표함수를 써주거나 바인드를 해준다.. 왜 화살표함수를 써야 에러가 안나지? 화살표 함수안쓰면 렌더링되면서 뜬금없이 신고함 */}
                     {this.state.data.clientData}{' '}
-                    <RiAlarmWarning onClick={() => { this.userReport() }} /> 
+                    
+                    {/* <RiAlarmWarning onClick={() => { this.openUserReportModal()}} />  */}
+                    {/* {this.state.isOpen ? <UserReportModal openUserReportModal={this.openUserReportModal}/> : null} */}
+                     
                   </Nickname>
                   {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
                 &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
@@ -235,7 +269,16 @@ class UserVideoComponent extends Component {
               <Profile>
                 <Nickname>
                   {this.state.data.clientData}{' '}
-                  <RiAlarmWarning onClick={() => { this.userReport() }} /> <button onClick={ () => {this.requestDirectMessage()}}>DM신청</button>
+                  {/* { !this.state.showIcons && !this.state.isDuplicated ? <RiAlarmWarning onClick={() => { this.userReport() }} />: null} */}
+                  
+                  <ProfileIcon onClick={() => { this.openUserProfileModal()}} /> 
+          
+                    {this.state.isOpen ? <UserProfileModal openUserProfileModal={this.openUserProfileModal} oppositeUserNo={this.state.oppositeUserNo} myUserNo={this.state.myUserNo} userReport={this.userReport} /> : null}
+                   
+                  { !this.state.showIcons && !this.state.isDuplicated ? <TiMsg onClick={ () => {this.requestDirectMessage()}} />: null}
+                  {/* <RiAlarmWarning onClick={() => { this.openUserReportModal()}} />  */}
+                    {/* {this.state.isOpen ? <UserReportModal openUserReportModal={this.openUserReportModal} userReport={this.userReport}/> : null} */}
+                   
                 </Nickname>
                 {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
                 &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
