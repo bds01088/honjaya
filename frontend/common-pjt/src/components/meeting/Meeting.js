@@ -623,7 +623,7 @@ class Meeting extends Component {
     
     try {
       const restPointRes = await myAxios.get('/honjaya/points')
-      if ( restPointRes.data.point < 100 ) { ToastsStore.info("Loupin이 부족합니다 ❗")
+      if ( restPointRes.data.point < 100 ) { ToastsStore.info("Lupin이 부족합니다 ❗")
         } else {
           await this.setState({ timeLimit: this.state.timeLimit + 180 })
           await this.setState({ showAddTimer: false })
@@ -638,6 +638,7 @@ class Meeting extends Component {
           await this.setState({
             myUserPoint: res.data.point,
           })
+          ToastsStore.info("-100 Lupin ❗")
         }
     } catch (err) {
       console.log('error')
@@ -833,7 +834,7 @@ class Meeting extends Component {
         this.setState({ randomCount: this.state.randomCount - 1 })
       } else {
         const restPointRes = await myAxios.get('/honjaya/points')
-        if ( restPointRes.data.point < 50 ) { ToastsStore.info("Loupin이 부족합니다 ❗") 
+        if ( restPointRes.data.point < 50 ) { ToastsStore.info("Lupin이 부족합니다 ❗") 
       } else {
         await this.shuffleTopic()
         this.state.session.signal({
@@ -844,11 +845,10 @@ class Meeting extends Component {
         const res = await myAxios.put('/honjaya/points', {
           point: -50,
         })
-        console.log('포인트수정', res)
-  
         await this.setState({
           myUserPoint: res.data.point,
         })
+        ToastsStore.info("-50 Lupin ❗")
       }
     }
 
@@ -857,47 +857,6 @@ class Meeting extends Component {
     }
   }
 
-
-  //   const restPointRes = await myAxios.get('/honjaya/points')
-  //   if ( restPointRes.data.point < 50 ) { ToastsStore.info("Loupin이 부족합니다 ❗") 
-  // } else {
-
-
-  // }
-
-  //   try {
-  //     //토픽바꾸기
-
-  //     await this.shuffleTopic()
-  //     this.state.session.signal({
-  //       data: `${this.state.randomTopic}`,
-  //       to: [],
-  //       type: 'randomTopic',
-  //     })
-
-  //     if (this.state.randomCount <= 0) {
-  //       const restPointRes = await myAxios.get('/honjaya/points')
-  //       if ( restPointRes.data.point < 50 ) {
-  //         ToastsStore.info("Loupin이 부족합니다 ❗")
-  //         // alert("포인트부족")
-  //       } else {
-  //         const res = await myAxios.put('/honjaya/points', {
-  //           point: -50,
-  //         })
-  //         console.log('포인트수정', res)
-  
-  //         await this.setState({
-  //           myUserPoint: res.data.point,
-  //         })
-
-  //       }
-  //     } else {
-  //       this.setState({ randomCount: this.state.randomCount - 1 })
-  //     }
-  //   } catch (err) {
-  //     console.log('error')
-  //   }
-  // }
 
   //채팅 보내는 함수
   handleChatMessageChange(e) {
