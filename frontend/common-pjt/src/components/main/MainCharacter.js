@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import axios from '../../api/http'
 import styled from 'styled-components'
-import cat from './../../assets/profile/001.png'
 import Shadow from '../../assets/shadow.png'
 import SelectCharcter from './SelectCharcter'
+import { FiEdit } from 'react-icons/fi'
+
+const Div = styled.div`
+  position: relative;
+`
 
 const Container = styled.div`
   perspective: 300px;
   position: relative;
-
   &:hover {
     .front {
       transform: rotateY(180deg);
@@ -46,17 +49,23 @@ const BackImg = styled.img`
   width: 100%;
   height: 100%;
 `
-
-const ChangeProfile = styled.div`
-  display: flex;
-  justify-content: center;
-  outline: 2px solid;
+const Wrapper = styled.div`
+  position: absolute;
+  /* display: flex; */
+  right: -3rem;
+  width: 120%;
+  z-index: 10;
 `
 
-const Div = styled.div`
-  width: 120%;
-  height: 120%;
-  /* outline: 3px solid red; */
+const ChangeProfile = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
+const EditBtn = styled(FiEdit)`
+  font-size: 3rem;
+  color: #ffc9d0;
+  cursor: pointer;
 `
 
 const MainCharacter = () => {
@@ -64,7 +73,6 @@ const MainCharacter = () => {
 
   useEffect(() => {
     getCharacter()
-    console.log('useEffect안', character)
   }, [])
 
   // 기존 이미지 가져오기
@@ -91,20 +99,19 @@ const MainCharacter = () => {
       })
   }
 
+  // 모달 열기
   const [isOpen, setIsOpen] = useState(false)
 
-  const openModalHelper = () => {
+  const openModalProfle = () => {
     setIsOpen(!isOpen)
   }
 
   const closeModalProfile = () => {
-    openModalHelper(false)
+    openModalProfle(false)
   }
-
-  const [num, setNum] = useState('')
-
+  console.log('url', character.url)
   return (
-    <div>
+    <Div>
       <Container>
         <CardFront className="front">
           {character.url !== undefined ? (
@@ -115,23 +122,19 @@ const MainCharacter = () => {
           <BackImg src={Shadow} />
         </CardBack>
       </Container>
-      
 
-      <Div>
-      <ChangeProfile>
-        <button onClick={() => handleProfileChange(num)}>저장</button>
-        <button onClick={closeModalProfile}>취소</button>
-        <button onClick={openModalHelper}>모달 띄우기</button>
-      </ChangeProfile>
-      {isOpen ? (
-        <SelectCharcter
-          openModalHelper={openModalHelper}
-          setNum={setNum}
-          num={num}
-        />
-      ) : null}
-      </Div>
-    </div>
+      <Wrapper>
+        <ChangeProfile>
+          <EditBtn onClick={openModalProfle}></EditBtn>
+        </ChangeProfile>
+        {isOpen ? (
+          <SelectCharcter
+            handleProfileChange={handleProfileChange}
+            closeModalProfile={closeModalProfile}
+          />
+        ) : null}
+      </Wrapper>
+    </Div>
   )
 }
 
