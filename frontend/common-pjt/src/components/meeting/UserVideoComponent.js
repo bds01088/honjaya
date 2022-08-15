@@ -198,16 +198,19 @@ class UserVideoComponent extends Component {
 
   //점수 평가하기
   async onhandleRate() {
-    const {getRateRecord} = this.props
-    
-    const record = await getRateRecord(this.state.data.userDatas.userNo)
-    console.log("응답옴?",record)
-    if (record.payload.data.rateScore !== 0) {
-      this.setState({rateRecord:true})
+    if (this.state.rateModal === false) {
+      const {getRateRecord} = this.props
+      const record = await getRateRecord(this.state.data.userDatas.userNo)
+      console.log("응답옴?",record)
+      if (record.payload.data.rateScore !== 0) {
+        this.setState({rateRecord:true})
+      }
+      this.setState({rateNo: record.payload.data.rateNo})
+      this.setState({rate : record.payload.data.rateScore})
+      this.setState({rateModal: true})
+    } else {
+      this.setState({rateModal: false})
     }
-    this.setState({rateNo: record.payload.data.rateNo})
-    this.setState({rate : record.payload.data.rateScore})
-    this.setState({rateModal: true})
   }
 
   async sendRate() {
@@ -219,16 +222,24 @@ class UserVideoComponent extends Component {
         rateScore : this.state.rate,
       }
       await setRate(rateData)
-      // const new_avgRate = await getOtherRate(this.state.data.userDatas.userNo)
-      // this.setState({avgRate:new_avgRate})
+      await getOtherRate(this.state.data.userDatas.userNo)
+      .then((res) => {
+        console.log('점수 보내고 새로 받아오기', res)
+        const new_avgRate = res.payload.rateScore
+        this.setState({avgRate:new_avgRate})
+      })
     } else {
       const rateData = {
         rateNo : this.state.rateNo,
         rateScore : this.state.rate,
       }
-      putRate(rateData)
-      // const new_avgRate = await getOtherRate(this.state.data.userDatas.userNo)
-      // this.setState({avgRate:new_avgRate})
+      await putRate(rateData)
+      await getOtherRate(this.state.data.userDatas.userNo)
+      .then((res) => {
+        console.log('점수 보내고 새로 받아오기',res)
+        const new_avgRate = res.payload.rateScore
+        this.setState({avgRate:new_avgRate})
+      })
     }
     this.setState({rateModal:false})
   }
