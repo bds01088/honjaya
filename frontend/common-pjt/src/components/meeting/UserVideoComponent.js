@@ -7,6 +7,9 @@ import { userReport } from './evaluate-slice'
 import { storeResult, doingVote, storeConnection } from './vote-slice'
 import axios from '../../api/http'
 import { requestDirectMessage } from '../main/chat/chat-slice'
+import { getRateRecord, putRate, setRate, getOtherRate } from '../main/hashtag/rate-slice'
+import Rating from '@mui/material/Rating';
+
 const StreamDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -62,13 +65,19 @@ class UserVideoComponent extends Component {
       myUserName: this.props.myUserName,
       myRoleCode: this.props.myRoleCode,
       myPairUser: this.props.myPairUser,
+      
+      avgRate: undefined,
+      rate: undefined,
+      rateRecord: false,
+      rateModal: false,
+      rateNo: undefined
     }
     // this.userReport = this.userReoport.bind(this)
   }
 
 
-  componentDidMount() {
-    const { mode } = this.props
+  async componentDidMount() {
+    const { mode, getOtherRate } = this.props
     const userNo = mode.user.userNo
     const userNickname = this.state.data.clientData
 
@@ -76,6 +85,10 @@ class UserVideoComponent extends Component {
       myUserNo: userNo,
       voteTo: userNickname,
     })
+
+    const avgRes = await getOtherRate(this.state.data.userDatas.userNo)
+    console.log("평균점수 응답", avgRes)
+    this.setState({avgRate : avgRes.payload.rateScore})
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
     // 1. 내가 아니어야 한다
@@ -183,6 +196,43 @@ class UserVideoComponent extends Component {
     await doDoingVote(data)
   }
 
+  //점수 평가하기
+  async onhandleRate() {
+    const {getRateRecord} = this.props
+    
+    const record = await getRateRecord(this.state.data.userDatas.userNo)
+    console.log("응답옴?",record)
+    if (record.payload.data.rateScore !== 0) {
+      this.setState({rateRecord:true})
+    }
+    this.setState({rateNo: record.payload.data.rateNo})
+    this.setState({rate : record.payload.data.rateScore})
+    this.setState({rateModal: true})
+  }
+
+  async sendRate() {
+    const {setRate, putRate, getOtherRate} = this.props
+    console.log("요청시작시 점수", this.state.rate)
+    if (this.state.rateRecord === false){
+      const rateData = {
+        rateTo : this.state.data.userDatas.userNo,
+        rateScore : this.state.rate,
+      }
+      await setRate(rateData)
+      // const new_avgRate = await getOtherRate(this.state.data.userDatas.userNo)
+      // this.setState({avgRate:new_avgRate})
+    } else {
+      const rateData = {
+        rateNo : this.state.rateNo,
+        rateScore : this.state.rate,
+      }
+      putRate(rateData)
+      // const new_avgRate = await getOtherRate(this.state.data.userDatas.userNo)
+      // this.setState({avgRate:new_avgRate})
+    }
+    this.setState({rateModal:false})
+  }
+
   render() {
     return (
       <>
@@ -243,6 +293,26 @@ class UserVideoComponent extends Component {
                   this.state.data.hashtags.map((item, idx) => (
                     <Hashtag># {item[1]} </Hashtag>
                   ))}
+                <div>
+                  <button onClick={() => this.onhandleRate()}>rate 모달 띄우기</button>
+                  {this.state.avgRate === undefined ? "0" : this.state.avgRate}
+                  {this.state.rateModal === true ? 
+                  <div>
+                    <Rating
+                      name="simple-controlled"
+                      precision={0.5}
+                      value={this.state.rate}
+                      onChange={(event, newValue) => {
+                        console.log("newValue", newValue)
+                        this.setState({rate:newValue})
+                        console.log("바뀌나?",this.state.rate)
+                      }}
+                    />
+                    <button onClick={() => this.sendRate()}>평가 보내기</button>
+                  </div>
+                  : null}
+                  <div/>
+                </div>
               </Profile>
             </StreamComponent>
           ) : null}
@@ -266,7 +336,11 @@ const mapDispatchToProps = (dispatch) => {
     doStoreResult: (data) => dispatch(storeResult(data)),
     doStoreConnection: (data) => dispatch(storeConnection(data)),
     doDoingVote: (data) => dispatch(doingVote(data)),
-    doRequestDirectMessage: (data) => dispatch(requestDirectMessage(data))
+    doRequestDirectMessage: (data) => dispatch(requestDirectMessage(data)),
+    getRateRecord: (data) => dispatch(getRateRecord(data)),
+    putRate: (data) => dispatch(putRate(data)),
+    setRate: (data) => dispatch(setRate(data)),
+    getOtherRate: (data) => dispatch(getOtherRate(data))
   }
 }
 

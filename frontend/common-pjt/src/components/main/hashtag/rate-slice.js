@@ -34,12 +34,13 @@ export const getOtherRate = createAsyncThunk(
 )
 
 //내가 해당 특정 유저를 평가했는지 내역 조회
-export const getRateList = createAsyncThunk(
+export const getRateRecord = createAsyncThunk(
   'GET_RATE_LIST',
   async ( userNo, { rejectWithValue}) => {
     try {
       console.log("이사람을 평가했었나?", userNo)
       const res = await axios.get(`/honjaya/rates/${userNo}`)
+      console.log("평가응답", res)
     //{
     //   "rateNo": 0,
     //   "rateFrom": 7,
@@ -47,11 +48,7 @@ export const getRateList = createAsyncThunk(
     //   "rateScore": 0.0, => 0점일때 평가 안한거, 0점은 줄 수 없음
     //   "success": true
     //}
-      res.data.didRate = false
-      if (res.data.rateScore !== 0) {
-        res.data.didRate = true
-      }
-      return res.data
+      return res
     } catch (err) {
       return rejectWithValue(err.response)
     }
@@ -61,10 +58,15 @@ export const getRateList = createAsyncThunk(
 //평가 수정하기
 export const putRate = createAsyncThunk(
   'PUT_RATE',
-  async ( rateNo, { rejectWithValue }) => {
+  async ( rateData, { rejectWithValue }) => {
     try {
-      console.log("평가 수정하기", rateNo)
-      const res = await axios.put(`honjaya/rates/${rateNo}`)
+      console.log("평가 수정하기", rateData)
+      const res = await axios.put(
+        `honjaya/rates/${rateData.rateNo}`,
+        {
+          rateScore : rateData.rateScore
+        }
+      )
       console.log("평가수정 res", res)
       return res
     }
@@ -77,16 +79,16 @@ export const putRate = createAsyncThunk(
 //평가하기 보내기
 export const setRate = createAsyncThunk(
   'SET_RATE',
-  async ( data , { rejectWithValue }) => {
+  async ( rateData , { rejectWithValue }) => {
     try {
-      console.log("평가하기", data)
+      console.log("평가하기", rateData)
       //data : {
       //   rateFrom : int,
       //   rateTo : int,
       //   rateScore : double
       //}
-      const res = await axios.post('/honjaya/rates/', data )
-      console.log(res)
+      const res = await axios.post('/honjaya/rates/', rateData )
+      console.log("평가보내기 응답",res)
     }
     catch (err) {
       return rejectWithValue(err.response)
