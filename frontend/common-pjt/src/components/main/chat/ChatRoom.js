@@ -10,6 +10,10 @@ import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 
 
+import { enterRoom, getChatRoomDetail } from "./chat-slice";
+
+
+
 // import { randomColor } from './utils/common';
 
 const Container = styled.div`
@@ -188,10 +192,28 @@ const connect = () => {
 }
 
 
-//dependency 넣어서 커넥팅 한번만 되게 하기
+
+
 useEffect(() => {
-  connect()
-},[])
+  dispatch(enterRoom(chatRoomNo))
+    .unwrap()
+    .then((res) => {
+      console.log("채팅방입장성공", res.data)
+      dispatch(getChatRoomDetail(chatRoomNo))
+        .unwrap()
+        .then((res) => { console.log("방정보 불러오기 성공")
+          connect()
+        })
+        .catch((err) => {
+          alert("방 정보 불러오기 실패")
+        })
+        
+    })
+    .catch((err) => {
+      console.log('채팅방입장에러', err)
+    })
+  }
+)
 
 
 
