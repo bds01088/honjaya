@@ -5,11 +5,13 @@ import com.ssafy.honjaya.api.request.SignUpReq;
 import com.ssafy.honjaya.api.request.UserUpdateReq;
 import com.ssafy.honjaya.api.response.BanRes;
 import com.ssafy.honjaya.api.response.ProfileRes;
+import com.ssafy.honjaya.api.response.UserProfileInfoRes;
 import com.ssafy.honjaya.api.response.UserRes;
 
 public interface UserService {
 	boolean signUp(SignUpReq signUpReq);
 	UserRes findUser(int userNo);
+	UserProfileInfoRes getUserProfileInfo(int userNo);
 	boolean hasUserByEmail(String email);
 	boolean hasUserByNickname(String Nickname);
 	int login(LoginReq loginReq);
