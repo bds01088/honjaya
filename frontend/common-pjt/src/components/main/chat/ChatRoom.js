@@ -2,13 +2,15 @@ import styled from "styled-components"
 import ChatRoomHeader from "./ChatRoomHeader"
 import { MdSend } from "react-icons/md"; 
 import { useEffect } from "react";
-import { enterRoom } from "./chat-slice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getChatRoomDetail } from "./chat-slice";
-import ScrollToBottom from "react-scroll-to-bottom";
 import React, { useState } from 'react';
-import SockJsClient from 'react-stomp';
+
+import SockJS from "sockjs-client";
+import Stomp from 'stompjs';
+
+import { enterRoom, getChatRoomDetail } from "./chat-slice";
+
 
 // import { randomColor } from './utils/common';
 
@@ -42,7 +44,24 @@ const ChatContainer = styled.div`
 
 const ChatRecord = styled.div`
   height: 90%;
-  border: 2px solid blue; 
+  border: 2px solid blue;
+  overflow-y: scroll;
+
+
+  &::-webkit-scrollbar{
+    width: 0.7rem;
+  }
+
+  &::-webkit-scrollbar-thumb{
+    height: 15%;
+    background-color: #333333;
+    border-radius: 2rem;
+  }
+
+  &::-webkit-scrollbar-track{
+    background-color: #cccccc;
+    border-radius: 2rem;
+    }
 `
 
 const SendBox = styled.div`
@@ -72,8 +91,6 @@ const SendImg = styled(MdSend)`
   color: #6AA3F6;
 `
 
-//여기서 통신을 해야하나
-//chatUser는 상대 유저
 
 
 const ChatRoom = ({chatUser, chatUserNo, chatRoomNo, openChatList, setChatUser, openChatRoom, chatRooms}) => {
@@ -84,69 +101,81 @@ const opponentUserNickname = useSelector((state) => state.chat.opponentUserNickn
 const dispatch = useDispatch()
 
 
-
-// const [chatRoomNo,setChatRoomNo] = useState(1)
-// const [opponentNo,setOpponentNo] = useState(1)
-// const [opponentNickname,setOpponentNickname] =useState('')
-// const [userNo, setUserNo] = useState(1)
-const [chatMessage, setChatMessage] = useState("")
+const [chatMessage, setChatMessage] = useState(" ")
 const [messages, setMessages] = useState([])
 
 
-const Stomp = require("stompjs");
-var SockJS = require("sockjs-client");
-const sockJs = new SockJS("https://i7e104.p.ssafy.io/honjaya/stomp/chat");
+var sockJs = new SockJS("https://i7e104.p.ssafy.io/honjaya/stomp/chat");
 var stomp = Stomp.over(sockJs);
 var reconnect = 0;
 
 
-
-
-
-function sendMessage() {
+const sendMessage= () => {
   stomp.send(
     "/pub/chat/message",
     {},
     JSON.stringify({
-      chatRoomNo: `${chatRoomNo}`,
+      chatroomNo: `${chatRoomNo}`,
       userNo: `${myUserNo}`,
       chatMessage: chatMessage,
     })
     )
-    setChatMessage("")
-    
 }
 
 
-function recvMessage(recv) {
-  messages.unshift({
+const recvMessage = (recv) => {
+  messages.push({
     userNo: recv.userNo,
     userNickname: recv.userNickname,
     chatMessage: recv.chatMessage,
     chatTime: recv.chatTime,
   })
-}
-function connect() {
-  // pub/sub event
+  setMessages(messages)
 
+
+  //바뀐 값 인식 못할때 새로운 배열을 만들어서 구조분해할당후 수정해주기 이부분 주석은 남겨줘!
+  // const temp = {
+  //   userNo: recv.userNo,
+  //   userNickname: recv.userNickname,
+  //   chatMessage: recv.chatMessage,
+  //   chatTime: recv.chatTime,
+  // }
+
+  // const tempArray = [temp,...messages]
+  // setMessages(tempArray)
+  // setMessages(messages)
+
+}
+
+
+const connect = () => {
   stomp.connect(
     {},
     function (frame) {
-      console.log(chatRoomNo);
+      console.log("방번호",chatRoomNo);
       
       stomp.subscribe(`/sub/chat/room/${chatRoomNo}` , function (message) {
         var recv = JSON.parse(message.body);
-        recvMessage(recv);
+        //이게 내 메시지인지 아닌지 비교할려면 여기담긴 상대 userNo 이랑 내가 컴포넌트에 myUserNo 쓸수있게 해놔서 그거 비교하면 될듯!
+        console.log("여기에 받아오는 정보 다 있음 확인해서 사용하면됨", recv)
+        // setIsRecived(true)
+        recvMessage(recv)
+        //시간 차 사용해서 재랜더링 강제로 일으키기
+        setTimeout(() => {
+          setChatMessage("")
+          
+        }, 200);
+      //상대방 대화도 업데이트 필요함
+      setChatMessage(" ")      
       })
       stomp.send(
         "/pub/chat/enter",
         {},
         JSON.stringify({
-          chatRoomNo: `${chatRoomNo}`,
+          chatroomNo: `${chatRoomNo}`,
           userNo: `${myUserNo}`,
         })
-        );
-        console.log("구독 성공");
+        )
     },
     function (error) {
       if (reconnect++ <= 5) {
@@ -161,6 +190,12 @@ function connect() {
 }
 
 
+//dependency 넣어서 커넥팅 한번만 되게 하기
+// useEffect(() => {
+//   connect()
+// },[])
+
+
 useEffect(() => {
   dispatch(enterRoom(chatRoomNo))
     .unwrap()
@@ -169,8 +204,7 @@ useEffect(() => {
       dispatch(getChatRoomDetail(chatRoomNo))
         .unwrap()
         .then((res) => { console.log("방정보 불러오기 성공")
-            connect()
-          
+          connect()
         })
         .catch((err) => {
           alert("방 정보 불러오기 실패")
@@ -184,33 +218,23 @@ useEffect(() => {
 
 
 
-
 return (
   <div>
       {openChatRoom ? (
         <Container>
-            {chatUser}
+            {opponentUserNo}
             {chatRoomNo}
-            {chatUserNo}
-            {myUserNo}
-
-            {/* {chatUserNo} */}
             <ChatRoomHeader chatUser={chatUser} openChatList={openChatList} setChatUser={setChatUser} openChatRoom={openChatRoom}/>
             <ChatContainer>
               <ChatRecord>
-  
-                <ScrollToBottom >
                   <ul>
-                    {messages.map((msg) => (
-                      <li>
+                    {messages.map((msg, idx) => (
+                      <li key={idx}>
                         <p>{msg.chatTime}</p>
                         <p>{msg.chatMessage}</p>
                       </li>
                     ))}
-                  </ul>
-                </ScrollToBottom>
-              
-         
+                  </ul>  
               </ChatRecord>
               <SendBox>
                 <SendInput
@@ -222,7 +246,8 @@ return (
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       sendMessage(chatMessage);
-                      setChatMessage("");
+                     
+                      ;
                     }
                   }}
 
@@ -230,7 +255,8 @@ return (
                 <SendButton
                   onClick={() => {
                     sendMessage(chatMessage);
-                    setChatMessage("")}}
+                    
+                  }}
                 >
                   <SendImg/>
                 </SendButton>
@@ -239,10 +265,8 @@ return (
           </Container>
   
         ) : null}
+       
     </div>
-
-
-
 
     ) 
   }
