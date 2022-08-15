@@ -474,6 +474,7 @@ class Meeting extends Component {
       sec: 0,
       myUserPoint: 0,
       showAddTimer: false,
+      addTimeLimit: 3,
 
       //채팅관련
       message: '',
@@ -620,28 +621,32 @@ class Meeting extends Component {
 
   // 스톱워치 시간 추가 함수
   async addTimer() {
-    
-    try {
-      const restPointRes = await myAxios.get('/honjaya/points')
-      if ( restPointRes.data.point < 100 ) { ToastsStore.info("Lupin이 부족합니다 ❗")
-        } else {
-          await this.setState({ timeLimit: this.state.timeLimit + 180 })
-          await this.setState({ showAddTimer: false })
-          await this.state.session.signal({
-            data: `${this.state.timeLimit}`,
-            to: [],
-            type: 'addTime',
-          })
-          const res = await myAxios.put('/honjaya/points', {
-            point: -100,
-          })
-          await this.setState({
-            myUserPoint: res.data.point,
-          })
-          ToastsStore.info("-100 Lupin ❗")
-        }
-    } catch (err) {
-      console.log('error')
+    if (this.state.addTimeLimit > 0) {
+      try {
+        const restPointRes = await myAxios.get('/honjaya/points')
+        if ( restPointRes.data.point < 100 ) { ToastsStore.info("Lupin이 부족합니다 ❗")
+          } else {
+            await this.setState({ timeLimit: this.state.timeLimit + 180 })
+            await this.setState({ showAddTimer: false })
+            await this.state.session.signal({
+              data: `${this.state.timeLimit}`,
+              to: [],
+              type: 'addTime',
+            })
+            const res = await myAxios.put('/honjaya/points', {
+              point: -100,
+            })
+            await this.setState({
+              myUserPoint: res.data.point,
+              addTimeLimit : this.state.addTimeLimit-1
+            })
+            ToastsStore.info("-100 Lupin ❗")
+          }
+      } catch (err) {
+        console.log('error')
+      }
+    } else {
+        ToastsStore.info("더이상 시간 연장이 불가능합니다")
     }
   }
 
@@ -770,6 +775,9 @@ class Meeting extends Component {
 
   // 스톱워치 시간 모달 함수
   showSelectTimer = () => {
+    if (this.state.showAddTimer === false){
+      ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
+    }
     this.setState({ showAddTimer: !this.state.showAddTimer })
   }
 
