@@ -1,6 +1,8 @@
 package com.ssafy.honjaya.api.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +13,15 @@ import com.ssafy.honjaya.api.request.SignUpReq;
 import com.ssafy.honjaya.api.request.UserUpdateReq;
 import com.ssafy.honjaya.api.response.BanRes;
 import com.ssafy.honjaya.api.response.ProfileRes;
+import com.ssafy.honjaya.api.response.UserProfileInfoRes;
 import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.db.entity.Ban;
+import com.ssafy.honjaya.db.entity.Hashtag;
 import com.ssafy.honjaya.db.entity.User;
 import com.ssafy.honjaya.db.repository.BanRepository;
 import com.ssafy.honjaya.db.repository.ChatroomRepository;
+import com.ssafy.honjaya.db.repository.HashtagRepository;
+import com.ssafy.honjaya.db.repository.RateRepository;
 import com.ssafy.honjaya.db.repository.UserRepository;
 import com.ssafy.honjaya.util.CommonUtil;
 
@@ -26,6 +32,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RateRepository rateRepository;
+	
+	@Autowired
+	private HashtagRepository hashtagRepository;
 	
 	@Autowired
 	private ChatroomRepository chatroomRepository;
@@ -81,6 +93,22 @@ public class UserServiceImpl implements UserService {
 			return -2; // 이메일 또는 비밀번호 오답
 		}
 		return user.getUserNo();
+	}
+	
+	@Override
+	public UserProfileInfoRes getUserProfileInfo(int userNo) {
+		UserProfileInfoRes userProfileInfoRes = new UserProfileInfoRes();
+		User user = userRepository.findById(userNo).get();
+		userProfileInfoRes.setUserNickname(user.getUserNickname());
+		userProfileInfoRes.setUserProfilePicUrl(user.getUserProfilePicUrl());
+		userProfileInfoRes.setUserGender(user.getUserGender());
+		List<Hashtag> list = hashtagRepository.findByUser_UserNo(userNo);
+		List<String> hashtags = new ArrayList<String>();
+		list.forEach(e -> hashtags.add(e.getHashText()));
+		userProfileInfoRes.setHashtags(hashtags);
+		Double averageRate = rateRepository.getAverageRate(userNo);
+		userProfileInfoRes.setRateScore(averageRate != null ? averageRate : 0.0);
+		return userProfileInfoRes;
 	}
 
 //	@Override
