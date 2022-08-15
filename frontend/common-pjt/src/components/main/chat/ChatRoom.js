@@ -212,8 +212,7 @@ useEffect(() => {
     .catch((err) => {
       console.log('채팅방입장에러', err)
     })
-  }
-)
+  },[])
 
 
 
