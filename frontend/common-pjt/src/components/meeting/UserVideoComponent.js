@@ -12,6 +12,11 @@ import { requestDirectMessage } from '../main/chat/chat-slice'
 
 import MainHelper from '../main/MainHelper'
 
+
+
+
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
+
 import {
   getRateRecord,
   putRate,
@@ -19,6 +24,7 @@ import {
   getOtherRate,
 } from '../main/hashtag/rate-slice'
 import Rating from '@mui/material/Rating'
+
 
 const StreamDiv = styled.div`
   /* display: flex;
@@ -204,24 +210,37 @@ class UserVideoComponent extends Component {
 
   //DM방개설
   requestDirectMessage() {
+
     const { doRequestDirectMessage } = this.props
-    const oppositeUserNo = JSON.parse(
-      this.props.streamManager.stream.connection.data,
-    ).userDatas.userNo
-    doRequestDirectMessage(oppositeUserNo)
-      .unwrap()
+    axios.get(`/honjaya/chats/ask/${this.state.oppositeUserNo}`)
       .then((res) => {
-        console.log(res.data)
+        console.log("채팅중복검사",res)
         if (res.data.trueOrFalse) {
-          alert('방 개설 성공')
+
+          ToastsStore.info("중복 신청은 할 수 없어요❗")
+          this.setState({isDuplicated:true})
         } else {
-          alert('상대가 아직 신청 안함')
-        }
-      })
-      .catch((err) => {
-        alert('채팅 요청 실패')
-        console.log(err)
-      })
+          doRequestDirectMessage(this.state.oppositeUserNo)
+            .unwrap()
+            .then((res) => {
+              console.log(res.data)
+              if (res.data.trueOrFalse) {
+                alert("방 개설 성공")
+                this.setState({isDuplicated:true})
+              } else {
+                alert("상대가 아직 신청 안함")
+                this.setState({isDuplicated:true})
+              }
+            })
+            .catch((err) => {
+              alert('채팅 요청 실패')
+              console.log(err)
+
+            })
+          }
+        })
+
+
   }
 
   // 인물들의 역할코드 결과값 저장 ( 결과 비교용 )

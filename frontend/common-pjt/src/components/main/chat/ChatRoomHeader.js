@@ -3,7 +3,8 @@ import { MdLogout, MdKeyboardBackspace, MdInfoOutline } from 'react-icons/md'
 import { useState, } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import UserReportModal from "./UserReportModal";
-
+import DeleteModal from "./DeleteModal";
+import UserProfileModal from "../profile/UserProfileModal";
 const Container = styled.div`
   width: 100%;
   height: 5%;
@@ -34,13 +35,16 @@ const UserInform = styled(MdInfoOutline)`
   margin-left: 0.2rem;
 `
 
-const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom }) => {
+const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom, chatRoomNo, chatUserNo }) => {
 
   const [isOpen, setIsOpen] = useState(false)
-  const openUserReportModal = () => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const openUserProfileModal = () => {
     setIsOpen(!isOpen)
   }
-
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen)
+  }
 
   return (
     <>
@@ -50,14 +54,17 @@ const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom }) =>
           openChatList()
           setChatUser('')
           openChatRoom()
+          
         }}/>
         <User>
-          {chatUser} 
+          {chatUser}
+         
           {/* 아 이게 아이콘이구나 */}
-          <UserInform onClick={openUserReportModal}/> 
-          {isOpen ? <UserReportModal openUserReportModal={openUserReportModal}  /> : null}
+          <UserInform onClick={openUserProfileModal}/> 
+          {isOpen ? <UserProfileModal openUserProfileModal={openUserProfileModal} oppositeUserNo={chatUserNo} /> : null}
         </User>
-        <Logout/>
+        <Logout onClick={openDeleteModal}/>
+        {isDeleteModalOpen ? <DeleteModal openDeleteModal={openDeleteModal} chatRoomNo={chatRoomNo} openChatRoom={openChatRoom}  /> : null}
         
       </Container><hr/>
     </>
