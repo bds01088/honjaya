@@ -50,8 +50,6 @@ const BackImg = styled.img`
 `
 const Wrapper = styled.div`
   position: absolute;
-  /* display: flex; */
-  /* right: 0rem; */
   width: 100%;
   z-index: 1;
 `
@@ -108,7 +106,7 @@ const MainCharacter = () => {
   const closeModalProfile = () => {
     openModalProfle(false)
   }
-  console.log('url', character.url)
+
   return (
     <Div>
       <Container>
@@ -118,9 +116,11 @@ const MainCharacter = () => {
           ) : null}
         </CardFront>
         <CardBack className="back">
-          <BackImg
-            src={require(`./../../assets/backprofile${character.url}`)}
-          />
+          {character.url !== undefined ? (
+            <BackImg
+              src={require(`./../../assets/backprofile${character.url}`)}
+            />
+          ) : null}
         </CardBack>
       </Container>
 
