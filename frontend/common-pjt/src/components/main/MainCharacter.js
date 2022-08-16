@@ -63,6 +63,10 @@ const EditBtn = styled(FiEdit)`
   font-size: 2.5rem;
   color: #ffc9d0;
   cursor: pointer;
+
+  &:hover {
+    color: #f3b6bd;
+  }
 `
 
 const MainCharacter = () => {

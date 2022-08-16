@@ -10,6 +10,7 @@ import {
   MdRemoveCircle,
   MdLogout,
   MdForum,
+  MdTextsms,
   MdKeyboardArrowUp,
   MdKeyboardArrowDown,
 } from 'react-icons/md'
@@ -50,6 +51,7 @@ const HashTag = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 
   &.hash0 {
     top: 23%;
@@ -68,6 +70,7 @@ const HashTag = styled.div`
 `
 
 const AddHash = styled(MdAddCircle)`
+
   &.hash0 {
     width: 3rem;
     height: 3rem;
@@ -100,24 +103,37 @@ const AddHash = styled(MdAddCircle)`
 `
 
 const Hash = styled.p`
-  font-family: Jua;
+  font-family: Minseo;
   border-radius: 1rem;
   padding: 0.5rem;
   color: #333333;
+  font-weight: bold;
 
   &.hash0 {
     background-color: #85eaea;
-    font-size: 1.4rem;
+    font-size: 2rem;
+
+    &:hover {
+      font-size: 2.1rem;
+    }
   }
 
   &.hash1 {
     background-color: #D9D7F1;
-    font-size: 1.3rem;
+    font-size: 1.9rem;
+
+    &:hover {
+      font-size: 2rem;
+    }
   }
 
   &.hash2 {
     background-color: #ffc187;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
+
+    &:hover {
+      font-size: 1.8rem;
+    }
   }
 `
 
@@ -170,8 +186,9 @@ const Logout = styled(MdLogout)`
   color: #ff728e;
 `
 const LogoutText = styled.p`
-  font-family: Jua;
+  font-family: Minseo;
   margin: 0.5rem;
+  font-size: 1.3rem;
   color: #ff728e;
 `
 
@@ -185,10 +202,11 @@ const ChatBox = styled.div`
   justify-content: center;
 `
 
-const Chat = styled(MdForum)`
+const Chat = styled(MdTextsms)`
   /* margin-right: 1rem; */
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: #f796a9;
+
 `
 
 const FullChat = styled.div`
@@ -196,24 +214,33 @@ const FullChat = styled.div`
 `
 
 const ChatListUp = styled.div`
-  font-size: 120%;
-  font-family: Jua;
-  background-color: #ffffff;
+  font-size: 1.4rem;
+  font-family: Minseo;
+  font-weight: 600;
+  background-color: #fffff9;
   width: 13rem;
   height: 3rem;
   padding: 0 1rem;
   border-radius: 1rem;
-  border: 2px solid #333333;
+  /* border: 2px solid #333333; */
   color: #333333;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+
+  &:hover {
+    font-size: 1.5rem;
+  }
 `
 
-const ClosedChat = styled(MdKeyboardArrowUp)``
+const ClosedChat = styled(MdKeyboardArrowUp)`
+  font-size: 1.5rem;
+`
 
-const OpenChat = styled(MdKeyboardArrowDown)``
+const OpenChat = styled(MdKeyboardArrowDown)`
+  font-size: 1.5rem;
+`
 
 const Start = styled.div`
   position: absolute;
@@ -221,14 +248,23 @@ const Start = styled.div`
   right: 3rem;
   text-decoration: none;
   background-color: #F38BA0;
-  font-size: 2rem;
-  font-family: Jua;
+  font-size: 3rem;
+  font-family: Minseo;
+  font-weight: 500;
   padding: 0.5rem 2rem;
   border-radius: 2rem;
   border: 5px dashed #ffd2d2;
+  cursor: pointer;
 
   @media screen and (max-width: 800px) {
     font-size: 1.5rem;
+  }
+
+  &:hover {
+    background-color: #d85a73;
+    border: 5px dashed #f7b9b9;
+    color: #9e9e9e;
+    font-size: 3.1rem;
   }
 `
 
@@ -412,7 +448,13 @@ const Main = () => {
 
       <ChatBox>
         <FullChat className="FullChat">
-          <ChatListUp onClick={openChatList}>
+          <ChatListUp onClick={() => {
+            openChatList()
+            setChatUser('')
+            if (chatUser) {
+              openChatRoom()
+            }
+          }}>
             <Chat />채팅목록
             {openList ? <OpenChat /> : <ClosedChat />}
           </ChatListUp>
@@ -425,7 +467,6 @@ const Main = () => {
               setChatUserNo={setChatUserNo}
               openChatRoom={openChatRoom}
               chatRooms={chatRooms}
-              
             />
           ) : null}
         </FullChat>
