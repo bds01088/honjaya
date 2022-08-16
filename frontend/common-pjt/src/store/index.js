@@ -18,6 +18,7 @@ import rateReducer from '../components/main/hashtag/rate-slice'
 import modeReducer from '../components/mode/mode-slice'
 import voteReducer from '../components/meeting/vote-slice'
 import chatReducer from '../components/main/chat/chat-slice'
+import profileReducer from '../components/main/profile/profile-slice'
 //떵크 관련
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
@@ -34,7 +35,8 @@ const rootReducers = combineReducers({
   rate: rateReducer,
   mode: modeReducer,
   vote: voteReducer,
-  chat: chatReducer
+  chat: chatReducer,
+  profile: profileReducer,
 })
 
 
