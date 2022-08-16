@@ -258,6 +258,8 @@ const ChatRoom = ({
             openChatList={openChatList}
             setChatUser={setChatUser}
             openChatRoom={openChatRoom}
+            chatRoomNo={chatRoomNo}
+            chatUserNo={chatUserNo}
           />
           <ChatContainer>
             <ChatRecord>

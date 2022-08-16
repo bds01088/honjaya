@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { MdClose } from "react-icons/md"
+
 
 const Container = styled.div`
   display: flex;
@@ -23,7 +23,7 @@ const ChatListItem = ({user , openChatList, setChatRoomNo, setChatUser, userNo, 
         setChatRoomNo({roomNo})
       }}>
         <Name>{user}</Name>
-        <MdClose/>
+      
       </Container>
     </>
   )

@@ -157,6 +157,7 @@ const UserReportModal = ({openUserReportModal, oppositeUserNo, myUserNo, setIsDu
         console.log(res)
         if (res.data.trueOrFalse) {
         ToastsStore.info("중복 신고는 할 수 없어요❗")
+        setIsDuplicated(true)
         } else {
           dispatch(userReport(data))
             .unwrap()
