@@ -432,7 +432,7 @@ const RankingHeader = styled.div`
 `
 
 const RankingContent = styled.div`
-  padding-top: 0.2rem;
+  padding-top: 0.5rem;
   z-index: 4;
   width: 100%;
   font-size: 2rem;
@@ -777,6 +777,8 @@ class Meeting extends Component {
         type: 'sendScore',
       })
     }, 5000)
+
+
   }
 
   // 결과화면으로 이동
@@ -1573,16 +1575,16 @@ class Meeting extends Component {
                 <FooterRight>
                   { this.state.resultTime ? (
                     <>
-                      <ShowRanking>👑순위보기👑
+                      <ShowRanking>👑결과보기👑
                         <RankingContainer className="rankingTip">
-                          <RankingHeader>순위보기</RankingHeader>
+                          <RankingHeader>오늘의 추리왕은? 🧐</RankingHeader>
                           { this.state.ranking ?
                             (
                               Object.entries(this.state.ranking).map((item, idx) => {
                                 return (
                                   <RankingContent>
                                     <span>{item[0]}</span>
-                                    <span>+{item[1]}Lupin</span>
+                                    <span>+{item[1]} Lupin</span>
                                   </RankingContent>
                                 )
                               })
