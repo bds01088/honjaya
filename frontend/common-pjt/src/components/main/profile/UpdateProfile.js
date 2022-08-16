@@ -27,7 +27,7 @@ const LogoDiv = styled.div`
 `
 
 const Logo = styled.img`
-  height: 50%;
+  height: 75%;
 `
 
 const Container = styled.div`
@@ -77,23 +77,19 @@ const RightBox = styled.div`
 `
 
 const GenderSelect = styled.select`
-  width: 75%;
+  width: 77%;
   height: 3rem;
-  display: flex;
   border-radius: 0.5rem;
   border: 1.5px solid #333333;
   font-family: 'Jua';
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   cursor: pointer;
   &:focus {
     border: 3px solid #00cfb4;
   }
 `
 
-const GenderOption = styled.option`
-  display: flex;
-  justify-content: center;
-`
+const GenderOption = styled.option``
 
 const StyledInput = styled.input`
   background-color: white;
@@ -117,7 +113,7 @@ const StyledInput = styled.input`
   }
 
   &.nickname {
-    width: 55%;
+    width: 45%;
     margin-right: 1.5rem;
   }
 
@@ -133,12 +129,14 @@ const Label = styled.div`
 `
 const StyledBtn = styled.button`
   height: 3rem;
+  width: 3rem;
   background-color: #00cfb4;
   color: white;
   border-radius: 0.5rem;
   border: 0;
   font-size: 1rem;
   font-family: Jua;
+
   cursor: pointer;
 
   &:hover {
