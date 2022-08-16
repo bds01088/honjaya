@@ -12,7 +12,6 @@ export const ModalBackdrop = styled.div`
   position: absolute;
   left: -1rem;
   display: flex;
-  justify-content: center;
   align-items: center;
   width: 120%;
   margin-top: 1rem;
@@ -28,6 +27,8 @@ const ModalView = styled.div.attrs((props) => ({
   outline: 3px solid #aca65b;
   padding: 0.5rem;
 `
+
+const Label = styled.label``
 
 const ImgList = styled.img`
   width: 20%;
@@ -48,8 +49,6 @@ const BtnDiv = styled.div`
   justify-content: center;
 `
 
-const Label = styled.label``
-
 const CancelBtn = styled(MdOutlineCancel)`
   font-size: 2rem;
   color: #db1d49;
@@ -63,8 +62,6 @@ const CheckBtn = styled(MdCheckCircleOutline)`
 `
 
 const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
-
-
   const handleClickRadioButton = (e) => {
     setNum(e.target.value)
   }
@@ -72,7 +69,6 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
   const [num, setNum] = useState('')
 
   return (
-    // <ModalBackdrop onClick={closeModalProfile}>
     <ModalBackdrop>
       <ModalView>
         <Label>
@@ -83,7 +79,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '1'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Cat}/>
+          <ImgList src={Cat} />
         </Label>
 
         <Label>
@@ -93,7 +89,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '2'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Dog}/>
+          <ImgList src={Dog} />
         </Label>
 
         <Label>
@@ -103,7 +99,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '3'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Panda}/>
+          <ImgList src={Panda} />
         </Label>
 
         <Label>
@@ -113,7 +109,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '4'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Rabbit}/>
+          <ImgList src={Rabbit} />
         </Label>
 
         <Label>
@@ -123,7 +119,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '5'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Tiger}/>
+          <ImgList src={Tiger} />
         </Label>
         <BtnDiv>
           <CheckBtn onClick={() => handleProfileChange(num)}>저장</CheckBtn>
