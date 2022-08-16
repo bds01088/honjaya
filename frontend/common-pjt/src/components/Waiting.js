@@ -434,6 +434,7 @@ class Waiting extends Component {
   }
 
   rematchStart() {
+    this.setState({ nowmatching : true})
     console.log("total, roleCode", this.state.total, this.state.roleCode)
     const { doMatchDataGet } = this.props
     const data = {

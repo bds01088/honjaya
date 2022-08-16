@@ -640,12 +640,12 @@ class Meeting extends Component {
 
   // 스톱워치 시간 추가 함수
   async addTimer() {
-    if (this.state.addTimeLimit > 0) {
       try {
         const restPointRes = await myAxios.get('/honjaya/points')
         if (restPointRes.data.point < 100) {
           ToastsStore.info('Lupin이 부족합니다 ❗')
-        } else {
+          return
+        } else if (this.state.addTimeLimit > 0) {
           await this.setState({ timeLimit: this.state.timeLimit + 180 })
           await this.setState({ showAddTimer: false })
           await this.state.session.signal({
@@ -662,14 +662,14 @@ class Meeting extends Component {
           })
           console.log('시간추가 제한 횟수 차감 후', this.state.addTimeLimit)
           ToastsStore.info('-100 Lupin ❗')
+        } else {
+          ToastsStore.info('더이상 시간 연장이 불가능합니다')
         }
       } catch (err) {
         console.log('error')
       }
-    } else {
-      ToastsStore.info('더이상 시간 연장이 불가능합니다')
-    }
-  }
+    } 
+  
 
   componentDidUpdate() {
     this.scrollToBottom()
@@ -804,9 +804,6 @@ class Meeting extends Component {
 
   // 스톱워치 시간 모달 함수
   showSelectTimer = () => {
-    if (this.state.showAddTimer === false) {
-      ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
-    }
     this.setState({ showAddTimer: !this.state.showAddTimer })
   }
 
