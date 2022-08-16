@@ -45,6 +45,7 @@ function App() {
         {/* <Route path="/countdown" element={<PrivateRoute component={<Countdown />} />}/> */}
         <PrivateRoute exact path="/countdown" component={Countdown}/>
 
+        <Route path="*" component={Error} />
         
       </Switch>
     </BrowserRouter>
