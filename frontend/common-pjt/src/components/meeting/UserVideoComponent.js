@@ -11,12 +11,12 @@ import { userReport } from './evaluate-slice'
 import { storeResult, doingVote, storeConnection } from './vote-slice'
 import axios from '../../api/http'
 import { requestDirectMessage } from '../main/chat/chat-slice'
-<<<<<<< HEAD
+
 import MainHelper from '../main/MainHelper'
-=======
+
 import { getRateRecord, putRate, setRate, getOtherRate } from '../main/hashtag/rate-slice'
 import Rating from '@mui/material/Rating';
->>>>>>> cae2fb4d08c577820cb622f16f75c14fa258c86c
+
 
 const StreamDiv = styled.div`
   display: flex;
@@ -83,21 +83,21 @@ class UserVideoComponent extends Component {
       myUserName: this.props.myUserName,
       myRoleCode: this.props.myRoleCode,
       myPairUser: this.props.myPairUser,
-<<<<<<< HEAD
+
       showIcons: false,
       isDuplicated: false,
       isOpen: false,
-      oppositeUserNo: 1
-=======
+      oppositeUserNo: 1,
+
       
       avgRate: undefined,
       rate: undefined,
       rateRecord: false,
       rateModal: false,
       rateNo: undefined
->>>>>>> cae2fb4d08c577820cb622f16f75c14fa258c86c
+
     }
-    // this.userReport = this.userReoport.bind(this)
+    
   }
 
  
