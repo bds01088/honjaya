@@ -1,5 +1,8 @@
+import { useEffect } from "react"
 import styled from "styled-components"
 import ChatListItem from "./ChatListItem"
+import { findAllRoom } from "./chat-slice"
+import { useDispatch } from 'react-redux'
 
 const Container = styled.div`
   position: absolute;
@@ -32,8 +35,22 @@ const Container = styled.div`
     }
 `
 
+
 const ChatList = ({ openChatList, setChatUser, openChatRoom, chatRooms, setChatRoomNo, setChatUserNo}) => {
 
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(findAllRoom())
+      .unwrap()
+      .then(() => {
+        console.log("채팅목록생성완료")
+      })
+      .catch((err)=> {
+        console.log("채팅목록로드에러", err)
+        // alert('해쉬태그로드에러')
+      })
+  }, []) 
   //채팅상대유저
   const users = chatRooms.map((chatRoom ) => ( chatRoom.userNickname )
   )

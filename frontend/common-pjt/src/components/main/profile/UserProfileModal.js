@@ -9,7 +9,6 @@ import { RiAlarmWarningFill } from 'react-icons/ri'
 import Rating from '@mui/material/Rating'
 import UserReportModal from '../chat/UserReportModal'
 
-
 const ModalView = styled.div.attrs((props) => ({
   role: 'dialog',
 }))`
@@ -118,6 +117,9 @@ const UserProfileModal = ({
   myUserNo,
 }) => {
   const dispatch = useDispatch()
+  const [isDuplicated, setIsDuplicated] = useState(false)
+  const [showIcons, setShowIcons] = useState(false)
+
   const [isOpen, setIsOpen] = useState(false)
   const openUserReportModal = () => {
     setIsOpen(!isOpen)
@@ -131,7 +133,10 @@ const UserProfileModal = ({
   }
 
   useEffect(() => {
-    console.log('유저넘버 넘어오나', oppositeUserNo)
+    if (oppositeUserNo === myUserNo) {
+      setShowIcons(true)
+    }
+
     dispatch(opponentUserProfile(oppositeUserNo))
       .unwrap()
       .then((res) => {
@@ -143,58 +148,61 @@ const UserProfileModal = ({
   }, [])
 
   return (
-      <ModalBackdrop>
-        <ModalView>
-          <BackIcon onClick={closeUserProfileModal} />
-          <ProfileBox>
-            <div>
-              <LogoImg src={logoImg} />
-            </div>
-            <div>
-              <ProfileImg src={require(`../../../assets/profile${userProfilePicUrl}`)} />
-            </div>
+    <ModalBackdrop>
+      <ModalView>
+        <BackIcon onClick={closeUserProfileModal} />
+        <ProfileBox>
+          <div>
+            <LogoImg src={logoImg} />
+          </div>
+          <div>
+            <ProfileImg
+              src={require(`../../../assets/profile${userProfilePicUrl}`)}
+            />
+          </div>
 
-            <Nickname>
-              {userNickname}
-              {
-                <RiAlarmWarning
-                  onClick={() => {
-                    openUserReportModal()
-                  }}
-                />
-              }
-              {isOpen ? (
-                <UserReportModal
-                  openUserReportModal={openUserReportModal}
-                  oppositeUserNo={oppositeUserNo}
-                  myUserNo={myUserNo}
-                />
-              ) : null}
-            </Nickname>
-            
-            {userGender === 'f' ? (
-              <FemaleIcon></FemaleIcon>
-            ) : (
-              <MaleIcon></MaleIcon>
-            )}
-            
-            <HashList>
-              {hashtags &&
-                hashtags.map((item, idx) => <Hashtag># {item} </Hashtag>)}
-            </HashList>
-  
-            <RateBox>
-              <MannerRate
-                size="large"
-                value={rateScore}
-                precision={0.5}
-                readOnly
+          <Nickname>
+            {userNickname}
+            {!showIcons && !isDuplicated ? (
+              <RiAlarmWarning
+                onClick={() => {
+                  openUserReportModal()
+                }}
               />
-              {rateScore}
-            </RateBox>
-          </ProfileBox>
-        </ModalView>
-      </ModalBackdrop>
+            ) : null}
+            {isOpen ? (
+              <UserReportModal
+                openUserReportModal={openUserReportModal}
+                oppositeUserNo={oppositeUserNo}
+                myUserNo={myUserNo}
+                setIsDuplicated={setIsDuplicated}
+              />
+            ) : null}
+          </Nickname>
+
+          {userGender === 'f' ? (
+            <FemaleIcon></FemaleIcon>
+          ) : (
+            <MaleIcon></MaleIcon>
+          )}
+
+          <HashList>
+            {hashtags &&
+              hashtags.map((item, idx) => <Hashtag># {item} </Hashtag>)}
+          </HashList>
+
+          <RateBox>
+            <MannerRate
+              size="large"
+              value={rateScore}
+              precision={0.5}
+              readOnly
+            />
+            {rateScore}
+          </RateBox>
+        </ProfileBox>
+      </ModalView>
+    </ModalBackdrop>
   )
 }
 

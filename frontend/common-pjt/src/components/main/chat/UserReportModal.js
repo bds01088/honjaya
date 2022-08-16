@@ -6,6 +6,11 @@ import logoImg from '../../../assets/logo.png'
 import axios from '../../../api/http'
 import { useEffect } from 'react'
 import { userReport } from '../../meeting/evaluate-slice'
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition,
+} from 'react-toasts'
 
 const ModalBackdrop = styled.div`
   width: 100vw;
@@ -121,7 +126,13 @@ const CheckDiv = styled.div`
   /* margin-bottom: 1rem; */
   font-size: 2rem;
 `
-const UserReportModal = ({ openUserReportModal, oppositeUserNo, myUserNo }) => {
+
+const UserReportModal = ({
+  openUserReportModal,
+  oppositeUserNo,
+  myUserNo,
+  setIsDuplicated,
+}) => {
   const dispatch = useDispatch()
 
   const sendToBack = (e) => {
@@ -132,7 +143,7 @@ const UserReportModal = ({ openUserReportModal, oppositeUserNo, myUserNo }) => {
   const [reportTo, setReportTo] = useState(1)
   const [reportType, setReportType] = useState('')
   const [reportMessage, setReportMessage] = useState('')
-  const [isDuplicated, setIsDuplicated] = useState(false)
+
   const changeReportType = (e) => {
     setReportType(e.target.value)
   }
@@ -150,15 +161,17 @@ const UserReportModal = ({ openUserReportModal, oppositeUserNo, myUserNo }) => {
       reportMessage,
     }
 
-    axios.get(`/honjaya/reports/${myUserNo}`).then((res) => {
+    axios.get(`/honjaya/reports/${oppositeUserNo}`).then((res) => {
       console.log(res)
       if (res.data.trueOrFalse) {
+        ToastsStore.info('중복 신고는 할 수 없어요❗')
         setIsDuplicated(true)
       } else {
         dispatch(userReport(data))
           .unwrap()
           .then((res) => {
             console.log('신고성공', res.data)
+            setIsDuplicated(true)
           })
           .catch((err) => {
             console.log('신고에러', err)
@@ -185,8 +198,8 @@ const UserReportModal = ({ openUserReportModal, oppositeUserNo, myUserNo }) => {
                 value="1"
                 checked={reportType === '1'}
                 onChange={changeReportType}
-              />
-              {' '}부적절한 메시지
+              />{' '}
+              부적절한 메시지
             </label>
           </CheckDiv>
           <Text>차별, 욕설, 놀림, 언어폭력, 협박, 광고 등</Text>
@@ -199,8 +212,8 @@ const UserReportModal = ({ openUserReportModal, oppositeUserNo, myUserNo }) => {
                 value="2"
                 checked={reportType === '2'}
                 onChange={changeReportType}
-              />
-              {' '}불쾌한 노출
+              />{' '}
+              불쾌한 노출
             </label>
           </CheckDiv>
           <Text>상반신 또는 하반신 노출, 누드 사진 또는 영상 등</Text>
