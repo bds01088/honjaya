@@ -21,10 +21,14 @@ import {
 import Rating from '@mui/material/Rating'
 
 const StreamDiv = styled.div`
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  width: 90%;
-  height: 90%;
+  align-items: center;
+  flex-direction: column; */
+  width: 88%;
+  height: 100%;
+  padding: 3% 0;
+
   &.Commander {
     display: none;
   }
@@ -32,16 +36,17 @@ const StreamDiv = styled.div`
 
 const StreamComponent = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 65%;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   justify-content: center;
-  flex-direction: column-reverse;
+  align-items: center;
 `
 
 const Profile = styled.div`
   text-align: center;
   font-weight: bold;
-  margin: 0 auto;
+  margin-bottom: 0.3rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -69,8 +74,47 @@ const HashList = styled.div`
   width: 100%;
 `
 
+const RatingBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-family: Minseo;
+  font-size: 1.2rem;
+`
+
+const RatingBtn = styled.button`
+  margin-left: 0.5rem;
+  background-color: #f6a9a9;
+  border: 2px solid #333333;
+  color: #333333;
+  border-radius: 1rem;
+  font-family: Minseo;
+  font-size: 1.2rem;
+
+  &:hover {
+    background-color: #d18181;
+  }
+`
+
+const RatingCancelBtn = styled.button`
+  margin-left: 0.2rem;
+  background-color: #4da39d;
+  border: 2px solid #333333;
+  color: #333333;
+  border-radius: 1rem;
+  font-family: Minseo;
+  font-size: 1.2rem;
+
+  &:hover {
+    background-color: #3b837e;
+  }
+`
+
 const Hashtag = styled.span`
   font-family: Minseo;
+  font-size: 1.2rem;
 `
 
 const TiMsg = styled(TiMessages)`
@@ -82,6 +126,7 @@ const ProfileIcon = styled(IoPersonCircleOutline)`
   cursor: pointer;
   color: #00c3a9;
 `
+
 
 class UserVideoComponent extends Component {
   constructor(props) {
@@ -264,14 +309,9 @@ class UserVideoComponent extends Component {
       <>
         {/* 미팅시간 */}
         {this.props.meetingTime ? (
-          <StreamDiv
-            className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}
-          >
+          <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
             {this.props.streamManager !== undefined ? (
               <StreamComponent>
-                <OpenViduVideoComponent
-                  streamManager={this.props.streamManager}
-                />
                 <Profile>
                   <Nickname>
                     {/* 화살표함수를 써주거나 바인드를 해준다.. 왜 화살표함수를 써야 에러가 안나지? 화살표 함수안쓰면 렌더링되면서 뜬금없이 신고함 */}
@@ -286,6 +326,7 @@ class UserVideoComponent extends Component {
                       ))}
                   </HashList>
                 </Profile>
+                <OpenViduVideoComponent streamManager={this.props.streamManager} />
               </StreamComponent>
             ) : null}
           </StreamDiv>
@@ -293,19 +334,15 @@ class UserVideoComponent extends Component {
 
         {/* 투표시간 */}
         {this.props.voteTime ? (
-          <StreamDiv
-            className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}
-          >
+          <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'} >
             {this.props.streamManager !== undefined ? (
               <StreamComponent onClick={() => this.doingVote()}>
-                <OpenViduVideoComponent
-                  streamManager={this.props.streamManager}
-                />
                 <Profile>
                   <Nickname className={`role${this.state.voteRole}`}>
                     {this.state.data.clientData}
                   </Nickname>
                 </Profile>
+                <OpenViduVideoComponent streamManager={this.props.streamManager} />
               </StreamComponent>
             ) : null}
           </StreamDiv>
@@ -315,72 +352,91 @@ class UserVideoComponent extends Component {
         {this.props.resultTime ? (
           <StreamDiv>
             {this.props.streamManager !== undefined ? (
-              <StreamComponent>
-                <OpenViduVideoComponent
-                  streamManager={this.props.streamManager}
-                />
-                <Profile>
-                  <Nickname>
-                    {this.state.data.clientData}{' '}
-                    <ProfileIcon
-                      onClick={() => {
-                        this.openUserProfileModal()
-                      }}
-                    />
-                    {this.state.isOpen ? (
-                      <UserProfileModal
-                        openUserProfileModal={this.openUserProfileModal}
-                        oppositeUserNo={this.state.oppositeUserNo}
-                        myUserNo={this.state.myUserNo}
-                      />
-                    ) : null}
-                    {!this.state.showIcons && !this.state.isDuplicated ? (
-                      <TiMsg
-                        onClick={() => {
-                          this.requestDirectMessage()
-                        }}
-                      />
-                    ) : null}
-                  </Nickname>
-                  {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
+                <StreamComponent className="StreamComponent">
+                  <Profile>
+                    <Nickname>
+                      {this.state.data.clientData}{' '}
+                        <ProfileIcon onClick={() => {this.openUserProfileModal()}} />
+                        {this.state.isOpen ? (
+                          <UserProfileModal
+                            openUserProfileModal={this.openUserProfileModal}
+                            oppositeUserNo={this.state.oppositeUserNo}
+                            myUserNo={this.state.myUserNo}
+                          /> ) : null}
+                        {!this.state.showIcons && !this.state.isDuplicated ? (
+                          <TiMsg onClick={() => {this.requestDirectMessage()}}/> ) : null}
+                    </Nickname>
+
+                    {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
                 &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
-                  <HashList>
-                    {this.state.data.hashtags &&
-                      this.state.data.hashtags.map((item, idx) => (
-                        <Hashtag># {item[1]} </Hashtag>
-                      ))}
-                  </HashList>
-                  <div>
-                    <button onClick={() => this.onhandleRate()}>
-                      rate 모달 띄우기
-                    </button>
-                    {this.state.avgRate === undefined
-                      ? '0'
-                      : this.state.avgRate}
-                    {this.state.rateModal === true ? (
-                      <div>
-                        <Rating
-                          name="simple-controlled"
-                          precision={0.5}
-                          value={this.state.rate}
-                          onChange={(event, newValue) => {
-                            console.log('newValue', newValue)
-                            this.setState({ rate: newValue })
-                            console.log('바뀌나?', this.state.rate)
-                          }}
-                        />
-                        <button onClick={() => this.sendRate()}>
-                          평가 보내기
-                        </button>
-                      </div>
-                    ) : null}
-                    <div />
-                  </div>
-                </Profile>
-              </StreamComponent>
+                    {/* <HashList>
+                      {this.state.data.hashtags &&
+                        this.state.data.hashtags.map((item, idx) => (
+                          <Hashtag># {item[1]} </Hashtag>
+                        ))}
+                    </HashList> */}
+                    <RatingBox>
+                      {this.state.rateModal ? (
+                        <>
+                          <Rating
+                            name="simple-controlled"
+                            precision={0.5}
+                            value={this.state.rate}
+                            onChange={(event, newValue) => {
+                              console.log('newValue', newValue)
+                              this.setState({ rate: newValue })
+                              console.log('바뀌나?', this.state.rate)
+                            }}
+                          />
+                          {this.state.rate}
+                          <RatingBtn onClick={() => this.sendRate()}>
+                            저장
+                          </RatingBtn>
+                          <RatingCancelBtn
+                            onClick={() => this.setState({ rateModal: false })}
+                          >
+                            취소
+                          </RatingCancelBtn>
+                        </>
+                      ) : (
+                        <>
+                          {this.state.avgRate ? (
+                            <>
+                              <Rating
+                                name="avgRate"
+                                precision={0.5}
+                                value={this.state.avgRate}
+                                readOnly
+                              />
+                              {this.state.avgRate}
+                            </>
+                          ) : (
+                            <>
+                              <Rating
+                                name="avgRate"
+                                precision={0.5}
+                                value={0}
+                                readOnly
+                              />
+                              {'0'}
+                            </>
+                          )}
+
+                          <RatingBtn onClick={() => this.onhandleRate()}>
+                            별점주기
+                          </RatingBtn>
+                        </>
+                      )}
+                    </RatingBox>
+                  </Profile>
+                  <OpenViduVideoComponent streamManager={this.props.streamManager} />
+
+                </StreamComponent>
             ) : null}
           </StreamDiv>
         ) : null}
+
+
       </>
     )
   }

@@ -297,17 +297,15 @@ const InfoPoint = styled.span`
 
 const VideoBox = styled.div`
   display: grid;
-  /* align-items: end; */
-  grid-template-columns: 55% 55%;
-  grid-template-rows: repeat(2 1fr);
-  /* grid-gap: 1rem; */
+  grid-template-columns: 49% 49%;
+  grid-template-rows: 49% 49%;
+  grid-gap: 2%;
+  /* grid-template-rows: repeat(2 1fr); */
   width: 60%;
   height: 100%;
   background-color: #b5eaea;
   border-radius: 1rem;
   border: 4px dashed #5fcac3;
-
-  /* outline: 1px solid green; */
 `
 
 const SendMsgBox = styled.div`
@@ -398,7 +396,7 @@ const ShowRanking = styled.div`
 
   &:hover .rankingTip {
     visibility: visible;
-}
+  }
 `
 
 const RankingContainer = styled.div`
@@ -1502,7 +1500,7 @@ class Meeting extends Component {
                   </ChatBox>
                 ) : null}
 
-                <VideoBox>
+                <VideoBox className="VideoBox">
                   {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
                     <UserVideoComponent
