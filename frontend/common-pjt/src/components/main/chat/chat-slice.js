@@ -51,6 +51,18 @@ export const getChatRoomDetail = createAsyncThunk(
     }
   }
 )
+
+export const deleteChat = createAsyncThunk(
+  'DELETE_ROOM',
+  async (chatRoomNo, {rejectWithValue}) => {
+    try {
+      const res = await axios.get(`https://i7e104.p.ssafy.io/honjaya/exit/${chatRoomNo}`)
+      return res
+    } catch (err) {
+      return rejectWithValue(err.response) 
+    }
+  }
+)
 const initialState = {
   chatRooms : [],
   myUserNo: 1,

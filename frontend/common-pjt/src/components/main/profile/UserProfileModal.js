@@ -117,6 +117,9 @@ const MaleIcon = styled(IoIosMale)`
 
 const UserProfileModal = ({oppositeUserNo, openUserProfileModal, userReport, myUserNo}) => {
   const dispatch = useDispatch()
+  const [isDuplicated, setIsDuplicated] = useState(false)
+  const [showIcons, setShowIcons] = useState(false)
+
   const [isOpen, setIsOpen] = useState(false)
   const openUserReportModal = () => {
     setIsOpen(!isOpen)
@@ -130,6 +133,9 @@ const UserProfileModal = ({oppositeUserNo, openUserProfileModal, userReport, myU
 
   
   useEffect(() => {
+    if (oppositeUserNo === myUserNo) {
+      setShowIcons(true)
+    }
     console.log("유저넘버 넘어오나", oppositeUserNo)
     dispatch(opponentUserProfile(oppositeUserNo))
       .unwrap()
@@ -159,8 +165,9 @@ const UserProfileModal = ({oppositeUserNo, openUserProfileModal, userReport, myU
 
           <Nickname>
             나는닉네임{userNickname}
-            {<RiAlarmWarning onClick={() => { openUserReportModal()}} /> }
-            {isOpen ? <UserReportModal openUserReportModal={openUserReportModal} oppositeUserNo={oppositeUserNo} myUserNo={myUserNo}/> : null}
+            { !showIcons && !isDuplicated ? <RiAlarmWarning onClick={ () => { openUserReportModal()}} />: null}
+        
+            {isOpen ? <UserReportModal openUserReportModal={openUserReportModal} oppositeUserNo={oppositeUserNo} myUserNo={myUserNo} setIsDuplicated={setIsDuplicated}/> : null}
           </Nickname>
           <div>
             {userGender === 'f' ? (

@@ -6,6 +6,7 @@ import logoImg from '../../../assets/logo.png'
 import axios from '../../../api/http'
 import { useEffect } from 'react'
 import { userReport } from '../../meeting/evaluate-slice'
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
 
 export const ModalBackdrop = styled.div`
   width: 100vw;
@@ -118,7 +119,7 @@ const CheckDiv = styled.div`
   margin-top: 1rem;
   margin-bottom: 1rem;
 `
-const UserReportModal = ({openUserReportModal, oppositeUserNo, myUserNo}) => {
+const UserReportModal = ({openUserReportModal, oppositeUserNo, myUserNo, setIsDuplicated}) => {
 
   const dispatch = useDispatch()
 
@@ -132,7 +133,7 @@ const UserReportModal = ({openUserReportModal, oppositeUserNo, myUserNo}) => {
   const [reportTo, setReportTo] = useState(1)
   const [reportType, setReportType] = useState('')    
   const [reportMessage, setReportMessage] = useState('')
-  const [isDuplicated, setIsDuplicated] = useState(false)
+  
   const changeReportType = (e) => {
     setReportType(e.target.value)
   }
@@ -151,17 +152,17 @@ const UserReportModal = ({openUserReportModal, oppositeUserNo, myUserNo}) => {
       reportMessage,
     }
     
-    axios.get(`/honjaya/reports/${myUserNo}`)
+    axios.get(`/honjaya/reports/${oppositeUserNo}`)
       .then((res) => {
         console.log(res)
         if (res.data.trueOrFalse) {
-          setIsDuplicated(true)
+        ToastsStore.info("중복 신고는 할 수 없어요❗")
         } else {
           dispatch(userReport(data))
             .unwrap()
             .then((res) => { 
               console.log("신고성공", res.data)
-              
+              setIsDuplicated(true)
             })
             .catch((err) => {
                console.log("신고에러", err)
