@@ -11,6 +11,7 @@ import Meeting from './components/meeting/Meeting';
 import Countdown from './components/Countdown';
 import PrivateRoute from './lib/PrivateRoute';
 import PublicRoute from './lib/PublicRoute';
+import Error  from './components/Error';
 
 function App() {
   
@@ -26,6 +27,8 @@ function App() {
         <PublicRoute exact path="/pledge" component={Pledge}/>
         {/* <Route path="/signup" element={<PublicRoute component={<Signup />} />}/> */}
         <PublicRoute exact path="/signup" component={Signup}/>
+        {/* 임시 Error 페이지  */}
+        <PrivateRoute exact path="/error" component={Error}/>
         
         {/* main이랑 profile에 파라미터가 필요할까? */}
         {/* <Route path="/main" element={<PrivateRoute component={<Main />}/>}/> */}
@@ -41,7 +44,8 @@ function App() {
         <PrivateRoute exact path="/meeting" component={Meeting}/>
         {/* <Route path="/countdown" element={<PrivateRoute component={<Countdown />} />}/> */}
         <PrivateRoute exact path="/countdown" component={Countdown}/>
-      
+
+        
       </Switch>
     </BrowserRouter>
   );
