@@ -10,7 +10,7 @@ import { MdOutlineCancel, MdCheckCircleOutline } from 'react-icons/md'
 
 export const ModalBackdrop = styled.div`
   position: absolute;
-  left: -3.5rem;
+  left: -1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,7 +25,7 @@ const ModalView = styled.div.attrs((props) => ({
   border-radius: 30px;
   width: 100%;
   background-color: #fffdde;
-  outline: 2px solid;
+  outline: 3px solid #aca65b;
   padding: 0.5rem;
 `
 
@@ -83,7 +83,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '1'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Cat}></ImgList>
+          <ImgList src={Cat}/>
         </Label>
 
         <Label>
@@ -93,7 +93,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '2'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Dog}></ImgList>
+          <ImgList src={Dog}/>
         </Label>
 
         <Label>
@@ -103,7 +103,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '3'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Panda}></ImgList>
+          <ImgList src={Panda}/>
         </Label>
 
         <Label>
@@ -113,7 +113,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '4'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Rabbit}></ImgList>
+          <ImgList src={Rabbit}/>
         </Label>
 
         <Label>
@@ -123,7 +123,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '5'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Tiger}></ImgList>
+          <ImgList src={Tiger}/>
         </Label>
         <BtnDiv>
           <CheckBtn onClick={() => handleProfileChange(num)}>저장</CheckBtn>

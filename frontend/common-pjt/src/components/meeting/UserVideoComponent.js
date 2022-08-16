@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import OpenViduVideoComponent from './OvVideo'
 import styled from 'styled-components'
 import { TiMessages } from 'react-icons/ti'
-import {
-  IoPersonCircleOutline
-} from 'react-icons/io5'
+import { IoPersonCircleOutline } from 'react-icons/io5'
 import UserProfileModal from '../main/profile/UserProfileModal'
 import { connect } from 'react-redux'
 import { userReport } from './evaluate-slice'
@@ -14,9 +12,13 @@ import { requestDirectMessage } from '../main/chat/chat-slice'
 
 import MainHelper from '../main/MainHelper'
 
-import { getRateRecord, putRate, setRate, getOtherRate } from '../main/hashtag/rate-slice'
-import Rating from '@mui/material/Rating';
-
+import {
+  getRateRecord,
+  putRate,
+  setRate,
+  getOtherRate,
+} from '../main/hashtag/rate-slice'
+import Rating from '@mui/material/Rating'
 
 const StreamDiv = styled.div`
   display: flex;
@@ -40,35 +42,45 @@ const Profile = styled.div`
   text-align: center;
   font-weight: bold;
   margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
-const Nickname = styled.div`
+const Nickname = styled.p`
   font-size: 2rem;
   font-family: 'Minseo';
+  text-align: center;
   margin: 0;
   display: flex;
   align-items: center;
 
   &.role2 {
-    background-color: #5fcac3;
+    background-color: #4da39d;
     border-radius: 1rem;
   }
+`
+const HashList = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 `
 
 const Hashtag = styled.span`
   font-family: Minseo;
 `
 
-
-
 const TiMsg = styled(TiMessages)`
   cursor: pointer;
-  color: #FF728E;
+  color: #ff728e;
 `
 
 const ProfileIcon = styled(IoPersonCircleOutline)`
   cursor: pointer;
-  color: #00C3A9;
+  color: #00c3a9;
 `
 
 class UserVideoComponent extends Component {
@@ -78,7 +90,7 @@ class UserVideoComponent extends Component {
       isCommander: false,
       myUserNo: undefined,
       data: JSON.parse(this.props.streamManager.stream.connection.data),
-      voteTo: '',  // 투표 대상
+      voteTo: '', // 투표 대상
       voteRole: 1, // 1: 솔로, 2: 아바타
       myUserName: this.props.myUserName,
       myRoleCode: this.props.myRoleCode,
@@ -89,18 +101,13 @@ class UserVideoComponent extends Component {
       isOpen: false,
       oppositeUserNo: 1,
 
-      
       avgRate: undefined,
       rate: undefined,
       rateRecord: false,
       rateModal: false,
-      rateNo: undefined
-
+      rateNo: undefined,
     }
-    
   }
-
- 
 
   async componentDidMount() {
     const { mode, getOtherRate } = this.props
@@ -108,16 +115,15 @@ class UserVideoComponent extends Component {
     const userNickname = this.state.data.clientData
     const oppositeUserNo = this.state.data.userDatas.userNo
 
-
     this.setState({
       myUserNo: userNo,
       voteTo: userNickname,
-      oppositeUserNo: oppositeUserNo
+      oppositeUserNo: oppositeUserNo,
     })
 
     const avgRes = await getOtherRate(this.state.data.userDatas.userNo)
-    console.log("평균점수 응답", avgRes)
-    this.setState({avgRate : avgRes.payload.rateScore})
+    console.log('평균점수 응답', avgRes)
+    this.setState({ avgRate: avgRes.payload.rateScore })
 
     // 지시자가 아닌 인물들의 역할코드 저장 ( 결과 비교용 )
     // 1. 내가 아니어야 한다
@@ -126,11 +132,14 @@ class UserVideoComponent extends Component {
     // 3-1. 내가 지시자일 때, 내 아바타가 아니어야 함
     // 3-2. 내가 지시자가 아니어야 함.
     if (this.state.data.clientData !== this.state.myUserName) {
-      if (this.state.data.roleCodes === 1)  {
+      if (this.state.data.roleCodes === 1) {
         this.storeResult()
         this.storeConnection()
       } else if (this.state.data.roleCodes === 2) {
-        if (this.state.myRoleCode === 3 && (this.state.data.clientData !== this.state.myPairUser.userNickname)) {
+        if (
+          this.state.myRoleCode === 3 &&
+          this.state.data.clientData !== this.state.myPairUser.userNickname
+        ) {
           this.storeResult()
           this.storeConnection()
         } else if (this.state.myRoleCode !== 3) {
@@ -139,16 +148,14 @@ class UserVideoComponent extends Component {
         }
       }
     } else {
-      this.setState({showIcons:true})
+      this.setState({ showIcons: true })
     }
   }
 
   //모달 관련
   openUserProfileModal = () => {
-    this.setState({isOpen:!this.state.isOpen})
+    this.setState({ isOpen: !this.state.isOpen })
   }
-
-
 
   //DM방개설
   requestDirectMessage() {
@@ -161,12 +168,12 @@ class UserVideoComponent extends Component {
       .then((res) => {
         console.log(res.data)
         if (res.data.trueOrFalse) {
-          alert("방 개설 성공")
+          alert('방 개설 성공')
         } else {
-          alert("상대가 아직 신청 안함")
+          alert('상대가 아직 신청 안함')
         }
       })
-      .catch(err => {
+      .catch((err) => {
         alert('채팅 요청 실패')
         console.log(err)
       })
@@ -187,7 +194,7 @@ class UserVideoComponent extends Component {
 
   // 나의 투표 저장
   changeVote() {
-    if(this.state.voteRole === 1) {
+    if (this.state.voteRole === 1) {
       this.setState({ voteRole: 2 })
     } else if (this.state.voteRole === 2) {
       this.setState({ voteRole: 1 })
@@ -209,74 +216,75 @@ class UserVideoComponent extends Component {
   //점수 평가하기
   async onhandleRate() {
     if (this.state.rateModal === false) {
-      const {getRateRecord} = this.props
+      const { getRateRecord } = this.props
       const record = await getRateRecord(this.state.data.userDatas.userNo)
-      console.log("응답옴?",record)
+      console.log('응답옴?', record)
       if (record.payload.data.rateScore !== 0) {
-        this.setState({rateRecord:true})
+        this.setState({ rateRecord: true })
       }
-      this.setState({rateNo: record.payload.data.rateNo})
-      this.setState({rate : record.payload.data.rateScore})
-      this.setState({rateModal: true})
+      this.setState({ rateNo: record.payload.data.rateNo })
+      this.setState({ rate: record.payload.data.rateScore })
+      this.setState({ rateModal: true })
     } else {
-      this.setState({rateModal: false})
+      this.setState({ rateModal: false })
     }
   }
 
   async sendRate() {
-    const {setRate, putRate, getOtherRate} = this.props
-    console.log("요청시작시 점수", this.state.rate)
-    if (this.state.rateRecord === false){
+    const { setRate, putRate, getOtherRate } = this.props
+    console.log('요청시작시 점수', this.state.rate)
+    if (this.state.rateRecord === false) {
       const rateData = {
-        rateTo : this.state.data.userDatas.userNo,
-        rateScore : this.state.rate,
+        rateTo: this.state.data.userDatas.userNo,
+        rateScore: this.state.rate,
       }
       await setRate(rateData)
-      await getOtherRate(this.state.data.userDatas.userNo)
-      .then((res) => {
+      await getOtherRate(this.state.data.userDatas.userNo).then((res) => {
         console.log('점수 보내고 새로 받아오기', res)
         const new_avgRate = res.payload.rateScore
-        this.setState({avgRate:new_avgRate})
+        this.setState({ avgRate: new_avgRate })
       })
     } else {
       const rateData = {
-        rateNo : this.state.rateNo,
-        rateScore : this.state.rate,
+        rateNo: this.state.rateNo,
+        rateScore: this.state.rate,
       }
       await putRate(rateData)
-      await getOtherRate(this.state.data.userDatas.userNo)
-      .then((res) => {
-        console.log('점수 보내고 새로 받아오기',res)
+      await getOtherRate(this.state.data.userDatas.userNo).then((res) => {
+        console.log('점수 보내고 새로 받아오기', res)
         const new_avgRate = res.payload.rateScore
-        this.setState({avgRate:new_avgRate})
+        this.setState({ avgRate: new_avgRate })
       })
     }
-    this.setState({rateModal:false})
+    this.setState({ rateModal: false })
   }
 
   render() {
     return (
       <>
         {/* 미팅시간 */}
-        { this.props.meetingTime ? (
-          <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
+        {this.props.meetingTime ? (
+          <StreamDiv
+            className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}
+          >
             {this.props.streamManager !== undefined ? (
               <StreamComponent>
-                <OpenViduVideoComponent streamManager={this.props.streamManager} />
+                <OpenViduVideoComponent
+                  streamManager={this.props.streamManager}
+                />
                 <Profile>
                   <Nickname>
                     {/* 화살표함수를 써주거나 바인드를 해준다.. 왜 화살표함수를 써야 에러가 안나지? 화살표 함수안쓰면 렌더링되면서 뜬금없이 신고함 */}
                     {this.state.data.clientData}{' '}
-                    
-
-                     
                   </Nickname>
-                  {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
-                &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
-                  {this.state.data.hashtags &&
-                    this.state.data.hashtags.map((item, idx) => (
-                      <Hashtag># {item[1]} </Hashtag>
-                    ))}
+                  <HashList>
+                    {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
+                  &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
+                    {this.state.data.hashtags &&
+                      this.state.data.hashtags.map((item, idx) => (
+                        <Hashtag># {item[1]} </Hashtag>
+                      ))}
+                  </HashList>
                 </Profile>
               </StreamComponent>
             ) : null}
@@ -284,69 +292,95 @@ class UserVideoComponent extends Component {
         ) : null}
 
         {/* 투표시간 */}
-        { this.props.voteTime ? 
-          <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
-          { this.props.streamManager !== undefined ? (
-            <StreamComponent onClick={()=> this.doingVote()} >
-              <OpenViduVideoComponent streamManager={this.props.streamManager} />
-              <Profile>
-                <Nickname className={`role${this.state.voteRole}`}>
-                  {this.state.data.clientData}
-                </Nickname>
-              </Profile>
-            </StreamComponent>
-          ) : null}
+        {this.props.voteTime ? (
+          <StreamDiv
+            className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}
+          >
+            {this.props.streamManager !== undefined ? (
+              <StreamComponent onClick={() => this.doingVote()}>
+                <OpenViduVideoComponent
+                  streamManager={this.props.streamManager}
+                />
+                <Profile>
+                  <Nickname className={`role${this.state.voteRole}`}>
+                    {this.state.data.clientData}
+                  </Nickname>
+                </Profile>
+              </StreamComponent>
+            ) : null}
           </StreamDiv>
-        : null } 
+        ) : null}
 
         {/* 결과공개시간 */}
-        { this.props.resultTime ? 
+        {this.props.resultTime ? (
           <StreamDiv>
-          {this.props.streamManager !== undefined ? (
-            <StreamComponent>
-              <OpenViduVideoComponent streamManager={this.props.streamManager}/>
-              <Profile>
-                <Nickname>
-                  {this.state.data.clientData}{' '}
-                  
-                  <ProfileIcon onClick={() => { this.openUserProfileModal()}} /> 
-                    {this.state.isOpen ? <UserProfileModal openUserProfileModal={this.openUserProfileModal} oppositeUserNo={this.state.oppositeUserNo} myUserNo={this.state.myUserNo} /> : null}
-  
-                  { !this.state.showIcons && !this.state.isDuplicated ? <TiMsg onClick={ () => {this.requestDirectMessage()}} />: null}
-                  
-                   
-                </Nickname>
-                {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
-                &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
-                {this.state.data.hashtags &&
-                  this.state.data.hashtags.map((item, idx) => (
-                    <Hashtag># {item[1]} </Hashtag>
-                  ))}
-                <div>
-                  <button onClick={() => this.onhandleRate()}>rate 모달 띄우기</button>
-                  {this.state.avgRate === undefined ? "0" : this.state.avgRate}
-                  {this.state.rateModal === true ? 
-                  <div>
-                    <Rating
-                      name="simple-controlled"
-                      precision={0.5}
-                      value={this.state.rate}
-                      onChange={(event, newValue) => {
-                        console.log("newValue", newValue)
-                        this.setState({rate:newValue})
-                        console.log("바뀌나?",this.state.rate)
+            {this.props.streamManager !== undefined ? (
+              <StreamComponent>
+                <OpenViduVideoComponent
+                  streamManager={this.props.streamManager}
+                />
+                <Profile>
+                  <Nickname>
+                    {this.state.data.clientData}{' '}
+                    <ProfileIcon
+                      onClick={() => {
+                        this.openUserProfileModal()
                       }}
                     />
-                    <button onClick={() => this.sendRate()}>평가 보내기</button>
+                    {this.state.isOpen ? (
+                      <UserProfileModal
+                        openUserProfileModal={this.openUserProfileModal}
+                        oppositeUserNo={this.state.oppositeUserNo}
+                        myUserNo={this.state.myUserNo}
+                      />
+                    ) : null}
+                    {!this.state.showIcons && !this.state.isDuplicated ? (
+                      <TiMsg
+                        onClick={() => {
+                          this.requestDirectMessage()
+                        }}
+                      />
+                    ) : null}
+                  </Nickname>
+                  {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
+                &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
+                  <HashList>
+                    {this.state.data.hashtags &&
+                      this.state.data.hashtags.map((item, idx) => (
+                        <Hashtag># {item[1]} </Hashtag>
+                      ))}
+                  </HashList>
+                  <div>
+                    <button onClick={() => this.onhandleRate()}>
+                      rate 모달 띄우기
+                    </button>
+                    {this.state.avgRate === undefined
+                      ? '0'
+                      : this.state.avgRate}
+                    {this.state.rateModal === true ? (
+                      <div>
+                        <Rating
+                          name="simple-controlled"
+                          precision={0.5}
+                          value={this.state.rate}
+                          onChange={(event, newValue) => {
+                            console.log('newValue', newValue)
+                            this.setState({ rate: newValue })
+                            console.log('바뀌나?', this.state.rate)
+                          }}
+                        />
+                        <button onClick={() => this.sendRate()}>
+                          평가 보내기
+                        </button>
+                      </div>
+                    ) : null}
+                    <div />
                   </div>
-                  : null}
-                  <div/>
-                </div>
-              </Profile>
-            </StreamComponent>
-          ) : null}
+                </Profile>
+              </StreamComponent>
+            ) : null}
           </StreamDiv>
-        : null }
+        ) : null}
       </>
     )
   }
@@ -356,12 +390,11 @@ const mapStateToProps = (state) => ({
   mode: state.mode,
   point: state.point,
   vote: state.vote,
-  chat: state.chat
+  chat: state.chat,
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-
     doStoreResult: (data) => dispatch(storeResult(data)),
     doStoreConnection: (data) => dispatch(storeConnection(data)),
     doDoingVote: (data) => dispatch(doingVote(data)),
@@ -369,7 +402,7 @@ const mapDispatchToProps = (dispatch) => {
     getRateRecord: (data) => dispatch(getRateRecord(data)),
     putRate: (data) => dispatch(putRate(data)),
     setRate: (data) => dispatch(setRate(data)),
-    getOtherRate: (data) => dispatch(getOtherRate(data))
+    getOtherRate: (data) => dispatch(getOtherRate(data)),
   }
 }
 

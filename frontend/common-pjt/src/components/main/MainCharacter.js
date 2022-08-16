@@ -52,18 +52,18 @@ const BackImg = styled.img`
 const Wrapper = styled.div`
   position: absolute;
   /* display: flex; */
-  right: -3rem;
-  width: 120%;
+  /* right: 0rem; */
+  width: 100%;
   z-index: 1;
 `
 
 const ChangeProfile = styled.div`
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 `
 
 const EditBtn = styled(FiEdit)`
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #ffc9d0;
   cursor: pointer;
 `
