@@ -23,8 +23,8 @@ const ModalView = styled.div.attrs(props => ({
   border-radius: 30px;
   color: #5D5D5D;
   background-color: #FFFDDE;
-  font-size: 1.4rem;
-  font-family: Jua;
+  font-size: 1.5rem;
+  font-family: Minseo;
   width: 28rem;
 `
 
@@ -45,13 +45,15 @@ const LogoImg = styled.img`
 `
 
 const HeaderText = styled.p`
-  font-size: 2rem;
+  font-size: 2.2rem;
+  font-weight: bold;
   margin-bottom: 1rem;
   color: #006A71;
 `
 
 const GuideTitle = styled.p`
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+  font-weight: bold;
   color: #006A71;
   margin-bottom: 0.5rem;
 `

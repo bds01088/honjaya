@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import logoImg from '../../../assets/logo.png'
-import { opponentUserProfile } from './profile-slice'
+import { opponentUserProfile } from '../profile/profile-slice'
 import { IoIosFemale, IoIosMale } from 'react-icons/io'
 import { RiAlarmWarningFill } from 'react-icons/ri'
 import Rating from '@mui/material/Rating'
-import UserReportModal from '../chat/UserReportModal'
+import UserReportModal from './UserReportModal'
 
 const ModalView = styled.div.attrs((props) => ({
   role: 'dialog',
@@ -32,11 +32,11 @@ const ModalBackdrop = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 4;
-  font-family: Jua;
+  font-family: Minseo;
 `
 
 const RateBox = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   display: flex;
   align-items: center;
 `
@@ -81,6 +81,10 @@ const RiAlarmWarning = styled(RiAlarmWarningFill)`
   color: #e64848;
   font-size: 2rem;
   margin-left: 0.5rem;
+
+  &:hover {
+    font-size: 2.1rem;
+  }
 `
 const Nickname = styled.div`
   width: 100%;
@@ -101,13 +105,16 @@ const HashList = styled.div`
 
 const Hashtag = styled.span`
   font-family: Minseo;
+  font-size: 1.8rem;
 `
 
 const FemaleIcon = styled(IoIosFemale)`
   color: #ff728e;
+  font-size: 2rem;
 `
 const MaleIcon = styled(IoIosMale)`
   color: #009c87;
+  font-size: 2rem;
 `
 
 const UserProfileModal = ({
@@ -192,6 +199,7 @@ const UserProfileModal = ({
           </HashList>
 
           <RateBox>
+
             <MannerRate
               size="large"
               value={rateScore}

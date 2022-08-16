@@ -81,8 +81,8 @@ const GenderSelect = styled.select`
   height: 3rem;
   border-radius: 0.5rem;
   border: 1.5px solid #333333;
-  font-family: 'Jua';
-  font-size: 1.1rem;
+  font-family: Minseo;
+  font-size: 1.3rem;
   cursor: pointer;
   &:focus {
     border: 3px solid #00cfb4;
@@ -95,11 +95,11 @@ const StyledInput = styled.input`
   background-color: white;
   border: 1.5px solid #333333;
   border-radius: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   padding: 1rem 0.5rem;
   width: 70%;
   height: 1rem;
-  font-family: Jua;
+  font-family: Minseo;
 
   &:focus {
     border: 3px solid #00cfb4;
@@ -124,8 +124,8 @@ const StyledInput = styled.input`
 `
 
 const Label = styled.div`
-  font-family: 'Jua';
-  font-size: 1rem;
+  font-family: 'Minseo';
+  font-size: 1.4rem;
 `
 const StyledBtn = styled.button`
   height: 3rem;
@@ -134,8 +134,8 @@ const StyledBtn = styled.button`
   color: white;
   border-radius: 0.5rem;
   border: 0;
-  font-size: 1rem;
-  font-family: Jua;
+  font-size: 1.5rem;
+  font-family: Minseo;
 
   cursor: pointer;
 
@@ -162,8 +162,8 @@ const Btn = styled.button`
     border-radius: 0.5rem;
     border: 0;
     padding: 0.5rem;
-    font-size: 1.2rem;
-    font-family: Jua;
+    font-size: 1.5rem;
+    font-family: Minseo;
     cursor: pointer;
 
     &:hover {
@@ -179,8 +179,8 @@ const Btn = styled.button`
     border-radius: 0.5rem;
     border: 0;
     padding: 0.5rem;
-    font-size: 1.2rem;
-    font-family: Jua;
+    font-size: 1.5rem;
+    font-family: Minseo;
     cursor: pointer;
 
     &:hover {
@@ -197,13 +197,13 @@ const ErrorText = styled.span`
   color: #ff0000;
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  font-family: 'Jua';
+  font-family: 'Minseo';
 `
 const SuccessText = styled.span`
   color: #009c87;
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  font-family: 'Jua';
+  font-family: 'Minseo';
 `
 
 const UpdateDiv = styled.div`
