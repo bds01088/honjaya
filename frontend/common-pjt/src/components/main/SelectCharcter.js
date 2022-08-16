@@ -46,6 +46,7 @@ const RadioBtn = styled.input`
 const BtnDiv = styled.div`
   display: flex;
   justify-content: center;
+  height: 2.1rem;
 `
 
 const Label = styled.label``
@@ -54,12 +55,20 @@ const CancelBtn = styled(MdOutlineCancel)`
   font-size: 2rem;
   color: #db1d49;
   cursor: pointer;
+
+  &:hover {
+    font-size: 2.1rem;
+  }
 `
 
 const CheckBtn = styled(MdCheckCircleOutline)`
   font-size: 2rem;
   color: #00c3a9;
   cursor: pointer;
+
+  &:hover {
+    font-size: 2.1rem;
+  }
 `
 
 const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
