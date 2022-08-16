@@ -37,16 +37,14 @@ const ModalBackdrop = styled.div`
 `
 
 const RateBox = styled.div`
-  position: relative;
-
-  &:hover .rateTip {
-    visibility: visible;
-  }
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
 `
 
 const MannerRate = styled(Rating)`
   && {
-    color: #ffe23e;
+    color: #f5d835;
     margin: 1rem;
   }
 `
@@ -192,6 +190,7 @@ const UserProfileModal = ({
                 precision={0.5}
                 readOnly
               />
+              {rateScore}
             </RateBox>
           </ProfileBox>
         </ModalView>
