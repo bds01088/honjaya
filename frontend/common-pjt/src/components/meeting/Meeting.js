@@ -636,10 +636,11 @@ class Meeting extends Component {
             const res = await myAxios.put('/honjaya/points', {
               point: -100,
             })
+            console.log("시간추가 제한 횟수 차감 전", this.state.addTimeLimit)
             await this.setState({
               myUserPoint: res.data.point,
-              addTimeLimit: this.state.addTimeLimit-1
             })
+            console.log("시간추가 제한 횟수 차감 후", this.state.addTimeLimit)
             ToastsStore.info("-100 Lupin ❗")
           }
       } catch (err) {
@@ -1050,6 +1051,7 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
+          console.log("시그널 받았을 때",this.state.addTimeLimit)
           this.setState({ addTimeLimit: this.state.addTimeLimit-1})
           ToastsStore.info('누군가 시간 연장을 하였습니다')
           ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
