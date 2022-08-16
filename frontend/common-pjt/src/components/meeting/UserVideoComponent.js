@@ -130,33 +130,7 @@ class UserVideoComponent extends Component {
     this.setState({isOpen:!this.state.isOpen})
   }
 
-  // 유저 신고
-  userReport() {
-    const { doUserReport } = this.props
 
-    console.log('담기기하나?', this.state.data)
-
-    const reportData = {
-      reportTo: this.state.data.userDatas.userNo,
-      reportType: 1,
-      reportMessage: '유저신고',
-    }
-
-    axios.get(`/honjaya/reports/${this.state.myUserNo}`).then((res) => {
-      if (res.data.trueOrFalse) {
-        this.setState({isDuplicated:true})
-      } else {
-        doUserReport(reportData)
-          .unwrap()
-          .then((res) => {
-            console.log('신고10번누적시응답', res)
-          })
-          .catch((err) => {
-            console.log('신고 10번 누적시 에러응답', err)
-          })
-      }
-    })
-  }
 
   //DM방개설
   requestDirectMessage() {
@@ -228,8 +202,7 @@ class UserVideoComponent extends Component {
                     {/* 화살표함수를 써주거나 바인드를 해준다.. 왜 화살표함수를 써야 에러가 안나지? 화살표 함수안쓰면 렌더링되면서 뜬금없이 신고함 */}
                     {this.state.data.clientData}{' '}
                     
-                    {/* <RiAlarmWarning onClick={() => { this.openUserReportModal()}} />  */}
-                    {/* {this.state.isOpen ? <UserReportModal openUserReportModal={this.openUserReportModal}/> : null} */}
+
                      
                   </Nickname>
                   {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
@@ -269,15 +242,12 @@ class UserVideoComponent extends Component {
               <Profile>
                 <Nickname>
                   {this.state.data.clientData}{' '}
-                  {/* { !this.state.showIcons && !this.state.isDuplicated ? <RiAlarmWarning onClick={() => { this.userReport() }} />: null} */}
                   
                   <ProfileIcon onClick={() => { this.openUserProfileModal()}} /> 
-          
-                    {this.state.isOpen ? <UserProfileModal openUserProfileModal={this.openUserProfileModal} oppositeUserNo={this.state.oppositeUserNo} myUserNo={this.state.myUserNo} userReport={this.userReport} /> : null}
-                   
+                    {this.state.isOpen ? <UserProfileModal openUserProfileModal={this.openUserProfileModal} oppositeUserNo={this.state.oppositeUserNo} myUserNo={this.state.myUserNo} /> : null}
+  
                   { !this.state.showIcons && !this.state.isDuplicated ? <TiMsg onClick={ () => {this.requestDirectMessage()}} />: null}
-                  {/* <RiAlarmWarning onClick={() => { this.openUserReportModal()}} />  */}
-                    {/* {this.state.isOpen ? <UserReportModal openUserReportModal={this.openUserReportModal} userReport={this.userReport}/> : null} */}
+                  
                    
                 </Nickname>
                 {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
@@ -305,7 +275,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    doUserReport: (data) => dispatch(userReport(data)),
+
     doStoreResult: (data) => dispatch(storeResult(data)),
     doStoreConnection: (data) => dispatch(storeConnection(data)),
     doDoingVote: (data) => dispatch(doingVote(data)),

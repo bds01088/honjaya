@@ -160,7 +160,7 @@ const UserProfileModal = ({oppositeUserNo, openUserProfileModal, userReport, myU
           <Nickname>
             나는닉네임{userNickname}
             {<RiAlarmWarning onClick={() => { openUserReportModal()}} /> }
-            {isOpen ? <UserReportModal openUserReportModal={openUserReportModal} userReport={userReport} oppositeUserNo={oppositeUserNo} myUserNo={myUserNo}/> : null}
+            {isOpen ? <UserReportModal openUserReportModal={openUserReportModal} oppositeUserNo={oppositeUserNo} myUserNo={myUserNo}/> : null}
           </Nickname>
           <div>
             {userGender === 'f' ? (
