@@ -418,6 +418,27 @@ const RankingContainer = styled.div`
   text-align: center;
   width: 20vw;
   height: 30vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const RankingHeader = styled.div`
+  padding: 0.5rem 0;
+  z-index: 4;
+  width: 100%;
+  font-size: 2.3rem;
+  border-bottom: 2px double #333333;
+`
+
+const RankingContent = styled.div`
+  padding-top: 0.2rem;
+  z-index: 4;
+  width: 100%;
+  font-size: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 `
 
 // 나가기 버튼
@@ -749,8 +770,9 @@ class Meeting extends Component {
 
     // 최종 포인트 보내기
     await setTimeout(() => {
+      const score = this.state.correctPoint + this.state.wrongPoint
       this.state.session.signal({
-        data: this.state.correctPoint + this.state.wrongPoint,
+        data: score,
         to: [],
         type: 'sendScore',
       })
@@ -1020,14 +1042,16 @@ class Meeting extends Component {
         mySession.on('signal:sendScore', (event) => {
           // console.log('sendScore', event)
           const name = JSON.parse(event.from.data).clientData
-          const score = parseInt(event.data)
+          let score = parseInt(event.data)
+
+          if (isNaN(score)) { score = 0 }
 
           let replace = {
             ...this.state.ranking,
           }
           replace[name] = score
 
-          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => a - b))
+          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => b - a))
           console.log('sortReplace', sortReplace)
           this.setState({
             ranking: sortReplace,
@@ -1547,15 +1571,27 @@ class Meeting extends Component {
                 ) : null}
 
                 <FooterRight>
-                  {/* { this.state.resultTime ? ( */}
+                  { this.state.resultTime ? (
                     <>
                       <ShowRanking>👑순위보기👑
                         <RankingContainer className="rankingTip">
-                          dfssdfdsfdsfdsf
+                          <RankingHeader>순위보기</RankingHeader>
+                          { this.state.ranking ?
+                            (
+                              Object.entries(this.state.ranking).map((item, idx) => {
+                                return (
+                                  <RankingContent>
+                                    <span>{item[0]}</span>
+                                    <span>+{item[1]}Lupin</span>
+                                  </RankingContent>
+                                )
+                              })
+                            )
+                          : null }
                         </RankingContainer>
                       </ShowRanking>
                     </>
-                   {/* ) : null } */}
+                  ) : null }
 
                   {!this.state.voteTime ? (
                     <LeaveBox
