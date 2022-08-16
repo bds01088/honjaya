@@ -12,10 +12,7 @@ import { requestDirectMessage } from '../main/chat/chat-slice'
 
 import MainHelper from '../main/MainHelper'
 
-
-
-
-import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
+import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts'
 
 import {
   getRateRecord,
@@ -26,27 +23,18 @@ import {
 import Rating from '@mui/material/Rating'
 
 
-const StreamDiv = styled.div`
-  /* display: flex;
+const StreamComponent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 96%;
   justify-content: center;
   align-items: center;
-  flex-direction: column; */
-  width: 88%;
-  height: 100%;
-  padding: 3% 0;
+  /* padding: 1% 6% 3% 6%; */
 
   &.Commander {
     display: none;
   }
-`
-
-const StreamComponent = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
 `
 
 const Profile = styled.div`
@@ -327,10 +315,8 @@ class UserVideoComponent extends Component {
     return (
       <>
         {/* 미팅시간 */}
-        {this.props.meetingTime ? (
-          <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
-            {this.props.streamManager !== undefined ? (
-              <StreamComponent>
+            { this.props.meetingTime && this.props.streamManager !== undefined ? (
+              <StreamComponent className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'}>
                 <Profile>
                   <Nickname>
                     {/* 화살표함수를 써주거나 바인드를 해준다.. 왜 화살표함수를 써야 에러가 안나지? 화살표 함수안쓰면 렌더링되면서 뜬금없이 신고함 */}
@@ -348,29 +334,21 @@ class UserVideoComponent extends Component {
                 <OpenViduVideoComponent streamManager={this.props.streamManager} />
               </StreamComponent>
             ) : null}
-          </StreamDiv>
-        ) : null}
 
         {/* 투표시간 */}
-        {this.props.voteTime ? (
-          <StreamDiv className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'} >
-            {this.props.streamManager !== undefined ? (
-              <StreamComponent onClick={() => this.doingVote()}>
-                <Profile>
-                  <Nickname className={`role${this.state.voteRole}`}>
-                    {this.state.data.clientData}
-                  </Nickname>
-                </Profile>
-                <OpenViduVideoComponent streamManager={this.props.streamManager} />
-              </StreamComponent>
-            ) : null}
-          </StreamDiv>
-        ) : null}
+          { this.props.voteTime && this.props.streamManager !== undefined ? (
+            <StreamComponent className={this.state.data.roleCodes === 3 ? 'Commander' : 'etc'} onClick={() => this.doingVote()}>
+              <Profile>
+                <Nickname className={`role${this.state.voteRole}`}>
+                  {this.state.data.clientData}
+                </Nickname>
+              </Profile>
+              <OpenViduVideoComponent streamManager={this.props.streamManager} />
+            </StreamComponent>
+          ) : null}
 
         {/* 결과공개시간 */}
-        {this.props.resultTime ? (
-          <StreamDiv>
-            {this.props.streamManager !== undefined ? (
+            { this.props.resultTime && this.props.streamManager !== undefined ? (
                 <StreamComponent className="StreamComponent">
                   <Profile>
                     <Nickname>
@@ -386,14 +364,6 @@ class UserVideoComponent extends Component {
                           <TiMsg onClick={() => {this.requestDirectMessage()}}/> ) : null}
                     </Nickname>
 
-                    {/* Hashtags가 넘어올때 시간차가 생기면서 undefined 일때가 있음 이러한 오류를 방지해주기위해서
-                &&를 이용해서 앞에가 참일때만 뒤를 수행하게 함 */}
-                    {/* <HashList>
-                      {this.state.data.hashtags &&
-                        this.state.data.hashtags.map((item, idx) => (
-                          <Hashtag># {item[1]} </Hashtag>
-                        ))}
-                    </HashList> */}
                     <RatingBox>
                       {this.state.rateModal ? (
                         <>
@@ -449,13 +419,8 @@ class UserVideoComponent extends Component {
                     </RatingBox>
                   </Profile>
                   <OpenViduVideoComponent streamManager={this.props.streamManager} />
-
                 </StreamComponent>
             ) : null}
-          </StreamDiv>
-        ) : null}
-
-
       </>
     )
   }

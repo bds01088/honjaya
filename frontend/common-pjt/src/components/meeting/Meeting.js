@@ -20,11 +20,13 @@ import {
   MdMicOff,
 } from 'react-icons/md'
 
-
-import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition,
+} from 'react-toasts'
 
 import Messages from './meeting-chat/Messages'
-
 
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
@@ -244,6 +246,7 @@ const ChatBox = styled.div`
   height: 95%;
   padding: 0 2%;
   position: relative;
+  margin-right: 2rem;
 `
 
 const MessageBox = styled.div`
@@ -295,17 +298,19 @@ const InfoPoint = styled.span`
   font-weight: 600;
 `
 
+
+
 const VideoBox = styled.div`
   display: grid;
-  grid-template-columns: 49% 49%;
   grid-template-rows: 49% 49%;
+  grid-auto-flow: column;
   grid-gap: 2%;
-  /* grid-template-rows: repeat(2 1fr); */
-  width: 60%;
-  height: 100%;
-  background-color: #b5eaea;
+  max-width: 60%;
+  height: 90%;
   border-radius: 1rem;
+  background-color: #b5eaea;
   border: 4px dashed #5fcac3;
+  padding: 1rem 3rem;
 `
 
 const SendMsgBox = styled.div`
@@ -385,7 +390,7 @@ const FooterRight = styled.div`
 
 const ShowRanking = styled.div`
   color: #333333;
-  background-color: #F38BA0;
+  background-color: #f38ba0;
   border-radius: 1rem;
   padding: 0.6rem 0.8rem;
   font-family: Minseo;
@@ -472,10 +477,6 @@ const LeaveText = styled.p`
   margin-left: -1.9rem;
 `
 
-
-
-
-
 class Meeting extends Component {
   constructor(props) {
     super(props)
@@ -483,6 +484,7 @@ class Meeting extends Component {
     this.state = {
       // 세션 정보
       mySessionId: undefined,
+      myTotal: undefined,
       // myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -512,8 +514,7 @@ class Meeting extends Component {
 
       randomTopic: '🎁 랜덤 주제 뽑기 🎁',
 
-      topicList : randomTopicList,
-
+      topicList: randomTopicList,
 
       randomCount: 3,
 
@@ -576,10 +577,10 @@ class Meeting extends Component {
     const { mode } = this.props
     const { login } = this.props
     const { hashtag } = this.props
-    const { rate } = this.props 
+    const { rate } = this.props
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
-    const { uuid, roleCode, user } = mode
+    const { uuid, roleCode, user, total } = mode
     const { userRate } = rate.rateInfo
 
     if (roleCode !== 1) {
@@ -590,6 +591,7 @@ class Meeting extends Component {
 
     this.setState({
       mySessionId: uuid,
+      myTotal: total,
     })
 
     this.joinSession()
@@ -646,40 +648,43 @@ class Meeting extends Component {
     if (this.state.addTimeLimit > 0) {
       try {
         const restPointRes = await myAxios.get('/honjaya/points')
-        if ( restPointRes.data.point < 100 ) { ToastsStore.info("Lupin이 부족합니다 ❗")
-          } else {
-            await this.setState({ timeLimit: this.state.timeLimit + 180 })
-            await this.setState({ showAddTimer: false })
-            await this.state.session.signal({
-              data: `${this.state.timeLimit}`,
-              to: [],
-              type: 'addTime',
-            })
-            const res = await myAxios.put('/honjaya/points', {
-              point: -100,
-            })
-            console.log("시간추가 제한 횟수 차감 전", this.state.addTimeLimit)
-            await this.setState({
-              myUserPoint: res.data.point,
-            })
-            console.log("시간추가 제한 횟수 차감 후", this.state.addTimeLimit)
-            ToastsStore.info("-100 Lupin ❗")
-          }
+        if (restPointRes.data.point < 100) {
+          ToastsStore.info('Lupin이 부족합니다 ❗')
+        } else {
+          await this.setState({ timeLimit: this.state.timeLimit + 180 })
+          await this.setState({ showAddTimer: false })
+          await this.state.session.signal({
+            data: `${this.state.timeLimit}`,
+            to: [],
+            type: 'addTime',
+          })
+          const res = await myAxios.put('/honjaya/points', {
+            point: -100,
+          })
+          console.log('시간추가 제한 횟수 차감 전', this.state.addTimeLimit)
+          await this.setState({
+            myUserPoint: res.data.point,
+          })
+          console.log('시간추가 제한 횟수 차감 후', this.state.addTimeLimit)
+          ToastsStore.info('-100 Lupin ❗')
+        }
       } catch (err) {
         console.log('error')
       }
     } else {
-        ToastsStore.info("더이상 시간 연장이 불가능합니다")
+      ToastsStore.info('더이상 시간 연장이 불가능합니다')
     }
   }
 
-  componentDidUpdate() {
-    this.scrollToBottom()
+  componentDidUpdate(prevProps) {
+    if(prevProps.messagesEnd !== this.state.messagesEnd) {
+      this.scrollToBottom()
+    }
   }
 
   scrollToBottom = () => {
     if (this.messagesEnd) {
-      this.messagesEnd.scrollIntoView({ behavior: "smooth" })
+      this.messagesEnd.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -786,8 +791,6 @@ class Meeting extends Component {
         myUserPoint: res.data.point,
       })
     }, 7000)
-
-
   }
 
   // 결과화면으로 이동
@@ -812,7 +815,7 @@ class Meeting extends Component {
 
   // 스톱워치 시간 모달 함수
   showSelectTimer = () => {
-    if (this.state.showAddTimer === false){
+    if (this.state.showAddTimer === false) {
       ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
     }
     this.setState({ showAddTimer: !this.state.showAddTimer })
@@ -863,8 +866,8 @@ class Meeting extends Component {
 
   async pickTopic() {
     try {
-      if (this.state.randomCount > 0 ) {
-        console.log("무료3회", this.state.randomCount)
+      if (this.state.randomCount > 0) {
+        console.log('무료3회', this.state.randomCount)
         await this.shuffleTopic()
         this.state.session.signal({
           data: `${this.state.randomTopic}`,
@@ -874,29 +877,28 @@ class Meeting extends Component {
         this.setState({ randomCount: this.state.randomCount - 1 })
       } else {
         const restPointRes = await myAxios.get('/honjaya/points')
-        if ( restPointRes.data.point < 50 ) { ToastsStore.info("Lupin이 부족합니다 ❗") 
-      } else {
-        await this.shuffleTopic()
-        this.state.session.signal({
-          data: `${this.state.randomTopic}`,
-          to: [],
-          type: 'randomTopic',
-        })
-        const res = await myAxios.put('/honjaya/points', {
-          point: -50,
-        })
-        await this.setState({
-          myUserPoint: res.data.point,
-        })
-        ToastsStore.info("-50 Lupin ❗")
+        if (restPointRes.data.point < 50) {
+          ToastsStore.info('Lupin이 부족합니다 ❗')
+        } else {
+          await this.shuffleTopic()
+          this.state.session.signal({
+            data: `${this.state.randomTopic}`,
+            to: [],
+            type: 'randomTopic',
+          })
+          const res = await myAxios.put('/honjaya/points', {
+            point: -50,
+          })
+          await this.setState({
+            myUserPoint: res.data.point,
+          })
+          ToastsStore.info('-50 Lupin ❗')
+        }
       }
-    }
-
     } catch (err) {
       console.log('err')
     }
   }
-
 
   //채팅 보내는 함수
   handleChatMessageChange(e) {
@@ -1055,14 +1057,18 @@ class Meeting extends Component {
           const name = JSON.parse(event.from.data).clientData
           let score = parseInt(event.data)
 
-          if (isNaN(score)) { score = 0 }
+          if (isNaN(score)) {
+            score = 0
+          }
 
           let replace = {
             ...this.state.ranking,
           }
           replace[name] = score
 
-          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => b - a))
+          const sortReplace = Object.fromEntries(
+            Object.entries(replace).sort(([, a], [, b]) => b - a),
+          )
           console.log('sortReplace', sortReplace)
           this.setState({
             ranking: sortReplace,
@@ -1089,10 +1095,12 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
-          console.log("시그널 받았을 때",this.state.addTimeLimit)
-          this.setState({ addTimeLimit: this.state.addTimeLimit-1})
+          console.log('시그널 받았을 때', this.state.addTimeLimit)
+          this.setState({ addTimeLimit: this.state.addTimeLimit - 1 })
           ToastsStore.info('누군가 시간 연장을 하였습니다')
-          ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
+          ToastsStore.info(
+            `시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`,
+          )
         })
 
         // 세션 나가기
@@ -1135,7 +1143,7 @@ class Meeting extends Component {
               hashtags: this.state.hashList,
               roleCodes: this.state.myRoleCode,
               userDatas: this.state.myUserData,
-              userRate: this.state.userRate
+              userRate: this.state.userRate,
             })
             .then(async () => {
               var devices = await this.OV.getDevices()
@@ -1340,7 +1348,7 @@ class Meeting extends Component {
 
     return (
       <Background>
-        { this.state.resultTime ? <Countdown/> : null }
+        {this.state.resultTime ? <Countdown /> : null}
         <Header>
           <LogoBox>
             <Logo />
@@ -1392,13 +1400,15 @@ class Meeting extends Component {
 
         <Container>
           <style jsx="true">{`
-                  .toast {
-                      font-family: Jua !important;
-                  }
-              `}</style>
-          <ToastsContainer  position={ToastsContainerPosition.TOP_RIGHT}
-                              store={ToastsStore} 
-                                      lightBackground/>
+            .toast {
+              font-family: Jua !important;
+            }
+          `}</style>
+          <ToastsContainer
+            position={ToastsContainerPosition.TOP_RIGHT}
+            store={ToastsStore}
+            lightBackground
+          />
           {this.state.session !== undefined ? (
             <TopicBox>
               {this.state.meetingTime ? (
@@ -1442,7 +1452,6 @@ class Meeting extends Component {
           {this.state.session !== undefined ? (
             <SessionBox className="SessionBox">
               <ChatVideoBox>
-
                 {this.state.meetingTime ? (
                   <ChatBox>
                     {this.state.myRoleCode === 1 ? (
@@ -1500,35 +1509,35 @@ class Meeting extends Component {
                   </ChatBox>
                 ) : null}
 
-                <VideoBox className="VideoBox">
-                  {/* 내 카메라 */}
-                  {this.state.publisher !== undefined ? (
-                    <UserVideoComponent
-                      streamManager={this.state.publisher}
-                      myUserName={this.state.myUserName}
-                      myRoleCode={this.state.myRoleCode}
-                      myPairUser={this.state.pairUser}
-                      meetingTime={this.state.meetingTime}
-                      voteTime={this.state.voteTime}
-                      resultTime={this.state.resultTime}
-                      myRate={this.state.userRate}
-                    />
-                  ) : null}
+                  <VideoBox className="VideoBox">
+                    {/* 내 카메라 */}
+                    {this.state.publisher !== undefined ? (
+                      <UserVideoComponent
+                        streamManager={this.state.publisher}
+                        myUserName={this.state.myUserName}
+                        myRoleCode={this.state.myRoleCode}
+                        myPairUser={this.state.pairUser}
+                        meetingTime={this.state.meetingTime}
+                        voteTime={this.state.voteTime}
+                        resultTime={this.state.resultTime}
+                        myRate={this.state.userRate}
+                      />
+                    ) : null}
 
-                  {/* 상대카메라 */}
-                  {this.state.subscribers.map((sub, i) => (
-                    <UserVideoComponent
-                      streamManager={sub}
-                      myUserName={this.state.myUserName}
-                      myRoleCode={this.state.myRoleCode}
-                      myPairUser={this.state.pairUser}
-                      meetingTime={this.state.meetingTime}
-                      voteTime={this.state.voteTime}
-                      resultTime={this.state.resultTime}
-                      myRate={this.state.userRate}
-                    />
-                  ))}
-                </VideoBox>
+                    {/* 상대카메라 */}
+                    {this.state.subscribers.map((sub, i) => (
+                      <UserVideoComponent
+                        streamManager={sub}
+                        myUserName={this.state.myUserName}
+                        myRoleCode={this.state.myRoleCode}
+                        myPairUser={this.state.pairUser}
+                        meetingTime={this.state.meetingTime}
+                        voteTime={this.state.voteTime}
+                        resultTime={this.state.resultTime}
+                        myRate={this.state.userRate}
+                      />
+                    ))}
+                  </VideoBox>
               </ChatVideoBox>
 
               <Footer>
@@ -1582,27 +1591,28 @@ class Meeting extends Component {
                 ) : null}
 
                 <FooterRight>
-                  { this.state.resultTime ? (
+                  {this.state.resultTime ? (
                     <>
-                      <ShowRanking>👑결과보기👑
+                      <ShowRanking>
+                        👑결과보기👑
                         <RankingContainer className="rankingTip">
                           <RankingHeader>오늘의 추리왕은? 🧐</RankingHeader>
-                          { this.state.ranking ?
-                            (
-                              Object.entries(this.state.ranking).map((item, idx) => {
-                                return (
-                                  <RankingContent>
-                                    <span>{item[0]}</span>
-                                    <span>+{item[1]} Lupin</span>
-                                  </RankingContent>
-                                )
-                              })
-                            )
-                          : null }
+                          {this.state.ranking
+                            ? Object.entries(this.state.ranking).map(
+                                (item, idx) => {
+                                  return (
+                                    <RankingContent>
+                                      <span>{item[0]}</span>
+                                      <span>+{item[1]} Lupin</span>
+                                    </RankingContent>
+                                  )
+                                },
+                              )
+                            : null}
                         </RankingContainer>
                       </ShowRanking>
                     </>
-                  ) : null }
+                  ) : null}
 
                   {!this.state.voteTime ? (
                     <LeaveBox
@@ -1620,10 +1630,8 @@ class Meeting extends Component {
                       <Leave />
                       <LeaveText className="leaveTip">나가기</LeaveText>
                     </LeaveBox>
-                  ) : null }
+                  ) : null}
                 </FooterRight>
-
-
               </Footer>
             </SessionBox>
           ) : null}
