@@ -9,8 +9,6 @@ import Mode from './components/mode/Mode';
 import Waiting from './components/Waiting';
 import Meeting from './components/meeting/Meeting';
 import Countdown from './components/Countdown';
-import Vote from './components/Vote';
-import Result from './components/Result';
 import PrivateRoute from './lib/PrivateRoute';
 import PublicRoute from './lib/PublicRoute';
 
@@ -43,10 +41,6 @@ function App() {
         <PrivateRoute exact path="/meeting" component={Meeting}/>
         {/* <Route path="/countdown" element={<PrivateRoute component={<Countdown />} />}/> */}
         <PrivateRoute exact path="/countdown" component={Countdown}/>
-        {/* <Route path="/vote" element={<PrivateRoute component={<Vote />} />}/> */}
-        <PrivateRoute exact path="/vote" component={Vote}/>
-        {/* <Route path="/result" element={<PrivateRoute component={<Result />} />}/> */}
-        <PrivateRoute exact path="/result" component={Result}/>
       
       </Switch>
     </BrowserRouter>
