@@ -297,17 +297,15 @@ const InfoPoint = styled.span`
 
 const VideoBox = styled.div`
   display: grid;
-  /* align-items: end; */
-  grid-template-columns: 55% 55%;
-  grid-template-rows: repeat(2 1fr);
-  /* grid-gap: 1rem; */
+  grid-template-columns: 49% 49%;
+  grid-template-rows: 49% 49%;
+  grid-gap: 2%;
+  /* grid-template-rows: repeat(2 1fr); */
   width: 60%;
   height: 100%;
   background-color: #b5eaea;
   border-radius: 1rem;
   border: 4px dashed #5fcac3;
-
-  /* outline: 1px solid green; */
 `
 
 const SendMsgBox = styled.div`
@@ -398,7 +396,7 @@ const ShowRanking = styled.div`
 
   &:hover .rankingTip {
     visibility: visible;
-}
+  }
 `
 
 const RankingContainer = styled.div`
@@ -418,6 +416,27 @@ const RankingContainer = styled.div`
   text-align: center;
   width: 20vw;
   height: 30vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const RankingHeader = styled.div`
+  padding: 0.5rem 0;
+  z-index: 4;
+  width: 100%;
+  font-size: 2.3rem;
+  border-bottom: 2px double #333333;
+`
+
+const RankingContent = styled.div`
+  padding-top: 0.5rem;
+  z-index: 4;
+  width: 100%;
+  font-size: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 `
 
 // 나가기 버튼
@@ -749,12 +768,26 @@ class Meeting extends Component {
 
     // 최종 포인트 보내기
     await setTimeout(() => {
+      const score = this.state.correctPoint + this.state.wrongPoint
       this.state.session.signal({
-        data: this.state.correctPoint + this.state.wrongPoint,
+        data: score,
         to: [],
         type: 'sendScore',
       })
     }, 5000)
+
+    // 최종 포인트 보내기
+    await setTimeout(() => {
+      const score = this.state.correctPoint + this.state.wrongPoint
+      const res = myAxios.put('/honjaya/points', {
+        point: score,
+      })
+      this.setState({
+        myUserPoint: res.data.point,
+      })
+    }, 7000)
+
+
   }
 
   // 결과화면으로 이동
@@ -1020,14 +1053,16 @@ class Meeting extends Component {
         mySession.on('signal:sendScore', (event) => {
           // console.log('sendScore', event)
           const name = JSON.parse(event.from.data).clientData
-          const score = parseInt(event.data)
+          let score = parseInt(event.data)
+
+          if (isNaN(score)) { score = 0 }
 
           let replace = {
             ...this.state.ranking,
           }
           replace[name] = score
 
-          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => a - b))
+          const sortReplace = Object.fromEntries(Object.entries(replace).sort(([, a], [, b]) => b - a))
           console.log('sortReplace', sortReplace)
           this.setState({
             ranking: sortReplace,
@@ -1465,7 +1500,7 @@ class Meeting extends Component {
                   </ChatBox>
                 ) : null}
 
-                <VideoBox>
+                <VideoBox className="VideoBox">
                   {/* 내 카메라 */}
                   {this.state.publisher !== undefined ? (
                     <UserVideoComponent
@@ -1547,15 +1582,27 @@ class Meeting extends Component {
                 ) : null}
 
                 <FooterRight>
-                  {/* { this.state.resultTime ? ( */}
+                  { this.state.resultTime ? (
                     <>
-                      <ShowRanking>👑순위보기👑
+                      <ShowRanking>👑결과보기👑
                         <RankingContainer className="rankingTip">
-
+                          <RankingHeader>오늘의 추리왕은? 🧐</RankingHeader>
+                          { this.state.ranking ?
+                            (
+                              Object.entries(this.state.ranking).map((item, idx) => {
+                                return (
+                                  <RankingContent>
+                                    <span>{item[0]}</span>
+                                    <span>+{item[1]} Lupin</span>
+                                  </RankingContent>
+                                )
+                              })
+                            )
+                          : null }
                         </RankingContainer>
                       </ShowRanking>
                     </>
-                   {/* ) : null } */}
+                  ) : null }
 
                   {!this.state.voteTime ? (
                     <LeaveBox

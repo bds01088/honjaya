@@ -104,31 +104,32 @@ const Me = styled.div`
   text-align: right;
 `
 const YourNickname = styled.div`
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   display: flex;
   flex-direction: row;
   /* width: 50%; */
 `
 
 const MyNickname = styled.div`
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   display: flex;
   flex-direction: row-reverse;
   /* width: 50%; */
 `
 
 const Text = styled.div`
-  /* margin: 0 2rem; */
+  margin: 0 1rem 1rem 1rem ;
   /* width: 70%; */
   /* background-color: blue; */
   display: inline-block;
+  font-family: Minseo;
 `
 
 const SendTime = styled.div`
   color: #333333;
   /* width: 50%; */
   margin: 0 0.5rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
   /* display: inline-block; */
 `
 
