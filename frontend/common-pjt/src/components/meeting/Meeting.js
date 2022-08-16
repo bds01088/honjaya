@@ -778,6 +778,17 @@ class Meeting extends Component {
       })
     }, 5000)
 
+    // 최종 포인트 보내기
+    await setTimeout(() => {
+      const score = this.state.correctPoint + this.state.wrongPoint
+      const res = myAxios.put('/honjaya/points', {
+        point: score,
+      })
+      this.setState({
+        myUserPoint: res.data.point,
+      })
+    }, 7000)
+
 
   }
 
