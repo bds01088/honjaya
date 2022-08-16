@@ -6,10 +6,8 @@ import Panda from '../../assets/profile/003.png'
 import Rabbit from '../../assets/profile/004.png'
 import Tiger from '../../assets/profile/005.png'
 import { useState } from 'react'
-import { GiCancel } from 'react-icons/gi'
-import { RiCheckboxCircleLine } from 'react-icons/ri'
-import { ImCancelCircle } from 'react-icons/im'
 import { MdOutlineCancel, MdCheckCircleOutline } from 'react-icons/md'
+
 export const ModalBackdrop = styled.div`
   position: absolute;
   left: -3.5rem;

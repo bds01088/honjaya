@@ -2,7 +2,10 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
-
+import logoImg from '../../../assets/logo.png'
+import axios from '../../../api/http'
+import { useEffect } from 'react'
+import { userReport } from '../../meeting/evaluate-slice'
 
 export const ModalBackdrop = styled.div`
   width: 100vw;
@@ -16,6 +19,16 @@ export const ModalBackdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 4;
   font-family: Jua;
+`
+const LogoImg = styled.img`
+  height: 5rem;
+`
+
+const Text = styled.span`
+  width: 100%;
+  color: #4A4A4A;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 `
 
 const ModalView = styled.div.attrs((props) => ({
@@ -38,7 +51,7 @@ const BackIcon = styled(MdClear)`
   color: #88866f;
 `
 
-const ReportInputsBlock = styled.form`
+  const ReportInputsBlock = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,31 +65,154 @@ const ReportInputsBlock = styled.form`
   }
 `
 
-const UserReportModal = ({openUserReportModal, }) => {
+const StyledInput = styled.input`
+  background-color: white;
+  border: 1.5px solid #333333;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  padding: 1rem 0.5rem;
+  width: 95%;
+  height: 1rem;
+  font-family: Jua;
+
+  &:focus {
+    border: 3px solid #00cfb4;
+  }
+  & + & {
+    margin-top: 1rem;
+  }
+
+  &.email {
+    width: 75%;
+  }
+
+  &.nickname {
+    width: 75%;
+  }
+
+  &.birth {
+    width: 75%;
+    cursor: pointer;
+  }
+`
+const StyledBtn = styled.button`
+  height: 3rem;
+  background-color: #ff728e;
+  color: white;
+  border-radius: 0.5rem;
+  border: 0;
+  font-size: 1rem;
+  font-family: Jua;
+
+  &:hover{
+    background-color: #009c87;
+    color: #e0e0e0;
+  }
+`
+
+const CheckDiv = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+`
+const UserReportModal = ({openUserReportModal, oppositeUserNo, myUserNo}) => {
+
   const dispatch = useDispatch()
-  const closeUserReportModal = () => {
-      openUserReportModal(false)   
+
+  const sendToBack = (e) => {
+
+
+      openUserReportModal()   
   }
   
   //신고 타입
+  const [reportTo, setReportTo] = useState(1)
   const [reportType, setReportType] = useState('')    
-  const [extraReport, setExtraReport] = useState('') 
+  const [reportMessage, setReportMessage] = useState('')
+  const [isDuplicated, setIsDuplicated] = useState(false)
+  const changeReportType = (e) => {
+    setReportType(e.target.value)
+  }
+ 
 
+  useEffect(()=> {
+    setReportTo(oppositeUserNo)
+  },[])
+
+  function handleSubmit(e) {
+    console.log("어디서막히냐")
+    e.preventDefault()
+    const data = {
+      reportTo,
+      reportType,
+      reportMessage,
+    }
+    
+    axios.get(`/honjaya/reports/${myUserNo}`)
+      .then((res) => {
+        console.log(res)
+        if (res.data.trueOrFalse) {
+          setIsDuplicated(true)
+        } else {
+          dispatch(userReport(data))
+            .unwrap()
+            .then((res) => { 
+              console.log("신고성공", res.data)
+              
+            })
+            .catch((err) => {
+               console.log("신고에러", err)
+              })
+            }
+          })
+ 
+    }
+  
+    
 
   
   return (
     <div>
-      <ModalBackdrop onClick={() => {
-        closeUserReportModal()
-
-      }}>
+      <ModalBackdrop>
         <ModalView> 
-          <BackIcon onClick={() => {
-            closeUserReportModal()
+          <BackIcon onClick={
+            sendToBack}/>
+              
+              <div>
+                <LogoImg src={logoImg} />
+              </div>  
+     
+            <ReportInputsBlock onSubmit={(e) => handleSubmit(e)}>
+              <CheckDiv>
+                <label>
+                  <input name="reportType" type="radio" value="1" checked={reportType==="1"} onChange={changeReportType} />부적절한 메시지
+                </label>
+                
+              </CheckDiv>
+              <Text>차별, 욕설, 놀림, 언어폭력, 협박, 광고 등</Text>
+              <CheckDiv>
+                <label>
+                <input name="reportType" type="radio" value="2"  checked={reportType==="2"} onChange={changeReportType} />불쾌한 노출
+                </label>
+              </CheckDiv>
+              <Text>상반신 또는 하반신 노출, 누드 사진 또는 영상 등</Text>
 
-          }}/>
-            <ReportInputsBlock>
-              <button>{"신고"}</button>
+              <CheckDiv>
+              <Text>기타</Text>
+                <StyledInput
+                  name="reportContent"
+                  placeholder="신고사유를 입력하세요"
+                  onChange={(e) => setReportMessage(e.target.value)}   
+                  value={reportMessage}
+                />
+              </CheckDiv>
+            <StyledBtn>신고</StyledBtn>
+          
+
+              
             </ReportInputsBlock>
           </ModalView>
         </ModalBackdrop>
