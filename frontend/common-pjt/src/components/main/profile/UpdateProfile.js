@@ -186,7 +186,7 @@ const Btn = styled.button`
   &.update {
     background-color: #00cfb4;
     color: white;
-    width: 10%;
+    width: 100%;
     border-radius: 0.5rem;
     border: 0;
     padding: 0.5rem;
@@ -200,11 +200,10 @@ const Btn = styled.button`
     }
   }
 
-
   &.cancel {
-    background-color: red;
+    background-color: #ff728f;
     color: white;
-    width: 10%;
+    width: 100%;
     border-radius: 0.5rem;
     border: 0;
     padding: 0.5rem;
@@ -213,47 +212,61 @@ const Btn = styled.button`
     cursor: pointer;
 
     &:hover {
-      background-color: #ad0c45;
+      background-color: #ed5c7a;
       color: #e0e0e0;
     }
   }
 
-
   &:disabled {
-    cursor: not-allowed
+    cursor: not-allowed;
   }
-
 `
 const ErrorText = styled.span`
   width: 100%;
   color: #ff0000;
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  font-family: "Jua";
+  font-family: 'Jua';
 `
 const SuccessText = styled.span`
   width: 100%;
   color: #009c87;
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  font-family: "Jua";
-
+  font-family: 'Jua';
 `
 
 const UpdateDiv = styled.div`
   display: flex;
+  /* justify-content: center; */
+  width: 10%;
+  /* margin-right: 4rem; */
+`
+
+const CacelDiv = styled.div`
+  /* width: 100%; */
+  display: flex;
   justify-content: center;
-  width: 100%;
-  margin-right: 4rem;
+  width: 10%;
 `
 
 const CancelLink = styled(Link)`
   display: flex;
+  /* justify-content: center; */
+  width: 100%;
+  /* margin: 1rem 4rem 0 0; */
+`
+
+const BtnDiv = styled.div`
+  display: flex;
   justify-content: center;
   width: 100%;
-  margin: 1rem 4rem 0 0;
+  margin-right: 3rem;
+  outline: 2px solid;
 
 `
+
+
 
 const UpdateProfile = () => {
   // 누누가 들고온 회원가입 데이터
@@ -269,8 +282,6 @@ const UpdateProfile = () => {
   const nowUserGender = nowUserInfo.userGender
   const nowUserPassword = nowUserInfo.userPassword
 
-
-
   //이름이랑 이메일은 수정불가
   //필드 값 변경
   const [userNickname, setUserNickname] = useState(nowUserNickname)
@@ -285,7 +296,8 @@ const UpdateProfile = () => {
 
   //닉네임 중복 체크 여부 변수
   // t: 사용가능, f: 사용불가능
-  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] = useState(true)
+  const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] =
+    useState(true)
 
   // 비밀번호 재확인 변수
   const [checkedPwd, setCheckedPwd] = useState(false)
@@ -313,7 +325,6 @@ const UpdateProfile = () => {
     } else return setPwdValid(false)
   }
 
-  
   // 비밀번호 확인
   const checkPassword = (e) => {
     if (
@@ -348,20 +359,17 @@ const UpdateProfile = () => {
   }
 
   // 전화번호 유효성 검사 및 형식 자동 변환
-  const [checkedPhone, setCheckedPhone] = useState(false) 
+  const [checkedPhone, setCheckedPhone] = useState(false)
   const checkPhone = (e) => {
     const regex = /^[0-9\b -]{0,13}$/
     if (regex.test(e.target.value)) {
       setUserPhone(e.target.value)
-      
     }
-  } 
-
+  }
 
   useEffect(() => {
     if (userPhone !== undefined && userPhone.length === 10) {
       setUserPhone(userPhone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'))
-      
     }
     if (userPhone !== undefined && userPhone.length === 13) {
       setCheckedPhone(true)
@@ -396,7 +404,10 @@ const UpdateProfile = () => {
     dispatch(checkNickname(userNickname))
       .unwrap()
       .then((res) => {
-        if (userNickname === nowUserNickname || res.data.trueOrFalse === false) {
+        if (
+          userNickname === nowUserNickname ||
+          res.data.trueOrFalse === false
+        ) {
           return setisDuplicateNicknameChecked(true)
         } else return setisDuplicateNicknameChecked(false)
       })
@@ -433,7 +444,7 @@ const UpdateProfile = () => {
         }
       })
   }
-  
+
   // 아래 모든 조건 만족시 수정 버튼 활성화
   let disabled = true
   if (
@@ -446,7 +457,6 @@ const UpdateProfile = () => {
   ) {
     disabled = false
   }
-  
 
   return (
     <Background>
@@ -506,20 +516,19 @@ const UpdateProfile = () => {
                   </StyledBtn>
                 </div>
 
-              {defaultNickname && !nicknameValid ? (
-                <ErrorText>
-                  닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요
-                </ErrorText>
-              ) : defaultNickname &&
-              nicknameValid &&
-              !isDuplicateNicknameChecked ? (
-                <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText>
+                {defaultNickname && !nicknameValid ? (
+                  <ErrorText>
+                    닉네임은 2~10자 이하의 한글,영어,숫자만 입력할 수 있어요
+                  </ErrorText>
+                ) : defaultNickname &&
+                  nicknameValid &&
+                  !isDuplicateNicknameChecked ? (
+                  <ErrorText>닉네임 중복확인이 필요합니다.</ErrorText>
                 ) : null}
-              {(nowUserNickname !== userNickname) && isDuplicateNicknameChecked ? (
-                <SuccessText>사용 가능한 닉네임입니다.</SuccessText>
+                {nowUserNickname !== userNickname &&
+                isDuplicateNicknameChecked ? (
+                  <SuccessText>사용 가능한 닉네임입니다.</SuccessText>
                 ) : null}
-
-              
               </CheckDiv>
 
               <div>
@@ -614,27 +623,37 @@ const UpdateProfile = () => {
                   onChange={(e) => {
                     if (e.target.value) {
                       setDefaultPwdCheck(true)
-                    } else { setDefaultPwdCheck(false) }
+                    } else {
+                      setDefaultPwdCheck(false)
+                    }
                   }}
                   onBlur={checkPassword}
                 ></StyledInput>
                 <div>
-                  {pwdValid && !checkedPwd && defaultPwdCheck ? <ErrorText>비밀번호가 일치하지 않습니다</ErrorText> : null }
+                  {pwdValid && !checkedPwd && defaultPwdCheck ? (
+                    <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>
+                  ) : null}
                 </div>
               </div>
             </RightBox>
           </InfoBox>
 
-          <UpdateDiv>
-            <Btn className='update' disabled={disabled}>수정</Btn>
-          </UpdateDiv>
-          
+          <BtnDiv>
+            <UpdateDiv>
+              <Btn className="update" disabled={disabled}>
+                수정
+              </Btn>
+            </UpdateDiv>
+
+            <CacelDiv>
             <CancelLink to="/main" style={{ textDecoration: 'none' }}>
-              
-                <Btn className='cancel'>취소</Btn>
-              
+              <Btn className="cancel">
+                취소
+              </Btn>
             </CancelLink>
-          
+            </CacelDiv>
+          </BtnDiv>
+
         </FormBox>
       </Container>
     </Background>
