@@ -1050,9 +1050,9 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
-          // this.setState({ addTimeLimit: this.state.addTimeLimit-1})
+          this.setState({ addTimeLimit: this.state.addTimeLimit-1})
           ToastsStore.info('누군가 시간 연장을 하였습니다')
-          ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit-1}회 남았습니다`)
+          ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
         })
 
         // 세션 나가기
