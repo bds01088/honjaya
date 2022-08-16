@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import logo from '../../../assets/logo.png'
-import profileImg from '../../../assets/shadow.png'
 import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector, useDispatch } from 'react-redux'
@@ -20,38 +19,15 @@ const Header = styled.div`
   justify-content: center;
   height: 25%;
   background-color: #ccf3ee;
-  /* outline: 1px solid; */
 `
 
 const LogoDiv = styled.div`
-  
+  display: flex;
+  align-items: center;
 `
 
 const Logo = styled.img`
   height: 50%;
-`
-
-const ProfileContainer = styled.div`
-  position: absolute;
-  top: 7rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 25%;
-`
-
-const ImgBox = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 30%;
-  height: 100%;
-`
-const ProfileImg = styled.img`
-  height: 85%;
-  width: 35%;
-  border-radius: 70%;
-  background-color: #333333;
 `
 
 const Container = styled.div`
@@ -63,15 +39,15 @@ const Container = styled.div`
 `
 
 const FormBox = styled.form`
-  position: absolute;
   display: flex;
-  margin-left: 6rem;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
+  position: absolute;
+  margin-left: 4rem;
+  bottom: 1rem;
   width: 50%;
   height: 100%;
-
   form {
     display: flex;
     flex-direction: column;
@@ -84,7 +60,6 @@ const InfoBox = styled.div`
   justify-content: space-evenly;
   width: 90%;
   height: 70%;
-  margin-top: 3rem;
 `
 
 const LeftBox = styled.div`
@@ -172,12 +147,7 @@ const StyledBtn = styled.button`
   }
 `
 
-const CheckDiv = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-`
+const CheckDiv = styled.div``
 
 const BirthdayDiv = styled.div`
   width: 93%;
@@ -226,14 +196,12 @@ const Btn = styled.button`
   }
 `
 const ErrorText = styled.span`
-  width: 100%;
   color: #ff0000;
   font-size: 1rem;
   margin-bottom: 0.5rem;
   font-family: 'Jua';
 `
 const SuccessText = styled.span`
-  width: 100%;
   color: #009c87;
   font-size: 1rem;
   margin-bottom: 0.5rem;
@@ -242,13 +210,10 @@ const SuccessText = styled.span`
 
 const UpdateDiv = styled.div`
   display: flex;
-  /* justify-content: center; */
   width: 30%;
-  /* margin-right: 4rem; */
 `
 
 const CacelDiv = styled.div`
-  /* width: 100%; */
   display: flex;
   justify-content: center;
   width: 30%;
@@ -256,9 +221,7 @@ const CacelDiv = styled.div`
 
 const CancelLink = styled(Link)`
   display: flex;
-  /* justify-content: center; */
   width: 100%;
-  /* margin: 1rem 4rem 0 0; */
 `
 
 const BtnDiv = styled.div`
@@ -268,10 +231,7 @@ const BtnDiv = styled.div`
   margin-right: 4rem;
 `
 
-
-
 const UpdateProfile = () => {
-  // 누누가 들고온 회원가입 데이터
   // 기존 유저정보 이메일이랑 이름은 변동사항 없어서 그냥 가져다 써도됨
   const { userEmail, userName } = useSelector((state) => state.login.user)
 
@@ -463,15 +423,10 @@ const UpdateProfile = () => {
   return (
     <Background>
       <Header>
-        <Logo src={logo}></Logo>
+        <LogoDiv>
+          <Logo src={logo}></Logo>
+        </LogoDiv>
       </Header>
-
-      <ProfileContainer>
-        {/* <ImgBox>
-          <ProfileImg src={profileImg}></ProfileImg>
-          <ProfileImg src={profileImg}></ProfileImg>
-        </ImgBox> */}
-      </ProfileContainer>
 
       <Container>
         <FormBox
@@ -648,14 +603,11 @@ const UpdateProfile = () => {
             </UpdateDiv>
 
             <CacelDiv>
-            <CancelLink to="/main" style={{ textDecoration: 'none' }}>
-              <Btn className="cancel">
-                취소
-              </Btn>
-            </CancelLink>
+              <CancelLink to="/main" style={{ textDecoration: 'none' }}>
+                <Btn className="cancel">취소</Btn>
+              </CancelLink>
             </CacelDiv>
           </BtnDiv>
-
         </FormBox>
       </Container>
     </Background>
