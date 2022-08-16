@@ -54,7 +54,7 @@ const Wrapper = styled.div`
   /* display: flex; */
   right: -3rem;
   width: 120%;
-  z-index: 10;
+  z-index: 1;
 `
 
 const ChangeProfile = styled.div`
