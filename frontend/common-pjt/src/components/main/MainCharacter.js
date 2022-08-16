@@ -119,7 +119,7 @@ const MainCharacter = () => {
           ) : null}
         </CardFront>
         <CardBack className="back">
-          <BackImg src={Shadow} />
+          <BackImg src={require(`./../../assets/backprofile${character.url}`)} />
         </CardBack>
       </Container>
 
