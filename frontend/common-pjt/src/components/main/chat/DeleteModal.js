@@ -19,16 +19,17 @@ export const ModalBackdrop = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 4;
-  font-family: Jua;
+  font-family: Minseo;
 `
 const LogoImg = styled.img`
-  height: 5rem;
+  height: 7rem;
+  margin-bottom: 1.5rem;
 `
 
 const Text = styled.div`
   width: 100%;
   color: #4A4A4A;
-  font-size: 1rem;
+  font-size: 1.4rem;
   margin-bottom: 0.5rem;
 `
 
@@ -52,13 +53,20 @@ const BackIcon = styled(MdClear)`
   color: #88866f;
 `
 const StyledBtn = styled.button`
+  margin-top: 1rem;
   height: 3rem;
+  width: 4rem;
   background-color: #ff728e;
   color: white;
   border-radius: 0.5rem;
   border: 0;
-  font-size: 1rem;
-  font-family: Jua;
+  font-size: 1.3rem;
+  font-family: Minseo;
+
+  &:hover {
+    background-color: #b8495f;
+    color: #b1aeae;
+  }
 `
 
 

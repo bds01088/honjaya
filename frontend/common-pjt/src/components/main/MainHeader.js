@@ -14,7 +14,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   height: 5rem;
-  font-family: Jua;
+  font-family: Minseo;
   position: sticky;
   z-index: 3;
 `
@@ -29,7 +29,8 @@ const LeftBox = styled.div`
 `
 
 const Nickname = styled.div`
-  font-size: 1.8rem;
+  font-size: 2.3rem;
+  font-weight: bold;
   background-color: #f5c939;
   padding-top: 0.3rem;
   padding-left: 1rem;
@@ -66,13 +67,14 @@ const RateText = styled.p`
   text-align: center;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
+  font-size: 1.2rem;
   opacity: 80%;
   position: absolute;
   z-index: 1;
-  top: 100%;
+  top: 40%;
   left: 50%;
-  margin-left: -3rem;
+  margin-left: -3.5rem;
 `
 
 // 포인트
@@ -82,7 +84,8 @@ const PointImg = styled.img`
 
 const PointText = styled.p`
   color: #333333;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
   margin-right: 1rem;
 `
 
@@ -109,11 +112,12 @@ const ProfileText = styled.p`
   width: 80px;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
+  font-size: 1.2rem;
   opacity: 80%;
   position: absolute;
   z-index: 1;
-  top: 100%;
+  top: 50%;
   left: 50%;
   margin-left: -3.3rem;
 `
@@ -139,13 +143,14 @@ const HelperText = styled.p`
   text-align: center;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
+  font-size: 1.2rem;
   opacity: 80%;
   position: absolute;
   z-index: 1;
-  top: 100%;
+  top: 50%;
   left: 50%;
-  margin-left: -2.8rem;
+  margin-left: -2.5rem;
 `
 
 const MainHeader = () => {

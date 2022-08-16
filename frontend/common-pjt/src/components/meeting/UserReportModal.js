@@ -2,10 +2,10 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
-import logoImg from '../../../assets/logo.png'
-import axios from '../../../api/http'
+import logoImg from '../../assets/logo.png'
+import axios from '../../api/http'
 import { useEffect } from 'react'
-import { userReport } from '../../meeting/evaluate-slice'
+import { userReport } from './evaluate-slice'
 import {
   ToastsContainer,
   ToastsStore,
