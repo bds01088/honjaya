@@ -27,6 +27,7 @@ import com.ssafy.honjaya.api.response.EmailCheckRes;
 import com.ssafy.honjaya.api.response.LoginRes;
 import com.ssafy.honjaya.api.response.ProfileRes;
 import com.ssafy.honjaya.api.response.UserNoRes;
+import com.ssafy.honjaya.api.response.UserProfileInfoRes;
 import com.ssafy.honjaya.api.response.UserRes;
 import com.ssafy.honjaya.api.service.JwtServiceImpl;
 import com.ssafy.honjaya.api.service.MailService;
@@ -221,7 +222,7 @@ public class UserController {
 		return new ResponseEntity<LoginRes>(loginRes, status);
 	}
 
-	@ApiOperation(value = "회원 정보 가져오기", response = UserRes.class)
+	@ApiOperation(value = "본인 회원 정보 가져오기", response = UserRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
@@ -250,6 +251,65 @@ public class UserController {
 			status = HttpStatus.UNAUTHORIZED;
 		}
 		return new ResponseEntity<UserRes>(userRes, status);
+	}
+	
+	@ApiOperation(value = "본인 회원 프로필 정보 정보 가져오기", response = UserProfileInfoRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/info")
+	public ResponseEntity<UserProfileInfoRes> getUserProfileInfo(HttpServletRequest request) {
+		UserProfileInfoRes userProfileInfoRes = new UserProfileInfoRes();
+		HttpStatus status;
+
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				int userNo = jwtService.extractUserNo(accessToken);
+				userProfileInfoRes = userService.getUserProfileInfo(userNo);
+				userProfileInfoRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				userProfileInfoRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			userProfileInfoRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<UserProfileInfoRes>(userProfileInfoRes, status);
+	}
+	
+	@ApiOperation(value = "상대 회원 프로필 정보 정보 가져오기", response = UserProfileInfoRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/info/{userNo}")
+	public ResponseEntity<UserProfileInfoRes> getOpponentUserProfileInfo(@PathVariable int userNo, HttpServletRequest request) {
+		UserProfileInfoRes userProfileInfoRes = new UserProfileInfoRes();
+		HttpStatus status;
+
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				userProfileInfoRes = userService.getUserProfileInfo(userNo);
+				userProfileInfoRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				userProfileInfoRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			userProfileInfoRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<UserProfileInfoRes>(userProfileInfoRes, status);
 	}
 
 //	@ApiOperation(value = "전체 회원 목록 가져오기", response = List.class)
@@ -436,6 +496,35 @@ public class UserController {
 			if (jwtService.checkToken(accessToken)) {
 				int userNo = jwtService.extractUserNo(accessToken);
 				profileRes = userService.updateProfileImg(userNo, imgNo);
+				profileRes.setSuccess(true);
+				status = HttpStatus.OK;
+			} else {
+				logger.error("사용 불가능 토큰!!!");
+				profileRes.setError("The token is denied");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			profileRes.setError(e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<ProfileRes>(profileRes, status);
+	}
+	
+	@ApiOperation(value = "프로필 캐릭터 url 불러오기", response = ProfileRes.class)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공 (success: true)"),
+		@ApiResponse(code = 401, message = "토큰 만료"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/profile/{userNo}")
+	public ResponseEntity<ProfileRes> getProfileImg(@PathVariable int userNo, HttpServletRequest request) {
+		ProfileRes profileRes = new ProfileRes();
+		HttpStatus status;
+
+		try {
+			String accessToken = request.getHeader("access-token");
+			if (jwtService.checkToken(accessToken)) {
+				profileRes = userService.getProfileImg(userNo);
 				profileRes.setSuccess(true);
 				status = HttpStatus.OK;
 			} else {
