@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from '../../api/http'
 import styled from 'styled-components'
-import Shadow from '../../assets/shadow.png'
 import SelectCharcter from './SelectCharcter'
 import { FiEdit } from 'react-icons/fi'
 
@@ -119,7 +118,9 @@ const MainCharacter = () => {
           ) : null}
         </CardFront>
         <CardBack className="back">
-          <BackImg src={require(`./../../assets/backprofile${character.url}`)} />
+          <BackImg
+            src={require(`./../../assets/backprofile${character.url}`)}
+          />
         </CardBack>
       </Container>
 
