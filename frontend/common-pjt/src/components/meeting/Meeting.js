@@ -626,7 +626,6 @@ class Meeting extends Component {
         const restPointRes = await myAxios.get('/honjaya/points')
         if ( restPointRes.data.point < 100 ) { ToastsStore.info("Lupin이 부족합니다 ❗")
           } else {
-            await this.setState({ addTimeLimit: this.state.addTimeLimit-1})
             await this.setState({ timeLimit: this.state.timeLimit + 180 })
             await this.setState({ showAddTimer: false })
             await this.state.session.signal({
@@ -639,6 +638,7 @@ class Meeting extends Component {
             })
             await this.setState({
               myUserPoint: res.data.point,
+              addTimeLimit: this.state.addTimeLimit-1
             })
             ToastsStore.info("-100 Lupin ❗")
           }
@@ -1050,9 +1050,9 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
-          this.setState({ addTimeLimit: this.state.addTimeLimit-1})
+          // this.setState({ addTimeLimit: this.state.addTimeLimit-1})
           ToastsStore.info('누군가 시간 연장을 하였습니다')
-          ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`)
+          ToastsStore.info(`시간 연장 횟수 ${this.state.addTimeLimit-1}회 남았습니다`)
         })
 
         // 세션 나가기
