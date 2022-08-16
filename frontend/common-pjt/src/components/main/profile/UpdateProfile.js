@@ -23,6 +23,10 @@ const Header = styled.div`
   /* outline: 1px solid; */
 `
 
+const LogoDiv = styled.div`
+  
+`
+
 const Logo = styled.img`
   height: 50%;
 `
@@ -239,7 +243,7 @@ const SuccessText = styled.span`
 const UpdateDiv = styled.div`
   display: flex;
   /* justify-content: center; */
-  width: 10%;
+  width: 30%;
   /* margin-right: 4rem; */
 `
 
@@ -247,7 +251,7 @@ const CacelDiv = styled.div`
   /* width: 100%; */
   display: flex;
   justify-content: center;
-  width: 10%;
+  width: 30%;
 `
 
 const CancelLink = styled(Link)`
@@ -259,11 +263,9 @@ const CancelLink = styled(Link)`
 
 const BtnDiv = styled.div`
   display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-right: 3rem;
-  outline: 2px solid;
-
+  justify-content: space-evenly;
+  width: 30%;
+  margin-right: 4rem;
 `
 
 
