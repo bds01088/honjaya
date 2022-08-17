@@ -455,7 +455,7 @@ const Main = () => {
               openChatRoom()
             }
           }}>
-            <Chat />채팅목록
+            <Chat />1:1 채팅목록
             {openList ? <OpenChat /> : <ClosedChat />}
           </ChatListUp>
 
