@@ -3,6 +3,7 @@ import axios from '../../api/http'
 import styled from 'styled-components'
 import SelectCharcter from './SelectCharcter'
 import { FiEdit } from 'react-icons/fi'
+import { MdChangeCircle } from 'react-icons/md'
 
 const Div = styled.div`
   position: relative;
@@ -59,13 +60,13 @@ const ChangeProfile = styled.div`
   justify-content: center;
 `
 
-const EditBtn = styled(FiEdit)`
+const EditBtn = styled(MdChangeCircle)`
   font-size: 2.5rem;
-  color: #ffc9d0;
+  color: #f3ffbf;
   cursor: pointer;
 
   &:hover {
-    color: #f3b6bd;
+    color: #d6e984;
   }
 `
 

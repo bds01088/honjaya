@@ -17,18 +17,29 @@ const Background = styled.div`
 const Header = styled.div`
   position: relative;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
   height: 25%;
   background-color: #ccf3ee;
 `
 
 const LogoDiv = styled.div`
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: center; */
+  height: 50%;
+  margin-top: 1.8rem;
 `
 
 const Logo = styled.img`
-  height: 75%;
+  height: 100%;
+`
+
+const HeaderText = styled.p`
+  font-family: Minseo;
+  font-size: 3rem;
+  color: #00cfb4;
+  margin: 0;
 `
 
 const Container = styled.div`
@@ -422,11 +433,12 @@ const UpdateProfile = () => {
   return (
     <Background>
       <Header>
-        <Link to="/main">
-          <LogoDiv>
+        <LogoDiv>
+          <Link to="/main" style={{ width: 'fit-content', height: '50%' }}>
             <Logo src={logo}></Logo>
-          </LogoDiv>
-        </Link>
+          </Link>
+        </LogoDiv>
+        <HeaderText>회원정보 수정</HeaderText>
       </Header>
 
       <Container>
