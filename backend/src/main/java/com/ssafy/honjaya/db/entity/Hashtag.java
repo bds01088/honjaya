@@ -30,16 +30,10 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name="hashtag")
-//@Table(
-//name="student",
-//uniqueConstraints = {
-//		@UniqueConstraint(name="UK_STUDENT_EMAIL", columnNames="email")
-//}
-//)
 public class Hashtag {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="hash_no", nullable=false, updatable=false) // columnDefinition="char",
+	@Column(name="hash_no", nullable=false, updatable=false)
 	private int hashNo;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

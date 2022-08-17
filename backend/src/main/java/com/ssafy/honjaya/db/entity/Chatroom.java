@@ -25,7 +25,7 @@ import lombok.ToString;
 public class Chatroom {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="chatroom_no", nullable=false, updatable=false) // columnDefinition="char",
+	@Column(name="chatroom_no", nullable=false, updatable=false)
 	private long chatroomNo;
 	
 }

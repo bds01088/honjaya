@@ -39,7 +39,7 @@ uniqueConstraints = {
 public class ChatAsk {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="chat_ask_no", nullable=false, updatable=false) // columnDefinition="char",
+	@Column(name="chat_ask_no", nullable=false, updatable=false)
 	private int chatAskNo;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -54,7 +54,4 @@ public class SignUpReq {
 	@ApiModelProperty(value = "전화번호")
 	private String userPhone;
 
-//	@ApiModelProperty(value = "프로필 사진")
-//	private String userProfilePicUrl;
-
 }

@@ -131,16 +131,6 @@ public class UserServiceImpl implements UserService {
 		return userProfileInfoRes;
 	}
 
-//	@Override
-//	public List<UserDto> allUserInfo() {
-//		return userRepository.findAll();
-//	}
-
-//	@Override
-//	public User userInfo(int userNo) { // findUser
-//		return userMapper.userInfo(userNo);
-//	}
-
 	@Override
 	@Transactional
 	public boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) {
