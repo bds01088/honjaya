@@ -35,7 +35,7 @@ uniqueConstraints = {
 public class Ban {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="ban_no", nullable=false, updatable=false) // columnDefinition="char",
+	@Column(name="ban_no", nullable=false, updatable=false)
 	private int banNo;
 	
 	@Column(name="ban_user_email", length=50, nullable=false, updatable=false)

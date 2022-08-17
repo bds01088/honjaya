@@ -43,8 +43,6 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping("/users") // 401 에러 코드는
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-//	private static final String SUCCESS = "success";
-//	private static final String FAIL = "fail";
 
 	@Autowired
 	private JwtServiceImpl jwtService;
@@ -311,13 +309,6 @@ public class UserController {
 		}
 		return new ResponseEntity<UserProfileInfoRes>(userProfileInfoRes, status);
 	}
-
-//	@ApiOperation(value = "전체 회원 목록 가져오기", response = List.class)
-//	@GetMapping("/list")
-//	public ResponseEntity<List<User>> allUserInfo(){
-//		logger.debug("all user info");
-//		return new ResponseEntity<List<User>>(userService.allUserInfo(), HttpStatus.OK);
-//	}
 
 	@ApiOperation(value = "로그아웃", response = CommonRes.class)
 	@ApiResponses({
