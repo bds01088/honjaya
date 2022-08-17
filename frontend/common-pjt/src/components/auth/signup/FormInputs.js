@@ -113,7 +113,7 @@ const SuccessText = styled.span`
   width: 100%;
   color: #009c87;
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 `
 
 

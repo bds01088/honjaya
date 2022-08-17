@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
+import backImg from '../../assets/base.PNG'
 import { Link } from 'react-router-dom'
 import {
   MdOutlineCheckBoxOutlineBlank,
@@ -8,15 +9,17 @@ import {
 } from 'react-icons/md'
 
 const Background = styled.div`
+  background-image: url(${backImg});
   background-color: #fffdde;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
 `
 
 const Form = styled.div`
