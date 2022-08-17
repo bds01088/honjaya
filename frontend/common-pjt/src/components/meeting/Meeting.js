@@ -64,6 +64,8 @@ const Header = styled.div`
 const LogoBox = styled.div`
   height: 100%;
   margin: 0.5rem 2rem;
+  width: 20%;
+
   @media (max-height: 720px) {
     height: 64px;
   }
@@ -74,12 +76,12 @@ const Logo = styled.img.attrs({ src: `${logo}` })`
 
 // 타이머
 const TimerBox = styled.div`
+  height: 75%;
   background-color: #f6a9a9;
-  padding: 0.4rem 1rem;
+  padding: 0rem 1.5rem;
   border-radius: 1.8rem;
   display: flex;
   align-items: center;
-  margin-right: 1rem;
   position: relative;
 `
 
@@ -87,7 +89,6 @@ const Timer = styled.p`
   font-size: 2rem;
   font-weight: bold;
   font-family: Minseo;
-  margin: 0 0.5rem;
 `
 
 // 타이머 연장
@@ -163,7 +164,9 @@ const LeftBox = styled.div`
   margin-right: 2rem;
   display: flex;
   align-items: center;
+  justify-content: end;
   height: 100%;
+  width: 20%;
 `
 
 const PointImg = styled.img.attrs({ src: `${pointImg}` })`

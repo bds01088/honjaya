@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import ChatRoomHeader from './ChatRoomHeader'
 import { MdSend } from 'react-icons/md'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { useState } from 'react'
