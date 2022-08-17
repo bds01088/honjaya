@@ -38,6 +38,7 @@ const Nickname = styled.div`
   border-radius: 1rem;
   margin-right: 1rem;
   color: #333333;
+  cursor: pointer;
 
   @media screen and (max-width: 800px) {
     font-size: 1.3rem;
@@ -47,6 +48,7 @@ const Nickname = styled.div`
 // 매너 별점
 const RateBox = styled.div`
   position: relative;
+  cursor: default;
 
   &:hover .rateTip {
     visibility: visible;
@@ -80,6 +82,7 @@ const RateText = styled.p`
 // 포인트
 const PointImg = styled.img`
   height: 50%;
+  cursor: default;
 `
 
 const PointText = styled.p`
@@ -87,7 +90,7 @@ const PointText = styled.p`
   font-size: 1.8rem;
   font-weight: bold;
   margin-right: 1rem;
-
+  cursor: default;
   position: relative;
 
   &:hover .pointTip {  
@@ -206,7 +209,9 @@ const MainHeader = () => {
       <Logo src={logoImg} />
 
       <LeftBox>
-        <Nickname>{userNickname}</Nickname>
+        <Link to="/profile" style={{ textDecoration: "none" }}>
+          <Nickname>{userNickname}</Nickname>
+        </Link>
         <RateBox>
           <MannerRate size="large" value={rateScore} precision={0.5} readOnly />
           <RateText className="rateTip">매너점수: {rateScore}</RateText>

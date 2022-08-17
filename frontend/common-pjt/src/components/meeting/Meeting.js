@@ -666,7 +666,7 @@ class Meeting extends Component {
       try {
         const restPointRes = await myAxios.get('/honjaya/points')
         if (restPointRes.data.point < 100) {
-          ToastsStore.info('Lupin이 부족합니다 ❗')
+          ToastsStore.info('루팡이 부족합니다 ❗')
           return
         } else if (this.state.addTimeLimit > 0) {
           await this.setState({ timeLimit: this.state.timeLimit + 180 })
@@ -684,7 +684,7 @@ class Meeting extends Component {
             myUserPoint: res.data.point,
           })
           console.log('시간추가 제한 횟수 차감 후', this.state.addTimeLimit)
-          ToastsStore.info('-100 Lupin ❗')
+          ToastsStore.info('-100 루팡 ❗')
         } else {
           ToastsStore.info('더이상 시간 연장이 불가능합니다')
 
@@ -799,7 +799,7 @@ class Meeting extends Component {
         to: [],
         type: 'sendScore',
       })
-    }, 5000)
+    }, 6000)
 
     // 최종 포인트 보내기
     await setTimeout(() => {
@@ -810,7 +810,7 @@ class Meeting extends Component {
       this.setState({
         myUserPoint: res.data.point,
       })
-    }, 6000)
+    }, 7000)
   }
 
   // 결과화면으로 이동
@@ -899,7 +899,7 @@ class Meeting extends Component {
       } else {
         const restPointRes = await myAxios.get('/honjaya/points')
         if (restPointRes.data.point < 50) {
-          ToastsStore.info('Lupin이 부족합니다 ❗')
+          ToastsStore.info('루팡이 부족합니다 ❗')
         } else {
           await this.shuffleTopic()
           this.state.session.signal({
@@ -913,7 +913,7 @@ class Meeting extends Component {
           await this.setState({
             myUserPoint: res.data.point,
           })
-          ToastsStore.info('-50 Lupin ❗')
+          ToastsStore.info('-50 루팡 ❗')
         }
       }
     } catch (err) {
@@ -1054,7 +1054,7 @@ class Meeting extends Component {
             meetingTime: true,
             voteTime: false,
             resultTime: false,
-            timeLimit: 10,
+            timeLimit: 600,
           })
         })
 
@@ -1392,7 +1392,7 @@ class Meeting extends Component {
                   <AddText className="timerTip">
                     3분 추가
                     <br />
-                    (-100 Lupin)
+                    (-100 루팡)
                   </AddText>
                 </AddBox>
               ) : null}
@@ -1464,7 +1464,7 @@ class Meeting extends Component {
                     <ChangeText className="changeTip">
                       주제추천
                       <br />
-                      (-50 Lupin)
+                      (-50 루팡)
                     </ChangeText>
                   )}
                 </ChangeBox>
@@ -1639,7 +1639,7 @@ class Meeting extends Component {
                                   return (
                                     <RankingContent>
                                       <span>{item[0]}</span>
-                                      <span>+{item[1]} Lupin</span>
+                                      <span>+{item[1]} 루팡</span>
                                     </RankingContent>
                                   )
                                 },
