@@ -802,9 +802,9 @@ class Meeting extends Component {
         to: [],
         type: 'sendScore',
       })
-    }, 6000)
+    }, 5500)
 
-    // 최종 포인트 보내기
+    // 최종 포인트 적용하기
     await setTimeout(() => {
       const score = this.state.correctPoint + this.state.wrongPoint
       const res = myAxios.put('/honjaya/points', {
@@ -1575,7 +1575,7 @@ class Meeting extends Component {
 
               <Footer>
                 <FooterRight/>
-                {this.state.myRoleCode !== 3 ? (
+                {this.state.myRoleCode !== 3 || (this.state.myRoleCode === 3 && this.state.resultTime) ? (
                   <MicCamBox>
                     {this.state.audiostate ? (
                       <MicOn
