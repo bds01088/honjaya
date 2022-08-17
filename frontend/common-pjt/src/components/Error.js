@@ -3,7 +3,7 @@ import backImg from './../assets/base.PNG'
 import logo from './../assets/logo.png'
 import bear from './../assets/random.png'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { TbError404 } from 'react-icons/tb'
 import cat from './../assets/solo.png'
 
@@ -92,6 +92,7 @@ const HomeDiv = styled.div`
   flex-direction: row;
   width: 100%;
   height: 40%;
+  cursor: pointer;
 `
 
 const CatDiv = styled.div`
@@ -99,6 +100,8 @@ const CatDiv = styled.div`
 `
 
 const Error = () => {
+  const history = useHistory()
+
   return (
     <Background>
       <Header>
@@ -118,14 +121,23 @@ const Error = () => {
               <ErrorIcon></ErrorIcon>
               <Text className="h2">띠요용...여긴 아무것도 없어요...</Text>
             </TextDiv>
-            <HomeDiv>
+            <HomeDiv
+              onClick={() =>
+                history.push({
+                  pathname: '/main',
+                })
+              }
+            >
               <CatDiv>
                 <Link className="cat" to={'/main'}>
                   <Img src={cat}></Img>
                 </Link>
               </CatDiv>
 
-              <Text className="h3">길을 잃었다면 저를 따라오라냥</Text>
+              <Text className="h3">
+                ← 길을 잃었다면 나를 눌러달라냥
+                <br />
+              </Text>
             </HomeDiv>
           </RightBox>
         </Content>
