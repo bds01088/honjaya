@@ -57,14 +57,14 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 10%;
-  width: 96%;
-  padding: 0 2%;
+  width: 100%;
+  padding: 0.5rem 0;
 `
 
 // 헤더로고
 const LogoBox = styled.div`
   height: 100%;
-
+  margin: 0.5rem 2rem;
   @media (max-height: 720px) {
     height: 64px;
   }
@@ -150,6 +150,7 @@ const TimerCheckBtn = styled.button`
 
 // 포인트
 const LeftBox = styled.div`
+  margin-right: 2rem;
   display: flex;
   align-items: center;
   height: 100%;
@@ -185,6 +186,7 @@ const TopicBox = styled.div`
   padding: 1rem 0;
   background-color: #f6a9a9;
   margin-bottom: 0.5rem;
+  text-align: center;
 `
 
 const TopicText = styled.p`
@@ -250,7 +252,7 @@ const ChatBox = styled.div`
 `
 
 const MessageBox = styled.div`
-  height: 76%;
+  height: 73%;
   width: 100%;
   /* border: 2px solid; */
   overflow-y: scroll;
@@ -305,7 +307,7 @@ const VideoBox = styled.div`
   grid-template-rows: 49% 49%;
   grid-auto-flow: column;
   grid-gap: 2%;
-  max-width: 100%;
+  /* max-width: 60%; */
   height: 90%;
   border-radius: 1rem;
   background-color: #b5eaea;
@@ -382,8 +384,10 @@ const CamOff = styled(MdVideocamOff)`
 
 const FooterRight = styled.div`
   right: 0;
+  width: 30%;
   display: flex;
   flex-direction: row;
+  justify-content: end;
   justify-content: center;
   align-items: center;
 `
@@ -652,7 +656,8 @@ class Meeting extends Component {
         const restPointRes = await myAxios.get('/honjaya/points')
         if (restPointRes.data.point < 100) {
           ToastsStore.info('Lupin이 부족합니다 ❗')
-        } else {
+          return
+        } else if (this.state.addTimeLimit > 0) {
           await this.setState({ timeLimit: this.state.timeLimit + 180 })
           await this.setState({ showAddTimer: false })
           await this.state.session.signal({
@@ -669,6 +674,9 @@ class Meeting extends Component {
           })
           console.log('시간추가 제한 횟수 차감 후', this.state.addTimeLimit)
           ToastsStore.info('-100 Lupin ❗')
+        } else {
+          ToastsStore.info('더이상 시간 연장이 불가능합니다')
+
         }
       } catch (err) {
         console.log('error')
@@ -678,10 +686,9 @@ class Meeting extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.messagesEnd !== this.state.messagesEnd) {
-      this.scrollToBottom()
-    }
+  componentDidUpdate() {
+    this.scrollToBottom()
+
   }
 
   scrollToBottom = () => {
@@ -792,7 +799,7 @@ class Meeting extends Component {
       this.setState({
         myUserPoint: res.data.point,
       })
-    }, 7000)
+    }, 6000)
   }
 
   // 결과화면으로 이동
@@ -1406,7 +1413,6 @@ class Meeting extends Component {
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PointText>
-            <Helper />
           </LeftBox>
         </Header>
 
@@ -1488,6 +1494,12 @@ class Meeting extends Component {
                         입니다
                       </MyInfo>
                     )}
+                    {this.state.myRoleCode === 2 ? (
+                      <CommanderWarn>
+                        *주의* 아바타의 채팅은 모두가 볼 수 있어요
+                      </CommanderWarn>
+                    ) : null}
+
                     {this.state.myRoleCode === 3 ? (
                       <CommanderWarn>
                         * 지시자의 채팅은 아바타만 볼 수 있어요
@@ -1553,7 +1565,7 @@ class Meeting extends Component {
               </ChatVideoBox>
 
               <Footer>
-                <div />
+                <FooterRight/>
                 {this.state.myRoleCode !== 3 ? (
                   <MicCamBox>
                     {this.state.audiostate ? (
@@ -1603,12 +1615,18 @@ class Meeting extends Component {
                 ) : null}
 
                 <FooterRight>
+                  {this.state.meetingTime ? (
+                    <ShowRanking onClick={() => { this.moveToVote() }}>
+                      바로 투표 💌
+                    </ShowRanking>
+                  ) : null }
+
                   {this.state.resultTime ? (
                     <>
                       <ShowRanking>
                         👑결과보기👑
                         <RankingContainer className="rankingTip">
-                          <RankingHeader>오늘의 추리왕은? 🧐</RankingHeader>
+                          <RankingHeader>오늘의 MVP는? 🏆</RankingHeader>
                           {this.state.ranking
                             ? Object.entries(this.state.ranking).map(
                                 (item, idx) => {
