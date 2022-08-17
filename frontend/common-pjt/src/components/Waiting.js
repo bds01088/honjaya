@@ -60,6 +60,7 @@ const Leave = styled(MdLogout)`
   width: 2.3rem;
   margin: 0 2rem;
   color: #333333;
+  cursor: pointer;
 `
 
 const LeaveText = styled.p`
@@ -305,12 +306,14 @@ const CamOn = styled(MdVideocam)`
   font-size: 2.5rem;
   color: #333333;
   margin-top: 1.5rem;
+  cursor: pointer;
 `
 
 const CamOff = styled(MdVideocamOff)`
   font-size: 2.5rem;
   color: #333333;
   margin-top: 1.5rem;
+  cursor: pointer;
 `
 
 class Waiting extends Component {

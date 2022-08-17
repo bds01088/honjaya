@@ -346,6 +346,7 @@ const SendBtn = styled.p`
   font-family: Minseo;
   border: 0;
   border-bottom: 2px solid #333333;
+  cursor: pointer;
 `
 
 const CommanderWarn = styled.div`
@@ -454,7 +455,7 @@ const RankingContent = styled.div`
 // 나가기 버튼
 const LeaveBox = styled.div`
   position: relative;
-
+  cursor: pointer;
   &:hover .leaveTip {
     visibility: visible;
   }
@@ -928,31 +929,7 @@ class Meeting extends Component {
   }
 
   sendmessageByClick() {
-    this.setState({
-      messages: [
-        ...this.state.messages,
-        {
-          userName: this.state.myUserName,
-          text: this.state.message,
-          chatClass: 'messages__item--operator',
-        },
-      ],
-    })
-    const mySession = this.state.session
-
-    mySession.signal({
-      data: `${this.state.myUserName},${this.state.message}`,
-      to: [this.state.chatConnection],
-      type: 'chat',
-    })
-
-    this.setState({
-      message: '',
-    })
-  }
-
-  sendmessageByEnter(e) {
-    if (e.key === 'Enter') {
+    if (this.state.message.trim() !== ''){
       this.setState({
         messages: [
           ...this.state.messages,
@@ -974,6 +951,34 @@ class Meeting extends Component {
       this.setState({
         message: '',
       })
+    }
+  }
+
+  sendmessageByEnter(e) {
+    if (e.key === 'Enter') {
+      if (this.state.message.trim() !== ''){
+        this.setState({
+          messages: [
+            ...this.state.messages,
+            {
+              userName: this.state.myUserName,
+              text: this.state.message,
+              chatClass: 'messages__item--operator',
+            },
+          ],
+        })
+        const mySession = this.state.session
+
+        mySession.signal({
+          data: `${this.state.myUserName},${this.state.message}`,
+          to: [this.state.chatConnection],
+          type: 'chat',
+        })
+
+        this.setState({
+          message: '',
+        })
+      }
     }
   }
 

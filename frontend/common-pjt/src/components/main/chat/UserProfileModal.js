@@ -67,6 +67,7 @@ const BackIcon = styled(MdClear)`
   width: 2rem;
   height: 2rem;
   color: #88866f;
+  cursor: pointer;
 `
 
 const ProfileBox = styled.div`

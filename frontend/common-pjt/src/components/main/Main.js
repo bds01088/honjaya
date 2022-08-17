@@ -180,6 +180,9 @@ const LogoutBox = styled.div`
   flex-direction: column;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  background-color:rgba( 255, 255, 255, 0.7);
+  border-radius: 15px;
 `
 const Logout = styled(MdLogout)`
   font-size: 2rem;
@@ -224,6 +227,7 @@ const ChatListUp = styled.div`
   border-radius: 1rem;
   /* border: 2px solid #333333; */
   color: #333333;
+  cursor: pointer;
 
   display: flex;
   justify-content: space-around;
@@ -486,11 +490,11 @@ const Main = () => {
         />
       ) : null}
 
-      <Start>
-        <Link to="/mode" style={{ textDecoration: 'none', color: 'white' }}>
+      <Link to="/mode" style={{ textDecoration: 'none', color: 'white' }}>
+        <Start>
           입장하기
-        </Link>
-      </Start>
+        </Start>
+      </Link>
     </Container>
   )
 }

@@ -19,11 +19,13 @@ const Container = styled.div`
 const Leave = styled(MdLogout)`
   font-size: 1.5rem;
   color: #d1b411;
+  cursor: pointer;
 `;
 
 const Close = styled(MdKeyboardBackspace)`
   font-size: 1.5rem;
   color: #d1b411;
+  cursor: pointer;
 `
 
 const User = styled.div`
@@ -44,6 +46,7 @@ const UserInform = styled(MdInfoOutline)`
   font-size: 1.5rem;
   color: #e7c500;
   margin-left: 0.2rem;
+  cursor: pointer;
 `
 
 const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom, chatRoomNo, chatUserNo }) => {

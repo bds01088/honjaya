@@ -150,6 +150,7 @@ const ProfileText = styled.p`
 // 도움말
 const HelperBox = styled.div`
   position: relative;
+  cursor: pointer;
 
   &:hover .helperTip {
     visibility: visible;

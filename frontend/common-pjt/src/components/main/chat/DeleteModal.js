@@ -51,6 +51,7 @@ const BackIcon = styled(MdClear)`
   width: 2rem;
   height: 2rem;
   color: #88866f;
+  cursor: pointer;
 `
 const StyledBtn = styled.button`
   margin-top: 1rem;
@@ -62,7 +63,7 @@ const StyledBtn = styled.button`
   border: 0;
   font-size: 1.3rem;
   font-family: Minseo;
-
+  cursor: pointer;
   &:hover {
     background-color: #b8495f;
     color: #b1aeae;
