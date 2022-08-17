@@ -98,18 +98,14 @@ const Explain = styled.div`
 const ModeChoice = ({ data, setData }) => {
 
   const [Role, setRole] = useState("1")
+  
   const handleClickRadioButton = (e) => {
     setRole(e.target.value)
-    if (e.target.value === "4") {
-      const val = Math.floor(Math.random() * (3-1)+1)
-      setData({
-        ...data, roleCode: val
-      })
-    } else {
-      setData({
-        ...data, roleCode: parseInt(e.target.value)
-      })
-    }
+
+    setData({
+      ...data, roleCode: parseInt(e.target.value)
+    })
+
   }
 
   return (

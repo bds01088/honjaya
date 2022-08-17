@@ -51,8 +51,8 @@ const HashTag = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  cursor: pointer;
-  z-index: 3;
+  cursor: default;
+  z-index: 1;
 
   &.hash0 {
     top: 23%;
