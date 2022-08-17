@@ -87,20 +87,26 @@ const StartDiv = styled.div`
 `
 
 const Start = styled.button`
-  display: flex;
-  border: none;
-  border-radius: 1rem;
-  color: white;
+  text-decoration: none;
+  background-color: #F38BA0;
+  font-size: 3rem;
   font-family: Minseo;
-  font-size: 3.5rem;
+  font-weight: 500;
   padding: 0.5rem 2rem;
-  background: #ff728e;
+  color: white;
+  border-radius: 2rem;
+  border: 5px dashed #ffd2d2;
   cursor: pointer;
 
+  @media screen and (max-width: 800px) {
+    font-size: 1.5rem;
+  }
+
   &:hover {
-    background: #cc586f;
-    color: #c2c2c2;
-    font-size: 3.6rem;
+    background-color: #df7086;
+    border: 5px dashed #f7b9b9;
+    color: #d8d4d4;
+    font-size: 3.1rem;
   }
 `
 

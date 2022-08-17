@@ -15,7 +15,7 @@ export const ModalBackdrop = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.37);
   z-index: 4;
-  font-family: Jua;
+  font-family: Minseo;
 `
 
 const ModalView = styled.div.attrs((props) => ({
@@ -29,6 +29,7 @@ const ModalView = styled.div.attrs((props) => ({
   border: 0.2rem solid #88866f;
   color: #47463c;
   position: relative;
+  font-size: 1.5rem;
 `
 
 const BackIcon = styled(MdClear)`
@@ -38,13 +39,14 @@ const BackIcon = styled(MdClear)`
   width: 2rem;
   height: 2rem;
   color: #88866f;
+  cursor: pointer;
 `
 
 const Form = styled.form``
 
 const InputHash = styled.input`
   width: 100%;
-  font-family: Jua;
+  font-family: Minseo;
   font-size: 1.3rem;
   border: 2px solid #88866f;
   color: #47463c;
@@ -52,7 +54,7 @@ const InputHash = styled.input`
 `
 
 const SubmitBtn = styled.button`
-  font-family: Jua;
+  font-family: Minseo;
   font-size: 1.3rem;
   margin-top: 1rem;
   border-radius: 1rem;
@@ -60,6 +62,11 @@ const SubmitBtn = styled.button`
   border: 2px solid #47463c;
   color: #47463c;
   background-color: #CCF3EE;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #a1cfc9;
+  }
 `
 
 

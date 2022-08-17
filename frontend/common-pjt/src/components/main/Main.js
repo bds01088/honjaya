@@ -52,6 +52,7 @@ const HashTag = styled.div`
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+  z-index: 3;
 
   &.hash0 {
     top: 23%;
@@ -181,18 +182,18 @@ const LogoutBox = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  background-color:rgba( 255, 255, 255, 0.7);
-  border-radius: 15px;
+  /* background-color:rgba( 255, 255, 255, 0.7); */
+  /* border-radius: 15px; */
 `
 const Logout = styled(MdLogout)`
   font-size: 2rem;
-  color: #ff728e;
+  color: white;
 `
 const LogoutText = styled.p`
   font-family: Minseo;
-  margin: 0.5rem;
+  margin: 0.2rem;
   font-size: 1.3rem;
-  color: #ff728e;
+  color: white;
 `
 
 const ChatBox = styled.div`
@@ -208,8 +209,8 @@ const ChatBox = styled.div`
 const Chat = styled(MdTextsms)`
   /* margin-right: 1rem; */
   font-size: 1.7rem;
-  color: #f796a9;
-
+  /* color: #f796a9; */
+  color: #beeb6b;
 `
 
 const FullChat = styled.div`
@@ -265,9 +266,9 @@ const Start = styled.div`
   }
 
   &:hover {
-    background-color: #d85a73;
+    background-color: #df7086;
     border: 5px dashed #f7b9b9;
-    color: #9e9e9e;
+    color: #d8d4d4;
     font-size: 3.1rem;
   }
 `
