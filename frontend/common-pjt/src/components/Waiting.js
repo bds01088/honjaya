@@ -120,6 +120,7 @@ const ChoiceBtn = styled.button`
   border-radius: 1rem;
   padding: 0.3rem 1rem;
   border: none;
+  cursor: pointer;
 
   &.yes {
     background-color: #40C0E7;
@@ -236,7 +237,7 @@ const GuideBox = styled.div`
   }
 `
 const GuideContainer = styled.div`
-  width: 70%;
+  width: 90%;
   height: 93%;
   margin: 0 2rem 1rem 2rem;
   background-color: #B5EAEA;
@@ -282,7 +283,7 @@ const GuideHeader = styled.div`
 `
 
 const GuideText = styled.div`
-  padding: 1rem 2.5rem;
+  padding: 0.8rem 2.5rem;
   font-size: 1.6rem;
   font-family: Minseo;
   color: #333333;
@@ -522,13 +523,13 @@ class Waiting extends Component {
             </CamBox>
             <GuideBox>
               <GuideContainer>
-                <GuideHeader>이것만은 지켜주세요 !</GuideHeader>
-                <GuideText><CheckIcon/>서로를 존중해요</GuideText>
-                <GuideText><CheckIcon/>다른 사람의 이야기를 경청해요</GuideText>
-                <GuideText><CheckIcon/>본인의 역할에 집중해요</GuideText>
-                <GuideText><BanIcon/>과도한 요구는 자제해요</GuideText>
-                <GuideText><BanIcon/>욕설 및 비속어는 금지해요</GuideText>
-                <GuideText><BanIcon/>성적인 콘텐츠 및 행위를 금지해요</GuideText>
+                <GuideHeader>혼자야?는 이렇게 즐겨보세요!</GuideHeader>
+                <GuideText><CheckIcon/>아바타로 입장 시 누군가의 아바타가 되어 미팅을 진행해요</GuideText>
+                <GuideText><CheckIcon/>지시자는 모습을 감추고 채팅으로 아바타와 소통할 수 있어요</GuideText>
+                <GuideText><CheckIcon/>시간이 끝나면 지시자가 있는 참가자인지 투표해보세요</GuideText>
+                <GuideText><CheckIcon/>상대의 정체를 맞히면 +100 루팡!</GuideText>
+                <GuideText><CheckIcon/>상대를 잘 속이면 +50 루팡!</GuideText>
+                <GuideText><CheckIcon/>마음에 드는 상대에게 1:1 채팅을 요청해보세요</GuideText>
               </GuideContainer>
             </GuideBox>
           </CamGuideBox>

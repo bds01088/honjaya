@@ -95,7 +95,8 @@ const DeleteModal = ({openDeleteModal, chatRoomNo}) => {
   
   return (
     <div>
-    <ModalBackdrop>
+    <ModalBackdrop onClick={
+      sendToBack}>
       <ModalView> 
         <BackIcon onClick={
           sendToBack}/>

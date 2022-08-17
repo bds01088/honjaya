@@ -93,6 +93,7 @@ const SendButton = styled.button`
   /* visibility: hidden; */
   background: none;
   border: none;
+  cursor: pointer;
 `
 
 const SendImg = styled(MdSend)`

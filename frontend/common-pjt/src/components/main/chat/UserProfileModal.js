@@ -141,6 +141,7 @@ const UserProfileModal = ({
     openUserProfileModal(false)
   }
 
+  
   useEffect(() => {
     if (oppositeUserNo === myUserNo) {
       setShowIcons(true)
