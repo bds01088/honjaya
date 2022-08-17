@@ -5,6 +5,7 @@ import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
+import { ToastsContainer } from 'react-toasts'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -394,7 +395,7 @@ const UpdateProfile = () => {
     dispatch(modifyUserInfo(data))
       .unwrap()
       .then(() => {
-        alert('회원정보가 수정되었습니다')
+        history.push('/')
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -421,9 +422,11 @@ const UpdateProfile = () => {
   return (
     <Background>
       <Header>
-        <LogoDiv>
-          <Logo src={logo}></Logo>
-        </LogoDiv>
+        <Link to="/main">
+          <LogoDiv>
+            <Logo src={logo}></Logo>
+          </LogoDiv>
+        </Link>
       </Header>
 
       <Container>

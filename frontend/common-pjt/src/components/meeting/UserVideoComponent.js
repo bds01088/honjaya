@@ -88,6 +88,7 @@ const RatingBtn = styled.button`
   border-radius: 1rem;
   font-family: Minseo;
   font-size: 1.2rem;
+  cursor:pointer;
 
   &:hover {
     background-color: #d18181;
