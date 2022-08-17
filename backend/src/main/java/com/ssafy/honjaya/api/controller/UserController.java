@@ -207,10 +207,10 @@ public class UserController {
 				loginRes.setRefreshToken(refreshToken);
 				loginRes.setSuccess(true);
 				status = HttpStatus.OK;
-			} else if (loginResult == -1) { // 이메일 또는 비밀번호가 비어 있음
+			} else if (loginResult == -1) { // 이메일 또는 비밀번호가 비정상
 				loginRes.setError("Empty Email or Password!!!");
 				status = HttpStatus.BAD_REQUEST;
-			} else if (loginResult == -2) { // 이메일 또는 비밀번호가 틀림
+			} else if (loginResult == -2) { // 이메일 또는 비밀번호가 오답
 				loginRes.setError("Wrong Email or Password!!!");
 				status = HttpStatus.BAD_REQUEST;
 			}
