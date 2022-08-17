@@ -48,6 +48,7 @@ const UserInform = styled(MdInfoOutline)`
 
 const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom, chatRoomNo, chatUserNo }) => {
 
+  const {userProfilePicUrl} = useSelector((state) => state.chat)
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const openUserProfileModal = () => {
@@ -73,7 +74,12 @@ const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom, chat
           <UserInform onClick={openUserProfileModal}/> 
           {isOpen ? <UserProfileModal openUserProfileModal={openUserProfileModal} oppositeUserNo={chatUserNo} /> : null}
         </User>
+
         <Leave onClick={openDeleteModal}/>
+
+        {userProfilePicUrl}
+       
+
         {isDeleteModalOpen ? <DeleteModal openDeleteModal={openDeleteModal} chatRoomNo={chatRoomNo} openChatRoom={openChatRoom}  /> : null}
         
       </Container>
