@@ -305,7 +305,7 @@ const VideoBox = styled.div`
   grid-template-rows: 49% 49%;
   grid-auto-flow: column;
   grid-gap: 2%;
-  max-width: 60%;
+  max-width: 100%;
   height: 90%;
   border-radius: 1rem;
   background-color: #b5eaea;
