@@ -12,7 +12,7 @@ const Background = styled.div`
   width: 100vw;
   background-color: #FFFDDE;
   overflow: auto;
-  font-family: Jua;
+  font-family: Minseo;
 `
 
 const Signup = () => {

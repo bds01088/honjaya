@@ -12,7 +12,7 @@ const ModeSelectBox = styled.div`
   align-items: center;
   position: relative;
   margin: 0 auto;
-  outline: 0.2rem solid #333333;
+  outline: 0.2rem solid #363636;
   width: 90%;
   height: 80%;
   border-radius: 2rem;
@@ -24,9 +24,11 @@ const RoleSelectTitle = styled.div`
   top: -2rem;
   z-index: 1;
   padding: 0 2rem;
-  font-size: 2.8em;
+  font-size: 2.8rem;
+  font-weight: bold;
   background-color: #fffdde;
-  font-family: 'Jua';
+  color: #363636;
+  font-family: Minseo;
   border-radius: 1rem;
 `
 const ModeTitle = styled.div`
@@ -34,7 +36,7 @@ const ModeTitle = styled.div`
   display: flex;
   justify-content: center;
   font-size: 1.5rem;
-  font-family: "Jua";
+  font-family: Minseo;
   width: 80%;
   background-color: #FFC9D0;
   border-radius: 2rem;
@@ -69,15 +71,25 @@ const Input = styled.input`
   visibility: hidden;
   
   :checked + img {
-    outline: 0.2rem solid #ffc9d0;
+    outline: 0.2rem solid #f7adb7;
+    background-color: #f7adb7;
     border-radius: 2rem;
+
+  }
+  & + img {
+    margin-bottom: 0.5rem;
+
+    &:hover {
+      outline: 0.4rem solid #ffc9d0;
+      border-radius: 2rem;
+    }
   }
 `
 
 const Explain = styled.div`
   text-align: center;
-  font-family: 'Jua';
-  font-size: 1.3rem;
+  font-family: Minseo;
+  font-size: 1.5rem;
   color: #333333;
   cursor: pointer;
   /* outline: 2px solid; */
@@ -114,7 +126,7 @@ const ModeChoice = ({ data, setData }) => {
             onChange={handleClickRadioButton}/>
           <Mode src={SoloImg}></Mode>
           <Explain>
-            역할 없이 즐기고 싶을 땐
+            "역할 없이" 즐기고 싶을 땐
           </Explain>
           <Explain>
             싱글모드로 참여해보세요.

@@ -87,6 +87,31 @@ const PointText = styled.p`
   font-size: 1.8rem;
   font-weight: bold;
   margin-right: 1rem;
+
+  position: relative;
+
+  &:hover .pointTip {  
+    visibility: visible;
+  }
+`
+
+const PointTip = styled.p`
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Minseo;
+  font-weight: lighter;
+  font-size: 1.2rem;
+  opacity: 80%;
+  position: absolute;
+  z-index: 1;
+  width: 5rem;
+  top: 40%;
+  left: 50%;
+  margin-left: -3.5rem;
 `
 
 // 프로필 수정
@@ -187,7 +212,9 @@ const MainHeader = () => {
         </RateBox>
 
         <PointImg src={pointImg} />
-        <PointText>{pointShow}</PointText>
+        <PointText>{pointShow}
+          <PointTip className="pointTip">나의 보유루팡</PointTip>
+        </PointText>
 
         <ProfileBox>
           <Link to="/profile" style={{ fontSize: '0' }}>
