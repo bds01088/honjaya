@@ -1,9 +1,18 @@
 import styled from 'styled-components'
 import SignupForm from './SignupForm'
+import backImg from '../../../assets/base.PNG'
 
 
 
 const Background = styled.div`
+  background-image: url(${backImg});
+  background-color: #fffdde;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+
   display: flex;
   justify-content: center;
   align-items: center;
