@@ -60,6 +60,7 @@ const StyledBtn = styled.button`
   border: 0;
   font-size: 1.4rem;
   font-family: Minseo;
+  cursor: pointer;
 
   &:hover{
     background-color: #009c87;
