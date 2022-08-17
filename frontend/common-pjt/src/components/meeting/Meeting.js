@@ -58,7 +58,6 @@ const Header = styled.div`
   align-items: center;
   height: 10%;
   width: 100%;
-  padding: 0.5rem 0;
 `
 
 // 헤더로고
@@ -85,8 +84,9 @@ const TimerBox = styled.div`
 `
 
 const Timer = styled.p`
-  font-size: 1.6rem;
-  font-family: Jua;
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: Minseo;
   margin: 0 0.5rem;
 `
 
@@ -112,7 +112,7 @@ const AddText = styled.span`
   text-align: center;
   border-radius: 0.3rem;
   padding: 2px 0;
-  font-family: Jua;
+  font-family: Minseo;
   opacity: 80%;
 
   position: absolute;
@@ -133,7 +133,7 @@ const TimerCheckBox = styled.div`
 const TimerCheckBtn = styled.button`
   border: 0;
   border-radius: 0.3rem;
-  font-family: Jua;
+  font-family: Minseo;
   font-size: 1.1rem;
   width: 3rem;
   padding: 0.4rem 0.3rem;
@@ -141,10 +141,18 @@ const TimerCheckBtn = styled.button`
   &.ok {
     background-color: #b5eaea;
     margin-right: 0.2rem;
+
+    &&:hover {
+      background-color: #97caca; 
+    }
   }
 
   &.no {
     background-color: #ff728e;
+
+    &&:hover {
+      background-color: #d3546d; 
+    }
   }
 `
 
@@ -161,16 +169,12 @@ const PointImg = styled.img.attrs({ src: `${pointImg}` })`
 `
 const PointText = styled.p`
   color: #333333;
-  font-size: 1.5rem;
-  font-family: Jua;
+  font-size: 2rem;
+  font-family: Minseo;
   margin-right: 1rem;
+  font-weight: bold;
 `
 
-const Helper = styled(MdHelpOutline)`
-  /* margin-right: 2rem; */
-  color: #333333;
-  font-size: 1.8rem;
-`
 
 const Container = styled.div`
   /* outline: 3px solid; */
@@ -215,7 +219,7 @@ const ChangeText = styled.span`
   text-align: center;
   border-radius: 0.3rem;
   padding: 2px 0;
-  font-family: Jua;
+  font-family: Minseo;
   opacity: 80%;
 
   position: absolute;
@@ -388,7 +392,6 @@ const FooterRight = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: end;
-  justify-content: center;
   align-items: center;
 `
 
@@ -471,7 +474,7 @@ const LeaveText = styled.p`
   text-align: center;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
   opacity: 80%;
   position: absolute;
   z-index: 2;
@@ -497,7 +500,7 @@ class Meeting extends Component {
       // myUserNickname: undefined,
       myUserName: undefined,
       // 10분의 시간제한
-      timeLimit: 10,
+      timeLimit: 600,
       minute: 10,
       sec: 0,
       myUserPoint: 0,
@@ -704,7 +707,7 @@ class Meeting extends Component {
         meetingTime: true,
         voteTime: false,
         resultTime: false,
-        timeLimit: 10,
+        timeLimit: 600,
       })
       await this.state.session.signal({
         data: `${this.state.timeLimit}`,
@@ -1126,6 +1129,7 @@ class Meeting extends Component {
         mySession.on('signal:endMeeting', (event) => {
           const leaveName = event.data
           console.log(leaveName)
+          
           alert(`${leaveName}님이 미팅을 나가 메인화면으로 돌아갑니다.`)
           this.leaveSession()
         })
@@ -1419,7 +1423,7 @@ class Meeting extends Component {
         <Container>
           <style jsx="true">{`
             .toast {
-              font-family: Jua !important;
+              font-family: Minseo !important;
             }
           `}</style>
           <ToastsContainer
