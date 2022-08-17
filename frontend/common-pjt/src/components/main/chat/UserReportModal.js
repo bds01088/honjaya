@@ -164,14 +164,17 @@ const UserReportModal = ({
     axios.get(`/honjaya/reports/${oppositeUserNo}`).then((res) => {
       console.log(res)
       if (res.data.trueOrFalse) {
+        //이거 왜안먹음 ㅜㅜ
         ToastsStore.info('중복 신고는 할 수 없어요❗')
         setIsDuplicated(true)
+        sendToBack()
       } else {
         dispatch(userReport(data))
           .unwrap()
           .then((res) => {
             console.log('신고성공', res.data)
             setIsDuplicated(true)
+            sendToBack()
           })
           .catch((err) => {
             console.log('신고에러', err)

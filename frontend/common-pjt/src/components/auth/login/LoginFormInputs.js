@@ -66,10 +66,13 @@ const LoginFormInputs = () => {
       userEmail,
       userPassword
     }
-    dispatch(login(data))
+    
+ 
+   dispatch(login(data))
     .unwrap()
     .then(() => {
-      // console.log(res) 이렇게 쓸려면 ()안에 인자로 담으면됨
+      
+      
       history.push('/main')
 
     })
