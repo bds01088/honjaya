@@ -93,6 +93,7 @@ const Timer = styled.p`
 // 타이머 연장
 const AddBox = styled.div`
   position: relative;
+  cursor: pointer;
 
   &:hover .timerTip {
     visibility: visible;
@@ -137,6 +138,7 @@ const TimerCheckBtn = styled.button`
   font-size: 1.1rem;
   width: 3rem;
   padding: 0.4rem 0.3rem;
+  cursor: pointer;
 
   &.ok {
     background-color: #b5eaea;
@@ -209,6 +211,7 @@ const ChangeBox = styled.div`
 const TopicIcon = styled(MdOutlineChangeCircle)`
   font-size: 2rem;
   padding: 0 1rem;
+  cursor: pointer;
 `
 
 const ChangeText = styled.span`
@@ -375,15 +378,19 @@ const MicCamBox = styled.div`
 
 // 마이크, 카메라 on/off
 const MicOn = styled(MdMic)`
+  cursor:pointer;
   color: #7e6752;
 `
 const MicOff = styled(MdMicOff)`
+  cursor:pointer;
   color: #7e6752;
 `
 const CamOn = styled(MdVideocam)`
+  cursor:pointer;
   color: #7e6752;
 `
 const CamOff = styled(MdVideocamOff)`
+  cursor:pointer;
   color: #7e6752;
 `
 
@@ -404,7 +411,7 @@ const ShowRanking = styled.div`
   font-family: Minseo;
   font-weight: 600;
   font-size: 1.3rem;
-
+  cursor: pointer;
   position: relative;
 
   &:hover .rankingTip {
@@ -869,14 +876,7 @@ class Meeting extends Component {
     }
   }
 
-  // requestDirectMessage(oppositeUserNo) {
-  //   this.state.session.signal({
-  //     data: `${this.state.myUserName}`
-  //     to:[],
 
-  //   })
-    
-  // }
   //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시
   //랜덤 주제 픽
   shuffleTopic() {
@@ -1124,10 +1124,7 @@ class Meeting extends Component {
           this.setState({ timeLimit: event.data })
           console.log('시그널 받았을 때', this.state.addTimeLimit)
           this.setState({ addTimeLimit: this.state.addTimeLimit - 1 })
-          ToastsStore.info('누군가 시간 연장을 하였습니다')
-          ToastsStore.info(
-            `시간 연장 횟수 ${this.state.addTimeLimit}회 남았습니다`,
-          )
+          ToastsStore.info(`누군가 시간 연장을 하여, 연장 가능 횟수 ${this.state.addTimeLimit}회 남았습니다`)
         })
 
         // 세션 나가기
