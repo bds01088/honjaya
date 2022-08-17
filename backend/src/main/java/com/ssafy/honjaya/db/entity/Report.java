@@ -44,7 +44,7 @@ uniqueConstraints = {
 public class Report {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // AutoIncrement
-	@Column(name="report_no", nullable=false, updatable=false) // columnDefinition="char",
+	@Column(name="report_no", nullable=false, updatable=false)
 	private int reportNo;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

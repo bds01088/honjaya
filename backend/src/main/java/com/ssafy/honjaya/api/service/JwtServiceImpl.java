@@ -2,15 +2,10 @@ package com.ssafy.honjaya.api.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -113,26 +108,4 @@ public class JwtServiceImpl implements JwtService {
 		}
 		return userNo;
 	}
-
-//	@Override
-//	public Map<String, Object> get(String key) {
-//		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-//				.getRequest();
-//		String jwt = request.getHeader("access-token");
-//		Jws<Claims> claims = null;
-//		try {
-//			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//		}
-//		Map<String, Object> value = claims.getBody();
-//		logger.info("value : {}", value);
-//		return value;
-//	}
-//
-//	@Override
-//	public String getId() {
-//		return (String) this.get("user").get("id");
-//	}
-
 }

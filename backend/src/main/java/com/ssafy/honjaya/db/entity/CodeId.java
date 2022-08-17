@@ -3,6 +3,7 @@ package com.ssafy.honjaya.db.entity;
 import java.io.Serializable;
 
 public class CodeId implements Serializable {
+	private static final long serialVersionUID = 853579330573065782L;
 	private String groupCode;
 	private String code;
 	@Override

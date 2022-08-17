@@ -30,9 +30,6 @@ public class MeetingRes {
 	@ApiModelProperty(value = "방 팀원 수")
 	private int total;
 	
-//	@ApiModelProperty(value = "총 인원 수")
-//	private int people;
-	
 	@ApiModelProperty(value = "응답 결과 (1:성공 / 0:취소 / -1:timeout)")
 	private int result;
 	
