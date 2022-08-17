@@ -3,6 +3,7 @@ package com.ssafy.honjaya.api.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ import com.ssafy.honjaya.util.CommonUtil;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private static final int SIGN_UP_POINT = 0; // 가입 시 포인트
+	private static final int SIGN_UP_POINT = 500; // 가입 시 포인트
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -48,6 +49,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public boolean signUp(SignUpReq signUpReq) {
+		Pattern pattern = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+		if (!pattern.matcher(signUpReq.getUserEmail()).matches()) { // 이메일 정규식
+			return false;
+		}
+		pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^])[A-Za-z\\d@$!%*#?&]{8,15}$");
+		if (!pattern.matcher(signUpReq.getUserPassword()).matches()) { // 비밀번호 정규식
+			return false;
+		}
+		
 		int randomProfileNo = (int) (Math.random() * 5) + 1;
 		String userProfilePicUrl = "/" + String.format("%03d", randomProfileNo) + ".png";
 		User user = User.builder()
@@ -85,12 +95,22 @@ public class UserServiceImpl implements UserService {
 	public int login(LoginReq loginReq) {
 		String email = loginReq.getUserEmail();
 		String password = loginReq.getUserPassword();
-		if (email == null || password == null) {
+		if (email == null || email.length() < 5 || email.length() > 50
+				|| password == null || password.length() < 8 || password.length() > 15) {
+			return -1; // 이메일 또는 비밀번호가 비정상
+		}
+		Pattern pattern = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+		if (!pattern.matcher(email).matches()) { // 이메일 정규식
 			return -1;
 		}
+		pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^])[A-Za-z\\d@$!%*#?&]{8,15}$");
+		if (!pattern.matcher(password).matches()) { // 비밀번호 정규식
+			return -1;
+		}
+
 		User user = userRepository.findByUserEmail(email);
-		if (user == null || !user.getUserPassword().equals(password)) {
-			return -2; // 이메일 또는 비밀번호 오답
+		if (user == null || !password.equals(user.getUserPassword())) {
+			return -2; // 이메일 또는 비밀번호가 오답
 		}
 		return user.getUserNo();
 	}

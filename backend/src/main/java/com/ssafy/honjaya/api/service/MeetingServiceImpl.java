@@ -85,6 +85,19 @@ public class MeetingServiceImpl implements MeetingService {
 			
 			for (int i = 0; i < 2; i++) { // i가 0일 때는 2인, i가 1일 때는 4인
 				if (meetingReq.getTotal() == (i + 1) * 2) {
+					
+					if (meetingReq.getRoleCode() == 4) { // 역할이 랜덤일 때는 최적화 전략을 사용함
+						int commanderSize = waitingCommander.get(i).size();
+						int avatarSize = waitingAvatar.get(i).size();
+						if (commanderSize > avatarSize) { // 지시자가 페어를 찾는 중이면
+							meetingReq.setRoleCode(2); // 아바타로 설정
+						} else if (commanderSize < avatarSize) { // 아바타가 페어를 찾는 중이면
+							meetingReq.setRoleCode(3); // 지시자로 설정
+						} else { // 페어를 찾고 있는 지시자나 아바타가 없을 경우
+							meetingReq.setRoleCode(1); // 싱글로 설정
+						}
+					}
+					
 					// 아바타나 지시자일 경우 서로 짝 먼저 지어줘야 함
 					switch (meetingReq.getRoleCode()) {
 					case 1:
@@ -340,7 +353,7 @@ public class MeetingServiceImpl implements MeetingService {
 //		this.waitingPair.add(new LinkedHashMap<>());
 //	}
 	
-	private void testPrint() { // 테스트
+	private void testPrint() { // 큐 상태 로그 출력
 		String s = "";
 		for (int i = 0; i < 2; i++) {
 			int cnt = 0;
