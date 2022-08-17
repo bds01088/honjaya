@@ -67,9 +67,9 @@ const initialState = {
   chatRooms : [],
   myUserNo: 1,
   opponentNickname: '',
-  opponentUserNo: 1
-
-
+  opponentUserNo: 1,
+  isMatched: false,
+  userProfilePicUrl:''
 }
 
 const chatSlice = createSlice({
@@ -88,6 +88,11 @@ const chatSlice = createSlice({
     [getChatRoomDetail.fulfilled] : (state,action) => {
       state.opponentUserNo = action.payload.data.userNo
       state.opponentNickname = action.payload.data.userNickname
+      state.userProfilePicUrl = action.payload.data.userProfilePicUrl
+      // console.log("여기에 있나",action.payload.data)
+    },
+    [requestDirectMessage.fulfilled] : (state,action) => {
+      state.isMatched = action.payload.data.trueOrFalse
     }
   }
 })
