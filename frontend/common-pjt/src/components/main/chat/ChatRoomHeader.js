@@ -72,12 +72,12 @@ const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom, chat
           </Username>
           {/* 아 이게 아이콘이구나 */}
           <UserInform onClick={openUserProfileModal}/> 
-          {isOpen ? <UserProfileModal openUserProfileModal={openUserProfileModal} oppositeUserNo={chatUserNo} /> : null}
+          {isOpen ? <UserProfileModal openUserProfileModal={openUserProfileModal} oppositeUserNo={chatUserNo} userProfilePicUrl={userProfilePicUrl}/> : null}
         </User>
 
         <Leave onClick={openDeleteModal}/>
 
-        {userProfilePicUrl}
+        {/* {userProfilePicUrl} */}
        
 
         {isDeleteModalOpen ? <DeleteModal openDeleteModal={openDeleteModal} chatRoomNo={chatRoomNo} openChatRoom={openChatRoom}  /> : null}

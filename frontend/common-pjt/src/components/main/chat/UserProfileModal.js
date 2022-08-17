@@ -122,6 +122,7 @@ const UserProfileModal = ({
   openUserProfileModal,
   userReport,
   myUserNo,
+  userProfilePicUrl
 }) => {
   const dispatch = useDispatch()
   const [isDuplicated, setIsDuplicated] = useState(false)
@@ -132,7 +133,7 @@ const UserProfileModal = ({
     setIsOpen(!isOpen)
   }
 
-  const { userNickname, rateScore, userGender, hashtags, userProfilePicUrl } =
+  const { userNickname, rateScore, userGender, hashtags } =
     useSelector((state) => state.profile)
 
   const closeUserProfileModal = () => {
@@ -154,6 +155,7 @@ const UserProfileModal = ({
       })
   }, [])
 
+  console.log("프로필 주소가 있니?", userProfilePicUrl)
   return (
     <ModalBackdrop>
       <ModalView>
@@ -163,9 +165,11 @@ const UserProfileModal = ({
             <LogoImg src={logoImg} />
           </div>
           <div>
+            {userProfilePicUrl !== undefined ? 
             <ProfileImg
-              src={require(`../../../assets/profile${userProfilePicUrl}`)}
+              src={require(`./../../../assets/profile_img${userProfilePicUrl}`)}
             />
+            : null }
           </div>
 
           <Nickname>

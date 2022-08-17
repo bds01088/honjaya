@@ -116,7 +116,7 @@ const MainCharacter = () => {
       <Container>
         <CardFront className="front">
           {character.url !== undefined ? (
-            <FrontImg src={require(`./../../assets/profile${character.url}`)} />
+            <FrontImg src={require(`./../../assets/profile_img${character.url}`)} />
           ) : null}
         </CardFront>
         <CardBack className="back">

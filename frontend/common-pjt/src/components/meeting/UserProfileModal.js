@@ -122,17 +122,19 @@ const UserProfileModal = ({
   openUserProfileModal,
   userReport,
   myUserNo,
+  userProfilePicUrl
 }) => {
+  console.log("모달연 다음", userProfilePicUrl)
   const dispatch = useDispatch()
   const [isDuplicated, setIsDuplicated] = useState(false)
   const [showIcons, setShowIcons] = useState(false)
-
+  
   const [isOpen, setIsOpen] = useState(false)
   const openUserReportModal = () => {
     setIsOpen(!isOpen)
   }
 
-  const { userNickname, rateScore, userGender, hashtags, userProfilePicUrl } =
+  const { userNickname, rateScore, userGender, hashtags } =
     useSelector((state) => state.profile)
 
   const closeUserProfileModal = () => {
@@ -148,6 +150,7 @@ const UserProfileModal = ({
       .unwrap()
       .then((res) => {
         console.log('상대유저정보', res.data)
+
       })
       .catch((err) => {
         console.log('채팅목록로드에러', err)
@@ -163,9 +166,11 @@ const UserProfileModal = ({
             <LogoImg src={logoImg} />
           </div>
           <div>
+            {userProfilePicUrl !== undefined ? 
             <ProfileImg
-              src={require(`../../assets/profile${userProfilePicUrl}`)}
+              src={require(`./../../assets/profile_img${userProfilePicUrl}`)}
             />
+             : null}
           </div>
 
           <Nickname>

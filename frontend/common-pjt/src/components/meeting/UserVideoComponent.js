@@ -3,12 +3,14 @@ import OpenViduVideoComponent from './OvVideo'
 import styled from 'styled-components'
 import { TiMessages } from 'react-icons/ti'
 import { IoPersonCircleOutline } from 'react-icons/io5'
+// import UserProfileModal from './../main/chat/UserProfileModal'
 import UserProfileModal from './UserProfileModal'
 import { connect } from 'react-redux'
 import { userReport } from './evaluate-slice'
 import { storeResult, doingVote, storeConnection } from './vote-slice'
 import axios from '../../api/http'
 import { requestDirectMessage } from '../main/chat/chat-slice'
+import { opponentUserProfile } from '../main/profile/profile-slice'
 
 import MainHelper from '../main/MainHelper'
 
@@ -139,6 +141,7 @@ class UserVideoComponent extends Component {
       isDuplicated: false,
       isOpen: false,
       oppositeUserNo: 1,
+      userPicUrl: undefined,
 
       avgRate: undefined,
       rate: undefined,
@@ -149,7 +152,7 @@ class UserVideoComponent extends Component {
   }
 
   async componentDidMount() {
-    const { mode, getOtherRate } = this.props
+    const { mode, getOtherRate, getOpponentUserProfile } = this.props
     const userNo = mode.user.userNo
     const userNickname = this.state.data.clientData
     const oppositeUserNo = this.state.data.userDatas.userNo
@@ -159,6 +162,10 @@ class UserVideoComponent extends Component {
       voteTo: userNickname,
       oppositeUserNo: oppositeUserNo,
     })
+
+    const picUrlRes = await getOpponentUserProfile(oppositeUserNo)
+    console.log("비디오컴포넌트에서 url출력",picUrlRes)
+    this.setState({userPicUrl: picUrlRes.payload.data.userProfilePicUrl})
 
     const avgRes = await getOtherRate(this.state.data.userDatas.userNo)
     console.log('평균점수 응답', avgRes)
@@ -359,6 +366,7 @@ class UserVideoComponent extends Component {
                             openUserProfileModal={this.openUserProfileModal}
                             oppositeUserNo={this.state.oppositeUserNo}
                             myUserNo={this.state.myUserNo}
+                            userProfilePicUrl={this.state.userPicUrl}
                           /> ) : null}
                         {!this.state.showIcons && !this.state.isDuplicated ? (
                           <TiMsg onClick={() => {this.requestDirectMessage()}}/> ) : null}
@@ -431,6 +439,7 @@ const mapStateToProps = (state) => ({
   point: state.point,
   vote: state.vote,
   chat: state.chat,
+  profile: state.profile
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -443,6 +452,7 @@ const mapDispatchToProps = (dispatch) => {
     putRate: (data) => dispatch(putRate(data)),
     setRate: (data) => dispatch(setRate(data)),
     getOtherRate: (data) => dispatch(getOtherRate(data)),
+    getOpponentUserProfile: (data) => dispatch(opponentUserProfile(data))
   }
 }
 
