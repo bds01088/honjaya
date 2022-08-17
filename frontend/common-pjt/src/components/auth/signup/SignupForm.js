@@ -17,11 +17,13 @@ const SignupFormBlock = styled.div`
   h3 {
     margin: 0;
     color: #00C3A9;
-    font-size: 2rem;
+    font-size: 2.3rem;
   }
 
   p {
     font-size: 1.2rem;
+    margin: 0;
+    margin-top: 1rem;
   }
 
   .Login {
@@ -82,7 +84,7 @@ const SignupForm = () => {
   
   return (
     <SignupFormBlock>
-      <Logo><img src={logoImg} alt="logo" style={{ height: '100%'}}/></Logo> 
+      <Logo><img src={logoImg} alt="logo" style={{ height: '110%', paddingLeft: "1rem"}}/></Logo> 
       <h3>회원가입</h3>
       <p>이미 회원이신가요? <Link to="/" className="Login">로그인하기</Link></p>
       <FormBox>

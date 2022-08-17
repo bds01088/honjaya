@@ -15,7 +15,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Jua;
+  font-family: Minseo;
 `
 
 const Login = () => {

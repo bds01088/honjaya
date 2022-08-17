@@ -58,7 +58,7 @@ const Header = styled.div`
   align-items: center;
   height: 10%;
   width: 96%;
-  padding: 0.5rem 2%;
+  padding: 0 2%;
 `
 
 // 헤더로고
@@ -182,7 +182,7 @@ const TopicBox = styled.div`
   justify-content: center;
   height: 5%;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 0;
   background-color: #f6a9a9;
   margin-bottom: 0.5rem;
 `
