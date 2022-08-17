@@ -43,6 +43,7 @@ const LoginBtn = styled.button`
   margin: 1.5rem 0;
   font-size: 1.5rem;
   font-family: Minseo;
+  cursor: pointer;
 
   &:hover{
     background-color: #df6079;

@@ -28,7 +28,7 @@ const GoInBtn = styled.div`
   font-size: 1.5rem;
   font-family: Minseo;
   margin-bottom: 25%;
-
+  cursor: pointer;
   &:hover{
     background-color: #009c87;
     color: #e0e0e0;
