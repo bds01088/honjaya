@@ -25,11 +25,11 @@ const StyledInput = styled.input`
   background-color: white;
   border: 1.5px solid #333333;
   border-radius: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   padding: 1rem 0.5rem;
   width: 95%;
   height: 1rem;
-  font-family: Jua;
+  font-family: Minseo;
 
   &:focus {
     border: 3px solid #00cfb4;
@@ -58,12 +58,13 @@ const StyledBtn = styled.button`
   color: white;
   border-radius: 0.5rem;
   border: 0;
-  font-size: 1rem;
-  font-family: Jua;
+  font-size: 1.4rem;
+  font-family: Minseo;
 
   &:hover{
     background-color: #009c87;
     color: #e0e0e0;
+    /* font-size: 1.5rem; */
   }
 `
 
@@ -87,12 +88,13 @@ const InBtn = styled.button`
   border: 0;
   padding: 1rem;
   margin: 1rem 0;
-  font-size: 1.2rem;
-  font-family: Jua;
+  font-size: 1.5rem;
+  font-family: Minseo;
   cursor: pointer;
   &:hover{
     background-color: #009c87;
     color: #e0e0e0;
+    font-size: 1.6rem;
   }
 
   &:disabled{
@@ -452,7 +454,7 @@ const FormInputs = () => {
           className="birth"
         ></StyledInput>
 
-        <div>
+        <div style={{ fontSize: "1.5rem" }}>
           <label>
             <input name="userGender" type="radio" value="m" checked={userGender==="m"} onChange={changeGender} />남
           </label>

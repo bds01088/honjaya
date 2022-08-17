@@ -30,7 +30,7 @@ const PersonnelBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  border: 0.2rem solid #333333;
+  border: 0.2rem solid #363636;
   border-radius: 2rem;
   height: 70%;
   width: 50%;
@@ -38,9 +38,10 @@ const PersonnelBox = styled.div`
 
 const Title = styled.div`
   position: absolute;
-  font-family: 'Jua';
+  font-family: Minseo;
   font-size: 2rem;
-  color: #333333;
+  font-weight: bold;
+  color: #363636;
   top: -1rem;
   z-index: 1;
   padding: 0 1rem;
@@ -58,10 +59,14 @@ const Label = styled.label`
   align-items: center;
   justify-content: space-evenly;
   width: 10rem;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   margin: 0 1rem;
-  font-family: 'Jua';
+  font-family: Minseo;
   cursor: pointer;
+
+  &:hover {
+    font-weight: bold;
+  }
 `
 
 const RadioIconOff = styled(MdRadioButtonUnchecked)`
@@ -86,15 +91,16 @@ const Start = styled.button`
   border: none;
   border-radius: 1rem;
   color: white;
-  font-family: Jua;
-  font-size: 2.8rem;
+  font-family: Minseo;
+  font-size: 3.5rem;
   padding: 0.5rem 2rem;
   background: #ff728e;
   cursor: pointer;
 
   &:hover {
-    background: #a04053;
+    background: #cc586f;
     color: #c2c2c2;
+    font-size: 3.6rem;
   }
 `
 

@@ -25,13 +25,15 @@ const GoInBtn = styled.div`
   text-align: center;
   border-radius: 0.5rem;
   padding: 1rem 0rem;
-  font-size: 1.2rem;
-  font-family: Jua;
+  font-size: 1.5rem;
+  font-family: Minseo;
   margin-bottom: 25%;
 
   &:hover{
     background-color: #009c87;
     color: #e0e0e0;
+    width: 72%;
+    font-size: 1.6rem;
   }
 `
 

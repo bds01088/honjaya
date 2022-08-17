@@ -16,6 +16,9 @@ const Background = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 `
 
 const ModeContainer = styled.div`
@@ -23,9 +26,8 @@ const ModeContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   width: 94%;
-  padding: 0 3%;
-  height: 87%;
-  margin-top: 1rem;
+  padding: 1% 3% 0% 3%;
+  height: 85%;
 `
 
 // 모드 default = [Solo, 1:1, 성별무관]

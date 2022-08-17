@@ -69,13 +69,13 @@ const LeaveText = styled.p`
   text-align: center;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
   opacity: 80%;
   position: absolute;
   z-index: 2;
-  top: 100%;
+  top: 60%;
   left: 50%;
-  margin-left: -2rem;
+  margin-left: -1.8rem;
 `
 
 const SpinnerBox = styled.div`
@@ -96,8 +96,9 @@ const TimerBox = styled.div`
   margin: 1rem;
 `
 const Timer = styled.p`
-  font-size: 1.6rem;
-  font-family: Jua;
+  font-size: 2rem;
+  font-family: Minseo;
+  font-weight: bold;
   margin: 0 0.5rem;
 `
 
@@ -106,25 +107,35 @@ const TimerImg = styled.img.attrs({ src: `${timerImg}`})`
 `
 
 const StatusText = styled.p`
-  font-size: 1.2rem;
-  font-family: Jua;
+  font-size: 1.7rem;
+  font-family: Minseo;
   margin: 1rem;
   text-align: center;
 `
 
 const ChoiceBtn = styled.button`
   font-size: 1.3rem;
-  font-family: Jua;
+  font-family: Minseo;
   border-radius: 1rem;
   padding: 0.3rem 1rem;
   border: none;
 
   &.yes {
     background-color: #40C0E7;
+
+    &:hover {
+      background-color: #3ab3d8;
+      font-weight: bold;
+    }
   }
 
   &.no {
     background-color: #F38BA0;
+
+    &:hover {
+      background-color: #ee778f;
+      font-weight: bold;
+    }
   }
 `
 
@@ -256,8 +267,8 @@ const BanIcon = styled(MdOutlineHighlightOff)`
 const GuideHeader = styled.div`
   padding: 1rem;
   text-align: center;
-  font-size: 2rem;
-  font-family: Jua;
+  font-size: 2.2rem;
+  font-family: Minseo;
   color: #333333;
   display: flex;
   justify-content: center;
@@ -265,20 +276,20 @@ const GuideHeader = styled.div`
   border-bottom: 2px ridge  #333333;
 
   @media (max-width: 1400px){
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 `
 
 const GuideText = styled.div`
   padding: 1rem 2.5rem;
-  font-size: 1.5rem;
-  font-family: Jua;
+  font-size: 1.6rem;
+  font-family: Minseo;
   color: #333333;
   display: flex;
   align-items: center;
 
   @media (max-width: 1400px){
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     padding: 0.8rem 2.5rem;
   }
 
