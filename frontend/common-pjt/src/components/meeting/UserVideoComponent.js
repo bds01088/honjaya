@@ -220,10 +220,10 @@ class UserVideoComponent extends Component {
             .then((res) => {
               console.log(res.data)
               if (res.data.trueOrFalse) {
-                alert("방 개설 성공")
+                ToastsStore.info("🎊 1:1 채팅방이 개설되었습니다! 📩")
                 this.setState({isDuplicated:true})
               } else {
-                alert("상대가 아직 신청 안함")
+                ToastsStore.info("🎉 1:1 채팅 신청이 완료되었습니다! 📨")
                 this.setState({isDuplicated:true})
               }
             })
