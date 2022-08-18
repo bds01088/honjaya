@@ -31,6 +31,10 @@ import Messages from './meeting-chat/Messages'
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
 
+import ReactAudioPlayer from './../bgm'
+import bgm001 from './../../assets/sound/001.mp3'
+
+
 // import { compareResult } from './vote-slice'
 // import randomTopic from '../../DATA/randomTopic.json'
 
@@ -1376,6 +1380,11 @@ class Meeting extends Component {
 
     return (
       <Background>
+        <ReactAudioPlayer 
+          Url={bgm001}
+          isPlaying={true}
+          Volume={0.01}>
+        </ReactAudioPlayer>
         {this.state.resultTime ? <Countdown /> : null}
         <Header>
           <LogoBox>
