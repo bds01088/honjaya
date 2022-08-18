@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
 	public UserRes findUser(int userNo) {
 		User user = userRepository.findById(userNo).get();
 		UserRes userRes = new UserRes(user);
+		userRes.setUserPassword("");
 		return userRes;
 	}
 	
@@ -138,11 +139,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) {
+	public boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) throws NoSuchAlgorithmException {
 		User user = userRepository.findById(userNo).get();
 		if (user == null) {
 			return false;
 		}
+		
+		Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^])[A-Za-z\\d@$!%*#?&]{8,15}$");
+		if (!pattern.matcher(userUpdateReq.getUserPassword()).matches()) { // 비밀번호 정규식
+			return false;
+		}
+		userUpdateReq.setUserPassword(CommonUtil.sha256(userUpdateReq.getUserPassword()));
+		
 		user.setUserPassword(userUpdateReq.getUserPassword());
 		user.setUserNickname(userUpdateReq.getUserNickname());
 		user.setUserName(userUpdateReq.getUserName());

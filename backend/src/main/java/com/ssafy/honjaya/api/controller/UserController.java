@@ -92,9 +92,13 @@ public class UserController {
 		}
 		int userNo = jwtService.extractUserNo(accessToken);
 
-		if (userService.userUpdate(userNo, updateUserReq)) {
-			res.setSuccess(true);
-			return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+		try {
+			if (userService.userUpdate(userNo, updateUserReq)) {
+				res.setSuccess(true);
+				return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return new ResponseEntity<CommonRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
