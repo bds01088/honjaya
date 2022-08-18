@@ -223,26 +223,4 @@ public class ChatController {
 		}
 		return new ResponseEntity<CommonRes>(res, status);
 	}
-
-//	@ApiOperation(value = "채팅방 메시지 불러오기", response = ChatListRes.class)
-//	@ApiResponses({
-//		@ApiResponse(code = 200, message = "성공 (success: true)"),
-//		@ApiResponse(code = 401, message = "토큰 만료"),
-//		@ApiResponse(code = 500, message = "서버 오류")
-//	})
-//	@GetMapping("/messages/{chatroomNo}")
-//	public ResponseEntity<ChatListRes> average(@PathVariable long chatroomNo, HttpServletRequest request) {
-//		return null;
-//	}
-//	
-//	@ApiOperation(value = "채팅 메시지 입력", response = CommonRes.class)
-//	@ApiResponses({
-//		@ApiResponse(code = 200, message = "성공 (success: true)"),
-//		@ApiResponse(code = 401, message = "토큰 만료"),
-//		@ApiResponse(code = 500, message = "서버 오류")
-//	})
-//	@PostMapping("/message")
-//	public ResponseEntity<CommonRes> insertChat(@RequestBody ChatReq chatReq, HttpServletRequest request) {
-//		return null;
-//	}
 }

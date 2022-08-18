@@ -1,8 +1,10 @@
 package com.ssafy.honjaya.api.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,7 @@ import com.ssafy.honjaya.util.CommonUtil;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private static final int SIGN_UP_POINT = 0; // 가입 시 포인트
+	private static final int SIGN_UP_POINT = 500; // 가입 시 포인트
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -47,7 +49,18 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public boolean signUp(SignUpReq signUpReq) {
+	public boolean signUp(SignUpReq signUpReq) throws NoSuchAlgorithmException {
+		Pattern pattern = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+		if (!pattern.matcher(signUpReq.getUserEmail()).matches()) { // 이메일 정규식
+			return false;
+		}
+		pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^])[A-Za-z\\d@$!%*#?&]{8,15}$");
+		if (!pattern.matcher(signUpReq.getUserPassword()).matches()) { // 비밀번호 정규식
+			return false;
+		}
+		
+		signUpReq.setUserPassword(CommonUtil.sha256(signUpReq.getUserPassword())); // sha256, throws 처리
+		
 		int randomProfileNo = (int) (Math.random() * 5) + 1;
 		String userProfilePicUrl = "/" + String.format("%03d", randomProfileNo) + ".png";
 		User user = User.builder()
@@ -68,6 +81,7 @@ public class UserServiceImpl implements UserService {
 	public UserRes findUser(int userNo) {
 		User user = userRepository.findById(userNo).get();
 		UserRes userRes = new UserRes(user);
+		userRes.setUserPassword("");
 		return userRes;
 	}
 	
@@ -82,15 +96,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int login(LoginReq loginReq) {
+	public int login(LoginReq loginReq) throws NoSuchAlgorithmException {
 		String email = loginReq.getUserEmail();
 		String password = loginReq.getUserPassword();
-		if (email == null || password == null) {
+		if (email == null || email.length() < 5 || email.length() > 50
+				|| password == null || password.length() < 8 || password.length() > 15) {
+			return -1; // 이메일 또는 비밀번호가 비정상
+		}
+		Pattern pattern = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+		if (!pattern.matcher(email).matches()) { // 이메일 정규식
 			return -1;
 		}
+		pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^])[A-Za-z\\d@$!%*#?&]{8,15}$");
+		if (!pattern.matcher(password).matches()) { // 비밀번호 정규식
+			return -1;
+		}
+		
+		password = CommonUtil.sha256(password); // sha256, throws 처리
+
 		User user = userRepository.findByUserEmail(email);
-		if (user == null || !user.getUserPassword().equals(password)) {
-			return -2; // 이메일 또는 비밀번호 오답
+		if (user == null || !password.equals(user.getUserPassword())) {
+			return -2; // 이메일 또는 비밀번호가 오답
 		}
 		return user.getUserNo();
 	}
@@ -111,23 +137,20 @@ public class UserServiceImpl implements UserService {
 		return userProfileInfoRes;
 	}
 
-//	@Override
-//	public List<UserDto> allUserInfo() {
-//		return userRepository.findAll();
-//	}
-
-//	@Override
-//	public User userInfo(int userNo) { // findUser
-//		return userMapper.userInfo(userNo);
-//	}
-
 	@Override
 	@Transactional
-	public boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) {
+	public boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) throws NoSuchAlgorithmException {
 		User user = userRepository.findById(userNo).get();
 		if (user == null) {
 			return false;
 		}
+		
+		Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^])[A-Za-z\\d@$!%*#?&]{8,15}$");
+		if (!pattern.matcher(userUpdateReq.getUserPassword()).matches()) { // 비밀번호 정규식
+			return false;
+		}
+		userUpdateReq.setUserPassword(CommonUtil.sha256(userUpdateReq.getUserPassword()));
+		
 		user.setUserPassword(userUpdateReq.getUserPassword());
 		user.setUserNickname(userUpdateReq.getUserNickname());
 		user.setUserName(userUpdateReq.getUserName());

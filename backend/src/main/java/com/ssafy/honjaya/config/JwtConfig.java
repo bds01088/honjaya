@@ -1,9 +1,12 @@
 package com.ssafy.honjaya.config;
 
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+//import com.ssafy.honjaya.interceptor.JwtInterceptor;
 
 @Configuration
 //@EnableWebMvc
@@ -28,9 +31,20 @@ public class JwtConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(jwtInterCeptor).addPathPatterns("/user/**").addPathPatterns("/apt/**").addPathPatterns("/notice/**").addPathPatterns("/news/**") //湲곕낯 �쟻�슜 寃쎈줈
-//		.excludePathPatterns(Arrays.asList("/**/*.do/**"));
+//		registry.addInterceptor(jwtInterCeptor)
+//				.addPathPatterns("/users/**")
+//				.addPathPatterns("/chats/**")
+//				.addPathPatterns("/hashtags/**")
+//				.addPathPatterns("/meetings/**")
+//				.addPathPatterns("/points/**")
+//				.addPathPatterns("/rates/**")
+//				.addPathPatterns("/reports/**")
+//				.excludePathPatterns("/users/signup")
+//				.excludePathPatterns("/users/find/email/**")
+//				.excludePathPatterns("/users/find/nickname/**")
+//				.excludePathPatterns("/users/login")
+//				.excludePathPatterns("/users/logout")
+//				.excludePathPatterns("/users/refresh")
+//				.excludePathPatterns("/users/email");
 	}
-
-
 }

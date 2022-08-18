@@ -42,7 +42,6 @@ public class HashtagController {
 	@ApiOperation(value = "해시태그 입력", response = HashtagRes.class)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공 (success: true)"),
-//		@ApiResponse(code = 400, message = "해시태그 중복 입력"),
 		@ApiResponse(code = 401, message = "토큰 만료"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})

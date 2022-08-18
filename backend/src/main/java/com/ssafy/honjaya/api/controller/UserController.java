@@ -43,8 +43,6 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping("/users") // 401 에러 코드는
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-//	private static final String SUCCESS = "success";
-//	private static final String FAIL = "fail";
 
 	@Autowired
 	private JwtServiceImpl jwtService;
@@ -64,9 +62,13 @@ public class UserController {
 	public ResponseEntity<CommonRes> singUp(@RequestBody SignUpReq signUpReq) {
 		logger.debug("sign up");
 		CommonRes res = new CommonRes();
-		if (userService.signUp(signUpReq)) {
-			res.setSuccess(true);
-			return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+		try {
+			if (userService.signUp(signUpReq)) {
+				res.setSuccess(true);
+				return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return new ResponseEntity<CommonRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -90,9 +92,13 @@ public class UserController {
 		}
 		int userNo = jwtService.extractUserNo(accessToken);
 
-		if (userService.userUpdate(userNo, updateUserReq)) {
-			res.setSuccess(true);
-			return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+		try {
+			if (userService.userUpdate(userNo, updateUserReq)) {
+				res.setSuccess(true);
+				return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return new ResponseEntity<CommonRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -207,10 +213,10 @@ public class UserController {
 				loginRes.setRefreshToken(refreshToken);
 				loginRes.setSuccess(true);
 				status = HttpStatus.OK;
-			} else if (loginResult == -1) { // 이메일 또는 비밀번호가 비어 있음
+			} else if (loginResult == -1) { // 이메일 또는 비밀번호가 비정상
 				loginRes.setError("Empty Email or Password!!!");
 				status = HttpStatus.BAD_REQUEST;
-			} else if (loginResult == -2) { // 이메일 또는 비밀번호가 틀림
+			} else if (loginResult == -2) { // 이메일 또는 비밀번호가 오답
 				loginRes.setError("Wrong Email or Password!!!");
 				status = HttpStatus.BAD_REQUEST;
 			}
@@ -311,13 +317,6 @@ public class UserController {
 		}
 		return new ResponseEntity<UserProfileInfoRes>(userProfileInfoRes, status);
 	}
-
-//	@ApiOperation(value = "전체 회원 목록 가져오기", response = List.class)
-//	@GetMapping("/list")
-//	public ResponseEntity<List<User>> allUserInfo(){
-//		logger.debug("all user info");
-//		return new ResponseEntity<List<User>>(userService.allUserInfo(), HttpStatus.OK);
-//	}
 
 	@ApiOperation(value = "로그아웃", response = CommonRes.class)
 	@ApiResponses({

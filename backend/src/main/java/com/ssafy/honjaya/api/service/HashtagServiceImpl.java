@@ -7,12 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.honjaya.api.request.HashtagReq;
-import com.ssafy.honjaya.api.request.RateReq;
 import com.ssafy.honjaya.api.response.HashtagListRes;
 import com.ssafy.honjaya.api.response.HashtagRes;
-import com.ssafy.honjaya.api.response.RateRes;
 import com.ssafy.honjaya.db.entity.Hashtag;
-import com.ssafy.honjaya.db.entity.Rate;
 import com.ssafy.honjaya.db.repository.HashtagRepository;
 import com.ssafy.honjaya.db.repository.UserRepository;
 
