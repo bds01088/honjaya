@@ -26,7 +26,7 @@ const ModalView = styled.div.attrs((props) => ({
   text-align: center;
   text-decoration: none;
   padding: 30px 90px;
-  background-color: #FFFDDE;
+  background-color: #fffdde;
   border: 0.2rem solid #88866f;
   border-radius: 30px;
   color: #47463c;
@@ -59,7 +59,7 @@ const SubmitBtn = styled.button`
   font-family: Minseo;
   font-size: 1.5rem;
   margin-top: 1rem;
-  background-color: #CCF3EE;
+  background-color: #ccf3ee;
   border-radius: 1rem;
   border: 2px dashed #333333;
   color: #333333;
@@ -70,17 +70,14 @@ const SubmitBtn = styled.button`
 `
 
 const EmailCheck = (props) => {
-  
   const [codeIn, setCodeIn] = useState('')
-  
 
   const sendToMain = () => {
     props.closeEmailModal(false)
   }
 
   const checkCode = () => {
-    if(parseInt(codeIn) === props.code) {
-      console.log(codeIn, props.code)
+    if (parseInt(codeIn) === props.code) {
       props.setCheckedEmail(true)
       props.closeEmailModal()
     }
@@ -92,7 +89,9 @@ const EmailCheck = (props) => {
         <BackIcon onClick={sendToMain} />
         <h2>이메일로 전송된 인증코드를 입력하세요</h2>
         <InputHash type="text" onChange={(e) => setCodeIn(e.target.value)} />
-        <SubmitBtn type="button" onClick={checkCode}>인증번호 확인</SubmitBtn>
+        <SubmitBtn type="button" onClick={checkCode}>
+          인증번호 확인
+        </SubmitBtn>
       </ModalView>
     </ModalBackdrop>
   )

@@ -1,16 +1,12 @@
 import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import logoImg from '../../../assets/logo.png'
 import axios from '../../../api/http'
 import { useEffect } from 'react'
 import { userReport } from '../../meeting/evaluate-slice'
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition,
-} from 'react-toasts'
+import { ToastsStore } from 'react-toasts'
 
 const ModalBackdrop = styled.div`
   width: 100vw;
@@ -127,12 +123,9 @@ const StyledBtn = styled.button`
   }
 `
 
-
-
 const UserReportModal = ({
   openUserReportModal,
   oppositeUserNo,
-  myUserNo,
   setIsDuplicated,
 }) => {
   const dispatch = useDispatch()
@@ -146,6 +139,7 @@ const UserReportModal = ({
   const [reportType, setReportType] = useState('')
   const [reportMessage, setReportMessage] = useState('')
 
+  // 신고타입구분
   const changeReportType = (e) => {
     setReportType(e.target.value)
   }
@@ -155,7 +149,6 @@ const UserReportModal = ({
   }, [])
 
   function handleSubmit(e) {
-    console.log('어디서막히냐')
     e.preventDefault()
     const data = {
       reportTo,
@@ -166,7 +159,6 @@ const UserReportModal = ({
     axios.get(`/honjaya/reports/${oppositeUserNo}`).then((res) => {
       console.log(res)
       if (res.data.trueOrFalse) {
-        //이거 왜안먹음 ㅜㅜ
         ToastsStore.info('중복 신고는 할 수 없어요❗')
         setIsDuplicated(true)
         sendToBack()
@@ -174,12 +166,12 @@ const UserReportModal = ({
         dispatch(userReport(data))
           .unwrap()
           .then((res) => {
-            console.log('신고성공', res.data)
+            console.log('신고완료')
             setIsDuplicated(true)
             sendToBack()
           })
           .catch((err) => {
-            console.log('신고에러', err)
+            console.log(err)
           })
       }
     })

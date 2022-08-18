@@ -120,22 +120,21 @@ const MaleIcon = styled(IoIosMale)`
 const UserProfileModal = ({
   oppositeUserNo,
   openUserProfileModal,
-  userReport,
   myUserNo,
-  userProfilePicUrl
+  userProfilePicUrl,
 }) => {
-  console.log("모달연 다음", userProfilePicUrl)
   const dispatch = useDispatch()
   const [isDuplicated, setIsDuplicated] = useState(false)
   const [showIcons, setShowIcons] = useState(false)
-  
+
   const [isOpen, setIsOpen] = useState(false)
   const openUserReportModal = () => {
     setIsOpen(!isOpen)
   }
 
-  const { userNickname, rateScore, userGender, hashtags } =
-    useSelector((state) => state.profile)
+  const { userNickname, rateScore, userGender, hashtags } = useSelector(
+    (state) => state.profile,
+  )
 
   const closeUserProfileModal = () => {
     openUserProfileModal(false)
@@ -148,10 +147,6 @@ const UserProfileModal = ({
 
     dispatch(opponentUserProfile(oppositeUserNo))
       .unwrap()
-      .then((res) => {
-        console.log('상대유저정보', res.data)
-
-      })
       .catch((err) => {
         console.log('채팅목록로드에러', err)
       })
@@ -166,11 +161,11 @@ const UserProfileModal = ({
             <LogoImg src={logoImg} />
           </div>
           <div>
-            {userProfilePicUrl !== undefined ? 
-            <ProfileImg
-              src={require(`./../../assets/profile_img${userProfilePicUrl}`)}
-            />
-             : null}
+            {userProfilePicUrl !== undefined ? (
+              <ProfileImg
+                src={require(`./../../assets/profile_img${userProfilePicUrl}`)}
+              />
+            ) : null}
           </div>
 
           <Nickname>
@@ -204,7 +199,6 @@ const UserProfileModal = ({
           </HashList>
 
           <RateBox>
-
             <MannerRate
               size="large"
               value={rateScore}

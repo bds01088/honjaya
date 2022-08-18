@@ -1,16 +1,12 @@
 import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import logoImg from '../../assets/logo.png'
 import axios from '../../api/http'
 import { useEffect } from 'react'
 import { userReport } from './evaluate-slice'
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition,
-} from 'react-toasts'
+import { ToastsStore } from 'react-toasts'
 
 const ModalBackdrop = styled.div`
   width: 100vw;
@@ -70,7 +66,6 @@ const CheckDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
-  /* margin-bottom: 1rem; */
   font-size: 2.1rem;
 `
 
@@ -125,8 +120,6 @@ const StyledBtn = styled.button`
   }
 `
 
-
-
 const UserReportModal = ({
   openUserReportModal,
   oppositeUserNo,
@@ -153,7 +146,6 @@ const UserReportModal = ({
   }, [])
 
   function handleSubmit(e) {
-    console.log('어디서막히냐')
     e.preventDefault()
     const data = {
       reportTo,
@@ -166,12 +158,13 @@ const UserReportModal = ({
       if (res.data.trueOrFalse) {
         ToastsStore.info('중복 신고는 할 수 없어요❗')
         setIsDuplicated(true)
+        sendToBack()
       } else {
         dispatch(userReport(data))
           .unwrap()
           .then((res) => {
-            console.log('신고성공', res.data)
             setIsDuplicated(true)
+            sendToBack()
           })
           .catch((err) => {
             console.log('신고에러', err)

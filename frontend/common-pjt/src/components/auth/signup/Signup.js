@@ -2,8 +2,6 @@ import styled from 'styled-components'
 import SignupForm from './SignupForm'
 import backImg from '../../../assets/base.PNG'
 
-
-
 const Background = styled.div`
   background-image: url(${backImg});
   background-color: #fffdde;
@@ -19,16 +17,15 @@ const Background = styled.div`
 
   height: 100vh;
   width: 100vw;
-  background-color: #FFFDDE;
+  background-color: #fffdde;
   overflow: auto;
   font-family: Minseo;
 `
 
 const Signup = () => {
   return (
-    <Background>      
-      <SignupForm>  
-      </SignupForm>
+    <Background>
+      <SignupForm />
     </Background>
   )
 }
