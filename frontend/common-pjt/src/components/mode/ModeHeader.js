@@ -11,7 +11,6 @@ const Header = styled.div`
   }
 `
 
-
 const LogoBox = styled.div`
   height: 100%;
 `

@@ -55,33 +55,27 @@ const ChatList = ({
   useEffect(() => {
     dispatch(findAllRoom())
       .unwrap()
-      .then(() => {
-        console.log('채팅목록생성완료')
-      })
+      .then(() => { console.log('채팅목록조회') })
       .catch((err) => {
-        console.log('채팅목록로드에러', err)
-        // alert('해쉬태그로드에러')
+        console.log(err)
       })
   }, [])
-  //채팅상대유저
-  const users = chatRooms.map((chatRoom) => chatRoom.userNickname)
-  const chatRoomNos = chatRooms.map((chatRoom) => chatRoom.chatroomNo)
-  const chatUserNos = chatRooms.map((chatRoom) => chatRoom.userNo)
+
   return (
     <Container>
-      <ChatTitle>채팅목록 </ChatTitle>
+      <ChatTitle>채팅목록</ChatTitle>
       {chatRooms.map((chatRoom) => {
         return (
-            <ChatListItem
-              openChatList={openChatList}
-              user={chatRoom.userNickname}
-              roomNo={chatRoom.chatroomNo}
-              setChatUser={setChatUser}
-              setChatRoomNo={setChatRoomNo}
-              userNo={chatRoom.userNo}
-              setChatUserNo={setChatUserNo}
-              openChatRoom={openChatRoom}
-            />
+          <ChatListItem
+            openChatList={openChatList}
+            user={chatRoom.userNickname}
+            roomNo={chatRoom.chatroomNo}
+            setChatUser={setChatUser}
+            setChatRoomNo={setChatRoomNo}
+            userNo={chatRoom.userNo}
+            setChatUserNo={setChatUserNo}
+            openChatRoom={openChatRoom}
+          />
         )
       })}
     </Container>

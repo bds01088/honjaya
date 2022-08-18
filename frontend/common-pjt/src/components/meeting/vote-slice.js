@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-
 // 투표 결과 저장
 export const storeResult = createAsyncThunk(
   'STORE_RESULT',
@@ -8,9 +7,9 @@ export const storeResult = createAsyncThunk(
     try {
       return userData
     } catch (err) {
-      return rejectWithValue(err.response);
+      return rejectWithValue(err.response)
     }
-  }
+  },
 )
 
 // connection 저장
@@ -20,9 +19,9 @@ export const storeConnection = createAsyncThunk(
     try {
       return userData
     } catch (err) {
-      return rejectWithValue(err.response);
+      return rejectWithValue(err.response)
     }
-  }
+  },
 )
 
 // 내 투표 결과
@@ -32,18 +31,16 @@ export const doingVote = createAsyncThunk(
     try {
       return data
     } catch (err) {
-      return rejectWithValue(err.response);
+      return rejectWithValue(err.response)
     }
-  }
+  },
 )
-
 
 const initialState = {
   result: {},
   vote: {},
   connections: {},
-};
-
+}
 
 const voteSlice = createSlice({
   name: 'vote',
@@ -57,7 +54,7 @@ const voteSlice = createSlice({
     },
     setConnections: (state) => {
       state.connections = null || {}
-    }
+    },
   },
   extraReducers: {
     [storeResult.fulfilled]: (state, action) => {
@@ -70,8 +67,7 @@ const voteSlice = createSlice({
       state.vote[action.payload.voteTo] = action.payload.voteRole
     },
   },
-});
-
+})
 
 export const { setResult, setVote, setConnections } = voteSlice.actions
 

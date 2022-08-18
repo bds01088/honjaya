@@ -5,13 +5,9 @@ import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { useState } from 'react'
-
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
-
 import { enterRoom, getChatRoomDetail } from './chat-slice'
-
-// import { randomColor } from './utils/common';
 
 const Container = styled.div`
   width: 18rem;
@@ -90,7 +86,6 @@ const SendInput = styled.input`
 `
 
 const SendButton = styled.button`
-  /* visibility: hidden; */
   background: none;
   border: none;
   cursor: pointer;
@@ -119,12 +114,10 @@ const Me = styled.div`
   text-align: right;
 `
 const YourNickname = styled.div`
-  /* margin-bottom: 1rem; */
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 1.2rem;
-  /* width: 50%; */
 `
 const Yourname = styled.div`
   background-color: #ace248;
@@ -132,12 +125,10 @@ const Yourname = styled.div`
 `
 
 const MyNickname = styled.div`
-  /* margin-bottom: 1rem; */
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   font-size: 1.2rem;
-  /* width: 50%; */
 `
 
 const Myname = styled.div`
@@ -147,18 +138,14 @@ const Myname = styled.div`
 
 const Text = styled.div`
   margin: 0.1rem 0.5rem;
-  /* width: 70%; */
-  /* background-color: blue; */
   display: inline-block;
   font-family: Minseo;
 `
 
 const SendTime = styled.div`
   color: #333333;
-  /* width: 50%; */
   margin: 0 0.5rem;
   font-size: 0.8rem;
-  /* display: inline-block; */
 `
 
 const ChatRoom = ({
@@ -170,22 +157,21 @@ const ChatRoom = ({
   openChatRoom,
   chatRooms,
 }) => {
-
   const myUserNo = useSelector((state) => state.chat.myUserNo)
-  // const opponentUserNo = useSelector((state) => state.chat.opponentUserNo)
-  // const opponentUserNickname = useSelector(
-  //   (state) => state.chat.opponentUserNickname,
-  // )
+
   const dispatch = useDispatch()
 
-  const [chatMessage, setChatMessage] = useState(' ')
+  const [chatMessage, setChatMessage] = useState('')
   const [messages, setMessages] = useState([])
+  const [isUpdated, setIsUpdated] = useState(' ')
 
   var sockJs = new SockJS('https://i7e104.p.ssafy.io/honjaya/stomp/chat')
   var stomp = Stomp.over(sockJs)
   var reconnect = 0
 
+  // 메시지 발신
   const sendMessage = () => {
+    if (chatMessage.trim() === '') return
     stomp.send(
       '/pub/chat/message',
       {},
@@ -197,6 +183,7 @@ const ChatRoom = ({
     )
   }
 
+  // 메시지 수신
   const recvMessage = (recv) => {
     messages.push({
       userNo: recv.userNo,
@@ -205,18 +192,6 @@ const ChatRoom = ({
       chatTime: recv.chatTime,
     })
     setMessages(messages)
-
-    //바뀐 값 인식 못할때 새로운 배열을 만들어서 구조분해할당후 수정해주기 이부분 주석은 남겨줘!
-    // const temp = {
-    //   userNo: recv.userNo,
-    //   userNickname: recv.userNickname,
-    //   chatMessage: recv.chatMessage,
-    //   chatTime: recv.chatTime,
-    // }
-
-    // const tempArray = [temp,...messages]
-    // setMessages(tempArray)
-    // setMessages(messages)
   }
 
   const connect = () => {
@@ -227,16 +202,15 @@ const ChatRoom = ({
 
         stomp.subscribe(`/sub/chat/room/${chatRoomNo}`, function (message) {
           var recv = JSON.parse(message.body)
-          //이게 내 메시지인지 아닌지 비교할려면 여기담긴 상대 userNo 이랑 내가 컴포넌트에 myUserNo 쓸수있게 해놔서 그거 비교하면 될듯!
-          console.log('여기에 받아오는 정보 다 있음 확인해서 사용하면됨', recv)
-          // setIsRecived(true)
           recvMessage(recv)
+
           //시간 차 사용해서 재랜더링 강제로 일으키기
           setTimeout(() => {
-            setChatMessage('')
+            setIsUpdated('')
           }, 200)
-          //상대방 대화도 업데이트 필요함
-          setChatMessage(' ')
+
+          // 상대방 메시지 불러오기
+          setIsUpdated(' ')
         })
         stomp.send(
           '/pub/chat/enter',
@@ -263,24 +237,22 @@ const ChatRoom = ({
     dispatch(enterRoom(chatRoomNo))
       .unwrap()
       .then((res) => {
-        console.log('채팅방입장성공', res.data)
         dispatch(getChatRoomDetail(chatRoomNo))
           .unwrap()
           .then((res) => {
-            console.log('방정보 불러오기 성공')
             connect()
           })
           .catch((err) => {
-            alert('방 정보 불러오기 실패')
+            console.log(err)
           })
       })
       .catch((err) => {
-        console.log('채팅방입장에러', err)
+        console.log(err)
       })
   }, [])
 
   const scrollRef = useRef()
-  
+
   useEffect(() => {
     scrollRef.current.scrollIntoView({ behavior: 'smooth' })
   })
@@ -302,32 +274,31 @@ const ChatRoom = ({
               {messages.map((msg, idx) => {
                 return (
                   <>
-                    {
-                      msg.userNo !== myUserNo ? (
-                        // 상대 메시지는 왼쪽에
-                        <You key={idx} {...msg}>
-                          <YourNickname>
-                            <Yourname>{msg.userNickname}</Yourname>
-                            <SendTime>({msg.chatTime})</SendTime>
-                          </YourNickname>
-                          <Text>{msg.chatMessage}</Text>
-                        </You>
-                      ) : (
-                        // 내 메시지는 오른쪽에
-                        <Me key={idx} {...msg}>
-                          <MyNickname>
-                            <Myname>{msg.userNickname}</Myname>
-                            <SendTime>({msg.chatTime})</SendTime>
-                          </MyNickname>
-                          <Text>{msg.chatMessage}</Text>
-                        </Me>
-                      )
-                    }
+                    {msg.userNo !== myUserNo ? (
+                      // 상대 메시지는 왼쪽에
+                      <You key={idx} {...msg}>
+                        <YourNickname>
+                          <Yourname>{msg.userNickname}</Yourname>
+                          <SendTime>({msg.chatTime})</SendTime>
+                        </YourNickname>
+                        <Text>{msg.chatMessage}</Text>
+                      </You>
+                    ) : (
+                      // 내 메시지는 오른쪽에
+                      <Me key={idx} {...msg}>
+                        <MyNickname>
+                          <Myname>{msg.userNickname}</Myname>
+                          <SendTime>({msg.chatTime})</SendTime>
+                        </MyNickname>
+                        <Text>{msg.chatMessage}</Text>
+                      </Me>
+                    )}
                   </>
                 )
               })}
-              <div ref={scrollRef}/>
+              <div ref={scrollRef} />
             </ChatRecord>
+
             <SendBox>
               <SendInput
                 name="user_input"
@@ -338,12 +309,14 @@ const ChatRoom = ({
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
                     sendMessage(chatMessage)
+                    setChatMessage('')
                   }
                 }}
               />
               <SendButton
                 onClick={() => {
                   sendMessage(chatMessage)
+                  setChatMessage('')
                 }}
               >
                 <SendImg />

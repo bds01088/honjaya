@@ -123,25 +123,25 @@ const UserProfileModal = ({
   openUserProfileModal,
   userReport,
   myUserNo,
-  userProfilePicUrl
+  userProfilePicUrl,
 }) => {
   const dispatch = useDispatch()
   const [isDuplicated, setIsDuplicated] = useState(false)
   const [showIcons, setShowIcons] = useState(false)
-
   const [isOpen, setIsOpen] = useState(false)
+
+  // 신고모달
   const openUserReportModal = () => {
     setIsOpen(!isOpen)
   }
 
-  const { userNickname, rateScore, userGender, hashtags } =
-    useSelector((state) => state.profile)
+  const { userNickname, rateScore, userGender, hashtags } = useSelector((state) => state.profile)
 
+  // 유저프로필 모달 닫기
   const closeUserProfileModal = () => {
     openUserProfileModal(false)
   }
 
-  
   useEffect(() => {
     if (oppositeUserNo === myUserNo) {
       setShowIcons(true)
@@ -150,14 +150,13 @@ const UserProfileModal = ({
     dispatch(opponentUserProfile(oppositeUserNo))
       .unwrap()
       .then((res) => {
-        console.log('상대유저정보', res.data)
+        console.log('상대유저정보로드')
       })
       .catch((err) => {
         console.log('채팅목록로드에러', err)
       })
   }, [])
 
-  console.log("프로필 주소가 있니?", userProfilePicUrl)
   return (
     <ModalBackdrop>
       <ModalView>
@@ -167,21 +166,14 @@ const UserProfileModal = ({
             <LogoImg src={logoImg} />
           </div>
           <div>
-            {userProfilePicUrl !== undefined ? 
-            <ProfileImg
-              src={require(`./../../../assets/profile_img${userProfilePicUrl}`)}
-            />
-            : null }
+            {userProfilePicUrl !== undefined ? (
+              <ProfileImg src={require(`./../../../assets/profile_img${userProfilePicUrl}`)} /> ) : null}
           </div>
 
           <Nickname>
             {userNickname}
             {!showIcons && !isDuplicated ? (
-              <RiAlarmWarning
-                onClick={() => {
-                  openUserReportModal()
-                }}
-              />
+              <RiAlarmWarning onClick={() => { openUserReportModal() }} />
             ) : null}
             {isOpen ? (
               <UserReportModal
@@ -193,19 +185,13 @@ const UserProfileModal = ({
             ) : null}
           </Nickname>
 
-          {userGender === 'f' ? (
-            <FemaleIcon></FemaleIcon>
-          ) : (
-            <MaleIcon></MaleIcon>
-          )}
+          {userGender === 'f' ? <FemaleIcon/>  : <MaleIcon/>}
 
           <HashList>
-            {hashtags &&
-              hashtags.map((item, idx) => <Hashtag># {item} </Hashtag>)}
+            {hashtags && hashtags.map((item, idx) => <Hashtag># {item} </Hashtag>)}
           </HashList>
 
           <RateBox>
-
             <MannerRate
               size="large"
               value={rateScore}

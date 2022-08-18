@@ -25,12 +25,12 @@ const Background = styled.div`
   z-index: 10;
 `
 
-const BackImg = styled.img.attrs({ src: `${backGif}`})`
+const BackImg = styled.img.attrs({ src: `${backGif}` })`
   height: 100%;
   z-index: 10;
 `
 
-const LogoImg = styled.img.attrs({ src: `${logoImg}`})`
+const LogoImg = styled.img.attrs({ src: `${logoImg}` })`
   position: fixed;
   top: 2rem;
   height: 20%;
@@ -49,12 +49,12 @@ const Text = styled.div`
 
 class Countdown extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       timeLimit: 8,
     }
-    this.intervalRef = React.createRef();
+    this.intervalRef = React.createRef()
   }
 
   componentDidMount() {
@@ -62,40 +62,39 @@ class Countdown extends Component {
       // timeLimit이 남은 경우, 카운팅
       if (this.state.timeLimit > 0) {
         this.setState((prevState) => ({
-          timeLimit: prevState.timeLimit-1
-        }));
+          timeLimit: prevState.timeLimit - 1,
+        }))
       } else {
-        this.stopTimer();
+        this.stopTimer()
       }
-    }, 1000);
+    }, 1000)
   }
 
   componentWillUnmount() {
     // unmount 될때, 스톱워치 종료
-    this.stopTimer();
+    this.stopTimer()
   }
 
   // 스톱워치 종료 함수: clearInterval(변수)
   stopTimer = () => {
-    clearInterval(this.intervalRef.current);
+    clearInterval(this.intervalRef.current)
   }
 
   render() {
     return (
       <>
-        { this.state.timeLimit > 0 ? 
-        <Container>
-          <Background>
-            <LogoImg/>
-            <Text>결과 집계중입니다 .. 🧐</Text>
-            <BackImg/>
-          </Background>
-        </Container>
-        : null }
+        {this.state.timeLimit > 0 ? (
+          <Container>
+            <Background>
+              <LogoImg />
+              <Text>결과 집계중입니다 .. 🧐</Text>
+              <BackImg />
+            </Background>
+          </Container>
+        ) : null}
       </>
     )
   }
+}
 
-};
-
-export default Countdown;
+export default Countdown

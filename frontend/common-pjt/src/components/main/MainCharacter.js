@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import axios from '../../api/http'
 import styled from 'styled-components'
 import SelectCharcter from './SelectCharcter'
-import { FiEdit } from 'react-icons/fi'
 import { MdChangeCircle } from 'react-icons/md'
 
 const Div = styled.div`
@@ -81,7 +80,6 @@ const MainCharacter = () => {
   const getCharacter = async () => {
     try {
       const res = await axios.get('/honjaya/users/profile')
-      console.log('기본프로필', res)
       await setCharacter({ url: res.data.profileUrl })
     } catch (err) {
       console.log(err)
@@ -93,7 +91,6 @@ const MainCharacter = () => {
     axios
       .put(`/honjaya/users/profile/${profileNo}`)
       .then((res) => {
-        console.log('put 응답', res)
         setCharacter({ url: res.data.profileUrl })
       })
       .catch((err) => {
@@ -117,14 +114,12 @@ const MainCharacter = () => {
       <Container>
         <CardFront className="front">
           {character.url !== undefined ? (
-            <FrontImg src={require(`./../../assets/profile_img${character.url}`)} />
+            <FrontImg src={require(`./../../assets/profile_img${character.url}`)}/>
           ) : null}
         </CardFront>
         <CardBack className="back">
           {character.url !== undefined ? (
-            <BackImg
-              src={require(`./../../assets/backprofile${character.url}`)}
-            />
+            <BackImg src={require(`./../../assets/backprofile${character.url}`)} />
           ) : null}
         </CardBack>
       </Container>

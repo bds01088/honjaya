@@ -1,12 +1,9 @@
-import React from 'react';
+import React from 'react'
 import styled from 'styled-components'
 import { MdClear } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import logoImg from '../../../assets/logo.png'
-import axios from '../../../api/http'
-import { useEffect, useState } from 'react'
-import { deleteChat } from './chat-slice';
-import { Link, useHistory } from 'react-router-dom'
+import { deleteChat } from './chat-slice'
 
 export const ModalBackdrop = styled.div`
   width: 100vw;
@@ -28,7 +25,7 @@ const LogoImg = styled.img`
 
 const Text = styled.div`
   width: 100%;
-  color: #4A4A4A;
+  color: #4a4a4a;
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
 `
@@ -64,59 +61,48 @@ const StyledBtn = styled.button`
   font-size: 1.3rem;
   font-family: Minseo;
   cursor: pointer;
+
   &:hover {
     background-color: #b8495f;
     color: #b1aeae;
   }
 `
 
-
-const DeleteModal = ({openDeleteModal, chatRoomNo}) => { 
-  const [isDeleted, setIsDeleted] = useState(false)
-  const history = useHistory()
+const DeleteModal = ({ openDeleteModal, chatRoomNo }) => {
   const dispatch = useDispatch()
-  const sendToBack = (e) => { 
-   
-    openDeleteModal() } 
-  
-
-  function handleDelete(e) {
-    console.log(chatRoomNo)
-    dispatch(deleteChat(chatRoomNo))
-    .unwrap()
-    .then(() => {
-      console.log("삭제성공")
-      sendToBack()
-    
-     
-    })
+  const sendToBack = (e) => {
+    openDeleteModal()
   }
 
-  
+  function handleDelete(e) {
+    dispatch(deleteChat(chatRoomNo))
+      .unwrap()
+      .then(() => {
+        console.log('삭제성공')
+        sendToBack()
+      })
+  }
+
   return (
     <div>
-    <ModalBackdrop onClick={
-      sendToBack}>
-      <ModalView> 
-        <BackIcon onClick={
-          sendToBack}/>
-             
-            <div>
-              <LogoImg src={logoImg} />
-            </div>  
-   
-            <div>
-              <Text>채팅방을 나갈 시, 채팅 목록이 모두 삭제됩니다</Text>
-              <Text>정말 삭제하시겠습니까?</Text>
-            </div>
+      <ModalBackdrop onClick={sendToBack}>
+        <ModalView>
+          <BackIcon onClick={sendToBack} />
 
+          <div>
+            <LogoImg src={logoImg} />
+          </div>
 
-          <StyledBtn onClick={() => {handleDelete()}}>삭제</StyledBtn>
-      
+          <div>
+            <Text>채팅방을 나갈 시, 채팅 목록이 모두 삭제됩니다</Text>
+            <Text>정말 삭제하시겠습니까?</Text>
+          </div>
+
+          <StyledBtn onClick={() => { handleDelete() }}>삭제</StyledBtn>
         </ModalView>
       </ModalBackdrop>
-  </div>
-  );
-};
+    </div>
+  )
+}
 
-export default DeleteModal;
+export default DeleteModal

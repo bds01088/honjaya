@@ -18,7 +18,6 @@ export const exitMatching = createAsyncThunk(
     async (data, {rejectWithValue}) => { 
         try {
             const res = await axios.get('https://i7e104.p.ssafy.io/honjaya/meetings/cancel',)
-            // const res = await axios.get('http://localhost:8080/honjaya/meetings/cancel',)
             return res
             } catch (err) {
                 return rejectWithValue(err.response)
@@ -29,9 +28,6 @@ export const exitMatching = createAsyncThunk(
 )
 
 const initialState = {
-    // total: undefined, //2, 4
-    // roleCode: undefined, //1, 2, 3..
-    // matchResponse: undefined,
     result: undefined,
     roleCode: undefined,
     total: undefined,
@@ -39,10 +35,6 @@ const initialState = {
     user: {},
     uuid: undefined,
     pairUser: {},
-
-
-
-
 }
 
 const modeSlice = createSlice({

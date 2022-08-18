@@ -1,5 +1,4 @@
-import styled from "styled-components"
-
+import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
@@ -25,19 +24,26 @@ const Name = styled.p`
   }
 `
 
-const ChatListItem = ({ user , openChatList, setChatRoomNo, setChatUser, userNo, roomNo, setChatUserNo,  }) => {
-
-
+const ChatListItem = ({
+  user,
+  openChatList,
+  setChatRoomNo,
+  setChatUser,
+  userNo,
+  roomNo,
+  setChatUserNo,
+}) => {
   return (
-      <Container onClick={() => {
+    <Container
+      onClick={() => {
         openChatList()
-        setChatUser({user})
-        setChatUserNo({userNo})
-        setChatRoomNo({roomNo})
-      }}>
-        <Name>{user}</Name>
-      
-      </Container>
+        setChatUser({ user })
+        setChatUserNo({ userNo })
+        setChatRoomNo({ roomNo })
+      }}
+    >
+      <Name>{user}</Name>
+    </Container>
   )
 }
 

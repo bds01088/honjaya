@@ -10,7 +10,6 @@ import addTimerImg from '../../assets/add-timer.png'
 import backImg from '../../assets/base.PNG'
 import pointImg from '../../assets/carrot.png'
 import {
-  MdHelpOutline,
   MdLogout,
   MdSmartToy,
   MdOutlineChangeCircle,
@@ -19,27 +18,18 @@ import {
   MdMic,
   MdMicOff,
 } from 'react-icons/md'
-
 import {
   ToastsContainer,
   ToastsStore,
   ToastsContainerPosition,
 } from 'react-toasts'
-
 import Messages from './meeting-chat/Messages'
-
 import myAxios from '../../api/http'
 import { loadUser } from '../auth/login/login-slice'
-
 import ReactAudioPlayer from './../bgm'
 import bgm001 from './../../assets/sound/001.mp3'
 
-
-// import { compareResult } from './vote-slice'
-// import randomTopic from '../../DATA/randomTopic.json'
-
 const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443'
-// const OPENVIDU_SERVER_URL = 'https://coach82.p.ssafy.io:4443'
 const OPENVIDU_SERVER_SECRET = 'MY_SECRET'
 
 // 전체 배경
@@ -150,7 +140,7 @@ const TimerCheckBtn = styled.button`
     margin-right: 0.2rem;
 
     &&:hover {
-      background-color: #97caca; 
+      background-color: #97caca;
     }
   }
 
@@ -158,7 +148,7 @@ const TimerCheckBtn = styled.button`
     background-color: #ff728e;
 
     &&:hover {
-      background-color: #d3546d; 
+      background-color: #d3546d;
     }
   }
 `
@@ -184,9 +174,7 @@ const PointText = styled.p`
   font-weight: bold;
 `
 
-
 const Container = styled.div`
-  /* outline: 3px solid; */
   width: 100%;
   height: 90%;
 `
@@ -268,7 +256,6 @@ const ChatBox = styled.div`
 const MessageBox = styled.div`
   height: 73%;
   width: 100%;
-  /* border: 2px solid; */
   overflow-y: scroll;
   overflow-x: auto;
 
@@ -314,14 +301,11 @@ const InfoPoint = styled.span`
   font-weight: 600;
 `
 
-
-
 const VideoBox = styled.div`
   display: grid;
   grid-template-rows: 49% 49%;
   grid-auto-flow: column;
   grid-gap: 2%;
-  /* max-width: 60%; */
   height: 90%;
   border-radius: 1rem;
   background-color: #b5eaea;
@@ -385,19 +369,19 @@ const MicCamBox = styled.div`
 
 // 마이크, 카메라 on/off
 const MicOn = styled(MdMic)`
-  cursor:pointer;
+  cursor: pointer;
   color: #7e6752;
 `
 const MicOff = styled(MdMicOff)`
-  cursor:pointer;
+  cursor: pointer;
   color: #7e6752;
 `
 const CamOn = styled(MdVideocam)`
-  cursor:pointer;
+  cursor: pointer;
   color: #7e6752;
 `
 const CamOff = styled(MdVideocamOff)`
-  cursor:pointer;
+  cursor: pointer;
   color: #7e6752;
 `
 
@@ -427,7 +411,6 @@ const ShowRanking = styled.div`
 `
 
 const RankingContainer = styled.div`
-  /* border: 4px solid #333333; */
   visibility: hidden;
   background-color: #f6a9a9;
   opacity: 90%;
@@ -507,13 +490,12 @@ class Meeting extends Component {
       // 세션 정보
       mySessionId: undefined,
       myTotal: undefined,
-      // myUserName: 'Participant' + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-      // myUserNickname: undefined,
       myUserName: undefined,
+
       // 10분의 시간제한
       timeLimit: 600,
       minute: 10,
@@ -533,17 +515,13 @@ class Meeting extends Component {
       hashList: [],
 
       //랜덤주제
-
       randomTopic: '🎁 랜덤 주제 뽑기 🎁',
-
       topicList: randomTopicList,
-
       randomCount: 3,
 
       //롤코드
       myRoleCode: undefined,
       roleList: ['솔로', '아바타', '지시자'],
-      //이건 flag 역할인가
       check: false,
 
       // 비디오, 오디오 기본 설정
@@ -556,7 +534,6 @@ class Meeting extends Component {
       resultTime: false,
 
       // 투표 결과
-      // result: {},
       correctPoint: 0,
       wrongPoint: 0,
       calcReult: false,
@@ -567,7 +544,6 @@ class Meeting extends Component {
     // openVidu
     this.joinSession = this.joinSession.bind(this)
     this.leaveSession = this.leaveSession.bind(this)
-    this.switchCamera = this.switchCamera.bind(this)
     this.handleChangeSessionId = this.handleChangeSessionId.bind(this)
     this.handleChangeUserName = this.handleChangeUserName.bind(this)
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this)
@@ -591,7 +567,6 @@ class Meeting extends Component {
     this.handleChatMessageChange = this.handleChatMessageChange.bind(this)
 
     // 투표결과 불러오기
-    // this.setResult = this.setResult.bind(this)
     this.compareResult = this.compareResult.bind(this)
   }
 
@@ -600,8 +575,6 @@ class Meeting extends Component {
     const { login } = this.props
     const { hashtag } = this.props
     const { rate } = this.props
-    const { chat } = this.props
-    const { isMatched } = chat
     const { userNickname, userPoint } = login.user
     const { hashesOwned } = hashtag
     const { uuid, roleCode, user, total } = mode
@@ -609,7 +582,6 @@ class Meeting extends Component {
 
     if (roleCode !== 1) {
       const pairUser = mode.pairUser
-      console.log('페어유저 정보 저장', pairUser)
       this.setState({ pairUser: pairUser })
     }
 
@@ -644,7 +616,6 @@ class Meeting extends Component {
       }
     }, 1000)
 
-    //음 this.setState를 왜 따로 해주고 있지
     this.setState({
       myUserName: userNickname,
       myUserPoint: userPoint,
@@ -686,15 +657,12 @@ class Meeting extends Component {
           const res = await myAxios.put('/honjaya/points', {
             point: -100,
           })
-          console.log('시간추가 제한 횟수 차감 전', this.state.addTimeLimit)
           await this.setState({
             myUserPoint: res.data.point,
           })
-          console.log('시간추가 제한 횟수 차감 후', this.state.addTimeLimit)
           ToastsStore.info('-100 루팡 ❗')
         } else {
           ToastsStore.info('더이상 시간 연장이 불가능합니다')
-
         }
       } catch (err) {
         console.log('error')
@@ -706,7 +674,6 @@ class Meeting extends Component {
 
   componentDidUpdate() {
     this.scrollToBottom()
-
   }
 
   scrollToBottom = () => {
@@ -760,7 +727,6 @@ class Meeting extends Component {
     const { connections } = this.props.vote
     let wrongList = null || []
 
-    console.log('결과 비교할거야 아아아 !!!!!!')
     await Object.entries(result).map((item, idx) => {
       // user를 안 누른 경우, default = 1
       // 1. 결과가 vote에 없는 경우(누르지 않은 경우), 해당 유저가 솔로거나
@@ -771,21 +737,12 @@ class Meeting extends Component {
         (!vote[item[0]] && item[1] === 1) ||
         (vote[item[0]] && item[1] === vote[item[0]])
       ) {
-        console.log(
-          '오예 맞았다 !',
-          item[0],
-          item[1],
-          vote[item[0]],
-          this.state.correctPoint + 100,
-        )
         return this.setState({ correctPoint: this.state.correctPoint + 100 })
       } else {
         // 틀린 경우에는 해당 유저의 점수 + 50
         return wrongList.push(item[0])
       }
     })
-
-    await console.log('땡', wrongList)
 
     // 내가 틀린 사람들에게 점수 주기
     await wrongList.map((item, idx) => {
@@ -883,11 +840,8 @@ class Meeting extends Component {
     }
   }
 
-
-  //시그널을 보내고 자바스크립트서버에서 듣고 들은걸 다시
-  //랜덤 주제 픽
+  // 랜덤주제 셔플
   shuffleTopic() {
-    //shuffle arr
     let topic_idx = Math.floor(Math.random() * this.state.topicList.length)
     this.setState({ randomTopic: this.state.topicList[topic_idx] })
   }
@@ -895,7 +849,6 @@ class Meeting extends Component {
   async pickTopic() {
     try {
       if (this.state.randomCount > 0) {
-        console.log('무료3회', this.state.randomCount)
         await this.shuffleTopic()
         this.state.session.signal({
           data: `${this.state.randomTopic}`,
@@ -928,7 +881,7 @@ class Meeting extends Component {
     }
   }
 
-  //채팅 보내는 함수
+  // 채팅 보내는 함수
   handleChatMessageChange(e) {
     this.setState({
       message: e.target.value,
@@ -936,7 +889,7 @@ class Meeting extends Component {
   }
 
   sendmessageByClick() {
-    if (this.state.message.trim() !== ''){
+    if (this.state.message.trim() !== '') {
       this.setState({
         messages: [
           ...this.state.messages,
@@ -963,7 +916,7 @@ class Meeting extends Component {
 
   sendmessageByEnter(e) {
     if (e.key === 'Enter') {
-      if (this.state.message.trim() !== ''){
+      if (this.state.message.trim() !== '') {
         this.setState({
           messages: [
             ...this.state.messages,
@@ -990,14 +943,13 @@ class Meeting extends Component {
   }
 
 
-
+  // 오픈비두 세션 입장
   joinSession() {
-    // --- 1) Get an OpenVidu object ---
 
+    // --- 1) Get an OpenVidu object ---
     this.OV = new OpenVidu()
 
     // --- 2) Init a session ---
-
     this.setState(
       {
         session: this.OV.initSession(),
@@ -1006,7 +958,6 @@ class Meeting extends Component {
         var mySession = this.state.session
 
         // --- 3) Specify the actions when events take place in the session ---
-
         // On every new Stream received...
         mySession.on('streamCreated', (event) => {
           // Subscribe to the Stream to receive it. Second parameter is undefined
@@ -1047,7 +998,7 @@ class Meeting extends Component {
           console.warn(exception)
         })
 
-        //랜덤 주제에서 보낸 시그널을 들어보자
+        // 랜덤주제 추천 시그널
         mySession.on('signal:randomTopic', (event) => {
           this.setState({ randomTopic: event.data })
 
@@ -1087,7 +1038,6 @@ class Meeting extends Component {
 
         // 투표점수 받기
         mySession.on('signal:sendScore', (event) => {
-          // console.log('sendScore', event)
           const name = JSON.parse(event.from.data).clientData
           let score = parseInt(event.data)
 
@@ -1111,11 +1061,6 @@ class Meeting extends Component {
 
         // 누군가가 틀려서 내가 점수를 받는 경우
         mySession.on('signal:plusPoint', (event) => {
-          console.log(
-            '쟤가 나한테 점수줌 ㅋ',
-            event.data,
-            this.state.wrongPoint + 50,
-          )
           this.setState({ wrongPoint: this.state.wrongPoint + 50 })
           if (this.state.myRoleCode === 2) {
             this.state.session.signal({
@@ -1129,16 +1074,15 @@ class Meeting extends Component {
         // 시간 추가 시그널
         mySession.on('signal:addTime', (event) => {
           this.setState({ timeLimit: event.data })
-          console.log('시그널 받았을 때', this.state.addTimeLimit)
           this.setState({ addTimeLimit: this.state.addTimeLimit - 1 })
-          ToastsStore.info(`누군가 시간 연장을 하여, 연장 가능 횟수 ${this.state.addTimeLimit}회 남았습니다`)
+          ToastsStore.info(
+            `누군가 시간 연장을 하여, 연장 가능 횟수 ${this.state.addTimeLimit}회 남았습니다`,
+          )
         })
 
         // 세션 나가기
         mySession.on('signal:endMeeting', (event) => {
           const leaveName = event.data
-          console.log(leaveName)
-          
           alert(`${leaveName}님이 미팅을 나가 메인화면으로 돌아갑니다.`)
           this.leaveSession()
         })
@@ -1249,52 +1193,13 @@ class Meeting extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      mySessionId: undefined,
+      myUserName: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
     })
 
     this.props.history.push('/main')
-  }
-
-  async switchCamera() {
-    try {
-      const devices = await this.OV.getDevices()
-      var videoDevices = devices.filter(
-        (device) => device.kind === 'videoinput',
-      )
-
-      if (videoDevices && videoDevices.length > 1) {
-        var newVideoDevice = videoDevices.filter(
-          (device) =>
-            device.deviceId !== this.state.currentVideoDevice.deviceId,
-        )
-
-        if (newVideoDevice.length > 0) {
-          // Creating a new publisher with specific videoSource
-          // In mobile devices the default and first camera is the front one
-          var newPublisher = this.OV.initPublisher(undefined, {
-            videoSource: newVideoDevice[0].deviceId,
-            publishAudio: true,
-            publishVideo: true,
-            mirror: true,
-          })
-
-          //newPublisher.once("accessAllowed", () => {
-          await this.state.session.unpublish(this.state.mainStreamManager)
-
-          await this.state.session.publish(newPublisher)
-          this.setState({
-            currentVideoDevice: newVideoDevice,
-            mainStreamManager: newPublisher,
-            publisher: newPublisher,
-          })
-        }
-      }
-    } catch (e) {
-      console.error(e)
-    }
   }
 
   getToken() {
@@ -1374,8 +1279,6 @@ class Meeting extends Component {
   }
 
   render() {
-    // const mySessionId = this.state.mySessionId
-    // const myUserName = this.state.myUserName
     const messages = this.state.messages
 
     return (
@@ -1383,9 +1286,10 @@ class Meeting extends Component {
         <ReactAudioPlayer 
           Url={bgm001}
           isPlaying={true}
-          Volume={0.01}>
-        </ReactAudioPlayer>
+          Volume={0.01}
+        ></ReactAudioPlayer>
         {this.state.resultTime ? <Countdown /> : null}
+
         <Header>
           <LogoBox>
             <Logo />
@@ -1402,9 +1306,7 @@ class Meeting extends Component {
                 <AddBox onClick={this.showSelectTimer}>
                   <AddTimerImg />
                   <AddText className="timerTip">
-                    3분 추가
-                    <br />
-                    (-100 루팡)
+                    3분 추가<br />(-100 루팡)
                   </AddText>
                 </AddBox>
               ) : null}
@@ -1427,19 +1329,13 @@ class Meeting extends Component {
             <PointText>
               {this.state.myUserPoint === undefined
                 ? 0
-                : this.state.myUserPoint
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                : this.state.myUserPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PointText>
           </LeftBox>
         </Header>
 
         <Container>
-          <style jsx="true">{`
-            .toast {
-              font-family: Minseo !important;
-            }
-          `}</style>
+          <style jsx="true">{`.toast { font-family: Minseo !important;}`}</style>
           <ToastsContainer
             position={ToastsContainerPosition.TOP_RIGHT}
             store={ToastsStore}
@@ -1452,8 +1348,7 @@ class Meeting extends Component {
               ) : null}
               {this.state.voteTime ? (
                 <TopicText>
-                  ❓ 아바타는 누구일까요 ❔<br /> 아바타로 예상되는 유저의
-                  화면을 눌러 투표하세요 !
+                  ❓ 아바타는 누구일까요 ❔<br /> 아바타로 예상되는 유저의 화면을 눌러 투표하세요 !
                 </TopicText>
               ) : null}
               {this.state.resultTime ? (
@@ -1468,15 +1363,11 @@ class Meeting extends Component {
                   <TopicIcon onClick={this.pickTopic}></TopicIcon>
                   {this.state.randomCount > 0 ? (
                     <ChangeText className="changeTip">
-                      주제추천
-                      <br />
-                      (무료 {this.state.randomCount}회)
+                      주제추천<br />(무료 {this.state.randomCount}회)
                     </ChangeText>
                   ) : (
                     <ChangeText className="changeTip">
-                      주제추천
-                      <br />
-                      (-50 루팡)
+                      주제추천<br />(-50 루팡)
                     </ChangeText>
                   )}
                 </ChangeBox>
@@ -1551,40 +1442,41 @@ class Meeting extends Component {
                   </ChatBox>
                 ) : null}
 
-                  <VideoBox className="VideoBox">
-                    {/* 내 카메라 */}
-                    {this.state.publisher !== undefined ? (
-                      <UserVideoComponent
-                        streamManager={this.state.publisher}
-                        myUserName={this.state.myUserName}
-                        myRoleCode={this.state.myRoleCode}
-                        myPairUser={this.state.pairUser}
-                        meetingTime={this.state.meetingTime}
-                        voteTime={this.state.voteTime}
-                        resultTime={this.state.resultTime}
-                        myRate={this.state.userRate}
-                      />
-                    ) : null}
+                <VideoBox className="VideoBox">
+                  {/* 내 카메라 */}
+                  {this.state.publisher !== undefined ? (
+                    <UserVideoComponent
+                      streamManager={this.state.publisher}
+                      myUserName={this.state.myUserName}
+                      myRoleCode={this.state.myRoleCode}
+                      myPairUser={this.state.pairUser}
+                      meetingTime={this.state.meetingTime}
+                      voteTime={this.state.voteTime}
+                      resultTime={this.state.resultTime}
+                      myRate={this.state.userRate}
+                    />
+                  ) : null}
 
-                    {/* 상대카메라 */}
-                    {this.state.subscribers.map((sub, i) => (
-                      <UserVideoComponent
-                        streamManager={sub}
-                        myUserName={this.state.myUserName}
-                        myRoleCode={this.state.myRoleCode}
-                        myPairUser={this.state.pairUser}
-                        meetingTime={this.state.meetingTime}
-                        voteTime={this.state.voteTime}
-                        resultTime={this.state.resultTime}
-                        myRate={this.state.userRate}
-                      />
-                    ))}
-                  </VideoBox>
+                  {/* 상대카메라 */}
+                  {this.state.subscribers.map((sub, i) => (
+                    <UserVideoComponent
+                      streamManager={sub}
+                      myUserName={this.state.myUserName}
+                      myRoleCode={this.state.myRoleCode}
+                      myPairUser={this.state.pairUser}
+                      meetingTime={this.state.meetingTime}
+                      voteTime={this.state.voteTime}
+                      resultTime={this.state.resultTime}
+                      myRate={this.state.userRate}
+                    />
+                  ))}
+                </VideoBox>
               </ChatVideoBox>
 
               <Footer>
-                <FooterRight/>
-                {this.state.myRoleCode !== 3 || (this.state.myRoleCode === 3 && this.state.resultTime) ? (
+                <FooterRight />
+                {this.state.myRoleCode !== 3 ||
+                (this.state.myRoleCode === 3 && this.state.resultTime) ? (
                   <MicCamBox>
                     {this.state.audiostate ? (
                       <MicOn
@@ -1634,10 +1526,8 @@ class Meeting extends Component {
 
                 <FooterRight>
                   {this.state.meetingTime ? (
-                    <ShowRanking onClick={() => { this.moveToVote() }}>
-                      바로 투표 💌
-                    </ShowRanking>
-                  ) : null }
+                    <ShowRanking onClick={() => { this.moveToVote() }}>바로 투표 💌</ShowRanking>
+                  ) : null}
 
                   {this.state.resultTime ? (
                     <>
@@ -1645,18 +1535,13 @@ class Meeting extends Component {
                         👑결과보기👑
                         <RankingContainer className="rankingTip">
                           <RankingHeader>오늘의 MVP는? 🏆</RankingHeader>
-                          {this.state.ranking
-                            ? Object.entries(this.state.ranking).map(
-                                (item, idx) => {
-                                  return (
-                                    <RankingContent>
-                                      <span>{item[0]}</span>
-                                      <span>+{item[1]} 루팡</span>
-                                    </RankingContent>
-                                  )
-                                },
-                              )
-                            : null}
+                          {this.state.ranking ? Object.entries(this.state.ranking).map((item, idx) => {
+                            return (
+                              <RankingContent>
+                                <span>{item[0]}</span>
+                                <span>+{item[1]} 루팡</span>
+                              </RankingContent>
+                            )}) : null}
                         </RankingContainer>
                       </ShowRanking>
                     </>
@@ -1709,7 +1594,7 @@ const mapStateToProps = (state) => ({
   mode: state.mode,
   vote: state.vote,
   rate: state.rate,
-  chat: state.chat
+  chat: state.chat,
 })
 
 // slice에 있는 actions(방찾기, 빠른 시작등등)을 사용하고 싶을 때
@@ -1718,7 +1603,6 @@ const mapDispatchToProps = (dispatch) => {
     // 빠른시작
     // quickStart는 import { quickStart } from './homeSlice'; 구문을 이용해서 action 가져온 것
     doLoadUser: () => dispatch(loadUser()),
-    // doCompareResult: () => dispatch(compareResult()),
   }
 }
 

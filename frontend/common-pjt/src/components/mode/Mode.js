@@ -3,10 +3,9 @@ import styled from 'styled-components'
 import ModeHeader from './ModeHeader'
 import ModePageTop from './ModePageTop'
 import ModePageBottom from './ModePageBottom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { loadUser } from '../auth/login/login-slice'
 import backImg from '../../assets/base.PNG'
-
 
 const Background = styled.div`
   background-image: url(${backImg});
@@ -32,13 +31,14 @@ const ModeContainer = styled.div`
 
 // 모드 default = [Solo, 1:1, 성별무관]
 const Mode = () => {
-  
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .catch((err)=> {alert('유저로드에러')})
+      .catch((err) => {
+        console.log(err)
+      })
   }, [])
 
   const [data, setData] = useState({
@@ -50,17 +50,14 @@ const Mode = () => {
     <Background>
       <ModeHeader />
       <ModeContainer>
-
         {/* 역할 선택 */}
-        <ModePageTop setData={setData} data={data}/> 
+        <ModePageTop setData={setData} data={data} />
 
         {/* 인원, 성별 선택 */}
-        <ModePageBottom setData={setData} data={data}/> 
+        <ModePageBottom setData={setData} data={data} />
       </ModeContainer>
     </Background>
   )
 }
 
 export default Mode
-
-

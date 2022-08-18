@@ -5,7 +5,6 @@ import { loadUser } from '../../auth/login/login-slice'
 import { checkNickname, modifyUserInfo } from '../../auth/signup/signup-slice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
-import { ToastsContainer } from 'react-toasts'
 
 const Background = styled.div`
   background-color: #fffdde;
@@ -19,14 +18,11 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   height: 25%;
   background-color: #ccf3ee;
 `
 
 const LogoDiv = styled.div`
-  /* display: flex;
-  align-items: center; */
   height: 50%;
   margin-top: 1.8rem;
 `
@@ -60,6 +56,7 @@ const FormBox = styled.form`
   bottom: 1rem;
   width: 50%;
   height: 100%;
+
   form {
     display: flex;
     flex-direction: column;
@@ -96,6 +93,7 @@ const GenderSelect = styled.select`
   font-family: Minseo;
   font-size: 1.3rem;
   cursor: pointer;
+
   &:focus {
     border: 3px solid #00cfb4;
   }
@@ -242,31 +240,35 @@ const BtnDiv = styled.div`
 `
 
 const UpdateProfile = () => {
-  // 기존 유저정보 이메일이랑 이름은 변동사항 없어서 그냥 가져다 써도됨
+  // 기존 이메일이랑 이름은 변동사항 없어서 불러와서 바로 적용가능
   const { userEmail, userName } = useSelector((state) => state.login.user)
 
-  //변수명이 데이터필드랑 겹쳐서, 기존 유저정보 받을려면 새로 변수선언해야되
-  //여기서 생일이랑 성별 기존정보 양식맞춰서 받아서 쓰면됨
+  // 변수명이 데이터필드랑 겹쳐서, now+데이터필드변수명
+  // 생일, 성별은 양식을 맞춰서 데이터를 받아야 함
   const nowUserInfo = useSelector((state) => state.login.user)
   const nowUserNickname = nowUserInfo.userNickname
   const nowUserPhone = nowUserInfo.userPhone
   const nowuserBirthday = nowUserInfo.userBirthday
   const nowUserGender = nowUserInfo.userGender
   const nowUserPassword = nowUserInfo.userPassword
+  const nowUserProfilePicUrl = nowUserInfo.userProfilePicUrl
+  console.log(nowUserInfo)
 
-  //이름이랑 이메일은 수정불가
-  //필드 값 변경
+  // 이름, 이메일 수정불가
+  // 필드 값 변경
   const [userNickname, setUserNickname] = useState(nowUserNickname)
   const [userPhone, setUserPhone] = useState(nowUserPhone)
   const [userBirthday, setUserBirthday] = useState(nowuserBirthday)
   const [userGender, setUserGender] = useState(nowUserGender)
   const [userPassword, setUserPassword] = useState(nowUserPassword)
+  const [userProfilePicUrl, setUserProfilePicUrl] =
+    useState(nowUserProfilePicUrl)
 
   // 필드 유효성검사
   const [nicknameValid, setNicknameValid] = useState(true)
   const [pwdValid, setPwdValid] = useState(true)
 
-  //닉네임 중복 체크 여부 변수
+  // 닉네임 중복 체크 여부 변수
   // t: 사용가능, f: 사용불가능
   const [isDuplicateNicknameChecked, setisDuplicateNicknameChecked] =
     useState(true)
@@ -401,6 +403,7 @@ const UpdateProfile = () => {
       userBirthday,
       userName,
       userPhone,
+      userProfilePicUrl,
     }
 
     dispatch(modifyUserInfo(data))
@@ -450,8 +453,7 @@ const UpdateProfile = () => {
               userBirthday &&
               userGender &&
               userPhone
-            )
-              handleSubmit(e)
+            ) handleSubmit(e)
           }}
         >
           <InfoBox>
@@ -470,18 +472,13 @@ const UpdateProfile = () => {
                       }
                     }}
                     value={userNickname}
-                    onBlur={(e) => {
-                      validateNickname(e)
-                    }}
+                    onBlur={(e) => { validateNickname(e) }}
                   ></StyledInput>
                   <StyledBtn
                     type="button"
                     onClick={(e) => {
-                      if (nicknameValid && defaultNickname) {
-                        isValidNickname(e)
-                      }
-                    }}
-                  >
+                      if (nicknameValid && defaultNickname) {isValidNickname(e)}
+                    }}>
                     확인
                   </StyledBtn>
                 </div>

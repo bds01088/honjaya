@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
-import { login,savePoint } from './login-slice'
-import { Link, useHistory } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { login } from './login-slice'
+import { useHistory } from 'react-router-dom'
 
 const LoginFormInputsBlock = styled.form`
   display: flex;
@@ -33,7 +32,7 @@ const StyledInput = styled.input`
 `
 
 const LoginBtn = styled.button`
-  background-color: #FF728E;
+  background-color: #ff728e;
   color: white;
   width: 100%;
   text-align: center;
@@ -45,14 +44,13 @@ const LoginBtn = styled.button`
   font-family: Minseo;
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     background-color: #df6079;
     color: #e0e0e0;
     font-size: 1.6rem;
     width: 102%;
   }
 `
-
 
 const LoginFormInputs = () => {
   const dispatch = useDispatch()
@@ -61,42 +59,36 @@ const LoginFormInputs = () => {
   const [userPassword, setPassword] = useState('')
 
   function handleSubmit(e) {
-    console.log(e)
     e.preventDefault()
     const data = {
       userEmail,
-      userPassword
+      userPassword,
     }
-    
- 
-   dispatch(login(data))
-    .unwrap()
-    .then(() => {
-      
-      
-      history.push('/main')
 
-    })
-    .catch((err) => {
-      // console.log("error 도착ㅋ")
-      // console.log(err.status)
-      if (err.status === 400) {
-        alert('아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.')
-      } else if (err.status === 401) {//refresh token 발급
-        console.log('토큰발급필요')
-      } else if (err.status === 403) {
-        alert('신고누적으로 사용이 정지된 유저입니다')
-      } else if (err.status === 500) {
-        history.push('/error')
-      } 
+    dispatch(login(data))
+      .unwrap()
+      .then(() => {
+        history.push('/main')
+      })
+      .catch((err) => {
+        if (err.status === 400) {
+          alert(
+            '아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.',
+          )
+        } else if (err.status === 401) {
+
+          //refresh token 발급
+          console.log('토큰발급필요')
+        } else if (err.status === 403) {
+          alert('신고누적으로 사용이 정지된 유저입니다')
+        } else if (err.status === 500) {
+          history.push('/error')
+        }
       })
   }
 
-
   return (
-    <LoginFormInputsBlock
-      onSubmit = {handleSubmit}
-    >
+    <LoginFormInputsBlock onSubmit={handleSubmit}>
       <StyledInput
         autoComplete="userEmail"
         name="userEmail"
@@ -113,12 +105,10 @@ const LoginFormInputs = () => {
         onChange={(e) => setPassword(e.target.value)}
         value={userPassword}
         className="password"
-        
       />
-
       <LoginBtn>로그인</LoginBtn>
     </LoginFormInputsBlock>
-  );
-};
+  )
+}
 
-export default LoginFormInputs;
+export default LoginFormInputs

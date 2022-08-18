@@ -19,7 +19,7 @@ const ReactAudioPlayer = ({Url, isPlaying, Volume}) => {
             loop={true} 
             controls={false}
             volume={Volume}
-             />
+            />
         </ReactAudioPlayerBlock>
     )
 }

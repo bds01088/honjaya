@@ -5,10 +5,8 @@ import Rating from '@mui/material/Rating'
 import { MdAccountCircle, MdHelpOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import MainHelper from './MainHelper'
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { loadUser } from '../auth/login/login-slice'
-import { getRate } from './hashtag/rate-slice'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const Header = styled.div`
   display: flex;
@@ -93,7 +91,7 @@ const PointText = styled.p`
   cursor: default;
   position: relative;
 
-  &:hover .pointTip {  
+  &:hover .pointTip {
     visibility: visible;
   }
 `
@@ -183,7 +181,7 @@ const HelperText = styled.p`
 `
 
 const MainHeader = () => {
-  //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
+  //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 됨
   //store에 있는 userNickname 불러오기
   const { userNickname, userPoint } = useSelector((state) => state.login.user)
 
@@ -209,7 +207,7 @@ const MainHeader = () => {
       <Logo src={logoImg} />
 
       <LeftBox>
-        <Link to="/profile" style={{ textDecoration: "none" }}>
+        <Link to="/profile" style={{ textDecoration: 'none' }}>
           <Nickname>{userNickname}</Nickname>
         </Link>
         <RateBox>
@@ -218,7 +216,8 @@ const MainHeader = () => {
         </RateBox>
 
         <PointImg src={pointImg} />
-        <PointText>{pointShow}
+        <PointText>
+          {pointShow}
           <PointTip className="pointTip">나의 보유루팡</PointTip>
         </PointText>
 
