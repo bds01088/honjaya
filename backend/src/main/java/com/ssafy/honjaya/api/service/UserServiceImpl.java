@@ -1,5 +1,6 @@
 package com.ssafy.honjaya.api.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public boolean signUp(SignUpReq signUpReq) {
+	public boolean signUp(SignUpReq signUpReq) throws NoSuchAlgorithmException {
 		Pattern pattern = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
 		if (!pattern.matcher(signUpReq.getUserEmail()).matches()) { // 이메일 정규식
 			return false;
@@ -57,6 +58,8 @@ public class UserServiceImpl implements UserService {
 		if (!pattern.matcher(signUpReq.getUserPassword()).matches()) { // 비밀번호 정규식
 			return false;
 		}
+		
+		signUpReq.setUserPassword(CommonUtil.sha256(signUpReq.getUserPassword())); // sha256, throws 처리
 		
 		int randomProfileNo = (int) (Math.random() * 5) + 1;
 		String userProfilePicUrl = "/" + String.format("%03d", randomProfileNo) + ".png";
@@ -92,7 +95,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int login(LoginReq loginReq) {
+	public int login(LoginReq loginReq) throws NoSuchAlgorithmException {
 		String email = loginReq.getUserEmail();
 		String password = loginReq.getUserPassword();
 		if (email == null || email.length() < 5 || email.length() > 50
@@ -107,6 +110,8 @@ public class UserServiceImpl implements UserService {
 		if (!pattern.matcher(password).matches()) { // 비밀번호 정규식
 			return -1;
 		}
+		
+		password = CommonUtil.sha256(password); // sha256, throws 처리
 
 		User user = userRepository.findByUserEmail(email);
 		if (user == null || !password.equals(user.getUserPassword())) {

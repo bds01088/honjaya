@@ -48,7 +48,7 @@ public class User {
 	@NotNull
 	private String userEmail;
 	
-	@Column(name="user_password", length=16, nullable=false)
+	@Column(name="user_password", length=65, nullable=false)
 	@NotNull
 	private String userPassword;
 	
