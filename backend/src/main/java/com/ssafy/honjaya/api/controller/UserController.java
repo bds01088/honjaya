@@ -62,9 +62,13 @@ public class UserController {
 	public ResponseEntity<CommonRes> singUp(@RequestBody SignUpReq signUpReq) {
 		logger.debug("sign up");
 		CommonRes res = new CommonRes();
-		if (userService.signUp(signUpReq)) {
-			res.setSuccess(true);
-			return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+		try {
+			if (userService.signUp(signUpReq)) {
+				res.setSuccess(true);
+				return new ResponseEntity<CommonRes>(res, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return new ResponseEntity<CommonRes>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
