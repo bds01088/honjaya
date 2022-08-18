@@ -1,10 +1,10 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+// import React from 'react'
+// import { useNavigate } from 'react-router-dom'
 
-const withNavigateHook = (Component) => {
-    return () => {
-        return <Component navigation={useNavigate()}/>
-    }
-}
+// const withNavigateHook = (Component) => {
+//     return () => {
+//         return <Component navigation={useNavigate()}/>
+//     }
+// }
 
-export default withNavigateHook
+// export default withNavigateHook

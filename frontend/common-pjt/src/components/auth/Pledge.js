@@ -89,7 +89,6 @@ const PledegeContent = styled.div`
   height: 100%;
   display: flex;
   overflow-y: auto;
-  /* overflow-x: auto; */
 
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -125,16 +124,13 @@ const Agree = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* outline: 1px solid; */
   height: 10%;
   padding-bottom: 4.5rem;
 `
 const NotChecked = styled(MdOutlineCheckBoxOutlineBlank)`
-  /* margin: 0 0.2rem; */
 `
 
 const Checked = styled(MdOutlineCheckBox)`
-  /* margin: 0 0.2rem; */
 `
 
 const Button = styled.button`
@@ -160,8 +156,6 @@ const Button = styled.button`
     cursor: not-allowed;
     font-size: 1.5rem;
   }
-
-
 `
 
 const Div = styled.div`
@@ -173,6 +167,7 @@ const Div = styled.div`
 `
 
 const Pledge = () => {
+  
   // 동의 체크 여부 판별
   const [check, setCheck] = useState(false)
 
@@ -257,11 +252,12 @@ const Pledge = () => {
           </TextBox>
 
           <Agree>
-            서비스 이용에 관한 모든 책임은
-            이용자에게 있음을 동의 하십니까?
+            서비스 이용에 관한 모든 책임은 이용자에게 있음을 동의 하십니까?
           </Agree>
 
-          <Div onClick={clickEvent}>{check ? <Checked /> : <NotChecked />}동의</Div>
+          <Div onClick={clickEvent}>
+            {check ? <Checked /> : <NotChecked />}동의
+          </Div>
         </PledgeTemplate>
 
         <Link to="/signup" style={{ textDecoration: 'none' }}>

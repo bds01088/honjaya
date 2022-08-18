@@ -4,7 +4,6 @@ import LoginFormInputs from './LoginFormInputs'
 import logoImg from '../../../assets/logo.png'
 import { useHistory } from 'react-router-dom'
 
-
 const LoginFormBlock = styled.div`
   width: 30rem;
   display: flex;
@@ -29,7 +28,8 @@ const GoInBtn = styled.div`
   font-family: Minseo;
   margin-bottom: 25%;
   cursor: pointer;
-  &:hover{
+  
+  &:hover {
     background-color: #009c87;
     color: #e0e0e0;
     width: 72%;
@@ -37,18 +37,16 @@ const GoInBtn = styled.div`
   }
 `
 
-
 const LoginForm = () => {
   const history = useHistory()
 
   return (
     <LoginFormBlock>
-      <Logo/> 
-      {/* <p>이미 회원이신가요? <Link to="/login" className="Login">로그인하기</Link></p> */}
-      <LoginFormInputs/>
+      <Logo />
+      <LoginFormInputs />
       <GoInBtn onClick={() => history.push('/pledge')}>회원가입</GoInBtn>
     </LoginFormBlock>
-  );
-};
+  )
+}
 
 export default LoginForm

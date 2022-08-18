@@ -24,7 +24,7 @@ const ModalView = styled.div.attrs((props) => ({
   text-align: center;
   text-decoration: none;
   padding: 30px 90px;
-  background-color: #FFFDDE;
+  background-color: #fffdde;
   border-radius: 30px;
   border: 0.2rem solid #88866f;
   color: #47463c;
@@ -61,7 +61,7 @@ const SubmitBtn = styled.button`
   padding: 0.3rem 0.5rem;
   border: 2px solid #47463c;
   color: #47463c;
-  background-color: #CCF3EE;
+  background-color: #ccf3ee;
   cursor: pointer;
 
   &:hover {
@@ -69,17 +69,16 @@ const SubmitBtn = styled.button`
   }
 `
 
-
 const CreateTag = (props) => {
   const dispatch = useDispatch()
   const [tag01, setTag01] = useState('')
 
-  const sendToMain = (e) => { 
-    if (tag01.trimStart().trimEnd() !== ''){
+  // 해시태그 생성 및 모달닫기
+  const sendToMain = (e) => {
+    if (tag01.trimStart().trimEnd() !== '') {
       dispatch(putHash(tag01))
-      console.log("해시태그생성후 응답")    
     }
-    props.openModalHash() 
+    props.openModalHash()
   }
 
   return (
@@ -89,16 +88,15 @@ const CreateTag = (props) => {
         <h1>해시태그를 입력하세요</h1>
         <Form>
           <InputHash type="text" onChange={(e) => setTag01(e.target.value)} />
-          <SubmitBtn onClick={(e) => sendToMain(e)}
-            onKeyUp={(e) => e.key==='Enter' ? sendToMain(e) : null }
-          >등록</SubmitBtn>
+          <SubmitBtn
+            onClick={(e) => sendToMain(e)}
+            onKeyUp={(e) => (e.key === 'Enter' ? sendToMain(e) : null)}>
+            등록
+          </SubmitBtn>
         </Form>
       </ModalView>
     </ModalBackdrop>
   )
 }
-
-
-
 
 export default CreateTag

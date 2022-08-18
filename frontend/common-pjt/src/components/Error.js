@@ -121,13 +121,7 @@ const Error = () => {
               <ErrorIcon></ErrorIcon>
               <Text className="h2">띠요용...여긴 아무것도 없어요...</Text>
             </TextDiv>
-            <HomeDiv
-              onClick={() =>
-                history.push({
-                  pathname: '/main',
-                })
-              }
-            >
+            <HomeDiv onClick={() => history.push({ pathname: '/main',})}>
               <CatDiv>
                 <Link className="cat" to={'/main'}>
                   <Img src={cat}></Img>
