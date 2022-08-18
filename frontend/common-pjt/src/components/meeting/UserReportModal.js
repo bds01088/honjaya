@@ -2,10 +2,10 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
-import logoImg from '../../../assets/logo.png'
-import axios from '../../../api/http'
+import logoImg from '../../assets/logo.png'
+import axios from '../../api/http'
 import { useEffect } from 'react'
-import { userReport } from '../../meeting/evaluate-slice'
+import { userReport } from './evaluate-slice'
 import { ToastsStore } from 'react-toasts'
 
 const ModalBackdrop = styled.div`
@@ -41,7 +41,6 @@ const BackIcon = styled(MdClear)`
   width: 2rem;
   height: 2rem;
   color: #88866f;
-  cursor: pointer;
 `
 
 const LogoImg = styled.img`
@@ -67,7 +66,6 @@ const CheckDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
-  /* margin-bottom: 1rem; */
   font-size: 2.1rem;
 `
 
@@ -115,7 +113,6 @@ const StyledBtn = styled.button`
   font-size: 1.2rem;
   font-family: Minseo;
   margin-top: 2rem;
-  cursor: pointer;
 
   &:hover {
     background-color: #e0637c;
@@ -126,6 +123,7 @@ const StyledBtn = styled.button`
 const UserReportModal = ({
   openUserReportModal,
   oppositeUserNo,
+  myUserNo,
   setIsDuplicated,
 }) => {
   const dispatch = useDispatch()
@@ -139,7 +137,6 @@ const UserReportModal = ({
   const [reportType, setReportType] = useState('')
   const [reportMessage, setReportMessage] = useState('')
 
-  // 신고타입구분
   const changeReportType = (e) => {
     setReportType(e.target.value)
   }
@@ -166,12 +163,11 @@ const UserReportModal = ({
         dispatch(userReport(data))
           .unwrap()
           .then((res) => {
-            console.log('신고완료')
             setIsDuplicated(true)
             sendToBack()
           })
           .catch((err) => {
-            console.log(err)
+            console.log('신고에러', err)
           })
       }
     })

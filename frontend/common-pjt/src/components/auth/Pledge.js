@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
+import backImg from '../../assets/base.PNG'
 import { Link } from 'react-router-dom'
 import {
   MdOutlineCheckBoxOutlineBlank,
@@ -8,10 +9,13 @@ import {
 } from 'react-icons/md'
 
 const Background = styled.div`
+  background-image: url(${backImg});
   background-color: #fffdde;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,7 +27,7 @@ const Form = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  font-family: Jua;
+  font-family: Minseo;
   height: 80%;
   width: 35%;
 
@@ -39,17 +43,18 @@ const PledgeTemplate = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 1rem;
-  height: 100%;
+  height: 110%;
   width: 100%;
   border-radius: 3%;
   background-color: #ccf3ee;
+  position: relative;
 `
 
 const Title = styled.div`
   display: flex;
   flex-direction: row;
   height: 15%;
-  margin: 1rem;
+  padding: 1rem;
 `
 
 const Logo = styled.img`
@@ -61,9 +66,9 @@ const Logo = styled.img`
 `
 
 const Phrase = styled.p`
-  font-family: 'Jua';
-  font-size: 2rem;
-  padding-top: 2.5rem;
+  font-family: Minseo;
+  font-size: 2.5rem;
+  padding-top: 0.2rem;
   color: #333333;
 
   @media screen and (max-width: 1500px) {
@@ -84,7 +89,6 @@ const PledegeContent = styled.div`
   height: 100%;
   display: flex;
   overflow-y: auto;
-  /* overflow-x: auto; */
 
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -104,7 +108,7 @@ const PledegeContent = styled.div`
 const PledgeOl = styled.ol``
 
 const PledgeLi = styled.li`
-  font-size: 2em;
+  font-size: 1.8em;
   font-family: Minseo;
   margin-bottom: 2rem;
 `
@@ -114,52 +118,56 @@ const PledgeDetail = styled.li`
 `
 
 const Agree = styled.div`
+  width: 80%;
   margin: 1rem 0 0 0;
   font-size: 1.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* outline: 1px solid; */
-  height: 7%;
+  height: 10%;
+  padding-bottom: 4.5rem;
 `
 const NotChecked = styled(MdOutlineCheckBoxOutlineBlank)`
-  margin: 0 0.2rem;
 `
 
 const Checked = styled(MdOutlineCheckBox)`
-  margin: 0 0.2rem;
 `
 
 const Button = styled.button`
   border: none;
   border-radius: 0.2rem;
   color: white;
-  font-family: Jua;
-  font-size: 1.3rem;
+  font-family: Minseo;
+  font-size: 1.5rem;
   padding: 0.5rem 2rem;
   margin: 1rem 0;
   background: #ff728e;
   cursor: pointer;
 
-  &:disabled {
+  &:hover {
+    cursor: pointer;
+    background: #ff728e;
+    font-size: 1.6rem;
+  }
+
+  &&:disabled {
     background: #8a3849;
     color: #c2c2c2;
     cursor: not-allowed;
+    font-size: 1.5rem;
   }
-
-  /* &:active {
-    cursor: pointer;
-    background: #ff728e;
-  } */
 `
 
 const Div = styled.div`
   margin-top: 1rem;
   display: flex;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  position: absolute;
+  bottom: 1rem;
 `
 
 const Pledge = () => {
+  
   // 동의 체크 여부 판별
   const [check, setCheck] = useState(false)
 
@@ -243,11 +251,13 @@ const Pledge = () => {
             </PledegeContent>
           </TextBox>
 
-          <Agree onClick={clickEvent}>
-            해당 사항을 불이행 및 거부할 경우에 발생하는 모든 불이익의 책임은
-            이용자에게 있음을 동의 하십니까?
-            <Div>{check ? <Checked /> : <NotChecked />}동의</Div>
+          <Agree>
+            서비스 이용에 관한 모든 책임은 이용자에게 있음을 동의 하십니까?
           </Agree>
+
+          <Div onClick={clickEvent}>
+            {check ? <Checked /> : <NotChecked />}동의
+          </Div>
         </PledgeTemplate>
 
         <Link to="/signup" style={{ textDecoration: 'none' }}>

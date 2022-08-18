@@ -5,16 +5,14 @@ import Rating from '@mui/material/Rating'
 import { MdAccountCircle, MdHelpOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import MainHelper from './MainHelper'
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { loadUser } from '../auth/login/login-slice'
-import { getRate } from './hashtag/rate-slice'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   height: 5rem;
-  font-family: Jua;
+  font-family: Minseo;
   position: sticky;
   z-index: 3;
 `
@@ -29,7 +27,8 @@ const LeftBox = styled.div`
 `
 
 const Nickname = styled.div`
-  font-size: 1.8rem;
+  font-size: 2.3rem;
+  font-weight: bold;
   background-color: #f5c939;
   padding-top: 0.3rem;
   padding-left: 1rem;
@@ -37,6 +36,7 @@ const Nickname = styled.div`
   border-radius: 1rem;
   margin-right: 1rem;
   color: #333333;
+  cursor: pointer;
 
   @media screen and (max-width: 800px) {
     font-size: 1.3rem;
@@ -46,6 +46,7 @@ const Nickname = styled.div`
 // 매너 별점
 const RateBox = styled.div`
   position: relative;
+  cursor: default;
 
   &:hover .rateTip {
     visibility: visible;
@@ -66,24 +67,52 @@ const RateText = styled.p`
   text-align: center;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
+  font-size: 1.2rem;
   opacity: 80%;
   position: absolute;
   z-index: 1;
-  top: 100%;
+  top: 40%;
   left: 50%;
-  margin-left: -3rem;
+  margin-left: -3.5rem;
 `
 
 // 포인트
 const PointImg = styled.img`
   height: 50%;
+  cursor: default;
 `
 
 const PointText = styled.p`
   color: #333333;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
   margin-right: 1rem;
+  cursor: default;
+  position: relative;
+
+  &:hover .pointTip {
+    visibility: visible;
+  }
+`
+
+const PointTip = styled.p`
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: Minseo;
+  font-weight: lighter;
+  font-size: 1.2rem;
+  opacity: 80%;
+  position: absolute;
+  z-index: 1;
+  width: 5rem;
+  top: 40%;
+  left: 50%;
+  margin-left: -3.5rem;
 `
 
 // 프로필 수정
@@ -109,11 +138,12 @@ const ProfileText = styled.p`
   width: 80px;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
+  font-size: 1.2rem;
   opacity: 80%;
   position: absolute;
   z-index: 1;
-  top: 100%;
+  top: 50%;
   left: 50%;
   margin-left: -3.3rem;
 `
@@ -121,6 +151,7 @@ const ProfileText = styled.p`
 // 도움말
 const HelperBox = styled.div`
   position: relative;
+  cursor: pointer;
 
   &:hover .helperTip {
     visibility: visible;
@@ -139,17 +170,18 @@ const HelperText = styled.p`
   text-align: center;
   border-radius: 0.3rem;
   padding: 0.2rem 0.5rem;
-  font-family: Jua;
+  font-family: Minseo;
+  font-size: 1.2rem;
   opacity: 80%;
   position: absolute;
   z-index: 1;
-  top: 100%;
+  top: 50%;
   left: 50%;
-  margin-left: -2.8rem;
+  margin-left: -2.5rem;
 `
 
 const MainHeader = () => {
-  //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 되나봄
+  //Main이 mount될때 loadUser()를 불러오니까 따로 MainHeader에서는 안불러와도 됨
   //store에 있는 userNickname 불러오기
   const { userNickname, userPoint } = useSelector((state) => state.login.user)
 
@@ -175,14 +207,19 @@ const MainHeader = () => {
       <Logo src={logoImg} />
 
       <LeftBox>
-        <Nickname>{userNickname}</Nickname>
+        <Link to="/profile" style={{ textDecoration: 'none' }}>
+          <Nickname>{userNickname}</Nickname>
+        </Link>
         <RateBox>
           <MannerRate size="large" value={rateScore} precision={0.5} readOnly />
           <RateText className="rateTip">매너점수: {rateScore}</RateText>
         </RateBox>
 
         <PointImg src={pointImg} />
-        <PointText>{pointShow}</PointText>
+        <PointText>
+          {pointShow}
+          <PointTip className="pointTip">나의 보유루팡</PointTip>
+        </PointText>
 
         <ProfileBox>
           <Link to="/profile" style={{ fontSize: '0' }}>

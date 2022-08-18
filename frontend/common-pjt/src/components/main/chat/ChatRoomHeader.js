@@ -1,8 +1,9 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import { MdLogout, MdKeyboardBackspace, MdInfoOutline } from 'react-icons/md'
-import { useState, } from "react"
-import { useSelector, useDispatch } from "react-redux";
-import UserReportModal from "./UserReportModal";
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import DeleteModal from './DeleteModal'
+import UserProfileModal from './UserProfileModal'
 
 const Container = styled.div`
   width: 100%;
@@ -10,16 +11,20 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
+  padding: 0.2rem 0;
+  margin-bottom: 0.5rem;
+`
 
-const Logout = styled(MdLogout)`
+const Leave = styled(MdLogout)`
   font-size: 1.5rem;
-  color: #333333;
-`;
+  color: #d1b411;
+  cursor: pointer;
+`
 
 const Close = styled(MdKeyboardBackspace)`
   font-size: 1.5rem;
-  color: #333333;
+  color: #d1b411;
+  cursor: pointer;
 `
 
 const User = styled.div`
@@ -28,38 +33,79 @@ const User = styled.div`
   align-items: center;
 `
 
-const UserInform = styled(MdInfoOutline)`
-  font-size: 1.5rem;
-  color: #333333;
-  margin-left: 0.2rem;
+const CharacterBox = styled.div`
+  height: 100%;
 `
 
-const ChatRoomHeader = ({chatUser, openChatList, setChatUser, openChatRoom }) => {
+const Character = styled.img`
+  height: 2.3rem;
+`
 
+const Username = styled.span`
+  font-size: 1.4rem;
+  background-color: #f8d71a;
+  border-radius: 1rem;
+  margin-right: 0.2rem;
+`
+
+const UserInform = styled(MdInfoOutline)`
+  font-size: 1.5rem;
+  color: #e7c500;
+  margin-left: 0.2rem;
+  cursor: pointer;
+`
+
+const ChatRoomHeader = ({
+  chatUser,
+  openChatList,
+  setChatUser,
+  openChatRoom,
+  chatRoomNo,
+  chatUserNo,
+}) => {
+  const { userProfilePicUrl } = useSelector((state) => state.chat)
   const [isOpen, setIsOpen] = useState(false)
-  const openUserReportModal = () => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const openUserProfileModal = () => {
     setIsOpen(!isOpen)
   }
-
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen)
+  }
 
   return (
     <>
-      
       <Container>
-        <Close onClick={() => {
-          openChatList()
-          setChatUser('')
+        <Close onClick={() => { 
+          setChatUser('') 
           openChatRoom()
-        }}/>
+          }}/>
+
         <User>
-          {chatUser} 
-          {/* 아 이게 아이콘이구나 */}
-          <UserInform onClick={openUserReportModal}/> 
-          {isOpen ? <UserReportModal openUserReportModal={openUserReportModal}  /> : null}
+          { userProfilePicUrl !== undefined ? 
+            <CharacterBox><Character src={require(`../../../assets/profile_img${userProfilePicUrl}`)}/></CharacterBox> : null
+          }
+          <Username>{chatUser}</Username>
+          <UserInform onClick={openUserProfileModal} />
+          {isOpen ? (
+            <UserProfileModal
+              openUserProfileModal={openUserProfileModal}
+              oppositeUserNo={chatUserNo}
+              userProfilePicUrl={userProfilePicUrl}
+            />
+          ) : null}
         </User>
-        <Logout/>
-        
-      </Container><hr/>
+
+        <Leave onClick={openDeleteModal} />
+
+        {isDeleteModalOpen ? (
+          <DeleteModal
+            openDeleteModal={openDeleteModal}
+            chatRoomNo={chatRoomNo}
+            openChatRoom={openChatRoom}
+          />
+        ) : null}
+      </Container>
     </>
   )
 }

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from '../../api/http'
 import styled from 'styled-components'
-import Shadow from '../../assets/shadow.png'
 import SelectCharcter from './SelectCharcter'
-import { FiEdit } from 'react-icons/fi'
+import { MdChangeCircle } from 'react-icons/md'
 
 const Div = styled.div`
   position: relative;
@@ -51,21 +50,23 @@ const BackImg = styled.img`
 `
 const Wrapper = styled.div`
   position: absolute;
-  /* display: flex; */
-  right: -3rem;
-  width: 120%;
-  z-index: 10;
+  width: 100%;
+  z-index: 1;
 `
 
 const ChangeProfile = styled.div`
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 `
 
-const EditBtn = styled(FiEdit)`
-  font-size: 3rem;
-  color: #ffc9d0;
+const EditBtn = styled(MdChangeCircle)`
+  font-size: 2.5rem;
+  color: #f3ffbf;
   cursor: pointer;
+
+  &:hover {
+    color: #d6e984;
+  }
 `
 
 const MainCharacter = () => {
@@ -79,7 +80,6 @@ const MainCharacter = () => {
   const getCharacter = async () => {
     try {
       const res = await axios.get('/honjaya/users/profile')
-      console.log('기본프로필', res)
       await setCharacter({ url: res.data.profileUrl })
     } catch (err) {
       console.log(err)
@@ -91,7 +91,6 @@ const MainCharacter = () => {
     axios
       .put(`/honjaya/users/profile/${profileNo}`)
       .then((res) => {
-        console.log('put 응답', res)
         setCharacter({ url: res.data.profileUrl })
       })
       .catch((err) => {
@@ -109,17 +108,19 @@ const MainCharacter = () => {
   const closeModalProfile = () => {
     openModalProfle(false)
   }
-  console.log('url', character.url)
+
   return (
     <Div>
       <Container>
         <CardFront className="front">
           {character.url !== undefined ? (
-            <FrontImg src={require(`./../../assets/profile${character.url}`)} />
+            <FrontImg src={require(`./../../assets/profile_img${character.url}`)}/>
           ) : null}
         </CardFront>
         <CardBack className="back">
-          <BackImg src={Shadow} />
+          {character.url !== undefined ? (
+            <BackImg src={require(`./../../assets/backprofile${character.url}`)} />
+          ) : null}
         </CardBack>
       </Container>
 

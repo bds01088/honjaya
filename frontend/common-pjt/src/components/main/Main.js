@@ -9,23 +9,21 @@ import {
   MdAddCircle,
   MdRemoveCircle,
   MdLogout,
-  MdForum,
+  MdTextsms,
   MdKeyboardArrowUp,
   MdKeyboardArrowDown,
 } from 'react-icons/md'
 import React, { useState, useEffect } from 'react'
-import { Link,useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getHash, delHash } from './hashtag/hashtag-slice'
 import { getRate } from './hashtag/rate-slice'
 import { findAllRoom } from './chat/chat-slice'
 
 import { useSelector } from 'react-redux'
-import { loadUser,logout } from '../auth/login/login-slice'
+import { loadUser, logout } from '../auth/login/login-slice'
 import ChatList from './chat/ChatList'
 import ChatRoom from './chat/ChatRoom'
-// import { ConnectedTvOutlined, NavigateBefore } from '@mui/icons-material'
-
 
 const Container = styled.div`
   background-image: url(${backImg});
@@ -50,6 +48,8 @@ const HashTag = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: default;
+  z-index: 1;
 
   &.hash0 {
     top: 23%;
@@ -100,27 +100,39 @@ const AddHash = styled(MdAddCircle)`
 `
 
 const Hash = styled.p`
-  font-family: Jua;
+  font-family: Minseo;
   border-radius: 1rem;
   padding: 0.5rem;
   color: #333333;
+  font-weight: bold;
 
   &.hash0 {
     background-color: #85eaea;
-    font-size: 1.4rem;
+    font-size: 2rem;
+
+    &:hover {
+      font-size: 2.1rem;
+    }
   }
 
   &.hash1 {
-    background-color: #D9D7F1;
-    font-size: 1.3rem;
+    background-color: #d9d7f1;
+    font-size: 1.9rem;
+
+    &:hover {
+      font-size: 2rem;
+    }
   }
 
   &.hash2 {
     background-color: #ffc187;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
+
+    &:hover {
+      font-size: 1.8rem;
+    }
   }
 `
-
 
 const RemoveHash = styled(MdRemoveCircle)`
   margin-left: 1rem;
@@ -128,18 +140,18 @@ const RemoveHash = styled(MdRemoveCircle)`
   &.hash0 {
     width: 2.2rem;
     height: 2.2rem;
-    
+
     color: #71db76;
     &:hover {
       color: #65c56a;
     }
   }
-  
+
   &.hash1 {
     width: 2.3rem;
     height: 2.3rem;
-    
-    color: #FFE6AB;
+
+    color: #ffe6ab;
     &:hover {
       color: #dac492;
     }
@@ -148,14 +160,13 @@ const RemoveHash = styled(MdRemoveCircle)`
   &.hash2 {
     width: 2.5rem;
     height: 2.5rem;
-    
-    color: #FFC4C4;
+
+    color: #ffc4c4;
     &:hover {
       color: #dbaaaa;
     }
   }
 `
-
 
 const LogoutBox = styled.div`
   position: absolute;
@@ -164,15 +175,17 @@ const LogoutBox = styled.div`
   flex-direction: column;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `
 const Logout = styled(MdLogout)`
   font-size: 2rem;
-  color: #ff728e;
+  color: white;
 `
 const LogoutText = styled.p`
-  font-family: Jua;
-  margin: 0.5rem;
-  color: #ff728e;
+  font-family: Minseo;
+  margin: 0.2rem;
+  font-size: 1.3rem;
+  color: white;
 `
 
 const ChatBox = styled.div`
@@ -185,10 +198,9 @@ const ChatBox = styled.div`
   justify-content: center;
 `
 
-const Chat = styled(MdForum)`
-  /* margin-right: 1rem; */
-  font-size: 2rem;
-  color: #f796a9;
+const Chat = styled(MdTextsms)`
+  font-size: 1.7rem;
+  color: #beeb6b;
 `
 
 const FullChat = styled.div`
@@ -196,49 +208,67 @@ const FullChat = styled.div`
 `
 
 const ChatListUp = styled.div`
-  font-size: 120%;
-  font-family: Jua;
-  background-color: #ffffff;
+  font-size: 1.4rem;
+  font-family: Minseo;
+  font-weight: 600;
+  background-color: #fffff9;
   width: 13rem;
   height: 3rem;
   padding: 0 1rem;
   border-radius: 1rem;
-  border: 2px solid #333333;
   color: #333333;
+  cursor: pointer;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+
+  &:hover {
+    font-size: 1.5rem;
+  }
 `
 
-const ClosedChat = styled(MdKeyboardArrowUp)``
+const ClosedChat = styled(MdKeyboardArrowUp)`
+  font-size: 1.5rem;
+`
 
-const OpenChat = styled(MdKeyboardArrowDown)``
+const OpenChat = styled(MdKeyboardArrowDown)`
+  font-size: 1.5rem;
+`
 
 const Start = styled.div`
   position: absolute;
   bottom: 3rem;
   right: 3rem;
   text-decoration: none;
-  background-color: #F38BA0;
-  font-size: 2rem;
-  font-family: Jua;
+  background-color: #f38ba0;
+  font-size: 3rem;
+  font-family: Minseo;
+  font-weight: 500;
   padding: 0.5rem 2rem;
   border-radius: 2rem;
   border: 5px dashed #ffd2d2;
+  cursor: pointer;
 
   @media screen and (max-width: 800px) {
     font-size: 1.5rem;
   }
+
+  &:hover {
+    background-color: #df7086;
+    border: 5px dashed #f7b9b9;
+    color: #d8d4d4;
+    font-size: 3.1rem;
+  }
 `
 
 const Main = () => {
-  const [openHash, setOpenHash] = useState(false)  
+  const [openHash, setOpenHash] = useState(false)
   const [hashDel, setHashDel] = useState({
     0: false,
     1: false,
     2: false,
-  })  
+  })
 
   const [openList, setOpenList] = useState(false)
   const [openRoom, setOpenRoom] = useState(false)
@@ -247,87 +277,66 @@ const Main = () => {
   const [chatUser, setChatUser] = useState('')
   const [chatUserNo, setChatUserNo] = useState(1)
   const [chatRoomNo, setChatRoomNo] = useState(1)
-  
+
   const dispatch = useDispatch()
   const history = useHistory()
-  
-  //소유한 해시태그 userSelector로 불러오기
-  const hashesOwned = useSelector((state) => state.hashtag.hashesOwned);
-  console.log('해쉬', hashesOwned)
 
+  //소유한 해시태그 userSelector로 불러오기
+  const hashesOwned = useSelector((state) => state.hashtag.hashesOwned)
 
   //채팅목록 불러오기
   const chatRooms = useSelector((state) => state.chat.chatRooms)
 
-  
-    
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
   useEffect(() => {
     dispatch(getHash())
       .unwrap()
-      .then(() => {
-        console.log("해시테그 데이터 로드 완료")
+      .catch((err) => {
+        console.log('해시태그로드에러', err)
       })
-      .catch((err)=> {
-        console.log("해시태그로드에러", err)
-        // alert('해쉬태그로드에러')
-      })
-  }, []) 
-
+  }, [])
 
   //main에서 유저정보 불러오기
   useEffect(() => {
     dispatch(loadUser())
       .unwrap()
-      .catch((err)=> {
+      .catch((err) => {
         console.log('유저로드에러', err)
-        // alert('유저로드에러')
       })
   }, [])
-
 
   //main에서 별점 정보 불러오기
   useEffect(() => {
     dispatch(getRate())
-    .unwrap()
-    // .then((res) => {console.log(res)})
-    .catch((err) => {
-      console.log("별점로드에러", err)
-      // alert('별점로드에러')
-    })
+      .unwrap()
+      .catch((err) => {
+        console.log('별점로드에러', err)
+      })
   }, [])
-
 
   //main에서 채팅 목록 불러오기
   useEffect(() => {
     dispatch(findAllRoom())
       .unwrap()
-      .then(() => {
-        console.log("채팅목록생성완료")
+      .catch((err) => {
+        console.log('채팅목록로드에러', err)
       })
-      .catch((err)=> {
-        console.log("채팅목록로드에러", err)
-        // alert('해쉬태그로드에러')
-      })
-  }, []) 
+  }, [])
 
-
-  //로그아웃 
+  //로그아웃
   function handleLogout() {
     dispatch(logout())
-    .unwrap()
-    .then((res) => {
-      //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜 
-      console.log(res)
-      history.push('/')
-    })
-    .catch((err) => {
-      if (err.status === 500) {
-        history.push('/error')
-      }
-    })
+      .unwrap()
+      .then((res) => {
+        //이메일이 중복이 아닐때만 중복검사결과가 true로 바뀜
+        history.push('/')
+      })
+      .catch((err) => {
+        if (err.status === 500) {
+          history.push('/error')
+        }
+      })
   }
-
 
   // 해시태그 추가하는 모달 open
   const openModalHash = () => {
@@ -336,12 +345,10 @@ const Main = () => {
 
   // 해시태그 삭제 아이콘 띄우기
   const showHashDel = (idx) => {
-    const change = {...hashDel}
+    const change = { ...hashDel }
     change[idx] = !hashDel[idx]
     setHashDel(change)
   }
-
-
 
   const openChatList = () => {
     setOpenList(!openList)
@@ -351,59 +358,56 @@ const Main = () => {
     setOpenRoom(!openRoom)
   }
 
-
   //해시태그 삭제 메소드 길어질까봐 따로 빼놓음
   const handleDeleteHash = (hashNo, idx) => {
-    console.log("왜 지금 삭제됌???")
     dispatch(delHash(hashNo))
-    .then((res) => {
-      console.log(res)
-      dispatch(getHash())
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+      .then(() => {
+        dispatch(getHash())
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 
     // 해시태그 삭제 아이콘 그대로 옮기기
-    let change = {...hashDel}
-    for (var i=idx; i < 2; i++) {
-      change[i] = change[i+1]
+    let change = { ...hashDel }
+    for (var i = idx; i < 2; i++) {
+      change[i] = change[i + 1]
     }
-    change[hashesOwned.length-1] = false
+    change[hashesOwned.length - 1] = false
     setHashDel(change)
   }
 
   const hashLen = `hash${hashesOwned.length}`
 
   return (
-    
     <Container>
-
       {/* MainHeader는 nickname, point, rate_score가 필요 */}
       <MainHeader />
       <CharacterBox>
         <MainCharacter />
-       
       </CharacterBox>
 
-      { hashesOwned.length < 3 ? 
+      {hashesOwned.length < 3 ? (
         <HashTag className={hashLen} onClick={openModalHash}>
           <AddHash className={hashLen} onClick={openModalHash} />
         </HashTag>
-        : null }
+      ) : null}
 
       {hashesOwned.map((item, idx) => (
-        <HashTag className={'hash'+ idx}>
-          <Hash className={'hash'+ idx} onClick={() => showHashDel(idx)}># {item[1]}</Hash>
-          { hashDel[idx] ? <RemoveHash className={'hash'+ idx} onClick={() => handleDeleteHash(item[0], idx)}/> : null }
+        <HashTag className={'hash' + idx}>
+          <Hash className={'hash' + idx} onClick={() => showHashDel(idx)}>
+            # {item[1]}
+          </Hash>
+          {hashDel[idx] ? (
+            <RemoveHash
+              className={'hash' + idx}
+              onClick={() => handleDeleteHash(item[0], idx)}
+            />
+          ) : null}
         </HashTag>
       ))}
-      {console.log('del', hashDel)}
 
       {openHash ? <CreateTag openModalHash={openModalHash} /> : null}
-
-
-
 
       <LogoutBox onClick={handleLogout}>
         <Logout />
@@ -412,8 +416,15 @@ const Main = () => {
 
       <ChatBox>
         <FullChat className="FullChat">
-          <ChatListUp onClick={openChatList}>
-            <Chat />채팅목록
+          <ChatListUp
+            onClick={() => {
+              openChatList()
+              setChatUser('')
+              if (chatUser) { openChatRoom() }
+            }}
+          >
+            <Chat />
+            1:1 채팅목록
             {openList ? <OpenChat /> : <ClosedChat />}
           </ChatListUp>
 
@@ -425,7 +436,6 @@ const Main = () => {
               setChatUserNo={setChatUserNo}
               openChatRoom={openChatRoom}
               chatRooms={chatRooms}
-              
             />
           ) : null}
         </FullChat>
@@ -439,17 +449,15 @@ const Main = () => {
           setChatRoomNo={setChatRoomNo}
           setChatUserNo={setChatUserNo}
           openChatRoom={openChatRoom}
-          chatRooms = {chatRooms}
+          chatRooms={chatRooms}
           chatRoomNo={chatRoomNo.roomNo}
           chatUserNo={chatUserNo.userNo}
         />
       ) : null}
 
-      <Start>
-        <Link to="/mode" style={{ textDecoration: 'none', color: 'white' }}>
-          입장하기
-        </Link>
-      </Start>
+      <Link to="/mode" style={{ textDecoration: 'none', color: 'white' }}>
+        <Start>입장하기</Start>
+      </Link>
     </Container>
   )
 }

@@ -1,20 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import Cat from '../../assets/profile/001.png'
-import Dog from '../../assets/profile/002.png'
-import Panda from '../../assets/profile/003.png'
-import Rabbit from '../../assets/profile/004.png'
-import Tiger from '../../assets/profile/005.png'
+import Cat from '../../assets/profile_img/001.png'
+import Dog from '../../assets/profile_img/002.png'
+import Panda from '../../assets/profile_img/003.png'
+import Rabbit from '../../assets/profile_img/004.png'
+import Tiger from '../../assets/profile_img/005.png'
 import { useState } from 'react'
-import { GiCancel } from 'react-icons/gi'
-import { RiCheckboxCircleLine } from 'react-icons/ri'
-import { ImCancelCircle } from 'react-icons/im'
 import { MdOutlineCancel, MdCheckCircleOutline } from 'react-icons/md'
+
 export const ModalBackdrop = styled.div`
   position: absolute;
-  left: -3.5rem;
+  left: -1rem;
   display: flex;
-  justify-content: center;
   align-items: center;
   width: 120%;
   margin-top: 1rem;
@@ -27,9 +24,11 @@ const ModalView = styled.div.attrs((props) => ({
   border-radius: 30px;
   width: 100%;
   background-color: #fffdde;
-  outline: 2px solid;
+  outline: 3px solid #aca65b;
   padding: 0.5rem;
 `
+
+const Label = styled.label``
 
 const ImgList = styled.img`
   width: 20%;
@@ -48,25 +47,30 @@ const RadioBtn = styled.input`
 const BtnDiv = styled.div`
   display: flex;
   justify-content: center;
+  height: 2.1rem;
 `
-
-const Label = styled.label``
 
 const CancelBtn = styled(MdOutlineCancel)`
   font-size: 2rem;
   color: #db1d49;
   cursor: pointer;
+
+  &:hover {
+    font-size: 2.1rem;
+  }
 `
 
 const CheckBtn = styled(MdCheckCircleOutline)`
   font-size: 2rem;
   color: #00c3a9;
   cursor: pointer;
+
+  &:hover {
+    font-size: 2.1rem;
+  }
 `
 
 const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
-
-
   const handleClickRadioButton = (e) => {
     setNum(e.target.value)
   }
@@ -74,7 +78,6 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
   const [num, setNum] = useState('')
 
   return (
-    // <ModalBackdrop onClick={closeModalProfile}>
     <ModalBackdrop>
       <ModalView>
         <Label>
@@ -85,7 +88,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '1'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Cat}></ImgList>
+          <ImgList src={Cat} />
         </Label>
 
         <Label>
@@ -95,7 +98,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '2'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Dog}></ImgList>
+          <ImgList src={Dog} />
         </Label>
 
         <Label>
@@ -105,7 +108,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '3'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Panda}></ImgList>
+          <ImgList src={Panda} />
         </Label>
 
         <Label>
@@ -115,7 +118,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '4'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Rabbit}></ImgList>
+          <ImgList src={Rabbit} />
         </Label>
 
         <Label>
@@ -125,7 +128,7 @@ const SelectCharcter = ({ handleProfileChange, closeModalProfile }) => {
             checked={num === '5'}
             onChange={handleClickRadioButton}
           ></RadioBtn>
-          <ImgList src={Tiger}></ImgList>
+          <ImgList src={Tiger} />
         </Label>
         <BtnDiv>
           <CheckBtn onClick={() => handleProfileChange(num)}>저장</CheckBtn>
