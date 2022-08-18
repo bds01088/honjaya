@@ -170,6 +170,7 @@ const ChatRoom = ({
   openChatRoom,
   chatRooms,
 }) => {
+
   const myUserNo = useSelector((state) => state.chat.myUserNo)
   // const opponentUserNo = useSelector((state) => state.chat.opponentUserNo)
   // const opponentUserNickname = useSelector(
@@ -278,6 +279,11 @@ const ChatRoom = ({
       })
   }, [])
 
+  const scrollRef = useRef()
+  
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+  })
 
   return (
     <div>
@@ -293,27 +299,34 @@ const ChatRoom = ({
           />
           <ChatContainer>
             <ChatRecord>
-              {messages.map((msg, idx) =>
-                msg.userNo !== myUserNo ? (
-                  // 상대 메시지는 왼쪽에
-                  <You key={idx}>
-                    <YourNickname>
-                      <Yourname>{msg.userNickname}</Yourname>
-                      <SendTime>({msg.chatTime})</SendTime>
-                    </YourNickname>
-                    <Text>{msg.chatMessage}</Text>
-                  </You>
-                ) : (
-                  // 내 메시지는 오른쪽에
-                  <Me key={idx}>
-                    <MyNickname>
-                      <Myname>{msg.userNickname}</Myname>
-                      <SendTime>({msg.chatTime})</SendTime>
-                    </MyNickname>
-                    <Text>{msg.chatMessage}</Text>
-                  </Me>
-                ),
-              )}
+              {messages.map((msg, idx) => {
+                return (
+                  <>
+                    {
+                      msg.userNo !== myUserNo ? (
+                        // 상대 메시지는 왼쪽에
+                        <You key={idx} {...msg}>
+                          <YourNickname>
+                            <Yourname>{msg.userNickname}</Yourname>
+                            <SendTime>({msg.chatTime})</SendTime>
+                          </YourNickname>
+                          <Text>{msg.chatMessage}</Text>
+                        </You>
+                      ) : (
+                        // 내 메시지는 오른쪽에
+                        <Me key={idx} {...msg}>
+                          <MyNickname>
+                            <Myname>{msg.userNickname}</Myname>
+                            <SendTime>({msg.chatTime})</SendTime>
+                          </MyNickname>
+                          <Text>{msg.chatMessage}</Text>
+                        </Me>
+                      )
+                    }
+                  </>
+                )
+              })}
+              <div ref={scrollRef}/>
             </ChatRecord>
             <SendBox>
               <SendInput
