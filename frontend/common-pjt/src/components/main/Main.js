@@ -299,7 +299,7 @@ const Main = () => {
 
   //채팅목록 불러오기
   const chatRooms = useSelector((state) => state.chat.chatRooms)
-
+  
   
     
   //main 컴포넌트가 붙기 전에 해시태그 데이터 가져오기
@@ -419,7 +419,6 @@ const Main = () => {
   return (
     
     <Container>
-
       {/* MainHeader는 nickname, point, rate_score가 필요 */}
       <MainHeader />
       <CharacterBox>
