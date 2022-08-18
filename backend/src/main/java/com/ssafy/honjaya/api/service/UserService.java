@@ -19,7 +19,7 @@ public interface UserService {
 	int login(LoginReq loginReq) throws NoSuchAlgorithmException;
 //	List<User> allUserInfo();
 //	User userInfo(int id); // findUser
-	boolean userUpdate(int userNo, UserUpdateReq userUpdateReq);
+	boolean userUpdate(int userNo, UserUpdateReq userUpdateReq) throws NoSuchAlgorithmException;
 	boolean userDelete(int userNo);
 	void saveRefreshToken(int userNo, String refreshToken);
 	String getRefreshToken(int userNo);
