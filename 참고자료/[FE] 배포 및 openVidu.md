@@ -182,7 +182,7 @@ server {
 
 > 추가 참조 (진행 당시 기록)
 > 
-> [[FE] OpenVidu (프로젝트 진행 당시)](OpenVidu 관련 내용)
+> [[FE] OpenVidu (프로젝트 진행 당시)](OpenVidu 관련 내용.md)
 
 > openVidu 서버
 [https://docs.openvidu.io/en/2.22.0/deployment/ce/on-premises/](https://docs.openvidu.io/en/2.22.0/deployment/ce/on-premises/)
