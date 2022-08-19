@@ -31,13 +31,13 @@
         - —rm : 해당 컨테이너가 정지(stop명령어)된다면, 자동으로 컨테이너 자체가 사라지게 만들기(kill명령어 효과와 동일하게) 위해 1회용으로 컨테이너를 사용하겠다는 명령어이다.
         - -e : 컨테이너에 돌아가는 프로그램의 환경변수를 설정해주는 명령어이다.
           
-            ![Untitled](OpenVidu 관련 내용(프로젝트 진행 당시).assets/Untitled 1.png)
+            ![Untitled](OpenVidu 관련 내용.assets/Untitled 1.png)
             
             해당 사진을 보면 알겠지만, on promises 형태로 사용할 때 필수적으로 설정해야 하는 환경 변수들이 있는데, 그 값을 docker를 실행할 때 같이 넣어줄 수 있다.
             
             환경 변수가 나온 김에, certificate_type은 letsencrypt로 변경해주고, letsencrypt_email은 이메일 형태의 아무 값이나 넣어도 되는 듯 하다. 그래서 나는 asdf1234@naver.com을 입력 해 놓았다.
             
-            ![Untitled](OpenVidu 관련 내용(프로젝트 진행 당시).assets/Untitled 2.png)
+            ![Untitled](OpenVidu 관련 내용.assets/Untitled 2.png)
             
             openvidu_secret 변수 값은 프론트와 소통할 때 인증키와 같은 것이므로 프론트와 같은 값으로 설정 해주어야 한다.
             
@@ -106,7 +106,7 @@ curl [https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_latest
         4. 저장 커맨드를 하면 엔터를 한번 쳐주면 .env 이름으로 저장이 된다.
         5. Ctrl+x를 통해 환경 변수 파일을 나올 수 있다.
     
-    ![Untitled](OpenVidu 관련 내용(프로젝트 진행 당시).assets/Untitled.png)
+    ![Untitled](OpenVidu 관련 내용.assets/Untitled.png)
     
 
 ### OpenVidu(on promise.ver) 실행

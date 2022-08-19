@@ -41,7 +41,7 @@ sudo nginx -v
 
 ## NGINX 설정
 
-> [[FE] nginx 수동 배포(프로젝트 진행 당시)]([FE] nginx 수동 배포(프로젝트 진행 당시).md)
+> [[FE] nginx 수동 배포(프로젝트 진행 당시)]([FE] nginx 수동 배포.md)
 
 ```bash
 cd /etc/nginx/site-available/
@@ -182,7 +182,7 @@ server {
 
 > 추가 참조 (진행 당시 기록)
 > 
-> [[FE] OpenVidu (프로젝트 진행 당시)](OpenVidu 관련 내용(프로젝트 진행 당시))
+> [[FE] OpenVidu (프로젝트 진행 당시)](OpenVidu 관련 내용)
 
 > openVidu 서버
 [https://docs.openvidu.io/en/2.22.0/deployment/ce/on-premises/](https://docs.openvidu.io/en/2.22.0/deployment/ce/on-premises/)
@@ -191,7 +191,6 @@ openVidu 사용 코드
 
 <aside>
 💡 도커 설치 선행 필수이며, nginx 미설치 상태 또는 정지 상태에서 깔아야한다
-
 </aside>
 
 <aside>
@@ -200,7 +199,7 @@ openVidu 사용 코드
 
 ### 포트 열기
 
-![Untitled]([FE] 배포 및 openVidu ReadMe.assets/Untitled.png)
+![Untitled]([FE] 배포 및 openVidu.assets/Untitled.png)
 
 - 위에 해당되는 포트를 전부 열어준다.
     - 포트를 여는 명령어 : sudo ufw allow portnum
@@ -316,7 +315,7 @@ $ cd /etc/letsencrypt/live/
 
 ---
 
-## openVidu 억까 중 억까
+## openVidu 해결하기 어려웠던 문제점
 
 <aside>
 💡 letsencrypt를 통한 인증서 발급 완료 및 openvidu의 인증 방식을 letsencrypt로 설정하였음에도 인증서 오류로 인한 배포된 환경에서 실행이 불가능할 경우

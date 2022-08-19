@@ -7,7 +7,7 @@
 - 빌드 자체는 간단하다.
   프론트 프로젝트에서 yarn build 명령어를 실행하면 build된 파일이 나타난다.
 
-  ![image-20220819095502103]([FE] nginx 수동 배포(프로젝트 진행 당시).assets/image-20220819095502103.png)
+  ![image-20220819095502103]([FE] nginx 수동 배포.assets/image-20220819095502103.png)
 
 
 
@@ -19,14 +19,19 @@
 
 > 실제로는 아마 ec2서버에 프론트를 git pull해서 내부에서 빌드해야 하는 것 같다. (추측)
 - 만들어진 빌드 폴더를 mobaXterm에 넣어주자
-킹갓 제네럴 엠페러 mobaXterm은 gui가 있기 때문에 업로드는 폴더를 끌어서 gui 목록에 넣어주면 된다.
+  킹갓 제네럴 엠페러 mobaXterm은 gui가 있기 때문에 업로드는 폴더를 끌어서 gui 목록에 넣어주면 된다.
+
 - `주의사항`
     - nginx가 배포하는 위치로 바로 폴더를 gui로 이동시키려면 실패한다
+    
     - 그 이유는 nginx로 파일을 이동시킬 권한이 없기 때문이다.
+    
     - 그러므로 /home/ubuntu/ 위치에 먼저 끌어서 넣은 뒤
-    - cli 상으로 이동시켜야 한다.
-    - ![Untitled 1]([FE] nginx 수동 배포(프로젝트 진행 당시).assets/Untitled 1.png)
 
+      cli 상으로 이동시켜야 한다.
+    
+    - ![Untitled 1]([FE] nginx 수동 배포.assets/Untitled 1.png)
+    
 - /home/ubuntu/에 끌어서 옮겼다면, 이제 nginx가 배포하는 위치로 옮겨야한다.
 
 
@@ -76,7 +81,7 @@
 - nginx는 기본적으로 /etc에 설치되어있다.
 - nginx의 사이트 설정은
 /etc/nginx/site-available/ 폴더에 default 파일을 켜서 설정 해 주어야 한다.
-- ![Untitled 3]([FE] nginx 수동 배포(프로젝트 진행 당시).assets/Untitled 3.png)
+- ![Untitled 3]([FE] nginx 수동 배포.assets/Untitled 3.png)
 
 ```bash
 #해당 위치라면
@@ -87,7 +92,7 @@ sudo vim /etc/nginx/sites-available/default
 
 - default 파일을 열면 아래 이미지처럼 나올 것이다.
 
-![Untitled]([FE] nginx 수동 배포(프로젝트 진행 당시).assets/Untitled 4.png)
+![Untitled]([FE] nginx 수동 배포.assets/Untitled 4.png)
 
 - 정확하게는 모르지만, 대충 80포트로 들어오는 걸 듣고 있다는 뜻인 것 같다.
 - 배포하려는 파일의 위치는 root로 표기되어있다.
@@ -99,7 +104,7 @@ index 라는 것으로 표현되어있는데, 보면 index.nginx-debian.html를 
     - try_files는 적혀진 순서대로 파일들을 찾고 표출하겠다는 설정이라고 한다.
 - 22.07.30 현재 설정된 형태는 아래 이미지와 같다.
 
-![Untitled]([FE] nginx 수동 배포(프로젝트 진행 당시).assets/Untitled 5.png)
+![Untitled]([FE] nginx 수동 배포.assets/Untitled 5.png)
 
 - nginx의 설정을 변경했다면, 무조건 nginx를 재시작해주어야 설정파일이 적용된다.
 - 참고로 설정 수정은 i를 통해 수정가능하며, 수정모드를 나가려면 esc
@@ -129,4 +134,4 @@ http로 [i7e104.p.ssafy.io/login](http://i7e104.p.ssafy.io/login) 은 잘 들어
   
     아래 이미지는 homedong의 nginx 설정인데 정확하게 location과 index, server_name 등 뭐가 어떻게 돌아가는지는 현재 파악하지 못하였고, 추후 코치님에게 질문한 답변을 받아야 할 것 같다.
     
-    ![Untitled]([FE] nginx 수동 배포(프로젝트 진행 당시).assets/Untitled 6.png)
+    ![Untitled]([FE] nginx 수동 배포.assets/Untitled 6.png)
