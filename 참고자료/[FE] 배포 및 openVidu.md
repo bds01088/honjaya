@@ -1,4 +1,4 @@
-# [FE] 배포 및 openVidu ReadMe
+# [FE] 배포 및 openVidu
 
 ## 환경 설정
 
