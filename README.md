@@ -6,7 +6,7 @@
 
 😼 **BE: 배상현**
 
-📽 **[UCC 유튜브 링크]()**
+📽 **[UCC 유튜브 링크](https://youtu.be/ngQkkMlmzA8)**
 
 ![logo](README.assets/logo-16608005227942.png)
 
