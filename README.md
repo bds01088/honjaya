@@ -163,11 +163,19 @@
 ## 🤝🏻협업 툴
 
 - Gitlab
+
+  ![image-20220819105702041](README.assets/image-20220819105702041.png)
 - Jira
+
+  ![image-20220819105551850](README.assets/image-20220819105551850.png)
 - Notion
+
+  ![image-20220819105558945](README.assets/image-20220819105558945.png)
 - Figma
 - Webex
 - Google Sheet
+
+  ![image-20220819105858014](README.assets/image-20220819105858014.png)
 
 
 
