@@ -126,7 +126,7 @@ certbot 공식 사이트로 따라하면서 인증서 발급 해볼 예정
 - certbot을 통한 인증서를 받았는데, 현재 사용중인 openvidu 서버가 튜토리얼꺼라 openvidu 환경설정이 selfsigned로 되어있어서 안되는 것 같다.
 - 튜토리얼 서버 도커를 삭제하고, openvidu 환경변수 중 CERTIFICATED_TYPE=letsencrypt 값과 LETSENCRYPT_EMAIL=asdf1234@naver.com 이라는 값을 넣어주면서 도커에 서버를 실행하였음에도 불구하고 작동이 안되는 것 같다.
 - 뭔가 http에서 https로 적용시키는게 잘 안된 것 같다.
-http로 [i7e104.p.ssafy.io/login](http://i7e104.p.ssafy.io/login) 은 잘 들어가졌으나 현재 https가 되니 접속이 안된다.
+http로 my.domain.url.com/login 은 잘 들어가졌으나 현재 https가 되니 접속이 안된다.
 - 또한 http로 접속하면 nginx가 자동으로 https로 바꿔주기 때문에 http 상에서 나타나는지도 확인이 불가능해졌다.
 - 현재 meeting의 영상을 제외한 모든 페이지가 https로 잘 들어가진다.
 

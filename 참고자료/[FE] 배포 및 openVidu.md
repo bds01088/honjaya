@@ -79,7 +79,7 @@ server {
         index index.html;
 				
 				#도메인 이름
-        server_name i7e104.p.ssafy.io;
+        server_name my.domain.url.com;
 				#https 보안 포트 접속에 사용할 인증서 위치
 				#certbot nginx설정 포함 인증서 발급시 자동으로 기입되지만
 				#나는 이때 5회 발급초과여서 zerossl이라는 또다른 무료 인증서 발급사이트를 사용함
@@ -231,7 +231,7 @@ $ curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_lates
 # Domain name. If you do not have one, the public IP of the machine.
 # For example: 198.51.100.1, or openvidu.example.com
 # 사용하는 도메인
-DOMAIN_OR_PUBLIC_IP=i7e104.p.ssafy.io
+DOMAIN_OR_PUBLIC_IP=my.domain.url.com
 
 # OpenVidu SECRET used for apps to connect to OpenVidu server and users to access to OpenVidu Dashboard
 # 오픈비두 서버와 프론트의 연결 시 비밀번호 같은 거
@@ -319,7 +319,6 @@ $ cd /etc/letsencrypt/live/
 
 <aside>
 💡 letsencrypt를 통한 인증서 발급 완료 및 openvidu의 인증 방식을 letsencrypt로 설정하였음에도 인증서 오류로 인한 배포된 환경에서 실행이 불가능할 경우
-
 </aside>
 
 <aside>

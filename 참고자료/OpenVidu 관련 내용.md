@@ -2,7 +2,6 @@
 
 > On Promises 형태로 진행하기에는 app과 openvidu를 연결할 방법을 모르기 때문에,
 일단은 화면 개발을 위해 튜토리얼 openvidu 서버를 구동하고 해당 서버를 통해서 화면 구성을 진행할 계획이다.
-> 
 
 ## EC2에 docker를 통한 `튜토리얼 openvidu 서버` 실행하기
 
@@ -19,7 +18,7 @@
 - 튜토리얼 서버가 구동되지 않고 있는 경우
   
     ```bash
-    sudo docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET -e DOMAIN_OR_PUBLIC_IP=i7e104.p.ssafy.io openvidu/openvidu-server-kms:2.22.0
+    sudo docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET -e DOMAIN_OR_PUBLIC_IP=my.domain.url.com openvidu/openvidu-server-kms:2.22.0
     ```
     
     해당 코드를 그대로 치면 튜토리얼 서버가 구동 가능하다.
@@ -50,7 +49,7 @@
 `On promises 형태가 아니기 때문에 프론트 서버를 구동해야한다`
 
 ```jsx
-const OPENVIDU_SERVER_URL = 'https://i7e104.p.ssafy.io:4443'; 
+const OPENVIDU_SERVER_URL = 'https://my.domain.url.com:4443'; 
 														//'https://' + location.hostname + ':4443';
 ```
 
@@ -82,6 +81,7 @@ App.js 파일에 최상단에 보면, Frontend에서 영상 연결을 위해 ope
 2. 아래 포트들이 열려있어야 한다.
    포트를 여는 명령어 : sudo ufw allow portnum
    연속된 포트를 여는 명령어 : sudo ufw allow portn1:portn2/tcp 또는 udp
+   
     - **22 TCP**: to connect using SSH to admin OpenVidu.
     - **80 TCP**: if you select Let's Encrypt to generate an SSL certificate this port is used by the generation process.
     - **443 TCP**: OpenVidu server and application are published by default in standard https port.
@@ -132,4 +132,4 @@ curl [https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_latest
 
 지금은 app_1파일이 존재하므로, 프론트 서버를 실행시키지 않아도 접속 가능하다.
 
-i7e104.p.ssafy.io로 접속하면, openvidu에서 마련한 홈페이지가 뜰 것이다.
+my.domain.url.com로 접속하면, openvidu에서 마련한 홈페이지가 뜰 것이다.

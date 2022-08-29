@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
--- Host: i7e104.p.ssafy.io    Database: honjaya_db
+-- Host: my.domain.url.com    Database: honjaya_db
 -- ------------------------------------------------------
 -- Server version	8.0.30-0ubuntu0.20.04.2
 
@@ -231,7 +231,7 @@ CREATE TABLE `hashtag` (
 
 LOCK TABLES `hashtag` WRITE;
 /*!40000 ALTER TABLE `hashtag` DISABLE KEYS */;
-INSERT INTO `hashtag` VALUES (264,14,'안녕~'),(318,19,'123'),(319,19,'222'),(320,19,'333'),(390,15,'리액트가뭔데'),(391,15,'둘이야'),(395,40,'SSAFY'),(396,40,'나만냥이없어'),(397,40,'떡볶이❤'),(399,36,'화난닭'),(400,15,'뚱땅이'),(401,42,'푸푸언니'),(403,42,'신남주의');
+INSERT INTO `hashtag` VALUES (264,14,'안녕~'),(318,19,'123'),(319,19,'222'),(320,19,'333'),(390,15,'리액트가뭔데'),(391,15,'둘이야'),(395,40,'안녕'),(396,40,'나만냥이없어'),(397,40,'떡볶이❤'),(399,36,'화난닭'),(400,15,'뚱땅이'),(401,42,'푸푸언니'),(403,42,'신남주의');
 /*!40000 ALTER TABLE `hashtag` ENABLE KEYS */;
 UNLOCK TABLES;
 
