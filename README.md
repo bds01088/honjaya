@@ -190,7 +190,7 @@
 
 - Swagger
 
-  ![1 유저 스웨거](README.assets/1 유저 스웨거.JPG)
+  ![스웨거_users](README.assets/스웨거_users.JPG)
 
 - Webex
 
