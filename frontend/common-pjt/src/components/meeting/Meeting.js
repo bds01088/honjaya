@@ -942,10 +942,8 @@ class Meeting extends Component {
     }
   }
 
-
   // 오픈비두 세션 입장
   joinSession() {
-
     // --- 1) Get an OpenVidu object ---
     this.OV = new OpenVidu()
 
@@ -1283,7 +1281,7 @@ class Meeting extends Component {
 
     return (
       <Background>
-        <ReactAudioPlayer 
+        <ReactAudioPlayer
           Url={bgm001}
           isPlaying={true}
           Volume={0.01}
@@ -1297,7 +1295,7 @@ class Meeting extends Component {
 
           {!this.state.resultTime ? (
             <TimerBox>
-              <Timer onClick={this.stopTimer}>
+              <Timer>
                 {this.state.minute}:{this.state.sec < 10 ? 0 : null}
                 {this.state.sec}
               </Timer>
@@ -1306,7 +1304,9 @@ class Meeting extends Component {
                 <AddBox onClick={this.showSelectTimer}>
                   <AddTimerImg />
                   <AddText className="timerTip">
-                    3분 추가<br />(-100 루팡)
+                    3분 추가
+                    <br />
+                    (-100 루팡)
                   </AddText>
                 </AddBox>
               ) : null}
@@ -1329,13 +1329,19 @@ class Meeting extends Component {
             <PointText>
               {this.state.myUserPoint === undefined
                 ? 0
-                : this.state.myUserPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                : this.state.myUserPoint
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PointText>
           </LeftBox>
         </Header>
 
         <Container>
-          <style jsx="true">{`.toast { font-family: Minseo !important;}`}</style>
+          <style jsx="true">{`
+            .toast {
+              font-family: Minseo !important;
+            }
+          `}</style>
           <ToastsContainer
             position={ToastsContainerPosition.TOP_RIGHT}
             store={ToastsStore}
@@ -1348,7 +1354,8 @@ class Meeting extends Component {
               ) : null}
               {this.state.voteTime ? (
                 <TopicText>
-                  ❓ 아바타는 누구일까요 ❔<br /> 아바타로 예상되는 유저의 화면을 눌러 투표하세요 !
+                  ❓ 아바타는 누구일까요 ❔<br /> 아바타로 예상되는 유저의
+                  화면을 눌러 투표하세요 !
                 </TopicText>
               ) : null}
               {this.state.resultTime ? (
@@ -1363,11 +1370,15 @@ class Meeting extends Component {
                   <TopicIcon onClick={this.pickTopic}></TopicIcon>
                   {this.state.randomCount > 0 ? (
                     <ChangeText className="changeTip">
-                      주제추천<br />(무료 {this.state.randomCount}회)
+                      주제추천
+                      <br />
+                      (무료 {this.state.randomCount}회)
                     </ChangeText>
                   ) : (
                     <ChangeText className="changeTip">
-                      주제추천<br />(-50 루팡)
+                      주제추천
+                      <br />
+                      (-50 루팡)
                     </ChangeText>
                   )}
                 </ChangeBox>
@@ -1526,7 +1537,13 @@ class Meeting extends Component {
 
                 <FooterRight>
                   {this.state.meetingTime ? (
-                    <ShowRanking onClick={() => { this.moveToVote() }}>바로 투표 💌</ShowRanking>
+                    <ShowRanking
+                      onClick={() => {
+                        this.moveToVote()
+                      }}
+                    >
+                      바로 투표 💌
+                    </ShowRanking>
                   ) : null}
 
                   {this.state.resultTime ? (
@@ -1535,13 +1552,18 @@ class Meeting extends Component {
                         👑결과보기👑
                         <RankingContainer className="rankingTip">
                           <RankingHeader>오늘의 MVP는? 🏆</RankingHeader>
-                          {this.state.ranking ? Object.entries(this.state.ranking).map((item, idx) => {
-                            return (
-                              <RankingContent>
-                                <span>{item[0]}</span>
-                                <span>+{item[1]} 루팡</span>
-                              </RankingContent>
-                            )}) : null}
+                          {this.state.ranking
+                            ? Object.entries(this.state.ranking).map(
+                                (item, idx) => {
+                                  return (
+                                    <RankingContent>
+                                      <span>{item[0]}</span>
+                                      <span>+{item[1]} 루팡</span>
+                                    </RankingContent>
+                                  )
+                                },
+                              )
+                            : null}
                         </RankingContainer>
                       </ShowRanking>
                     </>
